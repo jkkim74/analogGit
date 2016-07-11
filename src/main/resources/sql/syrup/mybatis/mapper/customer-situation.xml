@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.syrup.SyrupDashboardRepository">
+    <select id="getCustomerSituationPerDayOld" parameterType="OlapDimensionRequest" resultType="CustomerSituation">
+        SELECT
+                1,
+                <if test="useOs != null">
+                    "SMW_CODE1".SORT_SEQ AS SORT_SEQ1,
+                    "SMW_CODE1".COM_CD AS COM_CD1,
+                    "SMW_CODE1".SORT_SEQ || '@@' || "SMW_CODE1".CD_NM AS os,
+                </if>
+                <if test="useSex != null">
+                    "SMW_CODE3".SORT_SEQ AS SORT_SEQ3,
+                    "SMW_CODE3".COM_CD AS COM_CD3,
+                    "SMW_CODE3".SORT_SEQ || '@@' || "SMW_CODE3".CD_NM AS sex,
+                </if>
+                <if test="useAppVersion != null">
+                    "SMW_CODE4".SORT_SEQ AS SORT_SEQ4,
+                    "SMW_CODE4".COM_CD AS COM_CD4,
+                    "SMW_CODE4".SORT_SEQ || '@@' || "SMW_CODE4".CD_NM AS appVersion,
+                </if>
+                <if test="useAgeRange != null">
+                    "SMW_CODE5".SORT_SEQ AS SORT_SEQ5,
+                    "SMW_CODE5".COM_CD AS COM_CD5,
+                    "SMW_CODE5".SORT_SEQ || '@@' || "SMW_CODE5".CD_NM AS ageRange,
+                </if>
+                <if test="useTelecom != null">
+                    "SMW_CODE6".SORT_SEQ AS SORT_SEQ6,
+                    "SMW_CODE6".COM_CD AS COM_CD6,
+                    "SMW_CODE6".SORT_SEQ || '@@' || "SMW_CODE6".CD_NM AS telecom,
+                </if>
+                <if test="useStandardDate != null">
+                    "SMW_CLDR0".CLDR_DT AS CLDR_DT,
+                    "SMW_CLDR0".DISP_DT AS standardDate,
+                </if>
+               APP_DOWN_CNT AS appDownCount,
+               WLET_JOIN_CNT AS walletJoinCount,
+               ACCUM_WLET_JOIN_CNT AS walletJoinTotalCount,
+               ACCUM_APP_DOWN_CNT AS appDownTotalCount,
+               CARD_ISSUE_CNT AS cardIssueCount,
+               ACCUM_CARD_ISSUE_CNT AS cardIssueTotalCount,
+               CI_EXIST_CNT AS ciExistCount,
+               ACCUM_CI_EXIST_CNT AS ciExistTotalCount
+        FROM
+            (SELECT
+                <if test="useOs != null">
+                    WALLET."SMW_D_MBR_JOIN".OS_CD AS OS_CD,
+                </if>
+                <if test="useSex != null">
+                    WALLET."SMW_D_MBR_JOIN".GNDR_CD AS GNDR_CD,
+                </if>
+                <if test="useAppVersion != null">
+                    WALLET."SMW_D_MBR_JOIN".APP_VER AS APP_VER,
+                </if>
+                <if test="useAgeRange != null">
+                    WALLET."SMW_D_MBR_JOIN".AGE_RNG_CD AS AGE_RNG_CD,
+                </if>
+                <if test="useTelecom != null">
+                    WALLET."SMW_D_MBR_JOIN".TELC_CD AS TELC_CD,
+                </if>
+                <if test="useStandardDate != null">
+                    WALLET."SMW_D_MBR_JOIN".STRD_DT AS STRD_DT,
+                </if>
+                SUM (WALLET."SMW_D_MBR_JOIN".APP_DOWN_CNT) AS APP_DOWN_CNT,
+                SUM (WALLET."SMW_D_MBR_JOIN".WLET_JOIN_CNT) AS WLET_JOIN_CNT,
+                SUM (WALLET."SMW_D_MBR_JOIN".ACCUM_WLET_JOIN_CNT) AS ACCUM_WLET_JOIN_CNT,
+                SUM (WALLET."SMW_D_MBR_JOIN".ACCUM_APP_DOWN_CNT) AS ACCUM_APP_DOWN_CNT,
+                SUM (WALLET."SMW_D_MBR_JOIN".CARD_ISSUE_CNT) AS CARD_ISSUE_CNT,
+                SUM (WALLET."SMW_D_MBR_JOIN".ACCUM_CARD_ISSUE_CNT) AS ACCUM_CARD_ISSUE_CNT,
+                SUM (WALLET."SMW_D_MBR_JOIN".CI_EXIST_CNT) AS CI_EXIST_CNT,
+                SUM (WALLET."SMW_D_MBR_JOIN".ACCUM_CI_EXIST_CNT) AS ACCUM_CI_EXIST_CNT
+                FROM WALLET."SMW_D_MBR_JOIN"
+                WHERE (((WALLET."SMW_D_MBR_JOIN".STRD_DT BETWEEN (#{startDate}) AND (#{endDate}))))
+                <trim prefix="GROUP BY" suffixOverrides=",">
+                    <if test="useOs != null">
+                        WALLET."SMW_D_MBR_JOIN".OS_CD,
+                    </if>
+                    <if test="useSex != null">
+                        WALLET."SMW_D_MBR_JOIN".GNDR_CD,
+                    </if>
+                    <if test="useAppVersion != null">
+                      WALLET."SMW_D_MBR_JOIN".APP_VER,
+                    </if>
+                    <if test="useAgeRange!= null">
+                        WALLET."SMW_D_MBR_JOIN".AGE_RNG_CD,
+                    </if>
+                    <if test="useTelecom != null">
+                        WALLET."SMW_D_MBR_JOIN".TELC_CD,
+                    </if>
+                    <if test="useStandardDate != null">
+                        WALLET."SMW_D_MBR_JOIN".STRD_DT,
+                    </if>
+                </trim>
+                ) VCTAOZ
+                <if test="useOs != null">
+                    INNER JOIN WALLET."SMW_CODE" "SMW_CODE1" ON VCTAOZ.OS_CD = "SMW_CODE1".COM_CD
+                    AND "SMW_CODE1".LCL_CD = 'SMW001'
+                </if>
+                <if test="useSex != null">
+                    INNER JOIN WALLET."SMW_CODE" "SMW_CODE3" ON VCTAOZ.GNDR_CD = "SMW_CODE3".COM_CD
+                    AND "SMW_CODE3".LCL_CD = 'SMW003'
+                </if>
+                <if test="useAppVersion != null">
+                    INNER JOIN WALLET."SMW_CODE" "SMW_CODE4" ON VCTAOZ.APP_VER = "SMW_CODE4".COM_CD
+                    AND "SMW_CODE4".LCL_CD = 'SMW019'
+                </if>
+                <if test="useAgeRange != null">
+                    INNER JOIN WALLET."SMW_CODE" "SMW_CODE5" ON VCTAOZ.AGE_RNG_CD = "SMW_CODE5".COM_CD
+                    AND "SMW_CODE5".LCL_CD = 'SMW004'
+                </if>
+                <if test="useTelecom != null">
+                    INNER JOIN WALLET."SMW_CODE" "SMW_CODE6" ON VCTAOZ.TELC_CD = "SMW_CODE6".COM_CD
+                    AND "SMW_CODE6".LCL_CD = 'SMW002'
+                </if>
+                <if test="useStandardDate != null">
+                    INNER JOIN WALLET."SMW_CLDR" "SMW_CLDR0" ON VCTAOZ.STRD_DT = "SMW_CLDR0".CLDR_DT
+                </if>
+    </select>
+    <select id="getCustomerSituationPerDay" parameterType="OlapDimensionRequest" resultType="CustomerSituation">
+        WITH SMW_CODE1 AS (
+         SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW001'),
+         SMW_CODE3 AS (
+         SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW003'),
+         SMW_CODE4 AS (
+         SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW019'),
+         SMW_CODE5 AS (
+         SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW004'),
+         SMW_CODE6 AS (
+         SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW002')
+            SELECT
+                <if test="useOs != null">
+                     c1.cd_nm AS os,
+                </if>
+                <if test="useSex != null">
+                     c3.cd_nm AS sex,
+                </if>
+                <if test="useAppVersion != null">
+                     c4.cd_nm AS appVersion,
+                </if>
+                <if test="useAgeRange!= null">
+                     c5.cd_nm AS ageRange,
+                </if>
+                <if test="useTelecom != null">
+                     c6.cd_nm AS telecom,
+                </if>
+                <if test="useStandardDate != null">
+                    TO_CHAR(TO_DATE(t.strd_dt, 'YYYYMMDD'), 'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE(t.strd_dt, 'YYYYMMDD'), 'dy')|| ')' AS standardDate,
+                </if>
+                     SUM (t.APP_DOWN_CNT) AS appDownCount,
+                     SUM (t.WLET_JOIN_CNT) AS walletJoinCount,
+                     SUM (t.ACCUM_WLET_JOIN_CNT) AS walletJoinTotalCount,
+                     SUM (t.ACCUM_APP_DOWN_CNT) AS appDownTotalCount,
+                     SUM (t.CARD_ISSUE_CNT) AS cardIssueCount,
+                     SUM (t.ACCUM_CARD_ISSUE_CNT) AS cardIssueTotalCount,
+                     SUM (t.CI_EXIST_CNT) AS ciExistCount,
+                     SUM (t.ACCUM_CI_EXIST_CNT) AS ciExistTotalCount
+                FROM SMW_D_MBR_JOIN t, SMW_CODE1 c1, SMW_CODE3 c3, SMW_CODE4 c4, SMW_CODE5 c5, SMW_CODE6 c6
+               WHERE t.strd_dt BETWEEN #{startDate} AND #{endDate}
+                 AND t.os_cd = c1.com_cd
+                 AND t.gndr_cd = c3.com_cd
+                 AND t.app_ver = c4.com_cd
+                 AND t.age_rng_cd = c5.com_cd
+                 AND t.telc_cd = c6.com_cd
+            <trim prefix="GROUP BY" suffixOverrides=",">
+                <if test="useOs != null">
+                    c1.cd_nm,
+                </if>
+                <if test="useSex != null">
+                    c3.cd_nm,
+                </if>
+                <if test="useAppVersion != null">
+                    c4.cd_nm,
+                </if>
+                <if test="useAgeRange!= null">
+                    c5.cd_nm,
+                </if>
+                <if test="useTelecom != null">
+                    c6.cd_nm,
+                </if>
+                <if test="useStandardDate != null">
+                    t.strd_dt,
+                </if>
+            </trim>
+    </select>
+
+    <select id="getCustomerSituationPerWeek" parameterType="OlapDimensionRequest" resultType="CustomerSituation">
+        WITH SMW_CODE1 AS (
+           SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW001'),
+         SMW_CODE3 AS (
+           SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW003'),
+         SMW_CODE4 AS (
+           SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW019'),
+         SMW_CODE5 AS (
+           SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW004'),
+         SMW_CODE6 AS (
+           SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW002'),
+         dateS AS (
+           SELECT strd_year||LPAD(strd_wk_seq,2,'0') dateStr
+             FROM smw_cldr_wk
+            WHERE #{startDate} BETWEEN wk_st_dt AND wk_ed_dt),
+         dateE AS (
+           SELECT strd_year||LPAD(strd_wk_seq,2,'0') dateStr
+             FROM smw_cldr_wk
+            WHERE #{endDate} BETWEEN wk_st_dt AND wk_ed_dt)
+        SELECT
+                <if test="useOs != null">
+                     c1.cd_nm AS os,
+                </if>
+                <if test="useSex != null">
+                     c3.cd_nm AS sex,
+                </if>
+                <if test="useAppVersion != null">
+                     c4.cd_nm AS appVersion,
+                </if>
+                <if test="useAgeRange!= null">
+                     c5.cd_nm AS ageRange,
+                </if>
+                <if test="useTelecom != null">
+                     c6.cd_nm AS telecom,
+                </if>
+                <if test="useStandardDate != null">
+                     t.strd_yr||'-'||LPAD(t.strd_wk, 2, '0') AS standardDate,
+                </if>
+                     SUM (t.APP_DOWN_CNT) AS appDownCount,
+                     SUM (t.WLET_JOIN_CNT) AS walletJoinCount,
+                     SUM (t.ACCUM_WLET_JOIN_CNT) AS walletJoinTotalCount,
+                     SUM (t.ACCUM_APP_DOWN_CNT) AS appDownTotalCount,
+                     SUM (t.CARD_ISSUE_CNT) AS cardIssueCount,
+                     SUM (t.ACCUM_CARD_ISSUE_CNT) AS cardIssueTotalCount,
+                     SUM (t.CI_EXIST_CNT) AS ciExistCount,
+                     SUM (t.ACCUM_CI_EXIST_CNT) AS ciExistTotalCount
+                FROM SMW_W_MBR_JOIN t, SMW_CODE1 c1, SMW_CODE3 c3, SMW_CODE4 c4, SMW_CODE5 c5, SMW_CODE6 c6, dateS, dateE
+               WHERE (t.strd_yr||LPAD(t.strd_wk,2,'0')) BETWEEN dateS.dateStr AND dateE.dateStr
+                 AND t.os_cd = c1.com_cd
+                 AND t.gndr_cd = c3.com_cd
+                 AND t.app_ver = c4.com_cd
+                 AND t.age_rng_cd = c5.com_cd
+                 AND t.telc_cd = c6.com_cd
+            <trim prefix="GROUP BY" suffixOverrides=",">
+                <if test="useOs != null">
+                    c1.cd_nm,
+                </if>
+                <if test="useSex != null">
+                    c3.cd_nm,
+                </if>
+                <if test="useAppVersion != null">
+                    c4.cd_nm,
+                </if>
+                <if test="useAgeRange!= null">
+                    c5.cd_nm,
+                </if>
+                <if test="useTelecom != null">
+                    c6.cd_nm,
+                </if>
+                <if test="useStandardDate != null">
+                    t.strd_yr||'-'||LPAD(t.strd_wk, 2, '0'),
+                </if>
+            </trim>
+    </select>
+
+    <select id="getCustomerSituationPerMonth" parameterType="OlapDimensionRequest" resultType="CustomerSituation">
+        WITH SMW_CODE1 AS (
+         SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW001'),
+         SMW_CODE3 AS (
+         SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW003'),
+         SMW_CODE4 AS (
+         SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW019'),
+         SMW_CODE5 AS (
+         SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW004'),
+         SMW_CODE6 AS (
+         SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+             FROM smw_code
+            WHERE use_yn = 'Y'
+                AND lcl_cd  = 'SMW002')
+            SELECT
+                <if test="useOs != null">
+                     c1.cd_nm AS os,
+                </if>
+                <if test="useSex != null">
+                     c3.cd_nm AS sex,
+                </if>
+                <if test="useAppVersion != null">
+                     c4.cd_nm AS appVersion,
+                </if>
+                <if test="useAgeRange!= null">
+                     c5.cd_nm AS ageRange,
+                </if>
+                <if test="useTelecom != null">
+                     c6.cd_nm AS telecom,
+                </if>
+                <if test="useStandardDate != null">
+                     TO_CHAR (TO_DATE (t.strd_ym, 'YYYYMM'), 'YYYY-MM') AS standardDate,
+                </if>
+                     SUM (t.APP_DOWN_CNT) AS appDownCount,
+                     SUM (t.WLET_JOIN_CNT) AS walletJoinCount,
+                     SUM (t.ACCUM_WLET_JOIN_CNT) AS walletJoinTotalCount,
+                     SUM (t.ACCUM_APP_DOWN_CNT) AS appDownTotalCount,
+                     SUM (t.CARD_ISSUE_CNT) AS cardIssueCount,
+                     SUM (t.ACCUM_CARD_ISSUE_CNT) AS cardIssueTotalCount,
+                     SUM (t.CI_EXIST_CNT) AS ciExistCount,
+                     SUM (t.ACCUM_CI_EXIST_CNT) AS ciExistTotalCount
+                FROM SMW_M_MBR_JOIN t, SMW_CODE1 c1, SMW_CODE3 c3, SMW_CODE4 c4, SMW_CODE5 c5, SMW_CODE6 c6
+               WHERE t.strd_ym BETWEEN #{startDate} AND #{endDate}
+                 AND t.os_cd = c1.com_cd
+                 AND t.gndr_cd = c3.com_cd
+                 AND t.app_ver = c4.com_cd
+                 AND t.age_rng_cd = c5.com_cd
+                 AND t.telc_cd = c6.com_cd
+            <trim prefix="GROUP BY" suffixOverrides=",">
+                <if test="useOs != null">
+                    c1.cd_nm,
+                </if>
+                <if test="useSex != null">
+                    c3.cd_nm,
+                </if>
+                <if test="useAppVersion != null">
+                    c4.cd_nm,
+                </if>
+                <if test="useAgeRange!= null">
+                    c5.cd_nm,
+                </if>
+                <if test="useTelecom != null">
+                    c6.cd_nm,
+                </if>
+                <if test="useStandardDate != null">
+                    t.strd_ym,
+                </if>
+            </trim>
+    </select>
+
+
+</mapper>

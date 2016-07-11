@@ -1,0 +1,89 @@
+<!--qna detail start-->
+<div id="notice_article" class="help-desk-modal" tabindex="-1" role="dialog" aria-labelledby="notice" aria-hidden="true"
+     data-ng-init="modalInit()">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel()">×</button>
+        <h1 class="modal-title" id="myModalLabel">Q&amp;A 상세보기</h1>
+    </div>
+    <div class="modal-body blank-remove">
+        <div class="sub-title obj-clear">
+            <h2 class="pull-left">
+                <span class="sort">{{getCodeName(selectQna.category)}}</span>
+                <span class="sort-line">|</span>
+                {{selectQna.title}}
+            </h2>
+            <span class="date pull-right">{{selectQna.writer}} <span
+                    class="sort-line">|</span> 조회수 {{selectQna.hit}} <span class="sort-line">|</span> {{selectQna.writeDate}}</span>
+        </div>
+        <div class="detail-view">
+            <div class="detail-con">
+                <summernote ng-model="selectQna.context" config="summernoteConfig"></summernote>
+            </div>
+            <table class="file-list" summary="첨부된 파일 리스트">
+                <caption>첨부파일 리스트</caption>
+                <tr>
+                    <th rowspan="{{selectQnaFiles.length+2}}">첨부 파일</th>
+                </tr>
+                <tr data-ng-repeat="file in selectQnaFiles">
+                    <td>
+                        <a href="/file/download?containerName=helpdesk&uuid={{file.uuid}}&saveFileName={{file.fileName}}">{{file.fileName}}</a>
+                        <span>( {{file.fileSize/1024/1024|number:2}} MB )</span>
+                    </td>
+                </tr>
+                <tr data-ng-if="selectQnaFiles.length == 0">
+                    <td>첨부된 파일이 없습니다...</td>
+                </tr>
+            </table>
+            <div class="comment-section">
+                <ul class="comment-list">
+                    <li>
+                        <ul>
+                            <li data-ng-repeat="reply in replyList">
+                                <dl>
+                                    <dt>
+                                        <span class="label-square label-success" data-ng-show="checkReplyer(reply.writerId)">답변</span>
+                                        <strong>{{reply.writer}}</strong><span>|</span>{{reply.updateDate}}
+                                    </dt>
+                                    <dd class="comment-input">
+                                        <div data-ng-show="reply.replyState">
+                                            <p>{{reply.context}}</p>
+                                        </div>
+                                        <div data-ng-hide="reply.replyState">
+                                            <textarea data-ng-model="reply.tmpContext" cols="30" rows="10" class="form-control"></textarea>
+                                            <button data-ng-click="replyUpdate(reply.sn, reply.id, $index)" class="btn btn-white">답글입력</button>
+                                        </div>
+                                    </dd>
+                                </dl>
+                                <span class="edit" data-ng-show="checkUser(reply.writerId)">
+                                    <button data-ng-click="replyUpdateToggle($index)">{{reply.replyState ? '수정' : '수정취소' }}</button>
+                                    <span>|</span>
+                                    <button data-ng-click="replyDelete(reply.sn, reply.id)">삭제</button>
+                                </span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+        <div class="reply-input-area">
+            <textarea data-ng-model="replyForm.context" class="form-control" cols="30" rows="10"></textarea>
+            <button data-ng-click="replySave()" class="btn btn-white">답글입력</button>
+        </div>
+    </div>
+    <div class="control-area">
+        <div class="pull-left btn-group">
+            <button class="btn btn-white btn-small" data-ng-click="refreshSelectQna(selectQna.id, 'Q', 'previous')"><i
+                    class="fa fa-angle-left"></i></button>
+            <button class="btn btn-white btn-small" data-ng-click="refreshSelectQna(selectQna.id, 'Q', 'next')"><i
+                    class="fa fa-angle-right"></i></button>
+        </div>
+        <div class="pull-right">
+            <button class="btn btn-gray" data-ng-click="delete()"data-ng-show="checkUser(selectQna.writerId)" >삭제</button>
+            <button class="btn btn-orange" data-ng-click="update()" data-ng-show="checkUser(selectQna.writerId)">수정</button>
+            <button class="btn btn-orange" data-ng-click="replyCompletion()" data-ng-show="checkAuthority()">답변완료</button>
+        </div>
+    </div>
+</div>
+<!--qna detail end-->

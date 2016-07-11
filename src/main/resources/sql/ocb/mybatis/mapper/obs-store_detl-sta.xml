@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsStoreDetlStaRepository">
+    <select id="getStoreSingleForPivotPerDay" parameterType="JqGridRequest" resultType="ObsStoreDetlSta">
+    WITH k AS (
+               SELECT MAX (t.STORE_ID) AS STORE_ID,
+                      MAX (tmp.name1) AS store_nm,
+                      TO_CHAR(TO_DATE(t.std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(t.std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                      SUM (t.CHKIN_CNT) AS CHKIN_CNT,
+                      SUM (t.CHKIN_USER_CNT) AS CHKIN_USER_CNT,
+                      SUM (t.CALL_CNT) AS CALL_CNT,
+                      SUM (t.CALL_USER_CNT) AS CALL_USER_CNT,
+                      SUM (t.PHOTO_REG_CNT) AS PHOTO_REG_CNT,
+                      SUM (t.PHOTO_REG_USER_CNT) AS PHOTO_REG_USER_CNT,
+                      SUM (t.RVIEW_REG_CNT) AS RVIEW_REG_CNT,
+                      SUM (t.RVIEW_REG_USER_CNT) AS RVIEW_REG_USER_CNT,
+                      SUM (t.SHR_CLICK_CNT) AS SHR_CLICK_CNT,
+                      SUM (t.SHR_CLICK_USER_CNT) AS SHR_CLICK_USER_CNT,
+                      SUM (t.BNFT_OFFER_CNT) AS BNFT_OFFER_CNT,
+                      SUM (t.PTRN_CNT) AS PTRN_CNT,
+                      to_number(decode(MAX (t.STAR_YN),'Y',1,-1)) AS STAR_YN     --check!! this line
+                 FROM obs_d_store_detl_sta T, istuser.imc_m_merch_basic tmp
+ 			    WHERE T.std_dt BETWEEN #{startDate} AND #{endDate}
+                  AND T.poc_ind_cd = '01'
+				  AND T.store_id = tmp.mid
+             GROUP BY T.store_id, T.std_dt)
+    SELECT store_id, store_nm, std_dt, DECODE (measure, 'CHKIN_CNT', '체크인 건수', 'CHKIN_USER_CNT', '체크인 유저수', 'CALL_CNT', '전화걸기 건수', 'CALL_USER_CNT', '전화걸기 유저수', 'PHOTO_REG_CNT', '사진 등록 완료 건수', 'PHOTO_REG_USER_CNT', '사진 등록 완료 유저수', 'RVIEW_REG_CNT', '리뷰 등록 완료 건수', 'RVIEW_REG_USER_CNT', '리뷰 등록 완료 유저수', 'SHR_CLICK_CNT', '공유 버튼 클릭 건수', 'SHR_CLICK_USER_CNT', '공유 버튼 클릭 유저수', 'BNFT_OFFER_CNT', '혜택 제공 건수', 'PTRN_CNT', '보유 단골 개수', 'STAR_YN', '스타 보유 여부') AS measure, measure_value
+      FROM k UNPIVOT (measure_Value FOR measure IN  (CHKIN_CNT, CHKIN_USER_CNT, CALL_CNT, CALL_USER_CNT, PHOTO_REG_CNT, PHOTO_REG_USER_CNT, RVIEW_REG_CNT, RVIEW_REG_USER_CNT, SHR_CLICK_CNT, SHR_CLICK_USER_CNT, BNFT_OFFER_CNT, PTRN_CNT, STAR_YN))
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}
+        </if>
+    </select>
+    <select id="getStoreSingleForPivotPerWeek" parameterType="JqGridRequest" resultType="ObsStoreDetlSta">
+    WITH k AS (
+               SELECT MAX (t.STORE_ID) AS STORE_ID,
+                      MAX (tmp.name1) AS store_nm,
+                      TO_CHAR(TO_DATE(t.std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(t.std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                      SUM (t.CHKIN_CNT) AS CHKIN_CNT,
+                      SUM (t.CHKIN_USER_CNT) AS CHKIN_USER_CNT,
+                      SUM (t.CALL_CNT) AS CALL_CNT,
+                      SUM (t.CALL_USER_CNT) AS CALL_USER_CNT,
+                      SUM (t.PHOTO_REG_CNT) AS PHOTO_REG_CNT,
+                      SUM (t.PHOTO_REG_USER_CNT) AS PHOTO_REG_USER_CNT,
+                      SUM (t.RVIEW_REG_CNT) AS RVIEW_REG_CNT,
+                      SUM (t.RVIEW_REG_USER_CNT) AS RVIEW_REG_USER_CNT,
+                      SUM (t.SHR_CLICK_CNT) AS SHR_CLICK_CNT,
+                      SUM (t.SHR_CLICK_USER_CNT) AS SHR_CLICK_USER_CNT,
+                      SUM (t.BNFT_OFFER_CNT) AS BNFT_OFFER_CNT,
+                      SUM (t.PTRN_CNT) AS PTRN_CNT,
+                      to_number(decode(MAX (t.STAR_YN),'Y',1,-1)) AS STAR_YN     --check!! this line
+                 FROM obs_w_store_detl_sta T, istuser.imc_m_merch_basic tmp
+ 			    WHERE T.std_dt <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />
+                  AND T.poc_ind_cd = '01'
+				  AND T.store_id = tmp.mid
+             GROUP BY T.store_id, T.std_dt)
+    SELECT store_id, store_nm, std_dt, DECODE (measure, 'CHKIN_CNT', '체크인 건수', 'CHKIN_USER_CNT', '체크인 유저수', 'CALL_CNT', '전화걸기 건수', 'CALL_USER_CNT', '전화걸기 유저수', 'PHOTO_REG_CNT', '사진 등록 완료 건수', 'PHOTO_REG_USER_CNT', '사진 등록 완료 유저수', 'RVIEW_REG_CNT', '리뷰 등록 완료 건수', 'RVIEW_REG_USER_CNT', '리뷰 등록 완료 유저수', 'SHR_CLICK_CNT', '공유 버튼 클릭 건수', 'SHR_CLICK_USER_CNT', '공유 버튼 클릭 유저수', 'BNFT_OFFER_CNT', '혜택 제공 건수', 'PTRN_CNT', '보유 단골 개수', 'STAR_YN', '스타 보유 여부') AS measure, measure_value
+      FROM k UNPIVOT (measure_Value FOR measure IN  (CHKIN_CNT, CHKIN_USER_CNT, CALL_CNT, CALL_USER_CNT, PHOTO_REG_CNT, PHOTO_REG_USER_CNT, RVIEW_REG_CNT, RVIEW_REG_USER_CNT, SHR_CLICK_CNT, SHR_CLICK_USER_CNT, BNFT_OFFER_CNT, PTRN_CNT, STAR_YN))
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}
+        </if>
+    </select>
+    <select id="getStoreSingleForPivotPerMonth" parameterType="JqGridRequest" resultType="ObsStoreDetlSta">
+    WITH k AS (
+			   SELECT MAX (t.STORE_ID) AS STORE_ID,
+                      MAX (tmp.name1) AS store_nm,
+                      SUBSTR (T.std_ym, 0, 4) || '-' || SUBSTR (T.std_ym, 5, 2) AS std_dt,
+                      SUM (t.CHKIN_CNT) AS CHKIN_CNT,
+                      SUM (t.CHKIN_USER_CNT) AS CHKIN_USER_CNT,
+                      SUM (t.CALL_CNT) AS CALL_CNT,
+                      SUM (t.CALL_USER_CNT) AS CALL_USER_CNT,
+                      SUM (t.PHOTO_REG_CNT) AS PHOTO_REG_CNT,
+                      SUM (t.PHOTO_REG_USER_CNT) AS PHOTO_REG_USER_CNT,
+                      SUM (t.RVIEW_REG_CNT) AS RVIEW_REG_CNT,
+                      SUM (t.RVIEW_REG_USER_CNT) AS RVIEW_REG_USER_CNT,
+                      SUM (t.SHR_CLICK_CNT) AS SHR_CLICK_CNT,
+                      SUM (t.SHR_CLICK_USER_CNT) AS SHR_CLICK_USER_CNT,
+                      SUM (t.BNFT_OFFER_CNT) AS BNFT_OFFER_CNT,
+                      SUM (t.PTRN_CNT) AS PTRN_CNT,
+                      to_number(decode(MAX (t.STAR_YN),'Y',1,-1)) AS STAR_YN     --check!! this line
+                 FROM obs_m_store_detl_sta T, istuser.imc_m_merch_basic tmp
+				WHERE T.std_ym BETWEEN #{startDate} AND #{endDate}
+                  AND T.poc_ind_cd = '01'
+				  AND T.store_id = tmp.mid
+             GROUP BY T.store_id, T.std_ym)
+    SELECT store_id, store_nm, std_dt, DECODE (measure, 'CHKIN_CNT', '체크인 건수', 'CHKIN_USER_CNT', '체크인 유저수', 'CALL_CNT', '전화걸기 건수', 'CALL_USER_CNT', '전화걸기 유저수', 'PHOTO_REG_CNT', '사진 등록 완료 건수', 'PHOTO_REG_USER_CNT', '사진 등록 완료 유저수', 'RVIEW_REG_CNT', '리뷰 등록 완료 건수', 'RVIEW_REG_USER_CNT', '리뷰 등록 완료 유저수', 'SHR_CLICK_CNT', '공유 버튼 클릭 건수', 'SHR_CLICK_USER_CNT', '공유 버튼 클릭 유저수', 'BNFT_OFFER_CNT', '혜택 제공 건수', 'PTRN_CNT', '보유 단골 개수', 'STAR_YN', '스타 보유 여부') AS measure, measure_value
+      FROM k UNPIVOT (measure_Value FOR measure IN  (CHKIN_CNT, CHKIN_USER_CNT, CALL_CNT, CALL_USER_CNT, PHOTO_REG_CNT, PHOTO_REG_USER_CNT, RVIEW_REG_CNT, RVIEW_REG_USER_CNT, SHR_CLICK_CNT, SHR_CLICK_USER_CNT, BNFT_OFFER_CNT, PTRN_CNT, STAR_YN))
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}
+        </if>
+    </select>
+    <select id="getStoreSingleForGridPerDay" parameterType="JqGridRequest" resultType="ObsStoreDetlSta">
+        SELECT t.STORE_ID AS STORE_ID,
+                 tmp.name1 AS store_nm,
+                 TO_CHAR(TO_DATE(t.std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(t.std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                 t.CHKIN_CNT AS CHKIN_CNT,
+                 t.CHKIN_USER_CNT AS CHKIN_USER_CNT,
+                 t.CALL_CNT AS CALL_CNT,
+                 t.CALL_USER_CNT AS CALL_USER_CNT,
+                 t.PHOTO_REG_CNT AS PHOTO_REG_CNT,
+                 t.PHOTO_REG_USER_CNT AS PHOTO_REG_USER_CNT,
+                 t.RVIEW_REG_CNT AS RVIEW_REG_CNT,
+                 t.RVIEW_REG_USER_CNT AS RVIEW_REG_USER_CNT,
+                 t.SHR_CLICK_CNT AS SHR_CLICK_CNT,
+                 t.SHR_CLICK_USER_CNT AS SHR_CLICK_USER_CNT,
+                 t.BNFT_OFFER_CNT AS BNFT_OFFER_CNT,
+                 t.PTRN_CNT AS PTRN_CNT,
+                 t.STAR_YN AS STAR_YN                        --check!! this line
+            FROM obs_d_store_detl_sta T, istuser.imc_m_merch_basic tmp
+           WHERE T.std_dt BETWEEN #{startDate} AND #{endDate}
+        <if test="searchString != null">
+             AND T.store_id = #{searchString}
+        </if>
+             AND T.poc_ind_cd = '01'
+             AND T.store_id = tmp.mid
+             AND (CHKIN_CNT > 0
+              OR CHKIN_USER_CNT > 0
+              OR CALL_CNT > 0
+              OR CALL_USER_CNT > 0
+              OR PHOTO_REG_CNT > 0
+              OR PHOTO_REG_USER_CNT > 0
+              OR RVIEW_REG_CNT > 0
+              OR RVIEW_REG_USER_CNT > 0
+              OR SHR_CLICK_CNT > 0
+              OR SHR_CLICK_USER_CNT > 0
+              OR BNFT_OFFER_CNT > 0
+              OR PTRN_CNT > 0)
+        <if test="sidx == 'stdDt'">
+            ORDER BY T.store_id, T.std_dt ${sord}
+        </if>
+    </select>
+    <select id="getStoreSingleForGridPerWeek" parameterType="JqGridRequest" resultType="ObsStoreDetlSta">
+        SELECT t.STORE_ID AS STORE_ID,
+                 tmp.name1 AS store_nm,
+                 TO_CHAR(TO_DATE(t.std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(t.std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                 t.CHKIN_CNT AS CHKIN_CNT,
+                 t.CHKIN_USER_CNT AS CHKIN_USER_CNT,
+                 t.CALL_CNT AS CALL_CNT,
+                 t.CALL_USER_CNT AS CALL_USER_CNT,
+                 t.PHOTO_REG_CNT AS PHOTO_REG_CNT,
+                 t.PHOTO_REG_USER_CNT AS PHOTO_REG_USER_CNT,
+                 t.RVIEW_REG_CNT AS RVIEW_REG_CNT,
+                 t.RVIEW_REG_USER_CNT AS RVIEW_REG_USER_CNT,
+                 t.SHR_CLICK_CNT AS SHR_CLICK_CNT,
+                 t.SHR_CLICK_USER_CNT AS SHR_CLICK_USER_CNT,
+                 t.BNFT_OFFER_CNT AS BNFT_OFFER_CNT,
+                 t.PTRN_CNT AS PTRN_CNT,
+                 t.STAR_YN AS STAR_YN                        --check!! this line
+            FROM obs_w_store_detl_sta T, istuser.imc_m_merch_basic tmp
+           WHERE T.std_dt <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />
+        <if test="searchString != null">
+             AND T.store_id = #{searchString}
+        </if>
+             AND T.poc_ind_cd = '01'
+             AND T.store_id = tmp.mid
+             AND (CHKIN_CNT > 0
+              OR CHKIN_USER_CNT > 0
+              OR CALL_CNT > 0
+              OR CALL_USER_CNT > 0
+              OR PHOTO_REG_CNT > 0
+              OR PHOTO_REG_USER_CNT > 0
+              OR RVIEW_REG_CNT > 0
+              OR RVIEW_REG_USER_CNT > 0
+              OR SHR_CLICK_CNT > 0
+              OR SHR_CLICK_USER_CNT > 0
+              OR BNFT_OFFER_CNT > 0
+              OR PTRN_CNT > 0)
+        <if test="sidx == 'stdDt'">
+            ORDER BY T.store_id, T.std_dt ${sord}
+        </if>
+
+    </select>
+    <select id="getStoreSingleForGridPerMonth" parameterType="JqGridRequest" resultType="ObsStoreDetlSta">
+        SELECT t.STORE_ID AS STORE_ID,
+                 tmp.name1 AS store_nm,
+                 TO_CHAR(TO_DATE(std_ym,'YYYYMM'),'YYYY-MM') AS std_dt,
+                 t.CHKIN_CNT AS CHKIN_CNT,
+                 t.CHKIN_USER_CNT AS CHKIN_USER_CNT,
+                 t.CALL_CNT AS CALL_CNT,
+                 t.CALL_USER_CNT AS CALL_USER_CNT,
+                 t.PHOTO_REG_CNT AS PHOTO_REG_CNT,
+                 t.PHOTO_REG_USER_CNT AS PHOTO_REG_USER_CNT,
+                 t.RVIEW_REG_CNT AS RVIEW_REG_CNT,
+                 t.RVIEW_REG_USER_CNT AS RVIEW_REG_USER_CNT,
+                 t.SHR_CLICK_CNT AS SHR_CLICK_CNT,
+                 t.SHR_CLICK_USER_CNT AS SHR_CLICK_USER_CNT,
+                 t.BNFT_OFFER_CNT AS BNFT_OFFER_CNT,
+                 t.PTRN_CNT AS PTRN_CNT,
+                 t.STAR_YN AS STAR_YN                        --check!! this line
+            FROM obs_m_store_detl_sta T, istuser.imc_m_merch_basic tmp
+           WHERE T.std_ym BETWEEN #{startDate} AND #{endDate}
+        <if test="searchString != null">
+             AND T.store_id = #{searchString}
+        </if>
+             AND T.poc_ind_cd = '01'
+             AND T.store_id = tmp.mid
+             AND (CHKIN_CNT > 0
+              OR CHKIN_USER_CNT > 0
+              OR CALL_CNT > 0
+              OR CALL_USER_CNT > 0
+              OR PHOTO_REG_CNT > 0
+              OR PHOTO_REG_USER_CNT > 0
+              OR RVIEW_REG_CNT > 0
+              OR RVIEW_REG_USER_CNT > 0
+              OR SHR_CLICK_CNT > 0
+              OR SHR_CLICK_USER_CNT > 0
+              OR BNFT_OFFER_CNT > 0
+              OR PTRN_CNT > 0)
+        <if test="sidx == 'stdDt'">
+            ORDER BY T.store_id, T.std_ym ${sord}
+        </if>
+    </select>
+    <select id="getStoreSingleForGridPaginationPerDay" parameterType="JqGridRequest" resultType="ObsStoreDetlSta">
+    SELECT rnum,
+           totalRecordCount,
+           STORE_ID,
+           store_nm,
+           std_dt,
+           CHKIN_CNT,
+           CHKIN_USER_CNT,
+           CALL_CNT,
+           CALL_USER_CNT,
+           PHOTO_REG_CNT,
+           PHOTO_REG_USER_CNT,
+           RVIEW_REG_CNT,
+           RVIEW_REG_USER_CNT,
+           SHR_CLICK_CNT,
+           SHR_CLICK_USER_CNT,
+           BNFT_OFFER_CNT,
+           PTRN_CNT,
+           STAR_YN
+      FROM (SELECT ROWNUM rnum,
+                     COUNT (*) OVER () totalRecordCount,
+                     t.STORE_ID AS STORE_ID,
+                     tmp.name1 AS store_nm,
+                     TO_CHAR(TO_DATE(std_dt,'YYYYMMDD'),'YYYY-MM-DD') AS std_dt,
+                     t.CHKIN_CNT AS CHKIN_CNT,
+                     t.CHKIN_USER_CNT AS CHKIN_USER_CNT,
+                     t.CALL_CNT AS CALL_CNT,
+                     t.CALL_USER_CNT AS CALL_USER_CNT,
+                     t.PHOTO_REG_CNT AS PHOTO_REG_CNT,
+                     t.PHOTO_REG_USER_CNT AS PHOTO_REG_USER_CNT,
+                     t.RVIEW_REG_CNT AS RVIEW_REG_CNT,
+                     t.RVIEW_REG_USER_CNT AS RVIEW_REG_USER_CNT,
+                     t.SHR_CLICK_CNT AS SHR_CLICK_CNT,
+                     t.SHR_CLICK_USER_CNT AS SHR_CLICK_USER_CNT,
+                     t.BNFT_OFFER_CNT AS BNFT_OFFER_CNT,
+                     t.PTRN_CNT AS PTRN_CNT,
+                     t.STAR_YN AS STAR_YN        --check!! this line
+                FROM obs_d_store_detl_sta T, istuser.imc_m_merch_basic tmp
+               WHERE T.std_dt BETWEEN #{startDate} AND #{endDate}
+                     AND T.poc_ind_cd = '01'
+                     AND T.store_id = tmp.mid
+                     AND (   CHKIN_CNT > 0
+                          OR CHKIN_USER_CNT > 0
+                          OR CALL_CNT > 0
+                          OR CALL_USER_CNT > 0
+                          OR PHOTO_REG_CNT > 0
+                          OR PHOTO_REG_USER_CNT > 0
+                          OR RVIEW_REG_CNT > 0
+                          OR RVIEW_REG_USER_CNT > 0
+                          OR SHR_CLICK_CNT > 0
+                          OR SHR_CLICK_USER_CNT > 0
+                          OR BNFT_OFFER_CNT > 0
+                          OR PTRN_CNT > 0)
+                     AND ROWNUM &lt;= #{lastIndex}
+                <if test="sidx == 'stdDt'">
+                ORDER BY T.store_id, T.std_dt ${sord}
+                </if>
+              )
+     WHERE rnum &gt; #{firstIndex}
+    </select>
+    <select id="getStoreSingleForGridPaginationPerMonth" parameterType="JqGridRequest" resultType="ObsStoreDetlSta">
+    SELECT rnum,
+           totalRecordCount,
+           STORE_ID,
+           store_nm,
+           std_dt,
+           CHKIN_CNT,
+           CHKIN_USER_CNT,
+           CALL_CNT,
+           CALL_USER_CNT,
+           PHOTO_REG_CNT,
+           PHOTO_REG_USER_CNT,
+           RVIEW_REG_CNT,
+           RVIEW_REG_USER_CNT,
+           SHR_CLICK_CNT,
+           SHR_CLICK_USER_CNT,
+           BNFT_OFFER_CNT,
+           PTRN_CNT,
+           STAR_YN
+      FROM (SELECT   ROWNUM rnum,
+                     COUNT (*) OVER () totalRecordCount,
+                     t.STORE_ID AS STORE_ID,
+                     tmp.name1 AS store_nm,
+                     TO_CHAR(TO_DATE(std_ym,'YYYYMM'),'YYYY-MM') AS std_dt,
+                     t.CHKIN_CNT AS CHKIN_CNT,
+                     t.CHKIN_USER_CNT AS CHKIN_USER_CNT,
+                     t.CALL_CNT AS CALL_CNT,
+                     t.CALL_USER_CNT AS CALL_USER_CNT,
+                     t.PHOTO_REG_CNT AS PHOTO_REG_CNT,
+                     t.PHOTO_REG_USER_CNT AS PHOTO_REG_USER_CNT,
+                     t.RVIEW_REG_CNT AS RVIEW_REG_CNT,
+                     t.RVIEW_REG_USER_CNT AS RVIEW_REG_USER_CNT,
+                     t.SHR_CLICK_CNT AS SHR_CLICK_CNT,
+                     t.SHR_CLICK_USER_CNT AS SHR_CLICK_USER_CNT,
+                     t.BNFT_OFFER_CNT AS BNFT_OFFER_CNT,
+                     t.PTRN_CNT AS PTRN_CNT,
+                     t.STAR_YN AS STAR_YN        --check!! this line
+                FROM obs_m_store_detl_sta T, istuser.imc_m_merch_basic tmp
+               WHERE     T.std_ym BETWEEN #{startDate} AND #{endDate}
+                     AND T.poc_ind_cd = '01'
+                     AND T.store_id = tmp.mid
+                     AND (   CHKIN_CNT > 0
+                          OR CHKIN_USER_CNT > 0
+                          OR CALL_CNT > 0
+                          OR CALL_USER_CNT > 0
+                          OR PHOTO_REG_CNT > 0
+                          OR PHOTO_REG_USER_CNT > 0
+                          OR RVIEW_REG_CNT > 0
+                          OR RVIEW_REG_USER_CNT > 0
+                          OR SHR_CLICK_CNT > 0
+                          OR SHR_CLICK_USER_CNT > 0
+                          OR BNFT_OFFER_CNT > 0
+                          OR PTRN_CNT > 0)
+                     AND ROWNUM &lt;= #{lastIndex}
+        <if test="sidx == 'stdDt'">
+            ORDER BY T.store_id, T.std_ym ${sord}
+        </if>
+      )
+     WHERE rnum &gt; #{firstIndex}
+    </select>
+</mapper>

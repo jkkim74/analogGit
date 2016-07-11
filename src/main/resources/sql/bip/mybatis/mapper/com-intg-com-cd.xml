@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.ComIntgComCdRepository">
+    <select id="getComIntgComCds" parameterType="ComIntgComCd" resultType="ComIntgComCd">
+        SELECT SYS_IND_CD, COM_GRP_CD, COM_CD, COM_GRP_CD_NM, COM_CD_NM, SORT_SEQ, USE_YN, COM_CD_DESC ,OPER_DTM
+        FROM   COMUSER.COM_INTG_COM_CD
+        WHERE  USE_YN = 'Y'
+        AND    SYS_IND_CD = #{sysIndCd}
+        AND    COM_GRP_CD = #{comGrpCd}
+        ORDER BY SORT_SEQ
+    </select>
+    <select id="getSvcComCds" parameterType="SvcComCd" resultType="SvcComCd">
+        <foreach collection="list" item="item" separator=" UNION ALL ">
+            SELECT svc_id, code_type, code, code_nm, delete_yn, ord_idx
+            FROM   svc_com_cd
+            WHERE  svc_id = #{item.svcId}
+            AND    code_type = #{item.codeType}
+        </foreach>
+        ORDER  BY ord_idx
+    </select>
+</mapper>
+

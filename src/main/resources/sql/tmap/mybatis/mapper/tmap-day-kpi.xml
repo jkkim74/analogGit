@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.tmap.TmapDayKpiRepository">
+
+    <select id="getDayKpiPerDayForChart" parameterType="JqGridRequest" resultType="TmapDayKpi">
+          WITH BB AS (SELECT B1.STRD_DT
+                           , B1.UV AS RSLT_UV
+                        FROM TMAP_DAY_ACCUM_KPI_STC B1
+                       WHERE B1.STRD_DT LIKE #{endDate}||'%'
+                         AND B1.KPI_CD = #{kpiCode}
+                     ),
+               CC AS (SELECT C1.STRD_DT
+                           , MAX(C1.TRGT_UV) OVER() AS TRGT_UV
+                        FROM TMAP_DAY_ACCUM_KPI_TRGT C1
+                       WHERE C1.STRD_DT LIKE #{endDate}||'%'
+                         AND C1.KPI_CD = #{kpiCode}
+                     ),
+               DD AS (SELECT D1.STRD_DT
+                           , D2.ESTI_UV
+                        FROM (
+                              SELECT STRD_DT
+                                FROM TMAP_DAY_ACCUM_KPI_ESTI
+                               WHERE STRD_DT LIKE #{endDate}||'%'
+                                 AND KPI_CD = #{kpiCode}
+                               MINUS
+                              SELECT STRD_DT
+                                FROM TMAP_DAY_ACCUM_KPI_STC
+                               WHERE STRD_DT LIKE #{endDate}||'%'
+                                 AND KPI_CD = #{kpiCode}
+                             ) D1
+                           , TMAP_DAY_ACCUM_KPI_ESTI D2
+                       WHERE D2.STRD_DT = D1.STRD_DT
+                         AND D2.KPI_CD  = #{kpiCode}
+                     ),
+               GG AS (SELECT G1.CLDR_DT
+                           , G2.UV
+                        FROM (
+                              SELECT CLDR_DT
+                                FROM TMAP_CLDR
+                               WHERE CLDR_DT LIKE #{endDate}||'%'
+                             ) G1
+                       CROSS JOIN
+                             (
+                              SELECT MAX(UV) AS UV
+                                FROM TMAP_DAY_ACCUM_KPI_STC
+                               WHERE STRD_DT LIKE TO_CHAR(ADD_MONTHS(TO_DATE(#{endDate}, 'YYYYMM'), -1), 'YYYYMM')||'%'
+                                 AND KPI_CD = #{kpiCode}
+                             ) G2
+                     )
+        SELECT AA.DISP_DT        AS strd_dt
+             , NVL(CC.TRGT_UV,0) AS mnt_trgt_uv
+             , NVL(BB.RSLT_UV,0) AS rslt_uv
+             , NVL(DD.ESTI_UV,0) AS esti_uv
+             , NVL(FF.TRGT_UV,0) AS trgt_uv
+             , NVL(EE.UV,GG.UV)  AS uv
+          FROM TMAP_CLDR AA
+             , BB
+             , CC
+             , DD
+             , TMAP_DAY_ACCUM_KPI_STC EE
+             , TMAP_DAY_ACCUM_KPI_TRGT FF
+             , GG
+         WHERE AA.CLDR_DT LIKE #{endDate}||'%'
+           AND AA.CLDR_DT               = BB.STRD_DT(+)
+           AND AA.CLDR_DT               = CC.STRD_DT(+)
+           AND AA.CLDR_DT               = DD.STRD_DT(+)
+           AND AA.CLDR_DT               = FF.STRD_DT(+)
+           AND EE.STRD_DT(+) LIKE TO_CHAR(ADD_MONTHS(TO_DATE(#{endDate},'YYYYMM'), -1),'YYYYMM')||'%'
+           AND SUBSTR(AA.CLDR_DT, 7, 2) = SUBSTR(EE.STRD_DT(+),7,2)
+           AND EE.KPI_CD(+)             = #{kpiCode}
+           AND FF.KPI_CD(+)             = #{kpiCode}
+           AND AA.CLDR_DT               = GG.CLDR_DT
+         ORDER BY AA.DISP_DT
+    </select>
+
+    <select id="getDayKpiPerDayForGrid" parameterType="JqGridRequest" resultType="TmapDayKpi">
+          WITH BB AS (SELECT B1.STRD_DT
+                           , B1.UV                                                 AS RSLT_UV
+                           , CASE WHEN B2.TRGT_UV = 0
+                                  THEN 0
+                                  ELSE ROUND(B1.UV / B2.TRGT_UV * 100,1) END       AS UV_ACHIV_RT
+                           , B1.UV - LAG(B1.UV,1,B1.UV) OVER (ORDER BY B1.STRD_DT) AS DAY_INCRE
+                        FROM TMAP_DAY_ACCUM_KPI_STC B1
+                           , TMAP_MON_KPI_STC B2
+                       WHERE B1.STRD_DT LIKE #{endDate}||'%'
+                         AND B1.KPI_CD  = #{kpiCode}
+                         AND B2.STRD_YM = SUBSTR(B1.STRD_DT,1,6)
+                         AND B2.KPI_CD  = B1.KPI_CD
+                     ),
+               DD AS (SELECT D1.STRD_DT
+                           , D2.ESTI_UV
+                        FROM (
+                              SELECT STRD_DT
+                                FROM TMAP_DAY_ACCUM_KPI_ESTI
+                               WHERE STRD_DT LIKE #{endDate}||'%'
+                                 AND KPI_CD  = #{kpiCode}
+                               MINUS
+                              SELECT STRD_DT
+                                FROM TMAP_DAY_ACCUM_KPI_STC
+                               WHERE STRD_DT LIKE #{endDate}||'%'
+                                 AND KPI_CD  = #{kpiCode}
+                             ) D1
+                           , TMAP_DAY_ACCUM_KPI_ESTI D2
+                       WHERE D2.STRD_DT = D1.STRD_DT
+                         AND D2.KPI_CD  = #{kpiCode}
+                     )
+        SELECT AA.DISP_DT                                                  AS strd_dt
+             , GG.CD_NM                                                    AS cd_nm
+             , AA.HDAY_NM                                                  AS hday_nm
+             , NVL(BB.RSLT_UV,0)                                           AS rslt_uv
+             , NVL(BB.UV_ACHIV_RT,0)                                       AS uv_achiv_rt
+             , NVL(BB.DAY_INCRE,0)                                         AS day_incre
+             , NVL(CC.TRGT_UV,0)                                           AS trgt_uv
+             , NVL(BB.RSLT_UV - CC.TRGT_UV,0)                              AS dif_trgt_rslt
+             , CASE WHEN CC.TRGT_UV = 0
+                    THEN 0
+                    ELSE NVL(ROUND(BB.RSLT_UV / CC.TRGT_UV * 100,2),0) END AS dif_trgt_rslt_rt
+             , NVL(DD.ESTI_UV,0)                                           AS esti_uv
+             , NVL(EE.UV,0)                                                AS uv
+             , NVL(BB.RSLT_UV - EE.UV,0)                                   AS dif_uv
+             , CASE WHEN EE.UV = 0
+                    THEN 0
+                    ELSE NVL(ROUND(BB.RSLT_UV / EE.UV * 100,2),0) END      AS dif_uv_rt
+             , NVL(FF.UV,0)                                                AS day_uv
+          FROM TMAP_CLDR AA
+             , BB
+             , TMAP_DAY_ACCUM_KPI_TRGT CC
+             , DD
+             , TMAP_DAY_ACCUM_KPI_STC EE
+             , TMAP_DAY_KPI_STC FF
+             , TMAP_CODE GG
+         WHERE AA.CLDR_DT LIKE #{endDate}||'%'
+           AND AA.CLDR_DT             = BB.STRD_DT(+)
+           AND AA.CLDR_DT             = CC.STRD_DT(+)
+           AND AA.CLDR_DT             = DD.STRD_DT(+)
+           AND AA.CLDR_DT             = FF.STRD_DT(+)
+           AND EE.STRD_DT(+) LIKE TO_CHAR(ADD_MONTHS(TO_DATE(#{endDate},'YYYYMM'),-1), 'YYYYMM')||'%'
+           AND SUBSTR(AA.CLDR_DT,7,2) = SUBSTR(EE.STRD_DT(+),7,2)
+           AND CC.KPI_CD(+)           = #{kpiCode}
+           AND EE.KPI_CD(+)           = #{kpiCode}
+           AND FF.KPI_CD(+)           = #{kpiCode}
+           AND GG.LCL_CD              = 'IA001011'
+           AND AA.DOW_CD              = GG.COM_CD
+         ORDER BY AA.CLDR_DT
+    </select>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.syrup.SmwPushTickerStatDtlRepository">
+    <select id="getSmwPushTickerStatDtlPerDay" parameterType="JqGridRequest" resultType="SmwPushTickerStatDtl">
+        <![CDATA[
+            SELECT CD.SORT_SEQ, CD.COM_CD, CD.CD_NM
+              , TO_CHAR(TO_DATE (STRD_DT, 'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE (STRD_DT, 'yyyymmdd'), 'dy')||')' AS DISP_DT
+              , PTS.PUSH_MSG, TGT_CNT, SEND_CNT, ROUND(CASE WHEN TGT_CNT = 0 THEN 0 ELSE SEND_CNT/TGT_CNT * 100 END, 2) AS SEND_SUC_CNT, UV
+            FROM (SELECT /*+ INDEX(SMW_D_PUSH_TICKER_STAT_DTL PK_SMW_D_PUSH_TICKER_STAT_DTL) */ STAT_TYPE, STRD_DT, PUSH_MSG
+                      , SUM(TGT_CNT) AS TGT_CNT
+                      , SUM(SEND_CNT) AS SEND_CNT
+                      , SUM(SEND_SUC_CNT) AS SEND_SUC_CNT
+                      , SUM(UV) AS UV
+                   FROM SMW_D_PUSH_TICKER_STAT_DTL
+                   WHERE STRD_DT BETWEEN #{startDate} AND #{endDate}
+                   AND   STAT_TYPE > ' '
+                   AND   PUSH_ID >= 0
+                   GROUP BY STAT_TYPE, STRD_DT, PUSH_MSG
+            ) PTS
+            INNER JOIN SMW_CODE CD ON PTS.STAT_TYPE = CD.COM_CD AND CD.LCL_CD = 'SMW005'
+            ORDER BY CD.SORT_SEQ, STRD_DT, PTS.PUSH_MSG
+      ]]>
+    </select>
+    <select id="getSmwPushTickerStatDtlWeek" parameterType="JqGridRequest" resultType="SmwPushTickerStatDtl">
+        <![CDATA[
+            SELECT CD.SORT_SEQ, CD.COM_CD, CD.CD_NM, PTS.DISP_WK AS DISP_DT, PTS.PUSH_MSG
+              , TGT_CNT, SEND_CNT, ROUND(CASE WHEN TGT_CNT = 0 THEN 0 ELSE SEND_CNT/TGT_CNT * 100 END, 2) AS SEND_SUC_CNT, UV
+            FROM (SELECT /*+ INDEX(SMW_W_PUSH_TICKER_STAT_DTL PK_SMW_W_PUSH_TICKER_STAT_DTL) */ STAT_TYPE, STRD_YR||'-'||TO_CHAR(STRD_WK,'FM00') AS DISP_WK, PUSH_MSG
+                       , SUM(TGT_CNT) AS TGT_CNT
+                       , SUM(SEND_CNT) AS SEND_CNT
+                       , SUM(SEND_SUC_CNT) AS SEND_SUC_CNT
+                       , SUM(UV) AS UV
+                    FROM SMW_W_PUSH_TICKER_STAT_DTL
+                    WHERE STRD_YR||STRD_WK BETWEEN
+                        (SELECT STRD_YEAR||STRD_WK_SEQ FROM SMW_CLDR_WK WHERE WK_ST_DT <= #{startDate} AND WK_ED_DT >= #{startDate})
+                          AND (SELECT STRD_YEAR||STRD_WK_SEQ FROM SMW_CLDR_WK WHERE WK_ST_DT <= #{endDate} AND WK_ED_DT >= #{endDate})
+                    AND   STAT_TYPE > ' '
+                    AND   PUSH_ID >= 0
+                    GROUP BY STAT_TYPE, STRD_YR||'-'||TO_CHAR(STRD_WK,'FM00'), PUSH_MSG
+             ) PTS
+            INNER JOIN SMW_CODE CD ON PTS.STAT_TYPE = CD.COM_CD AND CD.LCL_CD = 'SMW005'
+            ORDER BY CD.SORT_SEQ, PTS.DISP_WK, PTS.PUSH_MSG
+        ]]>
+    </select>
+    <select id="getSmwPushTickerStatDtlPerMonth" parameterType="JqGridRequest" resultType="SmwPushTickerStatDtl">
+        <![CDATA[
+            SELECT CD.SORT_SEQ, CD.COM_CD, CD.CD_NM, TO_CHAR(TO_DATE(STRD_YM, 'YYYYMM'),'YYYY-MM') AS DISP_DT
+              , PTS.PUSH_MSG, TGT_CNT, SEND_CNT, ROUND(CASE WHEN TGT_CNT = 0 THEN 0 ELSE SEND_CNT/TGT_CNT * 100 END, 2) AS SEND_SUC_CNT, UV
+              FROM (SELECT /*+ INDEX(SMW_M_PUSH_TICKER_STAT_DTL PK_SMW_M_PUSH_TICKER_STAT_DTL) */ STAT_TYPE, STRD_YM, PUSH_MSG
+                      , SUM(TGT_CNT) AS TGT_CNT
+                      , SUM(SEND_CNT) AS SEND_CNT
+                      , SUM(SEND_SUC_CNT) AS SEND_SUC_CNT
+                      , SUM(UV) AS UV
+                   FROM SMW_M_PUSH_TICKER_STAT_DTL
+                  WHERE STRD_YM BETWEEN #{startDate} AND #{endDate}
+                  AND   STAT_TYPE > ' '
+                  AND   PUSH_ID >= 0
+               GROUP BY STAT_TYPE, STRD_YM, PUSH_MSG
+            ) PTS
+            INNER JOIN SMW_CODE CD ON PTS.STAT_TYPE = CD.COM_CD AND CD.LCL_CD = 'SMW005'
+            ORDER BY CD.SORT_SEQ, STRD_YM, PTS.PUSH_MSG
+      ]]>
+    </select>
+</mapper>

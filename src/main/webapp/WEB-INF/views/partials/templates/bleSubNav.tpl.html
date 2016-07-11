@@ -1,0 +1,23 @@
+<!-- report subtitle nav -->
+<!--<h2>{{menuContext.category.name}} <span>&gt;</span> {{menuContext.menu.name}}</h2>-->
+<div class="btn-group">
+    <!--<button class="btn btn-white" type="button"><img src="resources/images/ico/add.png" alt="대시보드 추가" /></button>-->
+    <!--<button clas<input type='hidden' name='dateType' value=''/>s="btn btn-white" type="button"><img src="resources/images/ico/copy.png" alt="클립보드 복사" /></button>-->
+    <button class="btn btn-white" type="button"><a href="https://docs.google.com/spreadsheets/d/1xHw3j6NCTA-y-K_aqXNvMETSTgO2rcnWVJNLAMEva58/edit?usp=sharing" target="_blank"><img src="resources/images/ico/info15_3.png" alt="리포트 내용 정보" /></a></button>
+    <button id="excelButton" class="btn btn-white" type="button" data-ng-click="excelDownload()">
+        <img src="resources/images/ico/down.png" alt="엑셀 다운로드" title="엑셀 다운로드" />
+    </button>
+    <form method='post' action='' id='bleExcelForm'>
+        <input type='hidden' name='dateType' value=''/>
+        <input type='hidden' name='startDate' value=''/>
+        <input type='hidden' name='endDate' value=''/>
+        <input type='hidden' name='measureCode' value=''/>
+        <input type='hidden' name='searchString' value=''/>
+        <input type='hidden' name='titleName' value=''/>
+        <input type='hidden' name='xlsName' value=''/>
+        <input type='hidden' name='itemCode' value=''/>
+        <input type='hidden' name='serviceTypeCode' value=''/>
+        <input type='hidden' name='statContents' value=''/>
+    </form>
+</div>
+<!--// report subtitle nav -->

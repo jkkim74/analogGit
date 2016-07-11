@@ -1,0 +1,143 @@
+<div ng-controller="moveToJiraCtrl" ng-init="init()">
+    <div class="mar-t20" ng-style="style(0)" resize>
+        <div style="padding:10px; border:1px solid #666;border-radius:10px; margin-right: 20px;">
+            <b>Voyager 업무요청 JIRA 서비스데스크로 이동합니다.</b>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="resources/app/helpdesk/moveToJiraCtrl.js"></script>
+
+<!--backup for late-->
+<!--<div ng-controller="workRequestHelpDeskCtrl" ng-init="init()">-->
+<!--&lt;!&ndash; main content start &ndash;&gt;-->
+    <!--<section id="main-content">-->
+        <!--<article class="wrapper">-->
+            <!--<div class="row content-wrap">-->
+                <!--<div class="col-md-12">-->
+                    <!--<div class="page-title obj-clear">-->
+                        <!--<h1 class="pull-left">작업요청</h1>-->
+                        <!--<div class="add-bookmark btn-group">-->
+                            <!--&lt;!&ndash;<button href="#" class="btn btn-white btn-rqst">작업요청 등록</button>&ndash;&gt;-->
+                        <!--</div>-->
+                        <!--<div class="pagenation">-->
+                            <!--Home <span>&gt;</span> Help Desk <span>&gt;</span> 작업요청-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="search-report-info type01">-->
+                        <!--<table summary="작업 요청 정보 입력 표(작업제목, 작업등록자, 작업담당자, 작업상태, 작업등록일자, 작업완료일자)">-->
+                            <!--<caption>작업 요청 정보 입력 표</caption>-->
+                            <!--<tbody>-->
+                                <!--<tr>-->
+                                    <!--<th scope="row">작업제목</th>-->
+                                    <!--<td colspan="3">-->
+                                        <!--<input data-ng-model="searchText.summary" type="text" class="form-control" title="작업제목 입력" />-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<th scope="row">작업등록자</th>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<td><input data-ng-model="searchText.applicant" type="text" class="form-control" title="작업등록자 입력" /></td>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<th>작업담당자</th>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<td><input data-ng-model="searchText.approval" type="text" class="form-control" title="작업담당자 입력" /></td>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<th scope="row">작업상태</th>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<td>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<select ng-model="searchForm.status"&ndash;&gt;-->
+                                                <!--&lt;!&ndash;ng-options="status.codeName as status.codeName for status in statusTypeList"&ndash;&gt;-->
+                                                <!--&lt;!&ndash;class="select" title="작업상태 선택">{{searchForm.status}}&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<option value='' selected="selected">ALL</option>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</td>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<th scope="row">서비스</th>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<td>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<select ng-model="searchForm.component"&ndash;&gt;-->
+                                                <!--&lt;!&ndash;ng-options="component.codeName as component.codeName for component in componentTypeList"&ndash;&gt;-->
+                                                <!--&lt;!&ndash;class="select" title="서비스 선택">{{searchForm.component}}&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<option value='' selected="selected">ALL</option>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</td>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                                <!--<tr>-->
+                                    <!--<th scope="row">작업 등록일자</th>-->
+                                    <!--<td colspan="3">-->
+                                        <!--<span class="checkbox">-->
+                                            <!--<input type="checkbox" data-ng-model="searchForm.createDateTotal" data-ng-change="checkBoxState()" id="rqst01" />-->
+                                            <!--<label for="rqst01">전체</label>-->
+                                        <!--</span>-->
+
+                                        <!--<div class="date-picker-area obj-clear">-->
+                                            <!--<div class="date-picker input-append success date">-->
+                                                <!--<input data-ng-model="searchForm.createStartDate" class="form-control date-pick" type="text" ng-readonly="true"/>-->
+                                                <!--<span class="add-on pull-left">-->
+                                                    <!--<span class="arrow"></span>-->
+                                                    <!--<i class="fa fa-th"></i>-->
+                                                <!--</span>-->
+                                            <!--</div>-->
+                                            <!--<span class="to">~</span>-->
+                                            <!--<div class="date-picker input-append success date">-->
+                                                <!--<input data-ng-model="searchForm.createEndDate" class="form-control date-pick" type="text" ng-readonly="true"/>-->
+                                                <!--<span class="add-on pull-left">-->
+                                                    <!--<span class="arrow"></span>-->
+                                                    <!--<i class="fa fa-th"></i>-->
+                                                <!--</span>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<th scope="row">완료희망일자</th>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<td colspan="3">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<span class="checkbox">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<input type="checkbox" data-ng-model="searchForm.dueDateTotal" data-ng-change="checkBoxState()"id="rqst02" />&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<label for="rqst02">전체</label>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="date-picker-area obj-clear">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<div class="date-picker input-append success date" >&ndash;&gt;-->
+                                                <!--&lt;!&ndash;<input data-ng-model="searchForm.dueStartDate" class="form-control date-pick" type="text" ng-readonly="true"/>&ndash;&gt;-->
+                                                <!--&lt;!&ndash;<span class="add-on pull-left">&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;<span class="arrow"></span>&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;<i class="fa fa-th"></i>&ndash;&gt;-->
+                                                <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<span class="to">~</span>&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<div class="date-picker input-append success date">&ndash;&gt;-->
+                                                <!--&lt;!&ndash;<input data-ng-model="searchForm.dueEndDate" class="form-control date-pick" type="text" ng-readonly="true"/>&ndash;&gt;-->
+                                                <!--&lt;!&ndash;<span class="add-on pull-left">&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;<span class="arrow"></span>&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;<i class="fa fa-th"></i>&ndash;&gt;-->
+                                                <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</td>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                                <!--<tr>-->
+                                    <!--<td colspan="4" class="report-control">-->
+                                        <!--<button data-ng-click="doSearch();" class="btn btn-search">Search</button>-->
+                                        <!--<button data-ng-click="doSearchInit();" class="btn btn-white btn-return">선택 초기화</button>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                            <!--</tbody>-->
+                        <!--</table>-->
+                    <!--</div>-->
+
+                    <!--<table ng-table="workRequestTableParams" class="table text-center table_list">-->
+                        <!--<tr data-ng-repeat="item in workRequestList" data-ng-click="goToJiraArticle(item.key)">-->
+                            <!--<td data-title="'NO.'" style="width: 10%">{{$index+1}}</td>-->
+                            <!--<td data-title="'제목'" class="text-left" style="width: 30%">{{item.summary}}</td>-->
+                            <!--<td data-title="'status'" style="width: 10%">{{item.status}}</td>-->
+                            <!--<td data-title="'작업등록자'" style="width: 20%">{{item.reporter}}</td>-->
+                            <!--<td data-title="'작업담당자'" style="width: 20%">{{item.assignee}}</td>-->
+                            <!--<td data-title="'작업등록일자'" style="width: 10%">{{item.creationDate | limitTo:10 }}</td>-->
+                        <!--</tr>-->
+                        <!--<tr data-ng-if="workRequestList.length == 0">-->
+                            <!--<td colspan="7"><h2>{{searchMessage}}</h2></td>-->
+                        <!--</tr>-->
+                    <!--</table>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</article>-->
+    <!--</section>-->
+<!--&lt;!&ndash; main content end &ndash;&gt;-->
+<!--</div>-->
+<!--<script type="text/javascript" src="resources/app/helpdesk/workRequest/workRequestHelpDeskCtrl.js"></script>-->

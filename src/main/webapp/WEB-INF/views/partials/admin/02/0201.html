@@ -1,0 +1,8 @@
+<div class="col-md-12" ng-controller="batchInfoCtrl" data-ng-init="init()" ng-style="styleNoTab(-140)" resize table-id="tableId">
+    <admin-search-box search-callback="search" admin-date-types="adminDateTypes" date-flag="dateFlag" menu-context="menuContext"></admin-search-box>
+    <div class="data-area jq-board" ng-style="dataAreaStyleNoTab(20)" resize>
+        <!--<jq-grid config="batchInfoConfig" id="batchInfoForGrid"></jq-grid>-->
+        <div id="batchInfoForGrid" report-indicator="pageState"></div>
+    </div>
+</div>
+<script type="text/javascript" src="resources/app/admin/boss/batchInfoCtrl.js"></script>

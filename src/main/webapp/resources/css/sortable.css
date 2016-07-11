@@ -1,0 +1,22 @@
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+
+ol.example li.placeholder {
+  position: relative;
+  /** More li styles **/
+}
+ol.example li.placeholder:before {
+  position: absolute;
+  /** Define arrowhead **/
+}
+
+#widget-container .widget, #widget-container .widget-placeholder { float:left;border-radius: 5px; width:49%;height:250px;padding:2px;margin:2px;}
+#widget-container .widget { border:1px solid #DDDDDD; }
+#widget-container .widget-placeholder {border: 1px dashed #ccc; background-color:#f3f3f3; }

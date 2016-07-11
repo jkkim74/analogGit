@@ -1,0 +1,32 @@
+<!-- Date: 2013-04-04 10:00:55 -->
+<!-- Author : Sofware Quality Engineering -->
+<!-- Description : exclude filter rules-->
+<FindBugsFilter>
+	<Match>
+		<Bug pattern="USM_USELESS_ABSTRACT_METHOD" />
+	</Match>
+	<Match>
+		<Bug pattern="BAC_BAD_APPLET_CONSTRUCTOR" />
+	</Match>
+	<Match>
+		<Bug pattern="UOE_USE_OBJECT_EQUALS" />
+	</Match>
+	<Match>
+		<Bug pattern="IMA_INEFFICIENT_MEMBER_ACCESS" />
+	</Match>
+	<Match>
+		<Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
+	</Match>
+	<Match>
+		<Bug pattern="USM_USELESS_SUBCLASS_METHOD" />
+	</Match>
+	<Match>
+		<Bug pattern="FB_MISSING_EXPECTED_WARNING" />
+	</Match>
+	<Match>
+		<Bug pattern="CD_CIRCULAR_DEPENDENCY" />
+	</Match>
+	<Match>
+		<Bug pattern="FB_UNEXPECTED_WARNING" />
+	</Match>
+</FindBugsFilter>

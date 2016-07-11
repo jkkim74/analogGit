@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.MenuSearchOptionRepository">
+    <select id="getMenuSearchOptionByMenuId" parameterType="Long" resultType="MenuSearchOption">
+        SELECT menu_id, add_type, label, date_types, code_url, calendar_type, last_update
+        FROM   menu_search_option
+        WHERE  menu_id = #{menuId}
+    </select>
+    <insert id="updateMenuSearchOption" parameterType="MenuSearchOption">
+        MERGE INTO menu_search_option
+        USING DUAL
+            ON (menu_id = #{menuId})
+            WHEN MATCHED THEN
+        UPDATE SET
+            add_type = #{addType, jdbcType=VARCHAR},
+            label = #{label, jdbcType=VARCHAR},
+            date_types = #{dateTypes, jdbcType=VARCHAR},
+            code_url = #{codeUrl, jdbcType=VARCHAR},
+            calendar_type = #{calendarType, jdbcType=VARCHAR},
+            last_update = #{lastUpdate, jdbcType=VARCHAR},
+            audit_id = #{auditId, jdbcType=VARCHAR}
+        WHEN NOT MATCHED THEN
+            INSERT (menu_id, add_type, label, date_types, code_url, calendar_type, last_update, audit_id)
+            VALUES (
+                #{menuId}, #{addType, jdbcType=VARCHAR}, #{label, jdbcType=VARCHAR}, #{dateTypes, jdbcType=VARCHAR},
+                #{codeUrl, jdbcType=VARCHAR}, #{calendarType, jdbcType=VARCHAR}, #{lastUpdate, jdbcType=VARCHAR}, #{auditId, jdbcType=VARCHAR})
+    </insert>
+    <insert id="createMenuSearchOptionBack" parameterType="MenuSearchOption">
+        INSERT INTO menu_search_option_back (menu_id, add_type, label, date_types, code_url, last_update, calendar_type, audit_id)
+        SELECT menu_id, add_type, label, date_types, code_url, #{lastUpdate}, calendar_type, #{auditId}
+        FROM  menu_search_option
+        WHERE menu_id = #{menuId}
+    </insert>
+    <delete id="deleteMenuSearchOption" parameterType="Long">
+        DELETE FROM menu_search_option WHERE menu_id = #{menuId}
+    </delete>
+</mapper>

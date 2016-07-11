@@ -1,0 +1,46 @@
+<!-- sidebar start -->
+<nav>
+    <div id="sidebar" class="nav-collapse">
+        <div class="leftside-navigation">
+            <div class="slide_btn" ng-click="slide();">
+                <span>
+                    <i class="fa fa-angle-left fa-35"></i>
+                </span>
+            </div>
+            <h1 class="tit">Dataset Sharing</h1>
+            <ul class="sidebar-menu" id="nav-accordion">
+                <!--<li class="sub-menu">-->
+                    <!--<a ui-sref-active="active" ui-sref="main.dss.menu({menu: 'recommend'})">-->
+                        <!--추천 보고서-->
+                    <!--</a>-->
+                <!--</li>-->
+                <li class="sub-menu">
+                    <a ng-class="{active: $state.is('main.dss.menu', {menu:'all'}) || $state.is('main.dss.detail')}" ui-sref="main.dss.menu({menu: 'all'})">
+                        모든 보고서
+                    </a>
+                </li>
+                <li class="sub-menu">
+                    <a ng-class="{active: $state.is('main.dss.menu', {menu: 'add'})}" ui-sref="main.dss.menu({menu: 'add'})">
+                        보고서 등록
+                    </a>
+                </li>
+            </ul>
+            <!--<div class="btn-save">-->
+                <!--<button class="btn btn-white" data-ng-click="changeModifyMode()">완료</button>-->
+            <!--</div>-->
+
+            <!-- bookmark area start -->
+            <!--<favorite-bar />-->
+            <!-- bookmark area end -->
+        </div>
+    </div>
+</nav>
+<!-- sidebar end -->
+<section class="container-wrap" ng-controller="dssCtrl" ng-init="init()" resize>
+    <section id="container" class="container">
+        <!-- content start -->
+        <div ui-view></div>
+        <!-- content end -->
+    </section>
+</section>
+<script type="text/javascript" src="resources/app/dss/controller/dssCtrl.js"></script>

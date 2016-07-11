@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.syrup.SmwRcmdStatDtlRepository">
+    <select id="getSmwRcmdStatDtlPerDay" parameterType="JqGridRequest" resultType="SmwRcmdStatDtl">
+        <![CDATA[
+          SELECT TO_CHAR(TO_DATE (STRD_DT, 'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE (STRD_DT, 'yyyymmdd'), 'dy')||')' AS STRD_DT
+                 , REC_ID, REC_NM
+                 , SUM(TGT_CNT) AS TGT_CNT
+                 , SUM(ACCUM_TGT_CNT) AS ACCUM_TGT_CNT
+                 , SUM(ISSUE_CNT) AS ISSUE_CNT
+                 , SUM(ACCUM_ISSUE_CNT) AS ACCUM_ISSUE_CNT
+                 , SUM(ISSUE_PAGE_CNT) AS ISSUE_PAGE_CNT
+                 , SUM(ACCUM_ISSUE_PAGE_CNT) AS ACCUM_ISSUE_PAGE_CNT
+          FROM (
+                 SELECT /*+ INDEX_SS(SMW_D_RCMD_STAT_DTL PK_SMW_D_RCMD_STAT_DTL) PARALLEL(SMW_D_RCMD_STAT_DTL, 6) */ STRD_DT, GNDR_CD, AGE_RNG_CD, OS_CD, TELC_CD, REC_TYPE, REC_ID, REC_NM,
+                    SUM(TGT_CNT) AS TGT_CNT,
+                    MAX(ACCUM_TGT_CNT) AS ACCUM_TGT_CNT,
+                    SUM(ISSUE_CNT) AS ISSUE_CNT,
+                    MAX(ACCUM_ISSUE_CNT) AS ACCUM_ISSUE_CNT,
+                    SUM(ISSUE_PAGE_CNT) AS ISSUE_PAGE_CNT,
+                    MAX(ACCUM_ISSUE_PAGE_CNT) AS ACCUM_ISSUE_PAGE_CNT
+                  FROM SMW_D_RCMD_STAT_DTL
+                  WHERE STRD_DT BETWEEN #{startDate} AND #{endDate}
+                  AND REC_TYPE = 'D'
+                  GROUP BY STRD_DT, GNDR_CD, AGE_RNG_CD, OS_CD, TELC_CD, REC_TYPE, REC_ID, REC_NM
+                )
+           GROUP BY TO_CHAR(TO_DATE (STRD_DT, 'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE (STRD_DT, 'yyyymmdd'), 'dy')||')', REC_ID, REC_NM
+        ]]>
+    </select>
+    <select id="getSmwRcmdStatDtlPerWeek" parameterType="JqGridRequest" resultType="SmwRcmdStatDtl">
+        <![CDATA[
+            SELECT STRD_DT, REC_ID, REC_NM
+               , SUM(TGT_CNT) AS TGT_CNT
+               , SUM(ACCUM_TGT_CNT) AS ACCUM_TGT_CNT
+               , SUM(ISSUE_CNT) AS ISSUE_CNT
+               , SUM(ACCUM_ISSUE_CNT) AS ACCUM_ISSUE_CNT
+               , SUM(ISSUE_PAGE_CNT) AS ISSUE_PAGE_CNT
+               , SUM(ACCUM_ISSUE_PAGE_CNT) AS ACCUM_ISSUE_PAGE_CNT
+            FROM (SELECT /*+ INDEX_SS(SMW_D_RCMD_STAT_DTL PK_SMW_D_RCMD_STAT_DTL) PARALLEL(SMW_D_RCMD_STAT_DTL, 6) */ STRD_YR||'-'||TO_CHAR(STRD_WK,'FM00') STRD_DT, GNDR_CD, AGE_RNG_CD, OS_CD, TELC_CD, REC_TYPE, REC_ID, REC_NM,
+                     SUM(TGT_CNT) AS TGT_CNT,
+                     MAX(ACCUM_TGT_CNT) AS ACCUM_TGT_CNT,
+                     SUM(ISSUE_CNT) AS ISSUE_CNT,
+                     MAX(ACCUM_ISSUE_CNT) AS ACCUM_ISSUE_CNT,
+                     SUM(ISSUE_PAGE_CNT) AS ISSUE_PAGE_CNT,
+                     MAX(ACCUM_ISSUE_PAGE_CNT) AS ACCUM_ISSUE_PAGE_CNT
+                  FROM  SMW_D_RCMD_STAT_DTL
+                  WHERE STRD_DT BETWEEN
+                    (SELECT WK_ST_DT FROM SMW_CLDR_WK WHERE WK_ST_DT <= #{startDate} AND WK_ED_DT >= #{startDate})
+                      AND (SELECT WK_ED_DT FROM SMW_CLDR_WK WHERE WK_ST_DT <= #{endDate} AND WK_ED_DT >= #{endDate})
+                  AND   REC_TYPE = 'D'
+                  GROUP BY STRD_YR||'-'||TO_CHAR(STRD_WK,'FM00'), GNDR_CD, AGE_RNG_CD, OS_CD, TELC_CD, REC_TYPE, REC_ID, REC_NM
+            )
+            GROUP BY STRD_DT, REC_ID, REC_NM
+        ]]>
+    </select>
+    <select id="getSmwRcmdStatDtlPerMonth" parameterType="JqGridRequest" resultType="SmwRcmdStatDtl">
+        <![CDATA[
+            SELECT STRD_DT, REC_ID, REC_NM
+                 , SUM(TGT_CNT) AS TGT_CNT
+                 , SUM(ACCUM_TGT_CNT) AS ACCUM_TGT_CNT
+                 , SUM(ISSUE_CNT) AS ISSUE_CNT
+                 , SUM(ACCUM_ISSUE_CNT) AS ACCUM_ISSUE_CNT
+                 , SUM(ISSUE_PAGE_CNT) AS ISSUE_PAGE_CNT
+                 , SUM(ACCUM_ISSUE_PAGE_CNT) AS ACCUM_ISSUE_PAGE_CNT
+             FROM (
+                SELECT /*+ INDEX_SS(SMW_D_RCMD_STAT_DTL PK_SMW_D_RCMD_STAT_DTL) PARALLEL(SMW_D_RCMD_STAT_DTL, 6) */ TO_CHAR(TO_DATE(STRD_YM, 'YYYYMM'),'YYYY-MM') AS STRD_DT, GNDR_CD, AGE_RNG_CD, OS_CD, TELC_CD, REC_TYPE, REC_ID, REC_NM,
+                      SUM(TGT_CNT) AS TGT_CNT,
+                      MAX(ACCUM_TGT_CNT) AS ACCUM_TGT_CNT,
+                      SUM(ISSUE_CNT) AS ISSUE_CNT,
+                      MAX(ACCUM_ISSUE_CNT) AS ACCUM_ISSUE_CNT,
+                      SUM(ISSUE_PAGE_CNT) AS ISSUE_PAGE_CNT,
+                      MAX(ACCUM_ISSUE_PAGE_CNT) AS ACCUM_ISSUE_PAGE_CNT
+                  FROM  SMW_D_RCMD_STAT_DTL
+                  WHERE STRD_YM BETWEEN #{startDate} AND #{endDate}
+                  AND   REC_TYPE = 'D'
+                  GROUP BY TO_CHAR(TO_DATE(STRD_YM, 'YYYYMM'),'YYYY-MM'), GNDR_CD, AGE_RNG_CD, OS_CD, TELC_CD, REC_TYPE, REC_ID, REC_NM
+             )
+             GROUP BY STRD_DT, REC_ID, REC_NM
+        ]]>
+    </select>
+</mapper>

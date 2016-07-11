@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.syrup.SmwCponStatRepository">
+
+    <select id="getCouponAchievePerDay" parameterType="OlapDimensionRequest" resultType="SmwCponStat">
+        WITH SMW_CODE1 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW001'),
+         SMW_CODE3 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW003'),
+         SMW_CODE5 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW004'),
+         SMW_CODE6 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW002'),
+         SMW_CODE10 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW022'),
+         SMW_CODE11 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW016')
+            SELECT
+                <if test="useOs != null">
+                     c1.cd_nm AS os,
+                </if>
+                <if test="useSex != null">
+                     c3.cd_nm AS sex,
+                </if>
+                <if test="useAgeRange!= null">
+                     c5.cd_nm AS ageRange,
+                </if>
+                <if test="useInputChannel!= null">
+                     c10.cd_nm AS inputChannel,
+                </if>
+                <if test="useCouponType!= null">
+                     c11.cd_nm AS couponType,
+                </if>
+                <if test="useTelecom != null">
+                     c6.cd_nm AS telecom,
+                </if>
+                <if test="useStandardDate != null">
+                    TO_CHAR(TO_DATE(t.STRD_DT, 'YYYYMMDD'), 'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE(t.STRD_DT, 'YYYYMMDD'), 'dy')|| ')' AS standardDate,
+                </if>
+                     SUM ( t.ISSUE_CNT )       AS issueCnt,
+                     MAX ( t.ACCUM_ISSUE_CNT ) AS accumIssueCnt,
+                     SUM ( t.USE_CNT )         AS issueUserCnt,
+                     MAX ( t.ACCUM_USE_CNT )   AS accumIssueUserCnt,
+                     CASE
+                        WHEN SUM( t.ISSUE_CNT ) = 0
+                        THEN 0
+                        ELSE SUM( t.USE_CNT) / SUM( t.ISSUE_CNT )
+                     END                                AS useCnt,
+                     SUM ( t.SHOW_CNT )                 AS showCnt,
+                     MAX ( t.ACCUM_SHOW_CNT )           AS accumShowCnt,
+                     SUM ( t.ISSUE_PAGE_CNT )           AS issuePageCnt,
+                     MAX ( t.ACCUM_ISSUE_PAGE_CNT )     AS accumIssuePageCnt,
+                     SUM ( t.ISSUE_PAGE_DTL_CNT )       AS issuePageDtlCnt,
+                     MAX ( t.ACCUM_ISSUE_PAGE_DTL_CNT ) AS accumIssuePageDtlCnt
+                FROM SMW_D_CPON_STAT t, SMW_CODE1 c1, SMW_CODE3 c3, SMW_CODE5 c5, SMW_CODE6 c6, SMW_CODE10 c10, SMW_CODE11 c11
+               WHERE t.strd_dt BETWEEN #{startDate} AND #{endDate}
+                <if test="useOs == null">
+                    AND t.OS_CD = 'T'
+                </if>
+                <if test="useSex == null">
+                    AND t.GNDR_CD = 'T'
+                </if>
+                <if test="useAgeRange == null">
+                    AND t.AGE_RNG_CD = 'TTTT'
+                </if>
+                <if test="useInputChannel == null">
+                    AND t.IN_CHN_CD = 'TTT'
+                </if>
+                <if test="useCouponType == null">
+                    AND t.CPON_TYP_CD = 'T'
+                </if>
+                <if test="useTelecom == null">
+                    AND t.TELC_CD = 'T'
+                </if>
+                 AND t.os_cd = c1.com_cd(+)
+                 AND t.gndr_cd = c3.com_cd(+)
+                 AND t.age_rng_cd = c5.com_cd(+)
+                 AND t.telc_cd = c6.com_cd(+)
+                 AND t.in_chn_cd = c10.com_cd(+)
+                 AND t.cpon_typ_cd = c11.com_cd(+)
+            <trim prefix="GROUP BY" suffixOverrides=",">
+                <if test="useOs != null">
+                    c1.cd_nm,
+                </if>
+                <if test="useSex != null">
+                    c3.cd_nm,
+                </if>
+                <if test="useAgeRange!= null">
+                    c5.cd_nm,
+                </if>
+                <if test="useInputChannel!= null">
+                    c10.cd_nm,
+                </if>
+                <if test="useCouponType!= null">
+                    c11.cd_nm,
+                </if>
+                <if test="useTelecom != null">
+                    c6.cd_nm,
+                </if>
+                <if test="useStandardDate != null">
+                    t.strd_dt,
+                </if>
+            </trim>
+    </select>
+
+    <select id="getCouponAchievePerWeek" parameterType="OlapDimensionRequest" resultType="SmwCponStat">
+        WITH SMW_CODE1 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW001'),
+         SMW_CODE3 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW003'),
+         SMW_CODE5 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW004'),
+         SMW_CODE6 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW002'),
+         SMW_CODE10 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW022'),
+         SMW_CODE11 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW016'),
+         dateS AS (
+               SELECT strd_year||LPAD(strd_wk_seq,2,'0') dateStr
+                 FROM smw_cldr_wk
+                WHERE #{startDate} BETWEEN wk_st_dt AND wk_ed_dt),
+         dateE AS (
+               SELECT strd_year||LPAD(strd_wk_seq,2,'0') dateStr
+                 FROM smw_cldr_wk
+                WHERE #{endDate} BETWEEN wk_st_dt AND wk_ed_dt)
+            SELECT
+                <if test="useOs != null">
+                     c1.cd_nm AS os,
+                </if>
+                <if test="useSex != null">
+                     c3.cd_nm AS sex,
+                </if>
+                <if test="useAgeRange!= null">
+                     c5.cd_nm AS ageRange,
+                </if>
+                <if test="useInputChannel!= null">
+                     c10.cd_nm AS inputChannel,
+                </if>
+                <if test="useCouponType!= null">
+                     c11.cd_nm AS couponType,
+                </if>
+                <if test="useTelecom != null">
+                     c6.cd_nm AS telecom,
+                </if>
+                <if test="useStandardDate != null">
+                     t.strd_yr||'('||LPAD(t.strd_wk,2,'0')||')' AS standardDate,
+                </if>
+                     SUM ( t.ISSUE_CNT )       AS issueCnt,
+                     MAX ( t.ACCUM_ISSUE_CNT ) AS accumIssueCnt,
+                     SUM ( t.USE_CNT )         AS issueUserCnt,
+                     MAX ( t.ACCUM_USE_CNT )   AS accumIssueUserCnt,
+                     CASE
+                        WHEN SUM( t.ISSUE_CNT ) = 0
+                        THEN 0
+                        ELSE SUM( t.USE_CNT) / SUM( t.ISSUE_CNT )
+                     END                                AS useCnt,
+                     SUM ( t.SHOW_CNT )                 AS showCnt,
+                     MAX ( t.ACCUM_SHOW_CNT )           AS accumShowCnt,
+                     SUM ( t.ISSUE_PAGE_CNT )           AS issuePageCnt,
+                     MAX ( t.ACCUM_ISSUE_PAGE_CNT )     AS accumIssuePageCnt,
+                     SUM ( t.ISSUE_PAGE_DTL_CNT )       AS issuePageDtlCnt,
+                     MAX ( t.ACCUM_ISSUE_PAGE_DTL_CNT ) AS accumIssuePageDtlCnt
+                FROM SMW_W_CPON_STAT t, SMW_CODE1 c1, SMW_CODE3 c3, SMW_CODE5 c5, SMW_CODE6 c6, dateS, dateE, SMW_CODE10 c10, SMW_CODE11 c11
+               WHERE (t.strd_yr||LPAD(t.strd_wk,2,'0')) BETWEEN dateS.dateStr AND dateE.dateStr
+                <if test="useOs == null">
+                    AND t.OS_CD = 'T'
+                </if>
+                <if test="useSex == null">
+                    AND t.GNDR_CD = 'T'
+                </if>
+                <if test="useAgeRange == null">
+                    AND t.AGE_RNG_CD = 'TTTT'
+                </if>
+                <if test="useInputChannel == null">
+                    AND t.IN_CHN_CD = 'TTT'
+                </if>
+                <if test="useCouponType == null">
+                    AND t.CPON_TYP_CD = 'T'
+                </if>
+                <if test="useTelecom == null">
+                    AND t.TELC_CD = 'T'
+                </if>
+                 AND t.os_cd = c1.com_cd(+)
+                 AND t.gndr_cd = c3.com_cd(+)
+                 AND t.age_rng_cd = c5.com_cd(+)
+                 AND t.telc_cd = c6.com_cd(+)
+                 AND t.in_chn_cd = c10.com_cd(+)
+                 AND t.cpon_typ_cd = c11.com_cd(+)
+            <trim prefix="GROUP BY" suffixOverrides=",">
+                <if test="useOs != null">
+                    c1.cd_nm,
+                </if>
+                <if test="useSex != null">
+                    c3.cd_nm,
+                </if>
+                <if test="useAgeRange!= null">
+                    c5.cd_nm,
+                </if>
+                <if test="useInputChannel!= null">
+                    c10.cd_nm,
+                </if>
+                <if test="useCouponType!= null">
+                    c11.cd_nm,
+                </if>
+                <if test="useTelecom != null">
+                    c6.cd_nm,
+                </if>
+                <if test="useStandardDate != null">
+                    t.strd_yr||'('||LPAD(t.strd_wk,2,'0')||')',
+                </if>
+            </trim>
+    </select>
+
+    <select id="getCouponAchievePerMonth" parameterType="OlapDimensionRequest" resultType="SmwCponStat">
+        WITH SMW_CODE1 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW001'),
+         SMW_CODE3 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW003'),
+         SMW_CODE5 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW004'),
+         SMW_CODE6 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW002'),
+         SMW_CODE10 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW022'),
+         SMW_CODE11 AS (
+             SELECT com_cd, (sort_seq||'@@'||cd_nm) cd_nm
+                 FROM smw_code
+                WHERE use_yn = 'Y'
+                  AND lcl_cd  = 'SMW016')
+            SELECT
+                <if test="useOs != null">
+                     c1.cd_nm AS os,
+                </if>
+                <if test="useSex != null">
+                     c3.cd_nm AS sex,
+                </if>
+                <if test="useAgeRange!= null">
+                     c5.cd_nm AS ageRange,
+                </if>
+                <if test="useInputChannel!= null">
+                     c10.cd_nm AS inputChannel,
+                </if>
+                <if test="useCouponType!= null">
+                     c11.cd_nm AS couponType,
+                </if>
+                <if test="useTelecom != null">
+                     c6.cd_nm AS telecom,
+                </if>
+                <if test="useStandardDate != null">
+                     TO_CHAR (TO_DATE (t.strd_ym, 'YYYYMM'), 'YYYY-MM') AS standardDate,
+                </if>
+                     SUM ( t.ISSUE_CNT )       AS issueCnt,
+                     MAX ( t.ACCUM_ISSUE_CNT ) AS accumIssueCnt,
+                     SUM ( t.USE_CNT )         AS issueUserCnt,
+                     MAX ( t.ACCUM_USE_CNT )   AS accumIssueUserCnt,
+                     CASE
+                        WHEN SUM( t.ISSUE_CNT ) = 0
+                        THEN 0
+                        ELSE SUM( t.USE_CNT) / SUM( t.ISSUE_CNT )
+                     END                                AS useCnt,
+                     SUM ( t.SHOW_CNT )                 AS showCnt,
+                     MAX ( t.ACCUM_SHOW_CNT )           AS accumShowCnt,
+                     SUM ( t.ISSUE_PAGE_CNT )           AS issuePageCnt,
+                     MAX ( t.ACCUM_ISSUE_PAGE_CNT )     AS accumIssuePageCnt,
+                     SUM ( t.ISSUE_PAGE_DTL_CNT )       AS issuePageDtlCnt,
+                     MAX ( t.ACCUM_ISSUE_PAGE_DTL_CNT ) AS accumIssuePageDtlCnt
+                FROM SMW_M_CPON_STAT t, SMW_CODE1 c1, SMW_CODE3 c3, SMW_CODE5 c5, SMW_CODE6 c6, SMW_CODE10 c10, SMW_CODE11 c11
+               WHERE t.strd_ym BETWEEN #{startDate} AND #{endDate}
+                <if test="useOs == null">
+                    AND t.OS_CD = 'T'
+                </if>
+                <if test="useSex == null">
+                    AND t.GNDR_CD = 'T'
+                </if>
+                <if test="useAgeRange == null">
+                    AND t.AGE_RNG_CD = 'TTTT'
+                </if>
+                <if test="useInputChannel == null">
+                    AND t.IN_CHN_CD = 'TTT'
+                </if>
+                <if test="useCouponType == null">
+                    AND t.CPON_TYP_CD = 'T'
+                </if>
+                <if test="useTelecom == null">
+                    AND t.TELC_CD = 'T'
+                </if>
+                 AND t.os_cd = c1.com_cd(+)
+                 AND t.gndr_cd = c3.com_cd(+)
+                 AND t.age_rng_cd = c5.com_cd(+)
+                 AND t.telc_cd = c6.com_cd(+)
+                 AND t.in_chn_cd = c10.com_cd(+)
+                 AND t.cpon_typ_cd = c11.com_cd(+)
+            <trim prefix="GROUP BY" suffixOverrides=",">
+                <if test="useOs != null">
+                    c1.cd_nm,
+                </if>
+                <if test="useSex != null">
+                    c3.cd_nm,
+                </if>
+                <if test="useAgeRange!= null">
+                    c5.cd_nm,
+                </if>
+                <if test="useInputChannel!= null">
+                    c10.cd_nm,
+                </if>
+                <if test="useCouponType!= null">
+                    c11.cd_nm,
+                </if>
+                <if test="useTelecom != null">
+                    c6.cd_nm,
+                </if>
+                <if test="useStandardDate != null">
+                    t.strd_ym,
+                </if>
+            </trim>
+    </select>
+
+
+</mapper>

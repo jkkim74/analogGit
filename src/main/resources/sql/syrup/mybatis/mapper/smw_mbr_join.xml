@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.syrup.SmwMbrJoinRepository">
+    <select id="getMbrJoinPerDay" parameterType="JqGridRequest" resultType="SmwMbrJoin">
+      <![CDATA[
+      SELECT B.DISP_DT || '('|| TO_CHAR (TO_DATE (B.DISP_DT, 'yyyy-mm-dd'), 'dy')|| ')' AS DISP_DT
+            , A.GRP_NM AS GRP_NM
+            , A.NM     AS NM
+            , A.DATA   AS DATA
+        FROM
+        (
+        /* 가입현황 */
+      SELECT  STRD_DT AS STRD_DT
+            , '01|@가입현황' AS GRP_NM
+            ,  CASE WHEN EQ = '1' THEN '1.|@다운로드수'
+                    WHEN EQ = '2' THEN '2.|@누적앱다운로드수'
+                    WHEN EQ = '3' THEN '3.|@지갑가입자수'
+                    WHEN EQ = '4' THEN '4.|@누적지갑가입자수'
+                    WHEN EQ = '5' THEN '5.|@CI보유회원수'
+                    WHEN EQ = '6' THEN '6.|@누적CI보유회원수'
+            END AS NM
+            , SUM (CASE WHEN EQ = '1' THEN APP_DOWN_CNT
+                         WHEN EQ = '2' THEN ACCUM_APP_DOWN_CNT
+                         WHEN EQ = '3' THEN WLET_JOIN_CNT
+                         WHEN EQ = '4' THEN ACCUM_WLET_JOIN_CNT
+                         WHEN EQ = '5' THEN CI_EXIST_CNT
+                         WHEN EQ = '6' THEN ACCUM_CI_EXIST_CNT
+                         END ) AS DATA
+        FROM ((SELECT STRD_DT
+                     , APP_DOWN_CNT
+                     , ACCUM_APP_DOWN_CNT
+                     , WLET_JOIN_CNT
+                     , ACCUM_WLET_JOIN_CNT
+                     , CI_EXIST_CNT
+                     , ACCUM_CI_EXIST_CNT
+                 FROM WALLET.SMW_DAY_JOIN_OS
+                WHERE STRD_DT >= #{startDate}
+                  AND STRD_DT <= #{endDate}
+        ) A CROSS JOIN (SELECT LEVEL AS EQ FROM DUAL CONNECT BY LEVEL <=6) B )
+        GROUP BY STRD_DT
+                , CASE WHEN EQ = '1' THEN '1.|@다운로드수'
+                        WHEN EQ = '2' THEN '2.|@누적앱다운로드수'
+                        WHEN EQ = '3' THEN '3.|@지갑가입자수'
+                        WHEN EQ = '4' THEN '4.|@누적지갑가입자수'
+                        WHEN EQ = '5' THEN '5.|@CI보유회원수'
+                        WHEN EQ = '6' THEN '6.|@누적CI보유회원수'
+                END
+        UNION ALL
+        /* APP실행현황 */
+        SELECT STRD_DT AS STRD_DT
+             , '02|@APP실행현황' AS GRP_NM
+             , CASE WHEN EQ = '1' THEN '01.|UV          '
+                    WHEN EQ = '2' THEN '02.|PV'
+                    WHEN EQ = '3' THEN '03.|회원UV'
+                    WHEN EQ = '4' THEN '04.|회원PV'
+                    WHEN EQ = '5' THEN '05.|지갑실행UV'
+                    WHEN EQ = '6' THEN '06.|지갑실행PV'
+                    WHEN EQ = '7' THEN '07.|위젯실행UV'
+                    WHEN EQ = '8' THEN '08.|위젯실행PV'
+             END AS NM
+             , SUM (CASE WHEN EQ = '1' THEN TOT_UV
+                         WHEN EQ = '2' THEN TOT_PV
+                         WHEN EQ = '3' THEN MBR_UV
+                         WHEN EQ = '4' THEN MBR_PV
+                         WHEN EQ = '5' THEN WLET_EXEC_UV
+                         WHEN EQ = '6' THEN WLET_EXEC_PV
+                         WHEN EQ = '7' THEN WDG_EXEC_UV
+                         WHEN EQ = '8' THEN WDG_EXEC_PV
+             END )  AS DATA
+         FROM ((SELECT STRD_DT
+                     , TOT_UV
+                     , TOT_PV
+                     , MBR_UV
+                     , MBR_PV
+                     , WLET_EXEC_UV
+                     , WLET_EXEC_PV
+                     , WDG_EXEC_UV
+                     , WDG_EXEC_PV
+                  FROM WALLET.SMW_D_APP_EXEC_DASH
+                 WHERE STRD_DT >= #{startDate}
+                   AND STRD_DT <= #{endDate}
+        ) A CROSS JOIN (SELECT LEVEL AS EQ FROM DUAL CONNECT BY LEVEL  <=8 ) B )
+        GROUP BY STRD_DT
+                , CASE WHEN EQ = '1' THEN '01.|UV          '
+                        WHEN EQ = '2' THEN '02.|PV'
+                        WHEN EQ = '3' THEN '03.|회원UV'
+                        WHEN EQ = '4' THEN '04.|회원PV'
+                        WHEN EQ = '5' THEN '05.|지갑실행UV'
+                        WHEN EQ = '6' THEN '06.|지갑실행PV'
+                        WHEN EQ = '7' THEN '07.|위젯실행UV'
+                        WHEN EQ = '8' THEN '08.|위젯실행PV'
+                END
+        UNION ALL
+        /* 멤버십발급*/
+        SELECT STRD_DT AS STRD_DT
+             , '03|@멤버십발급' AS GRP_NM
+             , CASE WHEN EQ = '1' THEN '1.|@게시건수'
+                    WHEN EQ = '2' THEN '2.|@총발급건수'
+                    END AS NM
+             , SUM (CASE WHEN EQ = '1' THEN NOTI_CNT
+                         WHEN EQ = '2' THEN TOT_ISSUE_CNT
+             END ) AS DATA
+         FROM ((SELECT STRD_DT
+                      , NOTI_CNT
+                      , TOT_ISSUE_CNT
+                   FROM WALLET.SMW_DAY_CARD_ISSUE
+                  WHERE STRD_DT >= #{startDate}
+                    AND STRD_DT <= #{endDate}
+        ) A CROSS JOIN (SELECT LEVEL AS EQ FROM DUAL CONNECT BY LEVEL <=2) B )
+        GROUP BY STRD_DT
+                , CASE WHEN EQ = '1' THEN '1.|@게시건수'
+                       WHEN EQ = '2' THEN '2.|@총발급건수'
+                END
+        UNION ALL
+        SELECT STRD_DT  AS STRD_DT
+              , '03|@멤버십발급' AS GRP_NM
+              , '3.|@총발급자수' AS NM
+              , SUM(ACCUM_CARD_ISSUE_CNT) AS DATA
+           FROM WALLET.SMW_DAY_JOIN_OS
+          WHERE STRD_DT >= #{startDate}
+            AND STRD_DT <= #{endDate}
+          GROUP BY STRD_DT
+        UNION ALL
+        SELECT STRD_DT  AS STRD_DT
+             , '03|@멤버십발급' AS GRP_NM
+             , '4.|@당일발급건수' AS NM
+             , SUM(DAY_ISSUE_CNT) AS DATA
+          FROM WALLET.SMW_DAY_CARD_ISSUE
+         WHERE STRD_DT >= #{startDate}
+           AND STRD_DT <= #{endDate}
+        GROUP BY STRD_DT
+        UNION ALL
+        SELECT STRD_DT  AS STRD_DT
+             , '03|@멤버십발급' AS GRP_NM
+             , '5.|@당일발급자수' AS NM
+             , SUM(CARD_ISSUE_CNT) AS DATA
+        FROM WALLET.SMW_DAY_JOIN_OS
+       WHERE STRD_DT >= #{startDate}
+         AND STRD_DT <= #{endDate}
+        GROUP BY STRD_DT
+        UNION ALL
+        /* 쿠폰발급*/
+        SELECT STRD_DT AS STRD_DT
+             , '04|@쿠폰발급' AS GRP_NM
+             , CASE WHEN EQ = '1' THEN '1.|@노출건수'
+                    WHEN EQ = '2' THEN '2.|@발급건수'
+                    WHEN EQ = '3' THEN '3.|@발급자수'
+                    WHEN EQ = '4' THEN '4.|@누적발급건수'
+                    WHEN EQ = '5' THEN '5.|@누적발급자수'
+             END AS NM
+             , SUM (CASE WHEN EQ = '1' THEN SHOW_CNT
+                         WHEN EQ = '2' THEN ISSUE_CNT
+                         WHEN EQ = '3' THEN ISSUE_USER_CNT
+                         WHEN EQ = '4' THEN ACCUM_ISSUE_CNT
+                         WHEN EQ = '5' THEN ACCUM_ISSUE_USER_CNT
+             END ) AS DATA
+        FROM ((SELECT STRD_DT
+                     , SHOW_CNT
+                     , ISSUE_CNT
+                     , ISSUE_USER_CNT
+                     , ACCUM_ISSUE_CNT
+                     , ACCUM_ISSUE_USER_CNT
+                  FROM WALLET.SMW_D_CPON_STAT_DASH
+                 WHERE STRD_DT >= #{startDate}
+                   AND STRD_DT <= #{endDate}
+        ) A CROSS JOIN (SELECT LEVEL AS EQ FROM DUAL CONNECT BY LEVEL <=5) B )
+        GROUP BY STRD_DT
+                , CASE WHEN EQ = '1' THEN '1.|@노출건수'
+                        WHEN EQ = '2' THEN '2.|@발급건수'
+                        WHEN EQ = '3' THEN '3.|@발급자수'
+                        WHEN EQ = '4' THEN '4.|@누적발급건수'
+                        WHEN EQ = '5' THEN '5.|@누적발급자수'
+                END
+        ) A INNER JOIN WALLET.SMW_CLDR B ON A.STRD_DT = B.CLDR_DT
+        ]]>
+    </select>
+    <select id="getMbrJoinPerWeek" parameterType="JqGridRequest" resultType="SmwMbrJoin">
+        SELECT B.DISP_WK AS DISP_DT
+              , A.GRP_NM AS GRP_NM
+              , A.NM AS NM
+              , A.DATA AS DATA
+        FROM
+        (
+        /* 가입현황 */
+        SELECT STRD_YR AS STRD_YR
+              , STRD_WK AS STRD_WK
+              , '01|@가입현황' AS GRP_NM
+              , CASE WHEN EQ = '1' THEN '1.|@다운로드수'
+                     WHEN EQ = '2' THEN '2.|@누적앱다운로드수'
+                     WHEN EQ = '3' THEN '3.|@지갑가입자수'
+                     WHEN EQ = '4' THEN '4.|@누적지갑가입자수'
+                     WHEN EQ = '5' THEN '5.|@CI보유회원수'
+                     WHEN EQ = '6' THEN '6.|@누적CI보유회원수'
+              END AS NM
+              , SUM (CASE WHEN EQ = '1' THEN APP_DOWN_CNT
+                           WHEN EQ = '2' THEN ACCUM_APP_DOWN_CNT
+                           WHEN EQ = '3' THEN WLET_JOIN_CNT
+                           WHEN EQ = '4' THEN ACCUM_WLET_JOIN_CNT
+                           WHEN EQ = '5' THEN CI_EXIST_CNT
+                           WHEN EQ = '6' THEN ACCUM_CI_EXIST_CNT
+              END ) AS DATA
+          FROM ((SELECT STRD_YR AS STRD_YR
+                       , STRD_WK AS STRD_WK
+                       , APP_DOWN_CNT
+                       , ACCUM_APP_DOWN_CNT
+                       , WLET_JOIN_CNT
+                       , ACCUM_WLET_JOIN_CNT
+                       , CI_EXIST_CNT
+                       , ACCUM_CI_EXIST_CNT
+                   FROM WALLET.SMW_W_MBR_JOIN
+        WHERE STRD_YR >= #{strdStYear}
+          <![CDATA[ AND STRD_YR <= #{strdPrevEdYear} ]]>
+          <![CDATA[ AND TO_CHAR(STRD_WK,'FM00') >= #{strdWkFrStSeq}
+          AND TO_CHAR(STRD_WK,'FM00') <= #{strdWkFrEdSeq}]]>
+        UNION ALL
+        SELECT STRD_YR AS STRD_YR
+                       , STRD_WK AS STRD_WK
+                       , APP_DOWN_CNT
+                       , ACCUM_APP_DOWN_CNT
+                       , WLET_JOIN_CNT
+                       , ACCUM_WLET_JOIN_CNT
+                       , CI_EXIST_CNT
+                       , ACCUM_CI_EXIST_CNT
+                   FROM WALLET.SMW_W_MBR_JOIN
+        WHERE STRD_YR = #{strdEdYear}
+          <![CDATA[ AND TO_CHAR(STRD_WK,'FM00') >= #{strdWkToStSeq}
+          AND TO_CHAR(STRD_WK,'FM00') <= #{strdWkToEdSeq}]]>
+        <![CDATA[) A CROSS JOIN (SELECT LEVEL AS EQ FROM DUAL CONNECT BY LEVEL <=6) B )]]>
+        GROUP BY STRD_YR
+                , STRD_WK
+                , CASE WHEN EQ = '1' THEN '1.|@다운로드수'
+                    WHEN EQ = '2' THEN '2.|@누적앱다운로드수'
+                    WHEN EQ = '3' THEN '3.|@지갑가입자수'
+                    WHEN EQ = '4' THEN '4.|@누적지갑가입자수'
+                    WHEN EQ = '5' THEN '5.|@CI보유회원수'
+                    WHEN EQ = '6' THEN '6.|@누적CI보유회원수'
+                END
+        UNION ALL
+        /* APP실행현황 */
+        SELECT STRD_YR AS STRD_YR
+             , STRD_WK AS STRD_WK
+             , '02|@APP실행현황' AS GRP_NM
+             , CASE WHEN EQ = '1' THEN '01.|UV          '
+                    WHEN EQ = '2' THEN '02.|PV'
+                    WHEN EQ = '3' THEN '03.|회원UV'
+                    WHEN EQ = '4' THEN '04.|회원PV'
+                    WHEN EQ = '5' THEN '05.|지갑실행UV'
+                    WHEN EQ = '6' THEN '06.|지갑실행PV'
+                    WHEN EQ = '7' THEN '07.|위젯실행UV'
+                    WHEN EQ = '8' THEN '08.|위젯실행PV'
+             END AS NM
+             , SUM (CASE WHEN EQ = '1' THEN TOT_UV
+                         WHEN EQ = '2' THEN TOT_PV
+                         WHEN EQ = '3' THEN MBR_UV
+                         WHEN EQ = '4' THEN MBR_PV
+                         WHEN EQ = '5' THEN WLET_EXEC_UV
+                         WHEN EQ = '6' THEN WLET_EXEC_PV
+                         WHEN EQ = '7' THEN WDG_EXEC_UV
+                         WHEN EQ = '8' THEN WDG_EXEC_PV
+             END )  AS DATA
+        FROM ((SELECT STRD_YR AS STRD_YR
+                     , STRD_WK AS STRD_WK
+                     , TOT_UV
+                     , TOT_PV
+                     , MBR_UV
+                     , MBR_PV
+                     , WLET_EXEC_UV
+                     , WLET_EXEC_PV
+                     , WDG_EXEC_UV
+                     , WDG_EXEC_PV
+                  FROM WALLET.SMW_W_APP_EXEC_DASH
+        WHERE STRD_YR >= #{strdStYear}
+        <![CDATA[ AND STRD_YR <= #{strdPrevEdYear} ]]>
+        <![CDATA[ AND TO_CHAR(STRD_WK,'FM00') >= #{strdWkFrStSeq}
+        AND TO_CHAR(STRD_WK,'FM00') <= #{strdWkFrEdSeq}]]>
+        UNION ALL
+        SELECT STRD_YR AS STRD_YR
+                     , STRD_WK AS STRD_WK
+                     , TOT_UV
+                     , TOT_PV
+                     , MBR_UV
+                     , MBR_PV
+                     , WLET_EXEC_UV
+                     , WLET_EXEC_PV
+                     , WDG_EXEC_UV
+                     , WDG_EXEC_PV
+                  FROM WALLET.SMW_W_APP_EXEC_DASH
+        WHERE STRD_YR = #{strdEdYear}
+        <![CDATA[ AND TO_CHAR(STRD_WK,'FM00') >= #{strdWkToStSeq}
+        AND TO_CHAR(STRD_WK,'FM00') <= #{strdWkToEdSeq}]]>
+        <![CDATA[) A CROSS JOIN (SELECT LEVEL AS EQ FROM DUAL CONNECT BY LEVEL <=8) B )]]>
+        GROUP BY STRD_YR
+                , STRD_WK
+                , CASE WHEN EQ = '1' THEN '01.|UV          '
+                        WHEN EQ = '2' THEN '02.|PV'
+                        WHEN EQ = '3' THEN '03.|회원UV'
+                        WHEN EQ = '4' THEN '04.|회원PV'
+                        WHEN EQ = '5' THEN '05.|지갑실행UV'
+                        WHEN EQ = '6' THEN '06.|지갑실행PV'
+                        WHEN EQ = '7' THEN '07.|위젯실행UV'
+                        WHEN EQ = '8' THEN '08.|위젯실행PV'
+                END
+        UNION ALL
+        /* 멤버십발급*/
+        SELECT STRD_YR AS STRD_YR
+             , STRD_WK AS STRD_WK
+             , '03|@멤버십발급' AS GRP_NM
+             , CASE WHEN EQ = '1' THEN '1.|@게시건수'
+                    WHEN EQ = '2' THEN '2.|@발급건수'
+                    WHEN EQ = '3' THEN '3.|@발급자수'
+                    WHEN EQ = '4' THEN '4.|@누적발급건수'
+                    WHEN EQ = '5' THEN '5.|@누적발급자수'
+             END AS NM
+             , SUM (CASE WHEN EQ = '1' THEN NOTI_CNT
+                         WHEN EQ = '2' THEN DAY_ISSUE_CNT
+                         WHEN EQ = '3' THEN DAY_ISSUE_USER_CNT
+                         WHEN EQ = '4' THEN TOT_ISSUE_CNT
+                         WHEN EQ = '5' THEN TOT_ISSUE_USER_CNT
+             END ) AS DATA
+          FROM ((SELECT STRD_YR AS STRD_YR
+                       , STRD_WK AS STRD_WK
+                       , NOTI_CNT
+                       , DAY_ISSUE_CNT
+                       , DAY_ISSUE_USER_CNT
+                       , TOT_ISSUE_CNT
+                       , TOT_ISSUE_USER_CNT
+                    FROM WALLET.SMW_W_CARD_ISSUE
+        WHERE STRD_YR >= #{strdStYear}
+        <![CDATA[ AND STRD_YR <= #{strdPrevEdYear} ]]>
+        <![CDATA[ AND TO_CHAR(STRD_WK,'FM00') >= #{strdWkFrStSeq}
+        AND TO_CHAR(STRD_WK,'FM00') <= #{strdWkFrEdSeq}]]>
+        AND MEM_CARD_CL_CD = 'TT'
+        UNION ALL
+        SELECT STRD_YR AS STRD_YR
+                       , STRD_WK AS STRD_WK
+                       , NOTI_CNT
+                       , DAY_ISSUE_CNT
+                       , DAY_ISSUE_USER_CNT
+                       , TOT_ISSUE_CNT
+                       , TOT_ISSUE_USER_CNT
+                    FROM WALLET.SMW_W_CARD_ISSUE
+        WHERE STRD_YR = #{strdEdYear}
+        <![CDATA[ AND TO_CHAR(STRD_WK,'FM00') >= #{strdWkToStSeq}
+        AND TO_CHAR(STRD_WK,'FM00') <= #{strdWkToEdSeq}]]>
+        AND MEM_CARD_CL_CD = 'TT'
+        <![CDATA[) A CROSS JOIN (SELECT LEVEL AS EQ FROM DUAL CONNECT BY LEVEL <=5) B )]]>
+        GROUP BY STRD_YR
+                , STRD_WK
+                , CASE WHEN EQ = '1' THEN '1.|@게시건수'
+                        WHEN EQ = '2' THEN '2.|@발급건수'
+                        WHEN EQ = '3' THEN '3.|@발급자수'
+                        WHEN EQ = '4' THEN '4.|@누적발급건수'
+                        WHEN EQ = '5' THEN '5.|@누적발급자수'
+                END
+        UNION ALL
+        /* 쿠폰발급*/
+        SELECT STRD_YR AS STRD_YR
+              , STRD_WK AS STRD_WK
+              , '04|@쿠폰발급' AS GRP_NM
+              , CASE WHEN EQ = '1' THEN '1.|@노출건수'
+                     WHEN EQ = '2' THEN '2.|@발급건수'
+                     WHEN EQ = '3' THEN '3.|@발급자수'
+                     WHEN EQ = '4' THEN '4.|@누적발급건수'
+                     WHEN EQ = '5' THEN '5.|@누적발급자수'
+              END AS NM
+              , SUM (CASE WHEN EQ = '1' THEN SHOW_CNT
+                           WHEN EQ = '2' THEN ISSUE_CNT
+                           WHEN EQ = '3' THEN ISSUE_USER_CNT
+                           WHEN EQ = '4' THEN ACCUM_ISSUE_CNT
+                           WHEN EQ = '5' THEN ACCUM_ISSUE_USER_CNT
+              END ) AS DATA
+           FROM ((SELECT STRD_YR AS STRD_YR
+                        , STRD_WK AS STRD_WK
+                        , SHOW_CNT
+                        , ISSUE_CNT
+                        , ISSUE_USER_CNT
+                        , ACCUM_ISSUE_CNT
+                        , ACCUM_ISSUE_USER_CNT
+                     FROM WALLET.SMW_W_CPON_STAT
+                      WHERE STRD_YR >= #{strdStYear}
+                      <![CDATA[ AND STRD_YR <= #{strdPrevEdYear} ]]>
+                      <![CDATA[ AND TO_CHAR(STRD_WK,'FM00') >= #{strdWkFrStSeq}
+                      AND TO_CHAR(STRD_WK,'FM00') <= #{strdWkFrEdSeq}]]>
+                      AND CPON_TYP_CD = 'T'
+                      AND GNDR_CD = 'T'
+                      AND AGE_RNG_CD = 'TTTT'
+                      AND OS_CD = 'T'
+                      AND TELC_CD = 'T'
+                      AND IN_CHN_CD = 'TTT'
+           UNION ALL
+           SELECT STRD_YR AS STRD_YR
+                , STRD_WK AS STRD_WK
+                , SHOW_CNT
+                , ISSUE_CNT
+                , ISSUE_USER_CNT
+                , ACCUM_ISSUE_CNT
+                , ACCUM_ISSUE_USER_CNT
+             FROM WALLET.SMW_W_CPON_STAT
+            WHERE STRD_YR = #{strdEdYear}
+              <![CDATA[ AND TO_CHAR(STRD_WK,'FM00') >= #{strdWkToStSeq}
+              AND TO_CHAR(STRD_WK,'FM00') <= #{strdWkToEdSeq}]]>
+              AND CPON_TYP_CD = 'T'
+              AND GNDR_CD = 'T'
+              AND AGE_RNG_CD = 'TTTT'
+              AND OS_CD = 'T'
+              AND TELC_CD = 'T'
+              AND IN_CHN_CD = 'TTT'
+        <![CDATA[) A CROSS JOIN (SELECT LEVEL AS EQ FROM DUAL CONNECT BY LEVEL <=5) B )]]>
+                GROUP BY STRD_YR
+                , STRD_WK
+                , CASE WHEN EQ = '1' THEN '1.|@노출건수'
+                    WHEN EQ = '2' THEN '2.|@발급건수'
+                    WHEN EQ = '3' THEN '3.|@발급자수'
+                    WHEN EQ = '4' THEN '4.|@누적발급건수'
+                    WHEN EQ = '5' THEN '5.|@누적발급자수'
+                END
+        ) A INNER JOIN WALLET.SMW_CLDR_WK B ON A.STRD_YR = B.STRD_YEAR AND A.STRD_WK = B.STRD_WK_SEQ
+    </select>
+    <select id="getMbrJoinPerMonth" parameterType="JqGridRequest" resultType="SmwMbrJoin">
+        <![CDATA[
+        SELECT B.DISP_YM AS DISP_DT
+            , A.GRP_NM AS GRP_NM
+            , A.NM AS NM
+            , A.DATA AS DATA
+            FROM
+            (
+            /* 가입현황 */
+            SELECT STRD_YM AS STRD_YM
+                 , '01|@가입현황' AS GRP_NM
+                 , CASE WHEN EQ = '1' THEN '1.|@다운로드수'
+                        WHEN EQ = '2' THEN '2.|@누적앱다운로드수'
+                        WHEN EQ = '3' THEN '3.|@지갑가입자수'
+                        WHEN EQ = '4' THEN '4.|@누적지갑가입자수'
+                        WHEN EQ = '5' THEN '5.|@CI보유회원수'
+                        WHEN EQ = '6' THEN '6.|@누적CI보유회원수'
+                 END AS NM
+                 , SUM (CASE WHEN EQ = '1' THEN APP_DOWN_CNT
+                             WHEN EQ = '2' THEN ACCUM_APP_DOWN_CNT
+                             WHEN EQ = '3' THEN WLET_JOIN_CNT
+                             WHEN EQ = '4' THEN ACCUM_WLET_JOIN_CNT
+                             WHEN EQ = '5' THEN CI_EXIST_CNT
+                             WHEN EQ = '6' THEN ACCUM_CI_EXIST_CNT
+                 END ) AS DATA
+              FROM ((SELECT STRD_YM
+                           , APP_DOWN_CNT
+                           , ACCUM_APP_DOWN_CNT
+                           , WLET_JOIN_CNT
+                           , ACCUM_WLET_JOIN_CNT
+                           , CI_EXIST_CNT
+                           , ACCUM_CI_EXIST_CNT
+                        FROM WALLET.SMW_M_MBR_JOIN
+                       WHERE STRD_YM >= #{startDate}
+                         AND STRD_YM <= #{endDate}
+            ) A CROSS JOIN (SELECT LEVEL AS EQ FROM DUAL CONNECT BY LEVEL <=6) B )
+            GROUP BY STRD_YM
+                    , CASE WHEN EQ = '1' THEN '1.|@다운로드수'
+                            WHEN EQ = '2' THEN '2.|@누적앱다운로드수'
+                            WHEN EQ = '3' THEN '3.|@지갑가입자수'
+                            WHEN EQ = '4' THEN '4.|@누적지갑가입자수'
+                            WHEN EQ = '5' THEN '5.|@CI보유회원수'
+                            WHEN EQ = '6' THEN '6.|@누적CI보유회원수'
+                    END
+            UNION ALL
+            /* APP실행현황 */
+            SELECT STRD_YM AS STRD_YM
+                  , '02|@APP실행현황' AS GRP_NM
+                  , CASE WHEN EQ = '1' THEN '01.|UV          '
+                         WHEN EQ = '2' THEN '02.|PV'
+                         WHEN EQ = '3' THEN '03.|회원UV'
+                         WHEN EQ = '4' THEN '04.|회원PV'
+                         WHEN EQ = '5' THEN '05.|지갑실행UV'
+                         WHEN EQ = '6' THEN '06.|지갑실행PV'
+                         WHEN EQ = '7' THEN '07.|위젯실행UV'
+                         WHEN EQ = '8' THEN '08.|위젯실행PV'
+                  END AS NM
+                  , SUM (CASE WHEN EQ = '1' THEN TOT_UV
+                               WHEN EQ = '2' THEN TOT_PV
+                               WHEN EQ = '3' THEN MBR_UV
+                               WHEN EQ = '4' THEN MBR_PV
+                               WHEN EQ = '5' THEN WLET_EXEC_UV
+                               WHEN EQ = '6' THEN WLET_EXEC_PV
+                               WHEN EQ = '7' THEN WDG_EXEC_UV
+                               WHEN EQ = '8' THEN WDG_EXEC_PV
+                  END )  AS DATA
+               FROM ((SELECT STRD_YM
+                            , TOT_UV
+                            , TOT_PV
+                            , MBR_UV
+                            , MBR_PV
+                            , WLET_EXEC_UV
+                            , WLET_EXEC_PV
+                            , WDG_EXEC_UV
+                            , WDG_EXEC_PV
+                         FROM WALLET.SMW_M_APP_EXEC_DASH
+                        WHERE STRD_YM >= #{startDate}
+                          AND STRD_YM <= #{endDate}
+            ) A CROSS JOIN (SELECT LEVEL AS EQ FROM DUAL CONNECT BY LEVEL <=10) B )
+            GROUP BY STRD_YM
+                    , CASE WHEN EQ = '1' THEN '01.|UV          '
+                           WHEN EQ = '2' THEN '02.|PV'
+                           WHEN EQ = '3' THEN '03.|회원UV'
+                           WHEN EQ = '4' THEN '04.|회원PV'
+                           WHEN EQ = '5' THEN '05.|지갑실행UV'
+                           WHEN EQ = '6' THEN '06.|지갑실행PV'
+                           WHEN EQ = '7' THEN '07.|위젯실행UV'
+                           WHEN EQ = '8' THEN '08.|위젯실행PV'
+                    END
+            UNION ALL
+            /* 멤버십발급*/
+            SELECT STRD_YM AS STRD_YM
+                  , '03|@멤버십발급' AS GRP_NM
+                  , CASE WHEN EQ = '1' THEN '1.|@게시건수'
+                         WHEN EQ = '2' THEN '2.|@발급건수'
+                         WHEN EQ = '3' THEN '3.|@발급자수'
+                         WHEN EQ = '4' THEN '4.|@누적발급건수'
+                         WHEN EQ = '5' THEN '5.|@누적발급자수'
+                  END AS NM
+                  , SUM (CASE WHEN EQ = '1' THEN NOTI_CNT
+                               WHEN EQ = '2' THEN DAY_ISSUE_CNT
+                               WHEN EQ = '3' THEN DAY_ISSUE_USER_CNT
+                               WHEN EQ = '4' THEN TOT_ISSUE_CNT
+                               WHEN EQ = '5' THEN TOT_ISSUE_USER_CNT
+                  END ) AS DATA
+               FROM ((SELECT STRD_YM
+                            , NOTI_CNT
+                            , DAY_ISSUE_CNT
+                            , DAY_ISSUE_USER_CNT
+                            , TOT_ISSUE_CNT
+                            , TOT_ISSUE_USER_CNT
+                         FROM WALLET.SMW_M_CARD_ISSUE
+                        WHERE STRD_YM >= #{startDate}
+                          AND STRD_YM <= #{endDate}
+                          AND MEM_CARD_CL_CD = 'TT'
+            ) A CROSS JOIN (SELECT LEVEL AS EQ FROM DUAL CONNECT BY LEVEL <=5) B )
+                     GROUP BY STRD_YM
+                             , CASE WHEN EQ = '1' THEN '1.|@게시건수'
+                                    WHEN EQ = '2' THEN '2.|@발급건수'
+                                    WHEN EQ = '3' THEN '3.|@발급자수'
+                                    WHEN EQ = '4' THEN '4.|@누적발급건수'
+                                    WHEN EQ = '5' THEN '5.|@누적발급자수'
+                             END
+            UNION ALL
+            /* 쿠폰발급*/
+            SELECT STRD_YM AS STRD_YM
+                 , '04|@쿠폰발급' AS GRP_NM
+                 , CASE WHEN EQ = '1' THEN '1.|@노출건수'
+                        WHEN EQ = '2' THEN '2.|@발급건수'
+                        WHEN EQ = '3' THEN '3.|@발급자수'
+                        WHEN EQ = '4' THEN '4.|@누적발급건수'
+                        WHEN EQ = '5' THEN '5.|@누적발급자수'
+                 END AS NM
+                 , SUM (CASE WHEN EQ = '1' THEN SHOW_CNT
+                             WHEN EQ = '2' THEN ISSUE_CNT
+                             WHEN EQ = '3' THEN ISSUE_USER_CNT
+                             WHEN EQ = '4' THEN ACCUM_ISSUE_CNT
+                             WHEN EQ = '5' THEN ACCUM_ISSUE_USER_CNT
+                 END ) AS DATA
+              FROM ((SELECT STRD_YM
+                           , SHOW_CNT
+                           , ISSUE_CNT
+                           , ISSUE_USER_CNT
+                           , ACCUM_ISSUE_CNT
+                           , ACCUM_ISSUE_USER_CNT
+                        FROM WALLET.SMW_M_CPON_STAT
+            WHERE STRD_YM >= #{startDate}
+              AND STRD_YM <= #{endDate}
+              AND CPON_TYP_CD = 'T'
+              AND GNDR_CD = 'T'
+              AND AGE_RNG_CD = 'TTTT'
+              AND OS_CD = 'T'
+              AND TELC_CD = 'T'
+              AND IN_CHN_CD = 'TTT'
+            ) A CROSS JOIN (SELECT LEVEL AS EQ FROM DUAL CONNECT BY LEVEL <=5) B )
+            GROUP BY STRD_YM, CASE WHEN EQ = '1' THEN '1.|@노출건수'
+            WHEN EQ = '2' THEN '2.|@발급건수'
+            WHEN EQ = '3' THEN '3.|@발급자수'
+            WHEN EQ = '4' THEN '4.|@누적발급건수'
+            WHEN EQ = '5' THEN '5.|@누적발급자수'
+            END
+            ) A INNER JOIN WALLET.SMW_CLDR_YM B ON A.STRD_YM = B.STRD_YM
+        ]]>
+    </select>
+</mapper>

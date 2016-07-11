@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.DeptPersonRepository">
+    <select id="getDeptInfo" parameterType="String" resultType="ComDept">
+        SELECT INDEPT AS ORG_CD, CRTYYMMDD AS APLY_STA_DT, DESTRUCTDD AS APLY_END_DT, DECODE(T_FLAG, 'D', 'N', 'Y') AS ACTVN_YN, OUTDEPT AS ORG_PRT_SEQ,
+               DEPTNM AS ORG_NM, SOSOK, TSOSOK, LEVELCD, DEPTREDUCNM AS ORG_ABBR_NM , HIGHPARTDEPT AS SUP_ORG_CD, HIGHPARTDEPTNM AS SUP_ORG_NM, LOWYN, DIREMPNO AS DIR_LOGINID, T_FLAG AS FLAG, GROUP_TYPE
+        FROM   INF_DEPT_INFO_RCV
+        WHERE  TO_CHAR(SENDDT, 'yyyymmdd') = #{sendDt}
+        AND    GROUP_TYPE = '1'
+    </select>
+    <select id="getPersonInfo" parameterType="String" resultType="ComPerson">
+        SELECT EMPNO AS LOGIN_ID, HNAME AS USER_NM, DECODE(T_FLAG, 'D', 'N', 'Y') AS ACTVN_YN,
+               INDEPT AS ORG_CD, SOSOK, TSOSOK, JBGRP, JBGRPNM, JBRANK, JBRANKNM, JBCHARGE, JBCHARGENM,
+               DECODE(T_FLAG, 'D', '22', '10') AS USER_ST_CD,
+               TRIM(NVL(STARTDATE, TO_CHAR(SYSDATE,'YYYYMMDD'))) AS APLY_STA_DT,
+               TRIM(DECODE(SIGN(NVL(RETIREDD,TO_CHAR(SYSDATE,'YYYYMMDD')) - NVL(CLOSEDATE, TO_CHAR(SYSDATE,'YYYYMMDD'))), 1, NVL(CLOSEDATE, TO_CHAR(SYSDATE,'YYYYMMDD')),NVL(RETIREDD, TO_CHAR(SYSDATE,'YYYYMMDD')))) AS APLY_END_DT,
+               T_SEX AS SEX, EMAIL AS EMAIL_ADDR, INTELNO AS OFFC_PHON_NUM, MOVETELNO AS MBL_PHON_NUM, USER_TYPE, AUTHOR, HOLDOFFIDIVI, T_FLAG AS FLAG
+        FROM   INF_PERSON_INFO_RCV
+        WHERE  TO_CHAR(SENDDT, 'yyyymmdd') = #{sendDt}
+    </select>
+    <select id="getComDept" parameterType="String" resultType="ComDept">
+        SELECT ORG_CD, ORG_NM, ORG_ABBR_NM, LOWYN, DIR_LOGINID, ORG_PRT_SEQ, LEVELCD, SUP_ORG_CD, SUP_ORG_NM, ORG_CL_CD,
+               SOSOK, TSOSOK, APLY_STA_DT, APLY_END_DT, ACTVN_YN, GROUP_TYPE, AUDIT_ID, AUDIT_DTM
+        FROM   COM_DEPT
+        WHERE  ORG_CD = #{orgCd}
+    </select>
+    <select id="getComPerson" parameterType="String" resultType="ComPerson">
+        SELECT LOGIN_ID, USER_NM, ACTVN_YN, ORG_CD, SOSOK, TSOSOK, JBGRP, JBGRPNM, JBRANK, JBRANKNM, JBCHARGE,
+               JBCHARGENM, USER_ST_CD, APLY_STA_DT, APLY_END_DT, PSN_TYP_CD, SEX, EMAIL_ADDR, OFFC_PHON_NUM, MBL_PHON_NUM, AUDIT_ID, AUDIT_DTM, USER_TYPE, HOLDOFFIDIVI, AUTHOR
+        FROM   COM_PERSON
+        WHERE  LOGIN_ID = #{loginId}
+    </select>
+    <insert id="createComDept" parameterType="ComDept" >
+         MERGE INTO COM_DEPT A
+         USING (SELECT #{orgCd} AS ORG_CD FROM DUAL) B
+         ON (A.ORG_CD = B.ORG_CD)
+         WHEN MATCHED THEN
+         UPDATE SET AUDIT_ID = 'PP39093'
+             , AUDIT_DTM = sysdate
+             , ORG_NM = #{orgNm, jdbcType=VARCHAR}
+             , ORG_ABBR_NM = #{orgAbbrNm, jdbcType=VARCHAR}
+             , LOWYN = #{lowyn}
+             , DIR_LOGINID = #{dirLoginid, jdbcType=VARCHAR}
+             , ORG_PRT_SEQ = #{orgPrtSeq, jdbcType=VARCHAR}
+             , LEVELCD = #{levelcd, jdbcType=VARCHAR}
+             , SUP_ORG_CD = #{supOrgCd, jdbcType=VARCHAR}
+             , SUP_ORG_NM = #{supOrgNm, jdbcType=VARCHAR}
+             , ORG_CL_CD = 'S'
+             , SOSOK = #{sosok, jdbcType=VARCHAR}
+             , TSOSOK = #{tsosok, jdbcType=VARCHAR}
+             , APLY_STA_DT = #{aplyStaDt, jdbcType=VARCHAR}
+             , APLY_END_DT = #{aplyEndDt, jdbcType=VARCHAR}
+             , ACTVN_YN = #{actvnYn}
+             , GROUP_TYPE = #{groupType, jdbcType=VARCHAR}
+         WHERE ORG_CD = #{orgCd}
+         WHEN NOT MATCHED THEN
+            INSERT (ORG_CD, AUDIT_ID, AUDIT_DTM, ORG_NM, ORG_ABBR_NM, LOWYN, DIR_LOGINID, ORG_PRT_SEQ
+                , LEVELCD, SUP_ORG_CD, SUP_ORG_NM, ORG_CL_CD, SOSOK, TSOSOK, APLY_STA_DT
+                , APLY_END_DT, ACTVN_YN, GROUP_TYPE
+            ) VALUES (#{orgCd}, 'PP39093', sysdate, #{orgNm, jdbcType=VARCHAR}, #{orgAbbrNm, jdbcType=VARCHAR}, #{lowyn, jdbcType=VARCHAR}, #{dirLoginid, jdbcType=VARCHAR},
+                #{orgPrtSeq, jdbcType=VARCHAR}, #{levelcd, jdbcType=VARCHAR}, #{supOrgCd, jdbcType=VARCHAR}, #{supOrgNm, jdbcType=VARCHAR}, 'S', #{sosok, jdbcType=VARCHAR},
+                #{tsosok, jdbcType=VARCHAR}, #{aplyStaDt, jdbcType=VARCHAR}, #{aplyEndDt, jdbcType=VARCHAR}, #{actvnYn, jdbcType=VARCHAR}, #{groupType, jdbcType=VARCHAR})
+    </insert>
+    <insert id="createComPerson" parameterType="ComPerson" >
+        INSERT INTO COM_PERSON (LOGIN_ID, USER_NM, ACTVN_YN, ORG_CD, SOSOK, TSOSOK, JBGRP, JBGRPNM, JBRANK, JBRANKNM, JBCHARGE,
+               JBCHARGENM, USER_ST_CD, APLY_STA_DT, APLY_END_DT, PSN_TYP_CD, SEX, EMAIL_ADDR, OFFC_PHON_NUM, MBL_PHON_NUM, AUDIT_ID, AUDIT_DTM, USER_TYPE, HOLDOFFIDIVI, AUTHOR)
+          VALUES (#{loginId}, #{userNm}, #{actvnYn}, #{orgCd}, #{sosok, jdbcType=VARCHAR}, #{tsosok, jdbcType=VARCHAR}, #{jbgrp, jdbcType=VARCHAR}, #{jbgrpnm, jdbcType=VARCHAR}, #{jbrank, jdbcType=VARCHAR}, #{jbranknm, jdbcType=VARCHAR}, #{jbcharge, jdbcType=VARCHAR},
+             #{jbchargenm, jdbcType=VARCHAR}, #{userStCd}, #{aplyStaDt, jdbcType=VARCHAR}, #{aplyEndDt, jdbcType=VARCHAR}, '100', #{sex, jdbcType=VARCHAR}, #{emailAddr, jdbcType=VARCHAR}, #{offcPhonNum, jdbcType=VARCHAR},
+             #{mblPhonNum, jdbcType=VARCHAR},'PP39093', sysdate, #{userType, jdbcType=VARCHAR}, #{holdoffidivi, jdbcType=VARCHAR}, #{author, jdbcType=VARCHAR})
+    </insert>
+    <update id="updateComPerson" parameterType="ComPerson">
+        UPDATE COM_PERSON SET AUDIT_ID = 'PP39093'
+         , AUDIT_DTM = sysdate
+         , ACTVN_YN = #{actvnYn}
+         , ORG_CD = #{orgCd}
+         , SOSOK = #{sosok, jdbcType=VARCHAR}
+         , TSOSOK = #{tsosok, jdbcType=VARCHAR}
+         , JBGRP = #{jbgrp, jdbcType=VARCHAR}
+         , JBGRPNM = #{jbgrpnm, jdbcType=VARCHAR}
+         , JBRANK = #{jbrank, jdbcType=VARCHAR}
+         , JBRANKNM = #{jbranknm, jdbcType=VARCHAR}
+         , JBCHARGE = #{jbcharge, jdbcType=VARCHAR}
+         , JBCHARGENM = #{jbchargenm, jdbcType=VARCHAR}
+         , EMAIL_ADDR = #{emailAddr, jdbcType=VARCHAR}
+         , OFFC_PHON_NUM = #{offcPhonNum, jdbcType=VARCHAR}
+         , MBL_PHON_NUM = #{mblPhonNum, jdbcType=VARCHAR}
+         , USER_ST_CD = #{userStCd, jdbcType=VARCHAR}
+         , APLY_STA_DT = #{aplyStaDt, jdbcType=VARCHAR}
+         , APLY_END_DT = #{aplyEndDt, jdbcType=VARCHAR}
+         , USER_TYPE =  #{userType, jdbcType=VARCHAR}
+         , HOLDOFFIDIVI = #{holdoffidivi, jdbcType=VARCHAR}
+         , AUTHOR = #{author, jdbcType=VARCHAR}
+         WHERE LOGIN_ID = #{loginId}
+    </update>
+    <insert id="createComDeptHst" parameterType="String" >
+        INSERT INTO COM_DEPT_HST
+            SELECT ORG_CD, ORG_NM, ORG_ABBR_NM, LOWYN, DIR_LOGINID, ORG_PRT_SEQ, LEVELCD, SUP_ORG_CD, SUP_ORG_NM, ORG_CL_CD,
+                   SOSOK, TSOSOK, APLY_STA_DT, APLY_END_DT, ACTVN_YN, GROUP_TYPE, 'PP39093', sysdate
+            FROM   COM_DEPT
+            WHERE  ORG_CD = #{orgCd}
+    </insert>
+    <insert id="createComPersonHst" parameterType="String" >
+        INSERT INTO COM_PERSON_HST
+            SELECT LOGIN_ID, USER_NM, ACTVN_YN, ORG_CD, SOSOK, TSOSOK, JBGRP, JBGRPNM, JBRANK, JBRANKNM, JBCHARGE,
+                   JBCHARGENM, USER_ST_CD, APLY_STA_DT, APLY_END_DT, PSN_TYP_CD, SEX, EMAIL_ADDR, OFFC_PHON_NUM, MBL_PHON_NUM, USER_TYPE, HOLDOFFIDIVI, AUTHOR, 'PP39093', sysdate
+            FROM   COM_PERSON
+            WHERE  LOGIN_ID = #{loginId}
+    </insert>
+</mapper>

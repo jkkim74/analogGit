@@ -1,0 +1,11 @@
+<link href="resources/pivot/pivot.css" media="screen" rel="stylesheet" type="text/css">
+<div class="content" ng-controller="service3Ctrl" data-ng-init="drawPivot()">
+    <h1 class="page-header">Pivot 샘플</h1>
+    <div id="output"></div>
+
+    <a download="privot-samples.xls" href="#" onclick="return ExcellentExport.excel(this, 'output', '회원가입(성별, 연령별)');">
+        <button class="btn btn-primary pull-right top-buffer">excel download</button>
+    </a>
+</div>
+<script type="text/javascript" src="resources/pivot/pivot.js"></script>
+<script type="text/javascript" src="resources/app/service3/service3Ctrl.js"></script>

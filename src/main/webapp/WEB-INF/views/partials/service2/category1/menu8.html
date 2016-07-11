@@ -1,0 +1,40 @@
+<div ng-controller="jqueryUiCtrl" data-ng-init="init()">
+    <h3>Range slider</h3>
+    <label for="amount">Price range:</label>
+    <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;">
+
+    <div id="slider-range"></div>
+
+    <hr/>
+    <h3>Knob Chart</h3><br/>
+    <h5>#default setting</h5>
+    <input type="text" value="75" class="defaultKnob">
+    <hr/>
+
+    <h5>#directive test</h5>
+    <knob-chart info="myKnob"></knob-chart>
+    <knob-chart info="myKnob2"></knob-chart>
+    <knob-chart info="myKnob3"></knob-chart>
+
+
+    <hr/>
+    <h5>#custom test <input type="button" id="btnClick" value="Change Value"></h5>
+    <input type="text" value="13" class="myKnob" id="testKnob">
+    <input type="text" value="13" class="myKnob" id="testKnob0">
+    <input type="text" value="13" class="myKnob" id="testKnob1" data-skin="tron">
+    <input type="text" value="5" class="myKnob" id="testKnob2">
+    <input type="text" value="24" class="myKnob" id="testKnob3">
+    <input type="text" value="53" class="myKnob" id="testKnob4">
+    <input type="text" value="10" class="myKnob" id="testKnob5">
+    <input type="text" value="40" class="myKnob" id="testKnob6">
+    <input type="text" value="40" class="myKnob" id="testKnob7">
+    <input type="text" value="34" class="myKnob" id="testKnob8">
+
+
+
+
+
+</div>
+
+<script type="text/javascript" src="resources/app/service2/jqueryUiCtrl.js"></script>
+<script type="text/javascript" src="resources/app/service2/jquery.knob.js"></script>

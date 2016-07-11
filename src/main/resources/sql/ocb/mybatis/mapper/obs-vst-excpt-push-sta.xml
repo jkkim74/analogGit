@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsVstExceptPushStaRepository">
+    <select id="getVisitsExceptPushOutlineForGridPerDay" parameterType="JqGridRequest" resultType="ObsVstExcptPushSta">
+        select   TO_CHAR(TO_DATE(std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                 uv AS uv,
+                 lv AS lv,
+                 pv AS pv,
+                 rv AS rv,
+                 vst_cnt AS vst_cnt,
+                 round(time_spt_f_vst)/1000 AS time_spt_f_vst,
+                 bunc_rate AS bunc_rate
+            from obs_d_vst_excpt_push_sta
+            where std_dt between #{startDate} and #{endDate}
+              AND poc_ind_cd = '01'
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}
+        </if>
+    </select>
+    <select id="getVisitsExceptPushOutlineForGridPerWeek" parameterType="JqGridRequest" resultType="ObsVstExcptPushSta">
+        select   TO_CHAR(TO_DATE(std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                 uv AS uv,
+                 lv AS lv,
+                 pv AS pv,
+                 rv AS rv,
+                 vst_cnt AS vst_cnt,
+                 round(time_spt_f_vst)/1000 AS time_spt_f_vst,
+                 bunc_rate AS bunc_rate
+            from obs_w_vst_excpt_push_sta
+            where std_dt <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />
+              AND poc_ind_cd = '01'
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}
+        </if>
+    </select>
+    <select id="getVisitsExceptPushOutlineForGridPerMonth" parameterType="JqGridRequest" resultType="ObsVstExcptPushSta">
+        select   TO_CHAR(TO_DATE(std_ym,'YYYYMM'),'YYYY-MM') as std_dt,
+                 uv AS uv,
+                 lv AS lv,
+                 pv AS pv,
+                 rv AS rv,
+                 vst_cnt AS vst_cnt,
+                 round(time_spt_f_vst)/1000 AS time_spt_f_vst,
+                 bunc_rate AS bunc_rate
+            from obs_m_vst_excpt_push_sta
+           where std_ym between #{startDate} and #{endDate}
+              AND poc_ind_cd = '01'
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_ym ${sord}
+        </if>
+    </select>
+</mapper>

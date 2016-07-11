@@ -1,0 +1,88 @@
+<div class="col-md-12" ng-controller="orgRoleCtrl" data-ng-init="init()" style="height: 800px">
+    <div class="page-title obj-clear">
+        <h1 class="pull-left">{{menuContext.menu.name}}</h1>
+        <div class="pagenation">
+            {{menuContext.category.name}} <span>&gt;</span> {{menuContext.menu.name}}
+        </div>
+    </div>
+    <div class="search-select-area obj-clear">
+        <div class="select-box">
+            <label for="searchedGroupType" class="text-check ng-binding">조직유형</label>
+            <select id="searchedGroupType" class="select ng-pristine ng-valid" data-ng-model="searchedGroupType" data-ng-change="changeGroupType()" data-ng-options="groupType.name for groupType in groupTypes">
+            </select>
+        </div>
+        <div class="select-box">
+            <label for="searchedOrgNm" class="text-check">조직</label>
+            <input id="searchedOrgNm" class="select" type="text" data-ng-model="searchedOrgNm" />
+        </div>
+        <a href="javascript:void(0);" class="btn btn-search pull-left" data-ng-click="searchOrgRole()">조회</a>
+    </div>
+
+    <div class="data-area jq-board" >
+        <div class="page-body-title">
+            <h2>조직</h2>
+        </div>
+       <jq-grid config="orgForGridConfig" id="orgForGrid"></jq-grid>
+        <div class="page-body-title">
+            <h2>권한</h2>
+        </div>
+        <jq-grid config="orgRoleForGridConfig" id="orgRoleForGrid"></jq-grid>
+        <div class="mar-t10 pull-right">
+            <button class="btn btn-warning basic" id="activeOrgRoleModal" ng-disabled="!orgCd" data-ng-click="activeOrgRoleModal();">조직 권한 등록</button>
+        </div>
+    </div>
+    <!-- 조직별 권한 등록 모달 -->
+    <div id="orgRoleModal" class="modal fade custom-modal in" tabindex="-1" role="dialog" aria-labelledby="orgRoleModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <section class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h1 class="modal-title" id="orgRoleModalLabel">조직 권한 등록</h1>
+                </div>
+                <div class="modal-body">
+                    <div class="data-table hover-table" style="margin-top:10px;">
+                        <table class="table">
+                            <colgroup>
+                                <col style="width:5%;">
+                                <col style="width:10%;">
+                                <col style="width:30%;">
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>
+                                    <span class="checkbox only">
+                                        <input type="checkbox" name="" id="border01">
+                                        <label for="border01"></label>
+                                    </span>
+                                </th>
+                                <th>ID</th>
+                                <th>권한명</th>
+                                <th>권한설명</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="role in roles">
+                                <td>
+                                    <span class="checkbox only">
+                                        <input type="checkbox" name="chk_role" id="chk_role_{{$index}}" value="{{role.id}}">
+                                        <label for="chk_role_{{$index}}"></label>
+                                    </span>
+                                </td>
+                                <td>{{role.id}}</td>
+                                <td>{{role.name}}</td>
+                                <td>{{role.description}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="obj-section">
+                        <button class="btn btn-danger basic text-right" data-ng-click="addOrgRole()">등록</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- 조직별 권한 등록 모달 -->
+</div>
+<script type="text/javascript" src="resources/app/admin/role/orgRoleCtrl.js"></script>

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.RtdDauRepository">
+    <select id="getRtdDauByStdDt" parameterType="RtdDau" resultType="RtdDau">
+        SELECT STRD_DT, 1 as FLAG, HOUR, HAU, HAU_ACM, GAP, FCT_GAP, FCT, HAU_MTH_AVG
+        FROM   RTD_H_OCB_HAU
+        WHERE  STRD_DT = #{oneHourBeforeStrdDt}
+        AND    HOUR = #{oneHourBefore}
+        UNION ALL
+        SELECT STRD_DT, 2 as FLAG, HOUR, HAU, HAU_ACM, GAP, FCT_GAP, FCT, HAU_MTH_AVG
+        FROM   RTD_H_OCB_HAU
+        WHERE  STRD_DT = #{strdDt}
+        AND    HOUR = #{hour}
+        UNION ALL
+        SELECT STRD_DT, 3 as FLAG, HOUR, HAU, HAU_ACM, GAP, 0 as FCT_GAP, FCT, HAU_MTH_AVG
+        FROM   RTD_H_SYRUP_HAU
+        WHERE  STRD_DT = #{syrupOneHourBeforeStrdDt}
+        AND    HOUR = #{syrupOneHourBefore}
+        UNION ALL
+        SELECT STRD_DT, 4 as FLAG, HOUR, HAU, HAU_ACM, GAP, 0 as FCT_GAP, FCT, HAU_MTH_AVG
+        FROM   RTD_H_SYRUP_HAU
+        WHERE  STRD_DT = #{syrupStrdDt}
+        AND    HOUR = #{syrupHour}
+    </select>
+    <select id="getOcbRtdDauByPreStrdDt" parameterType="RtdDau" resultType="RtdDau">
+        SELECT STRD_DT, FLAG, HOUR, HAU, HAU_ACM, GAP, FCT_GAP, FCT
+        FROM (
+            SELECT STRD_DT, 5 as FLAG, HOUR, HAU, HAU_MTH_AVG as HAU_ACM, GAP, FCT_GAP, FCT
+            FROM   RTD_H_OCB_HAU
+            WHERE  STRD_DT = #{preStrdDt}
+            AND    HOUR BETWEEN '00' AND '22'
+            UNION ALL
+            SELECT STRD_DT, 5 as FLAG, '23' as HOUR, 0 as HAU, DAU_MTH_AVG as HAU_ACM, 0 as GAP, 0 as FCT_GAP, DAU_MTH_AVG as FCT
+            FROM  RTD_D_OCB_DAU
+            WHERE STRD_DT = #{preStrdDt}
+        )
+        ORDER BY HOUR
+    </select>
+    <select id="getOcbSyrupRtdDauCountByStdDt" parameterType="RtdDau" resultType="RtdDau">
+        SELECT count(*) as FLAG FROM RTD_D_OCB_DAU WHERE STRD_DT = #{preStrdDt} AND DAU_MTH_AVG > 0
+        UNION ALL
+        SELECT count(*) as FLAG FROM RTD_D_SYRUP_DAU WHERE STRD_DT = #{preStrdDt} AND DAU_MTH_AVG > 0
+    </select>
+    <select id="getSyrupRtdDauByPreStrdDt" parameterType="RtdDau" resultType="RtdDau">
+        SELECT STRD_DT, FLAG, HOUR, HAU, HAU_ACM, GAP, FCT_GAP, FCT
+        FROM (
+            SELECT STRD_DT, 6 as FLAG, HOUR, HAU, HAU_MTH_AVG as HAU_ACM, GAP, 0 as FCT_GAP, FCT
+            FROM   RTD_H_SYRUP_HAU
+            WHERE  STRD_DT = #{syrupPreStrdDt}
+            AND    HOUR BETWEEN '00' AND '22'
+            UNION ALL
+            SELECT STRD_DT, 6 as FLAG, '23' as HOUR, 0 as HAU, DAU_MTH_AVG as HAU_ACM, 0 as GAP, 0 as FCT_GAP, DAU_MTH_AVG as FCT
+            FROM  RTD_D_SYRUP_DAU
+            WHERE STRD_DT = #{syrupPreStrdDt}
+        )
+        ORDER BY HOUR
+    </select>
+    <select id="getRtdDauCountByStdDt" parameterType="RtdDau" resultType="RtdDau">
+        SELECT count(*) as FLAG  FROM RTD_H_OCB_HAU WHERE STRD_DT = #{oneHourBeforeStrdDt} AND HOUR = #{oneHourBefore}
+        UNION ALL
+        SELECT count(*) as FLAG FROM RTD_H_OCB_HAU WHERE STRD_DT = #{strdDt} AND HOUR = #{hour}
+        UNION ALL
+        SELECT count(*) as FLAG  FROM RTD_H_SYRUP_HAU WHERE STRD_DT = #{oneHourBeforeStrdDt} AND HOUR = #{oneHourBefore}
+        UNION ALL
+        SELECT count(*) as FLAG FROM RTD_H_SYRUP_HAU WHERE STRD_DT = #{strdDt} AND HOUR = #{hour}
+    </select>
+    <select id="getOcbRtdDauByStdDt" parameterType="RtdDau" resultType="RtdDau">
+        SELECT STRD_DT, HOUR, HAU, HAU_ACM, GAP, FCT_GAP, FCT
+        FROM   RTD_H_OCB_HAU
+        WHERE  STRD_DT = #{strdDt}
+        AND    HOUR BETWEEN '00' AND #{oneHourBefore}
+        ORDER BY HOUR
+    </select>
+    <select id="getSyrupRtdDauByStdDt" parameterType="RtdDau" resultType="RtdDau">
+        SELECT STRD_DT, HOUR, HAU, HAU_ACM, GAP, 0 as FCT_GAP, FCT
+        FROM   RTD_H_SYRUP_HAU
+        WHERE  STRD_DT = #{syrupStrdDt}
+        AND    HOUR BETWEEN '00' AND #{syrupOneHourBefore}
+        ORDER BY HOUR
+    </select>
+    <select id="getOcbDauForPivotPerDay" parameterType="JqGridRequest" resultType="RtdDau">
+        <![CDATA[
+        WITH t AS (SELECT TO_CHAR(TO_DATE(STRD_DT,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE(STRD_DT,'yyyymmdd'),'dy')||')' AS STRD_DT
+                        , DAU
+                        , MOBILE_TOTAL
+                        , APP
+                        , M_OCB
+                        , OFFLINE_CNT
+                        , OPER_DTM
+                     FROM RTD_D_OCB_DAU
+                    WHERE STRD_DT BETWEEN #{startDate} AND #{endDate}
+                    ORDER BY STRD_DT
+                  )
+        SELECT STRD_DT
+             , DECODE (MEASURE
+                       , 'DAU','01DAU (KPI기준)'
+                       , 'MOBILE_TOTAL','02&nbsp;&nbsp;&nbsp;&nbsp;Mobile Total'
+                       , 'APP','03&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;App.'
+                       , 'M_OCB','04&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mOCB'
+                       , 'OFFLINE_CNT','05&nbsp;&nbsp;&nbsp;&nbsp;OCB Mileage'
+               ) AS MEASURE
+             , MEASURE_VALUE
+          FROM t UNPIVOT (MEASURE_VALUE FOR MEASURE
+                                         IN (DAU
+                                             , MOBILE_TOTAL
+                                             , APP
+                                             , M_OCB
+                                             , OFFLINE_CNT
+		                                    )
+                         )
+
+        ]]>
+    </select>
+    <select id="getOcbDauForPivotPerWeek" parameterType="JqGridRequest" resultType="RtdDau">
+        <![CDATA[
+        WITH t AS (SELECT TO_CHAR(TO_DATE(STRD_DT,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE(STRD_DT,'yyyymmdd'),'dy')||')' AS STRD_DT
+                        , DAU
+                        , MOBILE_TOTAL
+                        , APP
+                        , M_OCB
+                        , OFFLINE_CNT
+                        , OPER_DTM
+                     FROM RTD_W_OCB_DAU
+                    WHERE STRD_DT ]]><include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" /><![CDATA[
+                    ORDER BY STRD_DT
+                  )
+        SELECT STRD_DT
+             , DECODE (MEASURE
+                       , 'DAU','01DAU (KPI기준)'
+                       , 'MOBILE_TOTAL','02&nbsp;&nbsp;&nbsp;&nbsp;Mobile Total'
+                       , 'APP','03&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;App.'
+                       , 'M_OCB','04&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mOCB'
+                       , 'OFFLINE_CNT','05&nbsp;&nbsp;&nbsp;&nbsp;OCB Mileage'
+               ) AS MEASURE
+             , MEASURE_VALUE
+          FROM t UNPIVOT (MEASURE_VALUE FOR MEASURE
+                                         IN (DAU
+                                             , MOBILE_TOTAL
+                                             , APP
+                                             , M_OCB
+                                             , OFFLINE_CNT
+                                            )
+                         )
+
+        ]]>
+    </select>
+    <select id="getOcbDauForPivotPerMonth" parameterType="JqGridRequest" resultType="RtdDau">
+        <![CDATA[
+        WITH t AS (SELECT TO_CHAR (TO_DATE (STRD_DT, 'YYYYMM'), 'YYYY-MM') AS STRD_DT
+                        , DAU
+                        , MOBILE_TOTAL
+                        , APP
+                        , M_OCB
+                        , OFFLINE_CNT
+                        , OPER_DTM
+                     FROM RTD_M_OCB_DAU
+                    WHERE STRD_DT BETWEEN #{startDate} AND #{endDate}
+                    ORDER BY STRD_DT
+                  )
+        SELECT STRD_DT
+             , DECODE (MEASURE
+                       , 'DAU','01DAU (KPI기준)'
+                       , 'MOBILE_TOTAL','02&nbsp;&nbsp;&nbsp;&nbsp;Mobile Total'
+                       , 'APP','03&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;App.'
+                       , 'M_OCB','04&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mOCB'
+                       , 'OFFLINE_CNT','05&nbsp;&nbsp;&nbsp;&nbsp;OCB Mileage'
+               ) AS MEASURE
+             , MEASURE_VALUE
+          FROM t UNPIVOT (MEASURE_VALUE FOR MEASURE
+                                         IN (DAU
+                                             , MOBILE_TOTAL
+                                             , APP
+                                             , M_OCB
+                                             , OFFLINE_CNT
+		                                    )
+                         )
+
+        ]]>
+    </select>
+    <select id="getSyrupDauForPivotPerDay" parameterType="JqGridRequest" resultType="RtdDau">
+        WITH t AS (SELECT TO_CHAR(TO_DATE(STRD_DT,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE(STRD_DT,'yyyymmdd'),'dy')||')' AS STRD_DT
+        , DAU
+        , ACCEPT_DAU
+        , CI_DAU
+        , OPER_DTM
+        FROM RTD_D_SYRUP_DAU
+        WHERE STRD_DT BETWEEN #{startDate} AND #{endDate}
+        ORDER BY STRD_DT
+        )
+        SELECT STRD_DT
+        , DECODE (MEASURE
+        , 'DAU','01DAU (KPI기준)'
+        , 'ACCEPT_DAU','02약관동의 +1 클릭'
+        , 'CI_DAU','03인증 +1클릭'
+        ) AS MEASURE
+        , MEASURE_VALUE
+        FROM t UNPIVOT (MEASURE_VALUE FOR MEASURE
+        IN (DAU
+        , ACCEPT_DAU
+        , CI_DAU
+        )
+        )
+    </select>
+    <select id="getAppSticknessForPivotPerDay" parameterType="JqGridRequest" resultType="RtdDau">
+          WITH t AS (SELECT TO_CHAR(TO_DATE(STRD_DT,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE(STRD_DT,'yyyymmdd'),'dy')||')' AS STRD_DT
+                          , DAU_STICKNESS
+                          , OPER_DTM
+                       FROM RTD_D_OCB_DAU
+                      WHERE STRD_DT BETWEEN #{startDate} AND #{endDate}
+                      ORDER BY STRD_DT
+                    )
+        SELECT STRD_DT
+             , DECODE(MEASURE
+                      ,'DAU_STICKNESS','01OCB App - Stickiness_DAU'
+                     ) AS MEASURE
+             , MEASURE_VALUE
+          FROM t UNPIVOT (MEASURE_VALUE FOR MEASURE
+                                         IN (DAU_STICKNESS)
+                         )
+    </select>
+    <select id="getAppSticknessForPivotPerWeek" parameterType="JqGridRequest" resultType="RtdDau">
+          WITH t AS (SELECT TO_CHAR(TO_DATE(STRD_DT,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE(STRD_DT,'yyyymmdd'),'dy')||')' AS STRD_DT
+                          , WAU_STICKNESS
+                          , OPER_DTM
+                       FROM RTD_W_OCB_WAU
+                      WHERE STRD_DT <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />
+                      ORDER BY STRD_DT
+                    )
+        SELECT STRD_DT
+             , DECODE(MEASURE
+                      ,'WAU_STICKNESS','01OCB App - Stickiness_WAU'
+                     ) AS MEASURE
+             , MEASURE_VALUE
+          FROM t UNPIVOT (MEASURE_VALUE FOR MEASURE
+                                         IN (WAU_STICKNESS)
+                         )
+    </select>
+    <select id="getAppSticknessForPivotPerMonth" parameterType="JqGridRequest" resultType="RtdDau">
+          WITH t AS (SELECT TO_CHAR (TO_DATE (STRD_YM, 'YYYYMM'), 'YYYY-MM') AS STRD_DT
+                          , MAU_STICKNESS
+                          , OPER_DTM
+                       FROM RTD_M_OCB_MAU
+                      WHERE STRD_YM BETWEEN #{startDate} AND #{endDate}
+                      ORDER BY STRD_YM
+                    )
+        SELECT STRD_DT
+             , DECODE(MEASURE
+                      ,'MAU_STICKNESS','01OCB App - Stickiness_MAU'
+                     ) AS MEASURE
+             , MEASURE_VALUE
+          FROM t UNPIVOT (MEASURE_VALUE FOR MEASURE
+                                         IN (MAU_STICKNESS)
+                         )
+    </select>
+</mapper>

@@ -1,0 +1,14 @@
+<div ng-controller="searchResultClickAlliCtrl" data-ng-init="init()" ng-style="style(0)" resize table-id="tableId">
+    <report-search-box search-callback="search" search-config="searchConfig" menu-context="menuContext"></report-search-box>
+    <div class="non-sub-title obj-section">
+        <report-sub-nav excelConfig="excelConfig"></report-sub-nav>
+    </div>
+
+    <div class="data-area jq-board" ng-style="dataAreaStyle()" resize>
+        <jq-grid config="searchResultClickAlliGrid"></jq-grid>
+    </div>
+</div>
+<link href="resources/pivot/pivot.css" media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="resources/pivot/pivot.js"></script>
+<script type="text/javascript" src="resources/app/ocb/searchAnalysis/searchResultClickAlliCtrl.js"></script>
+

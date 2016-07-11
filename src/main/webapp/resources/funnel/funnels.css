@@ -1,0 +1,253 @@
+.funnel ul  {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.funnel li {
+}
+
+.funnel .floor {
+	clear: both;
+}
+
+.funnel .entry {
+	float: left;
+	display: table;
+	margin: 0 10px 0 5px;
+	width: 33%;
+	height: 240px;
+	min-width: 200px;
+	min-height: 240px;
+}
+
+.funnel .entry ul {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.funnel .entry .summary {
+	position: relative;
+	right: 0;
+	top: 45px;
+	width: 100%;
+	height: 30px;
+	/*border: 1px solid #fff;*/
+}
+
+.funnel .entry .detail {
+	position: relative;
+	right: 0;
+	top: 45px;
+	width: 100%;
+	border: 1px solid #ccc;
+}
+
+.funnel .entry .detail ul {
+	display: table;
+	width: 100%;
+}
+
+.funnel .entry .detail li {
+	display: table-cell;
+	float: left;
+}
+
+.funnel .entry .detail .key {
+	width: calc(100% - 52px);
+	text-align: left;
+	word-break: break-all;
+}
+
+.funnel .entry .detail .value {
+	width: 50px;
+	text-align: right;
+	word-break: break-all;
+}
+
+.funnel .entry h4 {
+	padding: 3px 25px 0 0;
+	text-align: right;
+	background: url(../images/funnel/entry-arrow.gif) no-repeat 100% 0;
+}
+
+.funnel .step {
+	float: left;
+	display: table;
+	margin: 0;
+	text-align: center;
+	width: 33%;
+	height: 240px;
+	min-width: 200px;
+	min-height: 240px;
+}
+
+.funnel .step ul {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.funnel .step .summary {
+	display: table;
+	width: 100%;
+	padding: 0;
+	border: 1px solid #ccc;
+}
+
+.funnel .step .summary.no-border {
+	display: table;
+	width: 100%;
+	padding: 0;
+	border: 1px solid #fff;
+}
+
+
+.funnel .step .summary ul {
+	display: table-cell;
+	padding: 0 0 10px 0;
+}
+
+.funnel .step .summary li {
+	line-height: 25px;
+}
+
+.funnel .step .detail {
+	position: relative;
+	width: 100%;
+	height: 120px;
+	border: 1px solid #fff;
+	border-top-width: 0;
+}
+
+.funnel .step .detail .arrow {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url(../images/funnel/arrow-down.jpg) no-repeat center bottom, url(../images/funnel/arrow-down-bg.png) repeat-y center top;
+}
+
+.funnel .step .detail .arrow img {
+	height: 60px;
+	border: none;
+	/*content: url(../images/funnel/arrow-down-tail.png);*/
+}
+
+.funnel .step .detail .ext-arrow {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url(../images/funnel/ext-arrow-down.jpg) no-repeat center bottom, url(../images/funnel/ext-arrow-down-bg.jpg) repeat-y center top;
+}
+
+.funnel .step .detail .ext-arrow img {
+	width: 78px;
+	height: 45px;
+	border: none;
+	/*content: url(../images/funnel/ext-arrow-down-tail.jpg);*/
+}
+
+.funnel .step .detail .ext-rate {
+	position: absolute;
+	bottom: 40px;
+	left: 0;
+	width: 100%;
+	height: 30px;
+}
+
+.funnel .step .detail .rate {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.funnel .step h3 {
+	font-size: 100%;
+	/*margin: 0px 0px 0.3em;*/
+	margin: 10px 0px 5px 0;
+}
+
+.funnel .step h4 {
+	margin: 0;
+	padding-top: 10px;
+}
+
+.funnel .exit {
+	float: left;
+	display: table;
+	margin: 0 5px 0 10px;
+	width: 33%;
+	height: 240px;
+	min-width: 200px;
+	min-height: 240px;
+}
+
+.funnel .exit ul {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.funnel .exit .summary {
+	position: relative;
+	left: 0;
+	top: 45px;
+	width: 100%;
+	height: 30px;
+	/*border: 1px solid #fff;*/
+}
+
+.funnel .exit .detail {
+	position: relative;
+	left: 0;
+	top: 45px;
+	width: 100%;
+	border: 1px solid #ccc;
+}
+
+.funnel .exit .detail ul {
+	display: table;
+	width: 100%;
+}
+
+.funnel .exit .detail li {
+	display: table-cell;
+	float: left;
+}
+
+.funnel .exit .detail .key {
+	width: calc(100% - 52px);
+	text-align: left;
+	word-break: break-all;
+}
+
+.funnel .exit .detail .value {
+	width: 50px;
+	text-align: right;
+	word-break: break-all;
+}
+
+.funnel .exit h4 {
+	padding: 3px 0 0 22px;
+	text-align: left;
+	background: url(../images/funnel/exit-arrow.gif) no-repeat 0 0;
+}
+
+.funnel_bar_graph {
+	background: #FF9999;
+	display: block;
+	height: 10px;
+	margin: 0 0 0 10px;
+	text-align: left;
+	width: calc(100% - 20px);
+}
+
+.funnel_bar_graph b {
+	background: #CCFF99;
+	display: block;
+	height: 10px;
+}

@@ -1,0 +1,201 @@
+<!-- header start -->
+<header class="header fixed-top clearfix">
+    <div class="container">
+        <h1 class="navbar-brand brand">
+            <a ui-sref="{{logoHref}}" class="logo">
+                Voyager <span>Beta</span>
+            </a>
+			<div class="sidebar-toggle-box visible-xs">
+				<div id="bg-control" class="fa fa-bars"></div>
+			</div>
+        </h1>
+        <div class="navbar-collapse collapse header-nav">
+            <ul class="nav navbar-nav navbar-left">
+                <li>
+                    <a href="javascript:void(0)" data-ng-click="goDashboardMenu()">Dashboard</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" data-toggle="dropdown" class="btn-dropdown-toggle">Report</a>
+                    <div class="dropdown-menu">
+                        <ul class="obj-clear">
+    						<li>
+                            	<span>Smart Shopping</span>
+                                <a href data-ng-click="goReportsMenu('ocb')">OCB</a>
+                                <a href data-ng-click="goReportsMenu('syrup')">Syrup Wallet</a>
+                                <a href data-ng-click="goReportsMenu('gifticon')">Gifticon</a>
+							</li>
+							<li>
+                            	<span>Smart Marketing</span>
+								<a href data-ng-click="goReportsMenu('syrupStore')">Syrup Store</a>
+							</li>
+							<li>
+                            	<span>Syrup Vertical</span>
+                                <a href data-ng-click="goReportsMenu('syrupTable')">Syrup Table</a>
+                                <a href data-ng-click="goReportsMenu('syrupOrder')">Syrup Order</a>
+<!--
+								<a href="#">Pickat</a>
+								<a href="#">Pickat SG</a>
+								<a href="#">Wish Pocket</a>
+-->
+							</li>
+							<li>
+                            	<span>Context Generator</span>
+<!--
+                                <a href data-ng-click="goReportsMenu('tmap')">T map</a>
+                                <a href data-ng-click="goReportsMenu('tmapTaxi')">T map 택시</a>
+-->
+							</li>
+							<li>
+                            	<span>Marketplace</span>
+<!--
+                                <a href data-ng-click="goReportsMenu('tstore')">T store</a>
+-->
+                                <a href data-ng-click="goReportsMenu('sk11st')">11st</a>
+                            </li>
+                            <li>
+                                <span>SKT Synergy</span>
+<!--
+                                <a href data-ng-click="goReportsMenu('tcloud')">T cloud</a>
+								<a href="#">T shopping</a>
+								<a href="#">T sports</a>
+-->
+							</li>
+                            <li>
+                            	<span>Standalone</span>
+<!--
+                                <a href data-ng-click="goReportsMenu('hoppin')">Hoppin</a>
+                                <a href data-ng-click="goReportsMenu('oneid')">One ID</a>
+-->
+                                <a href data-ng-click="goReportsMenu('edu')" ng-show="isMstrEduUsers();">SSBI교육</a>
+							</li>
+                        </ul>
+						<div class="arrow"><i class="fa fa-caret-down"></i></div>
+                    </div>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" data-toggle="dropdown" class="btn-dropdown-toggle" data-ng-click="checkMstrSsbiUsers(isMstrSsbiUsers)">Self-Service BI</a>
+                    <div class="dropdown-menu type-2" ng-show="isMstrSsbiUsers">
+                        <ul class="obj-clear">
+                            <li>
+                                <span>Project List</span>
+                                <div data-ng-repeat="project in mstrProjects | orderBy:'name'">
+                                    <div style="float:left; width:50%;">
+                                        <a href data-ng-click="goSelfServiceBiMenu(project.id)">{{project.name}}</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="arrow"><i class="fa fa-caret-down"></i></div>
+                    </div>
+                </li>
+                <li>
+                    <!--<a ui-sref="main.dss.menu({menu: 'recommend'})">Dataset Sharing</a>-->
+                    <a href data-ng-click="goDssMenu()">Dataset Sharing</a>
+                </li>
+                <li>
+                    <a href="http://wiki.skplanet.co.kr/display/BI/B.+DATA+White+Book" target="_blank">Data White Book</a>
+                </li>
+                <li>
+                    <a href data-ng-click="goHelpDeskMenu('notice')">Help Desk</a>
+                </li>
+                <li class="search-bar" onclick="swal('다음 릴리즈때 사용하실수 있습니다.\n조금 기다려 주세요.^^');">
+                    <button type="button" class="search-toggle" rel="popover"
+                            data-trigger="click"
+                            data-html="true"
+                            data-title='
+							<select name="" id="" class="">
+								<option value="">all</option>
+							</select>
+							<input type="text" name="" id="" placeholder="search" />
+							<a class="btn btn-search" href="#">검색</a>
+						'
+                            data-content='
+							<div class="search-popover">
+								<div class="default">
+									검색창에 원하시는 리포트명을 입력해주세요.
+								</div>
+								<div class="search-result-list">
+									<ul class="search-result">
+										<li>
+											<a href="#">Smartwallet &gt; 멤버쉽 </a>
+										</li>
+										<li>
+											<a href="#">Smartwallet &gt; 멤버쉽 상세</a>
+										</li>
+										<li>
+											<a href="#">Smartwallet &gt; 멤버쉽 발급 상세 분석</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						'
+                            data-toggle="popover">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </li>
+            </ul>
+            <div class="top-nav clearfix">
+                <ul class="nav pull-right top-menu util">
+                    <li class='dropdown'>
+                        <div class ='user-name'><a class='dropdown-toggle' href="#"><strong> {{user.fullname}} </strong> 님</a></div>
+                        <ul class='dropdown-menu'>
+                            <li ng-show="isAdmin();"><a href data-ng-click="goAdminMenu()"><i class="fa fa-cog"></i>&nbsp;&nbsp;&nbsp;Admin</a></li>
+                            <li><a href="/logout"><i class="fa fa-power-off"></i>&nbsp;&nbsp;&nbsp;Logout</a></li>
+                        </ul>
+                    </li>
+                    <li class='dropdown'>
+                        <div class ='mypage'><a class='dropdown-toggle' href="#"><i class="fa fa-user fa-2"></i></a></div>
+                        <ul class='dropdown-menu'>
+                            <li ng-show="isAdmin();"><a href data-ng-click="goAdminMenu()"><i class="fa fa-cog"></i>&nbsp;&nbsp;&nbsp;Admin</a></li>
+                            <li><a href="/logout"><i class="fa fa-power-off"></i>&nbsp;&nbsp;&nbsp;Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- header end -->
+<div ui-view></div>
+<!-- footer start -->
+<footer>
+    <div class="footer-section">
+        <div class="container">
+            <div class="footer-sitemap">
+                <a href="http://wiki.skplanet.co.kr/pages/viewpage.action?pageId=58056382" class="btn btn-white"
+                   target="_blank">데이터활용가이드</a>
+
+                <div class="btn-group dropup statistics">
+                    <button id="" class="btn btn-white">
+                        통계 사이트
+                    </button>
+                    <button class="btn btn-white btn-dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+					<ul class="dropdown-menu familysite-list">
+						<li><a href="http://bins.skplanet.com" target="_blank">BINS</a></li>
+					</ul>
+                </div>
+            </div>
+            <div class="footer-info obj-clear">
+                <h1><img src="resources/images/common/f_logo.gif" alt="SK planet"/></h1>
+                <address>
+                    SK planet 구성원을 위한 사내 시스템입니다. 불법으로 사용시에는 법적 제재를 받을 수 있습니다.<br/>
+                    COPYRIGHTS 2013 SK PLANET. ALL RIGHTS RESERVED.
+                </address>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+<!-- modals start -->
+<favorite-modal />
+<!-- modals end -->
+<script type="text/javascript" src="resources/app/common/services/dashboard-factory.js"></script>
+<script type="text/javascript" src="resources/app/common/services/report-factory.js"></script>
+<script type="text/javascript" src="resources/app/common/services/favorite-factory.js"></script>
+<script type="text/javascript" src="resources/app/common/services/admin-factory.js"></script>
+<script type="text/javascript" src="resources/app/common/directives/report-directive.js"></script>
+<script type="text/javascript" src="resources/app/common/directives/favorite-directive.js"></script>
+<script type="text/javascript" src="resources/app/common/directives/admin-directive.js"></script>
+<script type="text/javascript" src="resources/app/common/directives/dashboard-directive.js"></script>

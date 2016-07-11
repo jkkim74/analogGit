@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsSosBleStaRepository">
+    <select id="getBleDiffData" parameterType="JqGridRequest" resultType="ObsSosBleSta">
+        WITH codeT
+             AS (  SELECT com_cd, com_cd_nm, sort_seq
+                     FROM comuser.com_intg_com_cd
+                    WHERE use_yn = 'Y' AND com_grp_cd = 'OBC004'
+                 ORDER BY sort_seq),
+             syrupT
+             AS (SELECT std_dt AS std_dt,
+                        poc_ind_cd AS poc_ind_cd,
+                        com_cd AS com_cd,
+                        ble_cnt AS syrup_ble_cnt,
+                        bt_on_cnt AS syrup_bt_on_cnt,
+                        ble_flyr_cnt AS syrup_ble_flyr_cnt,
+                        smt_bcn_cnt AS syrup_smt_bcn_cnt
+                   FROM obs_d_sos_ble_syrup_sta
+                  WHERE poc_ind_cd = '01'
+                    AND std_dt BETWEEN #{startDate} AND #{endDate}),
+             ocbT
+             AS (SELECT std_dt AS std_dt,
+                        poc_ind_cd AS poc_ind_cd,
+                        com_cd AS com_cd,
+                        ble_flyr_cnt AS ocb_ble_flyr_cnt,
+                        ble_chkin_cnt AS ocb_ble_chkin_cnt,
+                        bt_on_cnt AS ocb_bt_on_cnt,
+                        smt_bcn_cnt AS ocb_smt_bcn_cnt,
+                        stor_flyr_cnt AS ocb_stor_flyr_cnt,
+                        trara_flyr_cnt AS ocb_trara_flyr_cnt
+                   FROM obs_d_sos_ble_ocb_sta
+                  WHERE poc_ind_cd = '01'
+                    AND std_dt BETWEEN #{startDate} AND #{endDate}),
+             soT
+             AS (SELECT std_dt AS std_dt,
+                        poc_ind_cd AS poc_ind_cd,
+                        com_cd AS com_cd,
+                        s_ble_jn_o_ble_flyr_chkin_cnt AS ble_flyr_chkin_cnt,
+                        s_ble_jn_o_ble_flyr_cnt AS ble_flyr_cnt,
+                        s_ble_jn_o_ble_chkin_cnt AS ble_chkin_cnt,
+                        s_bton_jn_o_bton_cnt AS ble_bton_cnt
+                   FROM obs_d_sos_ble_s_join_o_sta
+                  WHERE poc_ind_cd = '01'
+                    AND std_dt BETWEEN #{startDate} AND #{endDate})
+          SELECT TO_CHAR (TO_DATE (syrupT.std_dt, 'YYYYMMDD'),'YYYY-MM-DD')|| '('|| TO_CHAR (TO_DATE (syrupT.std_dt, 'yyyymmdd'), 'dy')|| ')' AS std_dt,
+                 syrupT.com_cd,
+                 codeT.sort_seq,
+                 codeT.com_cd_nm,
+                 syrupT.syrup_ble_cnt,
+                 syrupT.syrup_bt_on_cnt,
+                 syrupT.syrup_ble_flyr_cnt,
+                 syrupT.syrup_smt_bcn_cnt,
+                 ocbT.ocb_ble_flyr_cnt,
+                 ocbT.ocb_ble_chkin_cnt,
+                 ocbT.ocb_bt_on_cnt,
+                 ocbT.ocb_smt_bcn_cnt,
+                 ocbT.ocb_stor_flyr_cnt,
+                 ocbT.ocb_trara_flyr_cnt,
+                 soT.ble_flyr_chkin_cnt,
+                 soT.ble_flyr_cnt,
+                 soT.ble_chkin_cnt,
+                 soT.ble_bton_cnt
+            FROM codeT,syrupT,ocbT,soT
+           WHERE codeT.com_cd = syrupT.com_cd
+             AND codeT.com_cd = ocbT.com_cd
+             AND codeT.com_cd = soT.com_cd
+             AND syrupT.std_dt = ocbT.std_dt
+             AND ocbT.std_dt = soT.std_dt
+        ORDER BY syrupT.std_dt, codeT.sort_seq
+    </select>
+</mapper>

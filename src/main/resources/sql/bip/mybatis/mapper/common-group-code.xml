@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.CommonGroupCodeRepository">
+    <select id="getCodesByGroupCodeId" parameterType="String" resultType="CommonGroupCode">
+        SELECT group_code_id, group_code_name, code_id, code_name, sort
+          FROM common_group_code
+         WHERE group_code_id = #{groupCodeId}
+           AND use_yn = 'Y'
+      ORDER BY sort
+    </select>
+    <select id="getCodesAllByGroupCodeId" parameterType="String" resultType="CommonGroupCode">
+        SELECT group_code_id, group_code_name, code_id, code_name, sort, upper_group_code_id, upper_code_id
+          FROM common_group_code
+         WHERE group_code_id = #{groupCodeId}
+           AND use_yn = 'Y'
+      ORDER BY sort
+    </select>
+</mapper>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.EisSvcComCdRepository">
+    <select id="getComCdsBySvcId" parameterType="Long" resultType="EisSvcComCd">
+        SELECT svc_id, idx_cl_grp_cd, idx_cl_cd, idx_ctt_cd, idx_ctt_cd_val, idx_ctt_cd_desc, ord_idx
+        FROM   EIS_SVC_COM_CD
+        WHERE  svc_id = #{svcId}
+        ORDER BY ord_idx
+    </select>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="useColumnLabel" value="true"/>
+    </settings>
+
+    <typeAliases>
+        <typeAlias type="com.skplanet.bisportal.model.Sales" alias="Sales"/>
+        <typeAlias type="com.skplanet.bisportal.model.SalesUser" alias="SalesUser"/>
+        <typeAlias type="com.skplanet.bisportal.model.Aggregation" alias="Aggregation"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.OcbDayVisitStc" alias="OcbDayVisitStc"/>
+        <typeAlias type="com.skplanet.bisportal.model.Signup" alias="Signup"/>
+        <typeAlias type="com.skplanet.bisportal.common.model.JqGridRequest" alias="JqGridRequest"/>
+        <typeAlias type="com.skplanet.bisportal.common.model.ChartRequest" alias="ChartRequest"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsMbrentSta" alias="ObsMbrentSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsVstSta" alias="ObsVstSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsVstSexAgeSta" alias="ObsVstSexAgeSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsVstLngSta" alias="ObsVstLngSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsVstRsltnSta" alias="ObsVstRsltnSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsVstDvcMdlSta" alias="ObsVstDvcMdlSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsVstTimeSta" alias="ObsVstTimeSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsVstOsSta" alias="ObsVstOsSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsVstPageSta" alias="ObsVstPageSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsActnSta" alias="ObsActnSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsFeedSta" alias="ObsFeedSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsStoreOvrlSta" alias="ObsStoreOvrlSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsStoreDetlSta" alias="ObsStoreDetlSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsPntSta" alias="ObsPntSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsSrchClickStoreSta" alias="ObsSrchClickStoreSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsSrchClickAlliSta" alias="ObsSrchClickAlliSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsSrchClickBnftSta" alias="ObsSrchClickBnftSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsPushCnfgSta" alias="ObsPushCnfgSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsVstExcptPushSta" alias="ObsVstExcptPushSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsCntntDscvSta" alias="ObsCntntDscvSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsCntntTraraFlyrSta" alias="ObsCntntTraraFlyrSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsCntntFlyrDetlSta" alias="ObsCntntFlyrDetlSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsCntntStoreFlyrSta" alias="ObsCntntStoreFlyrSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsCntntMbilFlyrCopnSta" alias="ObsCntntMbilFlyrCopnSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsCntntMbilFlyrPageSta" alias="ObsCntntMbilFlyrPageSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsActvCustRpt" alias="ObsActvCustRpt"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsActvJoinsRpt" alias="ObsActvJoinsRpt"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsMbilAchvRpt" alias="ObsMbilAchvRpt"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsNewOcbSegRpt" alias="ObsNewOcbSegRpt"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsPresntSumRpt" alias="ObsPresntSumRpt"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsRsrvPntRpt" alias="ObsRsrvPntRpt"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsTotPntRpt" alias="ObsTotPntRpt"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsUsePntRpt" alias="ObsUsePntRpt"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsDPushRespSta" alias="ObsDPushRespSta"/>
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsSosBleSta" alias="ObsSosBleSta" />
+        <typeAlias type="com.skplanet.bisportal.model.ocb.SankeyAccessLog" alias="SankeyAccessLog" />
+        <typeAlias type="com.skplanet.bisportal.model.ocb.RtdDau" alias="RtdDau" />
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsVstInflowUvSta" alias="ObsVstInflowUvSta" />
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsVstFstUvSta" alias="ObsVstFstUvSta" />
+        <typeAlias type="com.skplanet.bisportal.model.ocb.BleNewTech" alias="BleNewTech" />
+        <typeAlias type="com.skplanet.bisportal.common.model.ComStdDt" alias="ComStdDt" />
+        <typeAlias type="com.skplanet.bisportal.model.ocb.ObsMktPushSend" alias="ObsMktPushSend" />
+        <typeAlias type="com.skplanet.bisportal.model.sankey.SankeyRequest" alias="SankeyRequest" />
+        <typeAlias type="com.skplanet.bisportal.model.sankey.SankeyResponse" alias="SankeyResponse" />
+    </typeAliases>
+
+</configuration>

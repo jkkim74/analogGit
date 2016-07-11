@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsFeedStaRepository">
+    <select id="getFeedsExposureForGridPerDay_old" parameterType="JqGridRequest" resultType="ObsFeedSta">
+        WITH tmp AS (
+                 SELECT 0 FEEDID, '배달통' FEED_NAME, '20140602' SDATE, '99991231' EDATE, 'N' IS_YN, 'N' ALLIANCE_YN FROM DUAL
+                 UNION ALL
+                 SELECT feedid, feed_name, sdate, edate, is_yn, alliance_yn FROM istuser.soi_tc_feed50 WHERE edate >= #{startDate}
+        )
+          SELECT t.feed_id AS feed_id,
+                 tmp.feed_name AS feed_nm,
+                 TO_CHAR (TO_DATE (tmp.sdate, 'yyyymmdd'), 'yyyy-mm-dd') AS feed_start_date,
+                 TO_CHAR (TO_DATE (tmp.edate, 'yyyymmdd'), 'yyyy-mm-dd') AS feed_end_date,
+                 tmp.is_yn AS is_yn,
+                 tmp.alliance_yn AS alliance_yn,
+                 TO_CHAR (TO_DATE (t.std_dt, 'yyyymmdd'), 'yyyy-mm-dd') AS std_dt,
+                 t.click_cnt AS click_cnt,
+                 t.click_cnt_on_uv AS click_cnt_on_uv,
+                 t.click_cnt_on_lv AS click_cnt_on_lv,
+                 round(t.time_spt_f_vst)/1000 AS time_spt_f_vst,
+                 t.prchs_cnt AS prchs_cnt,
+                 t.presnt_cnt AS presnt_cnt,
+                 t.dnld_cnt AS dnld_cnt,
+                 t.store_view_cnt AS store_view_cnt,
+                 t.msn_act_cnt AS msn_act_cnt,
+                 t.call_req_cnt AS call_req_cnt,
+                 t.hmpage_cnt AS hmpage_cnt,
+                 t.prod_view_cnt AS prod_view_cnt,
+                 t.detl_view_cnt AS detl_view_cnt,
+                 t.scut_cnt AS scut_cnt,
+                 t.call_cnt AS call_cnt,
+                 t.expsr_cnt AS expsr_cnt,
+                 t.expsr_cnt_on_lv AS expsr_cnt_on_lv
+            FROM obs_d_feed_sta t, tmp
+           WHERE t.std_dt BETWEEN #{startDate} AND #{endDate}
+             AND t.poc_ind_cd = '01'
+             AND t.feed_id = TO_CHAR (tmp.feedid)
+        ORDER BY t.feed_id, t.std_dt
+    </select>
+    <select id="getFeedsExposureForGridPerDay" parameterType="JqGridRequest" resultType="ObsFeedSta">
+        WITH tmp AS (
+                 SELECT '0' FEEDID, '배달통' FEED_NAME, '20140602' SDATE, '99991231' EDATE, 'N' IS_YN, 'N' ALLIANCE_YN FROM DUAL
+                 UNION ALL
+                 SELECT to_char(feedid) as feedid, feed_name, sdate, edate, is_yn, alliance_yn FROM istuser.soi_tc_feed50 WHERE edate >= #{startDate}
+        )
+          SELECT /*+ ORDERED INDEX(OBS_D_FEED_STA IDX_OBS_D_FEED_STA_PK) */ t.feed_id AS feed_id,
+             tmp.feed_name AS feed_nm,
+             TO_CHAR (TO_DATE (tmp.sdate, 'yyyymmdd'), 'yyyy-mm-dd') AS feed_start_date,
+             TO_CHAR (TO_DATE (tmp.edate, 'yyyymmdd'), 'yyyy-mm-dd') AS feed_end_date,
+             tmp.is_yn AS is_yn,
+             tmp.alliance_yn AS alliance_yn,
+             TO_CHAR (TO_DATE (t.std_dt, 'yyyymmdd'), 'yyyy-mm-dd') AS std_dt,
+             t.click_cnt AS click_cnt,
+             t.click_cnt_on_uv AS click_cnt_on_uv,
+             t.click_cnt_on_lv AS click_cnt_on_lv,
+             round(t.time_spt_f_vst)/1000 AS time_spt_f_vst,
+             t.prchs_cnt AS prchs_cnt,
+             t.presnt_cnt AS presnt_cnt,
+             t.dnld_cnt AS dnld_cnt,
+             t.store_view_cnt AS store_view_cnt,
+             t.msn_act_cnt AS msn_act_cnt,
+             t.call_req_cnt AS call_req_cnt,
+             t.hmpage_cnt AS hmpage_cnt,
+             t.prod_view_cnt AS prod_view_cnt,
+             t.detl_view_cnt AS detl_view_cnt,
+             t.scut_cnt AS scut_cnt,
+             t.call_cnt AS call_cnt,
+            <choose>
+                <when test="feedType == 'TYPE1'">
+             t.expsr_cnt AS expsr_cnt,
+             t.expsr_cnt_on_uv AS expsr_cnt_on_uv,
+             t.expsr_cnt_on_lv AS expsr_cnt_on_lv
+                </when>
+                <when test="feedType == 'TYPE2'">
+             t.app_expsr_cnt AS expsr_cnt,
+             t.app_expsr_cnt_on_uv AS expsr_cnt_on_uv,
+             t.app_expsr_cnt_on_lv AS expsr_cnt_on_lv
+                </when>
+                <otherwise>
+                </otherwise>
+             </choose>
+      FROM  tmp, obs_d_feed_sta t
+      WHERE tmp.feedid = t.feed_id
+      AND   t.std_dt BETWEEN #{startDate} AND #{endDate}
+      AND   t.poc_ind_cd = '01'
+      AND   t.feed_id > ' '
+    ORDER BY t.feed_id, t.std_dt
+    </select>
+
+
+    <select id="getFeedsExposureOrderForPivotPerDay" parameterType="JqGridRequest" resultType="ObsFeedSta">
+        WITH tmp AS (
+                 SELECT '0' FEEDID, '배달통' FEED_NAME, '20140602' SDATE, '99991231' EDATE, 'N' IS_YN, 'N' ALLIANCE_YN FROM DUAL
+                 UNION ALL
+                 SELECT to_char(feedid), feed_name, sdate, edate, is_yn, alliance_yn FROM istuser.soi_tc_feed50 WHERE edate >= #{startDate}
+        )
+        ,k AS (
+		   SELECT /*+ ORDERED INDEX(OBS_D_FEED_DISP_ORDER_STA IDX_OBS_D_FEED_DSPODR_STA_PK) */
+		   		  t.feed_id AS feed_id,
+				  tmp.feed_name AS feed_nm,
+				  TO_CHAR (TO_DATE (tmp.sdate, 'yyyymmdd'), 'yyyy-mm-dd') AS feed_start_date,
+				  TO_CHAR (TO_DATE (tmp.edate, 'yyyymmdd'), 'yyyy-mm-dd') AS feed_end_date,
+				  tmp.is_yn AS is_yn,
+				  tmp.alliance_yn AS alliance_yn,
+				  t.disp_order AS disp_order,
+				  TO_CHAR (TO_DATE (t.std_dt, 'yyyymmdd'), 'yyyy-mm-dd') AS std_dt,
+				  t.click_cnt as click_cnt,
+				  t.click_cnt_on_uv AS click_cnt_on_uv,
+				  t.click_cnt_on_lv AS click_cnt_on_lv,
+				  round(t.time_spt_f_vst/1000) AS time_spt_f_vst,
+				  t.prchs_cnt AS prchs_cnt,
+				  t.presnt_cnt AS presnt_cnt,
+				  t.dnld_cnt AS dnld_cnt,
+				  t.store_view_cnt AS store_view_cnt,
+				  t.msn_act_cnt AS msn_act_cnt,
+				  t.call_req_cnt AS call_req_cnt,
+				  t.hmpage_cnt AS hmpage_cnt,
+				  t.prod_view_cnt AS prod_view_cnt,
+				  t.detl_view_cnt AS detl_view_cnt,
+				  t.scut_cnt AS scut_cnt,
+				  t.call_cnt AS call_cnt,
+				  t.expsr_cnt AS expsr_cnt,
+				  t.expsr_cnt_on_lv AS expsr_cnt_on_lv
+        FROM  tmp, obs_d_feed_disp_order_sta t
+		WHERE tmp.feedid = t.feed_id
+		AND   t.std_dt BETWEEN #{startDate} AND #{endDate}
+        AND   t.poc_ind_cd = '01'
+		AND   t.disp_order > ' '
+		ORDER BY t.feed_id, t.disp_order, t.std_dt)
+        SELECT feed_id,
+               feed_nm,
+               feed_start_date,
+               feed_end_date,
+               is_yn,
+               alliance_yn,
+               disp_order,
+               std_dt,
+               DECODE (measure
+                   ,'CLICK_CNT', '1클릭 횟수'
+                   ,'CLICK_CNT_ON_UV', '2클릭 UV'
+                   ,'CLICK_CNT_ON_LV', '3클릭 LV'
+--                    ,'STORE_VIEW_CNT', '매장보기 건수'
+--                    ,'MSN_ACT_CNT', '미션수행 건수'
+--                    ,'CALL_REQ_CNT', '전화신청 건수'
+--                    ,'HMPAGE_CNT', '홈페이지 건수'
+--                    ,'PROD_VIEW_CNT', '상품보기 건수'
+--                    ,'DETL_VIEW_CNT', '자세히보기 건수'
+--                    ,'SCUT_CNT', '바로가기 건수'
+                   )
+              AS measure,
+           measure_value
+        FROM k UNPIVOT (measure_value
+             FOR measure
+             IN  (
+                 CLICK_CNT
+                 ,CLICK_CNT_ON_UV
+                 ,CLICK_CNT_ON_LV
+--                  ,STORE_VIEW_CNT
+--                  ,MSN_ACT_CNT
+--                  ,CALL_REQ_CNT
+--                  ,HMPAGE_CNT
+--                  ,PROD_VIEW_CNT
+--                  ,DETL_VIEW_CNT
+--                  ,SCUT_CNT
+                 ))
+    </select>
+
+    <select id="getFeedsExposureOrderForGridPerDay" parameterType="JqGridRequest" resultType="ObsFeedSta">
+        WITH tmp AS (
+                 SELECT '0' FEEDID, '배달통' FEED_NAME, '20140602' SDATE, '99991231' EDATE, 'N' IS_YN, 'N' ALLIANCE_YN FROM DUAL
+                 UNION ALL
+                 SELECT to_char(feedid), feed_name, sdate, edate, is_yn, alliance_yn FROM istuser.soi_tc_feed50 WHERE edate >= #{startDate}
+        )
+        SELECT /*+ ORDERED INDEX(OBS_D_FEED_DISP_ORDER_STA IDX_OBS_D_FEED_DSPODR_STA_PK) */ t.feed_id AS feed_id,
+             tmp.feed_name AS feed_nm,
+             TO_CHAR (TO_DATE (tmp.sdate, 'yyyymmdd'), 'yyyy-mm-dd')
+                AS feed_start_date,
+             TO_CHAR (TO_DATE (tmp.edate, 'yyyymmdd'), 'yyyy-mm-dd')
+                AS feed_end_date,
+             tmp.is_yn AS is_yn,
+             tmp.alliance_yn AS alliance_yn,
+             t.disp_order AS disp_order,
+             TO_CHAR (TO_DATE (t.std_dt, 'yyyymmdd'), 'yyyy-mm-dd') AS std_dt,
+             t.click_cnt click_cnt,
+             t.click_cnt_on_uv AS click_cnt_on_uv,
+             t.click_cnt_on_lv AS click_cnt_on_lv
+        --       round(t.time_spt_f_vst/1000) AS time_spt_f_vst,
+        --       t.prchs_cnt AS prchs_cnt,
+        --       t.presnt_cnt AS presnt_cnt,
+        --       t.dnld_cnt AS dnld_cnt,
+        --       t.store_view_cnt AS store_view_cnt,
+        --       t.msn_act_cnt AS msn_act_cnt,
+        --       t.call_req_cnt AS call_req_cnt,
+        --       t.hmpage_cnt AS hmpage_cnt,
+        --       t.prod_view_cnt AS prod_view_cnt,
+        --       t.detl_view_cnt AS detl_view_cnt,
+        --       t.scut_cnt AS scut_cnt,
+        --       t.call_cnt AS call_cnt,
+        --       t.expsr_cnt AS expsr_cnt,
+        --       t.expsr_cnt_on_lv AS expsr_cnt_on_lv
+        FROM  tmp, obs_d_feed_disp_order_sta t
+        WHERE tmp.feedid = t.feed_id
+        AND   t.std_dt BETWEEN #{startDate} AND #{endDate}
+        AND   t.poc_ind_cd = '01'
+        AND   t.disp_order > ' '
+        ORDER BY TO_NUMBER(t.feed_id),
+             TO_NUMBER(DECODE (disp_order, 'UNKNOWN', 999999, disp_order)), t.std_dt
+    </select>
+</mapper>

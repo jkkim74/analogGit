@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsVstTimeStaRepository">
+    <select id="getVisitTimeZoneForGridPerDay" parameterType="JqGridRequest" resultType="ObsVstTimeSta">
+    WITH t
+             AS (select   '@' || TO_CHAR(TO_DATE(std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                          hh as hh,
+                          uv AS uv,
+                          lv AS lv,
+                          pv AS pv,
+                          vst_cnt AS vst_cnt
+                     FROM obs_d_vst_time_sta
+                    where std_dt between #{startDate} and #{endDate}
+                        AND poc_ind_cd = #{pocCode}
+                 ORDER BY std_dt, hh)
+        SELECT std_dt, decode(hh,'00','00:00-00:59', '01','01:00-01:59', '02','02:00-02:59', '03','03:00-03:59', '04','04:00-04:59', '05','05:00-05:59',
+'06','06:00-06:59', '07','07:00-07:59', '08','08:00-08:59', '09','09:00-09:59', '10','10:00-10:59', '11','11:00-11:59',
+'12','12:00-12:59', '13','13:00-13:59', '14','14:00-14:59', '15','15:00-15:59', '16','16:00-16:59', '17','17:00-17:59',
+'18','18:00-18:59', '19','19:00-19:59', '20','20:00-20:59', '21','21:00-21:59', '22','22:00-22:59', '23','23:00-23:59',hh) hh,
+ 								  DECODE(measure, 'UV', '1UV', 'LV', '2LV (login visitor)','VST_CNT', '3방문횟수','PV', '4PV') AS measure, measure_value
+          FROM t UNPIVOT (measure_Value FOR measure IN (uv, lv, pv, vst_cnt))
+    </select>
+    <select id="getVisitTimeZoneForGridPerWeek" parameterType="JqGridRequest" resultType="ObsVstTimeSta">
+    WITH t
+             AS (select   '@' || TO_CHAR(TO_DATE(std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                          hh as hh,
+                          uv AS uv,
+                          lv AS lv,
+                          pv AS pv,
+                          vst_cnt AS vst_cnt
+                     FROM obs_w_vst_time_sta
+                    where std_dt <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />
+                         AND poc_ind_cd = #{pocCode}
+                 ORDER BY std_dt, hh)
+        SELECT std_dt, decode(hh,'00','00:00-00:59', '01','01:00-01:59', '02','02:00-02:59', '03','03:00-03:59', '04','04:00-04:59', '05','05:00-05:59',
+'06','06:00-06:59', '07','07:00-07:59', '08','08:00-08:59', '09','09:00-09:59', '10','10:00-10:59', '11','11:00-11:59',
+'12','12:00-12:59', '13','13:00-13:59', '14','14:00-14:59', '15','15:00-15:59', '16','16:00-16:59', '17','17:00-17:59',
+'18','18:00-18:59', '19','19:00-19:59', '20','20:00-20:59', '21','21:00-21:59', '22','22:00-22:59', '23','23:00-23:59',hh) hh,
+ 								  DECODE(measure, 'UV', '1UV', 'LV', '2LV (login visitor)','VST_CNT', '3방문횟수','PV', '4PV') AS measure, measure_value
+          FROM t UNPIVOT (measure_Value FOR measure IN (uv, lv, pv, vst_cnt))
+    </select>
+    <select id="getVisitTimeZoneForGridPerMonth" parameterType="JqGridRequest" resultType="ObsVstTimeSta">
+    WITH t
+             AS (select   '@' || TO_CHAR(TO_DATE(std_ym,'YYYYMM'),'YYYY-MM') as std_dt,
+						  hh as hh,
+                          uv AS uv,
+                          lv AS lv,
+                          pv AS pv,
+                          vst_cnt AS vst_cnt
+                     FROM obs_m_vst_time_sta
+                    where std_ym between #{startDate} and #{endDate}
+                         AND poc_ind_cd = #{pocCode}
+                 ORDER BY std_ym, hh)
+        SELECT std_ym, decode(hh,'00','00:00-00:59', '01','01:00-01:59', '02','02:00-02:59', '03','03:00-03:59', '04','04:00-04:59', '05','05:00-05:59',
+'06','06:00-06:59', '07','07:00-07:59', '08','08:00-08:59', '09','09:00-09:59', '10','10:00-10:59', '11','11:00-11:59',
+'12','12:00-12:59', '13','13:00-13:59', '14','14:00-14:59', '15','15:00-15:59', '16','16:00-16:59', '17','17:00-17:59',
+'18','18:00-18:59', '19','19:00-19:59', '20','20:00-20:59', '21','21:00-21:59', '22','22:00-22:59', '23','23:00-23:59',hh) hh,
+ 								 DECODE(measure, 'UV', '1UV', 'LV', '2LV (login visitor)','VST_CNT', '3방문횟수','PV', '4PV') AS measure, measure_value
+          FROM t UNPIVOT (measure_Value FOR measure IN (uv, lv, pv, vst_cnt))
+    </select>
+</mapper>

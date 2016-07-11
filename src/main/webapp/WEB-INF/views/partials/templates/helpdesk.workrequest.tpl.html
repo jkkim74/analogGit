@@ -1,0 +1,89 @@
+<!--workRequest register start-->
+<div id="workRequest_article" class="help-desk-modal" tabindex="-1" role="dialog" aria-labelledby="notice"
+     aria-hidden="true"
+     data-ng-init="modalInit()">
+    <form name="workRequestForm" ng-submit="sendWorkRequestForm()">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel()">×
+            </button>
+            <h1 class="modal-title" id="myModalLabel">작업요청</h1>
+        </div>
+        <div class="modal-body">
+            <table class="detail-con board-modify" summary="작업요청 등록">
+                <caption>작업요청 등록</caption>
+                <tbody>
+                <tr>
+                    <th scope="row">이슈 타입<span class="point">*</span></th>
+                    <td>
+                        <select class="select-full-width" ng-model="form.issue"
+                                ng-options="issue.codeId as issue.codeName for issue in issueTypeList" required>{{form.issue.codeName}}
+                            <option value='' selected="selected" style=" display: none;">이슈 타입을 선택하세요.</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">서비스 타입<span class="point">*</span></th>
+                    <td>
+                        <select class="select-full-width" ng-model="form.service"
+                                ng-options="service.codeId as service.codeName for service in serviceTypeList" required>{{form.service.codeName}}
+                            <option value='' selected="selected" style="display: none;">서비스 타입을 선택하세요.</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">제목<span class="point">*</span></th>
+                    <td>
+                        <input data-ng-model="form.title" type="text" id="title"
+                               class="form-control" title="제목을 입력하세요." placeholder="제목을 입력하세요." required/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>내용<span class="point">*</span></th>
+                    <td>
+                        <textarea data-ng-model="form.context" class="form-control" rows="5" title="내용을 입력하세요."
+                                  placeholder="내용을 입력하세요." required></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th>완료희망날짜</th>
+                    <td>
+                        <input data-ng-model="form.dueDate" type="text" id="due-date"
+                               class="form-control" title="완료희망날짜"
+                               placeholder="날짜를 입력하세요. ex) yyyy-mm-dd : 2015-08-09"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>신청자<span class="point">*</span></th>
+                    <td>
+                        <input data-ng-model="form.applicant" type="text" id="applicant" class="form-control"
+                               title="신청자를 입력하세요."
+                               placeholder="신청자를 입력하세요." disabled required/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>결재자</th>
+                    <td>
+                        <input data-ng-model="form.approval" type="text" id="approval" class="form-control"
+                               title="결재자를 입력하세요."
+                               placeholder="결재자를 입력하세요." disabled required/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>참조자</th>
+                    <td>
+                        <input data-ng-model="form.reference" type="text" id="reference" class="form-control"
+                               title="참조자를 입력하세요."
+                               placeholder="참조자를 입력하세요."/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="control-area">
+            <button class="btn btn-gray" data-ng-click="cancel()">취소</button>
+            <!--<button class="btn btn-orange" data-ng-disabled="!workRequestForm.$valid" data-ng-click="sendWorkRequestForm()">JIRA 전송</button>-->
+            <button type="submit" class="btn btn-orange">JIRA 전송</button>
+        </div>
+    </form>
+</div>
+<!--workRequest register end-->

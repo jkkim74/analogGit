@@ -1,0 +1,28 @@
+<div class="content" class="content" ng-controller="service1Ctrl" data-ng-init="init()">
+    <h2>jQgrid with salesUserList</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <jq-grid config="salesUsersConfig"></jq-grid>
+            <a download="salesUsers.xls" href="#" onclick="return ExcellentExport.excel(this, 'gview_jqGridSalesUsers', '사용자 리스트');">
+                <button class="btn btn-primary pull-right top-buffer">excel download</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <h2>jQgrid with SexCount</h2>
+        <nvd3-pie-chart
+                data="salesUserSexCount"
+                height="300"
+                x="keyFunction()"
+                y="valueFunction()"
+                showLabels="true"
+                donutLabelsOutside="true"
+                showLegend="true"
+                tooltips="true">
+            <svg height="300"></svg>
+        </nvd3-pie-chart>
+    </div>
+</div>
+<script type="text/javascript" src="resources/excel/excellentexport.min.js"></script>
+<script type="text/javascript" src="resources/app/service1/service1Ctrl.js"></script>

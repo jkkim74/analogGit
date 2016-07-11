@@ -1,0 +1,11 @@
+<div class="col-md-12" ng-controller="statisticsCtrl" data-ng-init="init()" ng-style="styleNoTab(-85)" resize table-id="tableId">
+    <admin-com-search-box search-callback="search" admin-date-types="adminDateTypes" date-flag="dateFlag" menu-context="menuContext"></admin-com-search-box>
+    <div class="non-sub-title obj-section">
+        <report-sub-nav excelConfig="excelConfig"></report-sub-nav>
+    </div>
+    <div class="data-area jq-board" ng-style="dataAreaStyle()" resize>
+        <!--<jq-grid config="statisticsConfig" id="statisticsForGrid"></jq-grid>-->
+        <div id="statisticsForGrid" report-indicator="pageState"></div>
+    </div>
+</div>
+<script type="text/javascript" src="resources/app/admin/voyager/statisticsCtrl.js"></script>

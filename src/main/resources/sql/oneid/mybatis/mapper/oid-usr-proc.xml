@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.oneid.OidUsrProcRepository">
+    <select id="getOidUsrProcs" parameterType="FunnelRequest" resultType="OidUsrProc">
+        SELECT step_cd, step_nm, disp_ord, page_id, ex_in_cnt, in_cnt, out_cnt,
+           (CASE WHEN step_cd = 's1' THEN ex_in_cnt ELSE (ex_in_cnt + in_cnt) END) as stepInCnt,
+           ((CASE WHEN step_cd = 's1' THEN ex_in_cnt ELSE (ex_in_cnt + in_cnt) END) - out_cnt) as nextStepCnt
+        FROM (-- todo. step이 5단계인데 로데이터가 4단계만 들어가 있을경우 처리부분 고려해야 함.
+            SELECT s.step_cd, s.step_nm, p.disp_ord, s.page_id, sum(nvl(p.ex_in_cnt, 0)) as ex_in_cnt, sum(nvl(p.in_cnt, 0)) as in_cnt, sum(nvl(p.out_cnt, 0)) as out_cnt
+            FROM   oid_usr_proc_step_cd s, oid_d_usr_proc p
+            WHERE  s.proc_cd = p.proc_cd
+            AND    s.step_cd = p.step_cd
+            AND    s.disp_ord = p.disp_ord
+            AND    s.poc = p.poc
+            AND    p.strd_dt BETWEEN #{startDate} AND #{endDate}
+            AND    p.svc_id = #{svcId}
+            AND    p.proc_cd = #{procCd}
+            <if test="procCd != null and procCd.equals('p1') and reqSstCd != null and !reqSstCd.equals('00000')">
+            AND    p.req_sst_cd = #{reqSstCd}
+            </if>
+            AND    p.poc = #{poc}
+            GROUP  BY s.step_cd, s.step_nm, p.disp_ord, s.page_id
+            ORDER  BY s.step_cd, p.disp_ord
+        )
+    </select>
+    <select id="getOidUsrProcs_bak" parameterType="FunnelRequest" resultType="OidUsrProc">
+        SELECT step_cd, step_nm, disp_ord, page_id, ex_in_cnt, in_cnt, out_cnt,
+          (CASE WHEN step_cd = 's1' THEN ex_in_cnt ELSE (ex_in_cnt + in_cnt) END) as stepInCnt,
+          ((CASE WHEN step_cd = 's1' THEN ex_in_cnt ELSE (ex_in_cnt + in_cnt) END) - out_cnt) as nextStepCnt
+        FROM (-- todo. step이 5단계인데 로데이터가 4단계만 들어가 있을경우 처리부분 고려해야 함.
+            SELECT step_cd, step_nm, disp_ord, page_id, sum(ex_in_cnt) as ex_in_cnt, sum(in_cnt) as in_cnt, sum(out_cnt) as out_cnt
+            FROM   (
+                SELECT s.step_cd, s.step_nm, p.disp_ord, s.page_id, nvl(p.ex_in_cnt, 0) as ex_in_cnt, nvl(p.in_cnt, 0) as in_cnt, nvl(p.out_cnt, 0) as out_cnt
+                FROM   oid_usr_proc_step_cd s, oid_d_usr_proc p
+                WHERE  s.proc_cd = p.proc_cd(+)
+                AND    s.step_cd = p.step_cd(+)
+                AND    s.disp_ord = p.disp_ord(+)
+                AND    s.poc = p.poc(+)
+                AND    p.strd_dt(+) BETWEEN #{startDate} AND #{endDate}
+                AND    p.svc_id(+) = #{svcId}
+                AND    p.proc_cd(+) = #{procCd}
+                <if test="procCd != null and procCd.equals('p1') and reqSstCd != null and !reqSstCd.equals('00000')">
+                AND    p.req_sst_cd(+) = #{reqSstCd}
+                </if>
+                AND    p.poc(+) = #{poc}
+                AND    s.proc_cd = #{procCd}
+                AND    s.poc = #{poc}
+            )
+            GROUP  BY step_cd, step_nm, disp_ord, page_id
+            ORDER  BY step_cd, disp_ord
+        )
+    </select>
+    <select id="getOidUsrProcRanks" parameterType="FunnelRequest" resultType="OidUsrProcRank">
+        SELECT page_id, cnt, rank
+        FROM (
+            SELECT page_id, cnt, row_number() over(order by(cnt) desc) as rank
+            FROM (
+                SELECT page_id, sum(cnt) as cnt
+                FROM   oid_d_usr_proc_rank
+                WHERE  strd_dt BETWEEN #{startDate} AND #{endDate}
+                AND    svc_id = #{svcId}
+                <if test="procCd != null and procCd.equals('p1') and reqSstCd != null and !reqSstCd.equals('00000')">
+                AND    req_sst_cd = #{reqSstCd}
+                </if>
+                AND    proc_cd = #{procCd}
+                AND    step_cd = #{stepCd}
+                AND    disp_ord = #{dispOrd}
+                AND    poc = #{poc}
+                AND    inout_flg = #{inoutFlg}
+                GROUP  BY page_id
+            )
+        )
+        WHERE rank &lt;= 10
+    </select>
+    <select id="getStepCds" parameterType="String" resultType="String">
+        SELECT distinct step_cd as step_cd
+        FROM   oid_usr_proc_step_cd
+        WHERE  proc_cd = #{procCd}
+    </select>
+</mapper>

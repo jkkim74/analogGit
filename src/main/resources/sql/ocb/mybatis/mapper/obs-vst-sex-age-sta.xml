@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsVstSexAgeStaRepository">
+
+    <select id="getVisitorsSexAgePerDay" parameterType="JqGridRequest" resultType="ObsVstSexAgeSta">
+        WITH T_SEXCODE AS (
+                   SELECT COM_CD, COM_CD_NM
+                     FROM COMUSER.COM_INTG_COM_CD
+                    WHERE USE_YN = 'Y' AND SYS_IND_CD = 'OBS' AND COM_GRP_CD = 'OBC002'
+                 ORDER BY SORT_SEQ),
+             T_AGECODE AS (
+                   SELECT COM_CD, COM_CD_NM
+                     FROM COMUSER.COM_INTG_COM_CD
+                    WHERE USE_YN = 'Y' AND SYS_IND_CD = 'OBS' AND COM_GRP_CD = 'OBC003'
+                 ORDER BY SORT_SEQ)
+        SELECT   TO_CHAR(TO_DATE(T_MAIN.std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(T_MAIN.std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                 T_MAIN.sex_ind_cd AS sex_ind_cd,
+                 T_SEXCODE.COM_CD_NM AS sex_ind_nm,
+                 T_MAIN.age_lgrp_cd AS age_lgrp_cd,
+                 T_AGECODE.COM_CD_NM AS age_lgrp_nm,
+                 T_MAIN.uv AS uv,
+                 T_MAIN.lv AS lv,
+                 T_MAIN.pv AS pv,
+                 T_MAIN.rv AS rv,
+                 T_MAIN.vst_cnt AS vst_cnt,
+                 round(T_MAIN.time_spt_f_vst)/1000 AS time_spt_f_vst,
+                 T_MAIN.bunc_rate AS bunc_rate
+            FROM obs_d_vst_sex_age_sta  T_MAIN, T_SEXCODE, T_AGECODE
+           WHERE std_dt BETWEEN #{startDate} AND #{endDate}
+             AND poc_ind_cd = '01'
+             AND T_MAIN.SEX_IND_CD = T_SEXCODE.COM_CD
+             AND T_MAIN.AGE_LGRP_CD = T_AGECODE.COM_CD
+        ORDER BY
+        <if test="sidx == 'stdDt'">
+            T_MAIN.std_dt ${sord}, T_MAIN.sex_ind_cd asc, to_number(T_MAIN.age_lgrp_cd) asc
+        </if>
+        <if test="sidx == 'sexIndCd'">
+            T_MAIN.std_dt asc, T_MAIN.sex_ind_cd ${sord}, to_number(T_MAIN.age_lgrp_cd) asc
+        </if>
+        <if test="sidx == 'ageLgrpCd'">
+            T_MAIN.std_dt asc, T_MAIN.sex_ind_cd asc, to_number(T_MAIN.age_lgrp_cd) ${sord}
+        </if>
+    </select>
+
+    <select id="getVisitorsSexAgePerWeek" parameterType="JqGridRequest" resultType="ObsVstSexAgeSta">
+        WITH T_SEXCODE AS (
+                   SELECT COM_CD, COM_CD_NM
+                     FROM COMUSER.COM_INTG_COM_CD
+                    WHERE USE_YN = 'Y' AND SYS_IND_CD = 'OBS' AND COM_GRP_CD = 'OBC002'
+                 ORDER BY SORT_SEQ),
+             T_AGECODE AS (
+                   SELECT COM_CD, COM_CD_NM
+                     FROM COMUSER.COM_INTG_COM_CD
+                    WHERE USE_YN = 'Y' AND SYS_IND_CD = 'OBS' AND COM_GRP_CD = 'OBC003'
+                 ORDER BY SORT_SEQ)
+        SELECT TO_CHAR(TO_DATE(T_MAIN.std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(T_MAIN.std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                 T_MAIN.sex_ind_cd AS sex_ind_cd,
+                 T_SEXCODE.COM_CD_NM AS sex_ind_nm,
+                 T_MAIN.age_lgrp_cd AS age_lgrp_cd,
+                 T_AGECODE.COM_CD_NM AS age_lgrp_nm,
+                 T_MAIN.uv AS uv,
+                 T_MAIN.lv AS lv,
+                 T_MAIN.pv AS pv,
+                 T_MAIN.rv AS rv,
+                 T_MAIN.vst_cnt AS vst_cnt,
+                 round(T_MAIN.time_spt_f_vst)/1000 AS time_spt_f_vst,
+                 T_MAIN.bunc_rate AS bunc_rate
+            FROM obs_w_vst_sex_age_sta  T_MAIN, T_SEXCODE, T_AGECODE
+           WHERE std_dt <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />
+             AND poc_ind_cd = '01'
+             AND T_MAIN.SEX_IND_CD = T_SEXCODE.COM_CD
+             AND T_MAIN.AGE_LGRP_CD = T_AGECODE.COM_CD
+        ORDER BY
+        <if test="sidx == 'stdDt'">
+            T_MAIN.std_dt ${sord}, T_MAIN.sex_ind_cd asc, to_number(T_MAIN.age_lgrp_cd) asc
+        </if>
+        <if test="sidx == 'sexIndCd'">
+            T_MAIN.std_dt asc, T_MAIN.sex_ind_cd ${sord}, to_number(T_MAIN.age_lgrp_cd) asc
+        </if>
+        <if test="sidx == 'ageLgrpCd'">
+            T_MAIN.std_dt asc, T_MAIN.sex_ind_cd asc, to_number(T_MAIN.age_lgrp_cd) ${sord}
+        </if>
+    </select>
+
+    <select id="getVisitorsSexAgePerMonth" parameterType="JqGridRequest" resultType="ObsVstSexAgeSta">
+        WITH T_SEXCODE AS (
+                   SELECT COM_CD, COM_CD_NM
+                     FROM COMUSER.COM_INTG_COM_CD
+                    WHERE USE_YN = 'Y' AND SYS_IND_CD = 'OBS' AND COM_GRP_CD = 'OBC002'
+                 ORDER BY SORT_SEQ),
+             T_AGECODE AS (
+                   SELECT COM_CD, COM_CD_NM
+                     FROM COMUSER.COM_INTG_COM_CD
+                    WHERE USE_YN = 'Y' AND SYS_IND_CD = 'OBS' AND COM_GRP_CD = 'OBC003'
+                 ORDER BY SORT_SEQ)
+        SELECT TO_CHAR (TO_DATE (T_MAIN.std_ym, 'YYYYMM'), 'YYYY-MM') AS std_dt,
+                 T_MAIN.sex_ind_cd AS sex_ind_cd,
+                 T_SEXCODE.COM_CD_NM AS sex_ind_nm,
+                 T_MAIN.age_lgrp_cd AS age_lgrp_cd,
+                 T_AGECODE.COM_CD_NM AS age_lgrp_nm,
+                 T_MAIN.uv AS uv,
+                 T_MAIN.lv AS lv,
+                 T_MAIN.pv AS pv,
+                 T_MAIN.rv AS rv,
+                 T_MAIN.vst_cnt AS vst_cnt,
+                 round(T_MAIN.time_spt_f_vst)/1000 AS time_spt_f_vst,
+                 T_MAIN.bunc_rate AS bunc_rate
+            FROM obs_m_vst_sex_age_sta  T_MAIN, T_SEXCODE, T_AGECODE
+           WHERE std_ym BETWEEN #{startDate} AND #{endDate}
+             AND poc_ind_cd = '01'
+             AND T_MAIN.SEX_IND_CD = T_SEXCODE.COM_CD
+             AND T_MAIN.AGE_LGRP_CD = T_AGECODE.COM_CD
+        ORDER BY
+        <if test="sidx == 'stdDt'">
+            T_MAIN.std_ym ${sord}, T_MAIN.sex_ind_cd asc, to_number(T_MAIN.age_lgrp_cd) asc
+        </if>
+        <if test="sidx == 'sexIndCd'">
+            T_MAIN.std_ym asc, T_MAIN.sex_ind_cd ${sord}, to_number(T_MAIN.age_lgrp_cd) asc
+        </if>
+        <if test="sidx == 'ageLgrpCd'">
+            T_MAIN.std_ym asc, T_MAIN.sex_ind_cd asc, to_number(T_MAIN.age_lgrp_cd) ${sord}
+        </if>
+    </select>
+</mapper>

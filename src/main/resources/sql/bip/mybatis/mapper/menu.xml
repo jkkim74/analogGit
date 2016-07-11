@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.acl.MenuRepository">
+    <sql id="menuSelectColumns">
+        m.id, m.code, m.name, m.parent_id, m.common_code_id, m.image_url, m.opr_svc_id, m.visible_yn, m.delete_yn, m.menu_search_option_yn,
+        m.summary_report_yn, m.order_idx, m.last_update, c.name AS common_code_name
+    </sql>
+    <sql id="menuDefaultColumns">
+        id, code, name, parent_id, common_code_id, image_url, opr_svc_id, visible_yn, delete_yn, menu_search_option_yn,
+        summary_report_yn, order_idx
+    </sql>
+    <sql id="menuAuthorityColumns">
+        m.id, m.code, m.name, m.parent_id, m.common_code_id, m.image_url, m.opr_svc_id, m.visible_yn, m.delete_yn, m.menu_search_option_yn,
+        m.summary_report_yn, m.order_idx, m.last_update, c.name AS common_code_name, authority
+    </sql>
+    <select id="getMenuById" parameterType="Long" resultType="Menu">
+        SELECT
+            <include refid="menuSelectColumns" />
+        FROM menu m INNER JOIN common_code c
+            ON m.common_code_id = c.id
+        WHERE m.id = #{id}
+    </select>
+    <select id="getTreeMenuService" parameterType="Menu" resultType="TreeMenuService">
+        SELECT <include refid="menuSelectColumns" />
+        FROM   menu m
+        INNER  JOIN common_code c ON m.common_code_id = c.id
+        WHERE  c.name = #{commonCodeName}
+        <if test="visibleYn != null">
+            AND m.visible_yn = #{visibleYn}
+        </if>
+        <if test="deleteYn != null">
+            AND m.delete_yn = #{deleteYn}
+        </if>
+        ORDER BY m.order_idx
+    </select>
+    <select id="getTreeMenuServices" parameterType="Menu" resultType="TreeMenuService">
+        SELECT <include refid="menuSelectColumns" />
+        FROM   menu m
+        INNER  JOIN common_code c ON m.common_code_id = c.id
+        WHERE  c.name = #{commonCodeName}
+        <if test="visibleYn != null">
+            AND m.visible_yn = #{visibleYn}
+        </if>
+        <if test="deleteYn != null">
+            AND m.delete_yn = #{deleteYn}
+        </if>
+        ORDER BY m.order_idx
+    </select>
+    <select id="getTreeMenuCategories" parameterType="Menu" resultType="TreeMenuCategory">
+        SELECT <include refid="menuSelectColumns" />
+        FROM   menu m
+        INNER  JOIN common_code c ON m.common_code_id = c.id
+        WHERE  c.name = #{commonCodeName}
+        <if test="visibleYn != null">
+            AND m.visible_yn = #{visibleYn}
+        </if>
+        <if test="deleteYn != null">
+            AND m.delete_yn = #{deleteYn}
+        </if>
+        ORDER BY m.order_idx
+    </select>
+    <select id="getTreeMenuWithMenuSearchOption" parameterType="Menu" resultType="MenuTree">
+        SELECT
+            <include refid="menuAuthorityColumns" />,
+            s.menu_id AS "menuSearchOption.menu_id",
+            s.add_type AS "menuSearchOption.add_type",
+            s.label AS "menuSearchOption.label",
+            s.code_url AS "menuSearchOption.code_url",
+            s.date_types AS "menuSearchOption.date_types",
+            s.calendar_type AS "menuSearchOption.calendar_type",
+            s.last_update AS "menuSearchOption.last_update"
+        FROM   menu m, common_code c, menu_search_option s, (
+                SELECT rm.menu_id, 'Y' as authority
+                FROM   com_role_menu rm
+                WHERE  rm.role_id = 0
+                UNION
+                SELECT rm.menu_id, 'Y' as authority
+                FROM   com_role_menu rm, com_role_user ru
+                WHERE  rm.role_id = ru.role_id
+                AND    ru.login_id = #{loginId}
+                UNION
+                SELECT rm.menu_id, 'Y' as authority
+                FROM   com_role_menu rm, com_role_org ro, com_person p
+                WHERE  rm.role_id = ro.role_id
+                AND    ro.org_cd = p.org_cd
+                AND    p.login_id = #{loginId}
+            ) mm
+        WHERE m.common_code_id = c.id
+        AND   m.id = mm.menu_id(+)
+        AND   m.id = s.menu_id(+)
+        AND   c.name = #{commonCodeName}
+        <if test="visibleYn != null">
+            AND m.visible_yn = #{visibleYn}
+        </if>
+        <if test="deleteYn != null">
+            AND m.delete_yn = #{deleteYn}
+        </if>
+        ORDER BY m.order_idx
+    </select>
+    <select id="getTreeMenus" parameterType="Menu" resultType="MenuTree">
+        SELECT <include refid="menuAuthorityColumns" />
+        FROM   menu m, common_code c, (
+                SELECT rm.menu_id, 'Y' as authority
+                FROM   com_role_menu rm
+                WHERE  rm.role_id = 0
+                UNION
+                SELECT rm.menu_id, 'Y' as authority
+                FROM   com_role_menu rm, com_role_user ru
+                WHERE  rm.role_id = ru.role_id
+                AND    ru.login_id = #{loginId}
+                UNION
+                SELECT rm.menu_id, 'Y' as authority
+                FROM   com_role_menu rm, com_role_org ro, com_person p
+                WHERE  rm.role_id = ro.role_id
+                AND    ro.org_cd = p.org_cd
+                AND    p.login_id = #{loginId}
+            ) mm
+        WHERE m.common_code_id = c.id
+        AND   m.id = mm.menu_id(+)
+        AND   c.name = #{commonCodeName}
+        <if test="parentId != null">
+            AND m.parent_id = #{parentId}
+        </if>
+        <if test="visibleYn != null">
+            AND m.visible_yn = #{visibleYn}
+        </if>
+        <if test="deleteYn != null">
+            AND m.delete_yn = #{deleteYn}
+        </if>
+        ORDER BY m.order_idx
+    </select>
+    <select id="getMaxOrderIdxByParentIDCommonCodeId" parameterType="Menu" resultType="Integer">
+        SELECT max(order_idx)
+        FROM  menu m
+        WHERE common_code_id = #{commonCodeId}
+        <if test="parentId == null">
+            AND parent_id is null
+        </if>
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+        ORDER BY order_idx DESC
+    </select>
+    <select id="getMaxCodeByParentId" parameterType="Menu" resultType="Integer">
+        SELECT nvl(max(code), 0)
+        FROM  menu m
+        WHERE parent_id = #{parentId}
+        AND   regexp_like(code, '^[[:digit:]]+$')
+        ORDER BY order_idx DESC
+    </select>
+    <insert id="createMenu" parameterType="Menu">
+        <selectKey keyProperty="id" order="BEFORE" resultType="Long">
+            SELECT MENU_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO menu (id, code, name, parent_id, common_code_id, image_url, opr_svc_id, visible_yn, menu_search_option_yn,
+            summary_report_yn, order_idx, last_update, audit_id)
+        VALUES (
+            #{id}, #{code}, #{name}, #{parentId, jdbcType=NUMERIC}, #{commonCodeId}, #{imageUrl, jdbcType=VARCHAR},
+            #{oprSvcId, jdbcType=NUMERIC}, #{visibleYn, jdbcType=VARCHAR}, #{menuSearchOptionYn, jdbcType=VARCHAR},
+            #{summaryReportYn, jdbcType=VARCHAR}, #{orderIdx}, #{lastUpdate}, #{auditId})
+    </insert>
+    <update id="updateMenu" parameterType="Menu">
+        UPDATE menu
+        <set>
+            <if test="code != null">code = #{code},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="oprSvcId != null">opr_svc_id = #{oprSvcId},</if>
+            <if test="imageUrl != null">image_url = #{imageUrl},</if>
+            <if test="visibleYn != null">visible_yn = #{visibleYn},</if>
+            <if test="deleteYn != null">delete_yn = #{deleteYn},</if>
+            <if test="menuSearchOptionYn != null">menu_search_option_yn = #{menuSearchOptionYn},</if>
+            <if test="summaryReportYn != null">summary_report_yn = #{summaryReportYn},</if>
+            <if test="orderIdx != null">order_idx = #{orderIdx},</if>
+            <if test="auditId != null">audit_id = #{auditId},</if>
+            <if test="lastUpdate != null">last_update = #{lastUpdate},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <update id="updateMenuChildrenOrderIdx" parameterType="Menu">
+        UPDATE menu
+        SET    order_idx = CONCAT(#{orderIdx}, SUBSTR(order_idx, -2))
+        WHERE
+            parent_id = #{id}
+    </update>
+    <select id="getMenuByBoss" parameterType="RoleRequest" resultType="Menu">
+        SELECT m.id, decode(level, 1, '서비스', 2, '카테고리', 3, '메뉴', '기타') as menuLevel, m.code
+         , substr(sys_connect_by_path(m.name, ' > '), 3) as pathName
+         , CONNECT_BY_ROOT m.name as rootName
+         , m.name, m.visible_yn, m.delete_yn
+        FROM menu m, com_role r, com_role_menu rm
+        WHERE m.id = rm.menu_id
+        AND   r.id = rm.role_id
+        AND   r.name = #{searchString}
+        START WITH m.parent_id is null and r.name = #{searchString}
+        CONNECT BY PRIOR m.id = m.parent_id and r.name = #{searchString}
+        order siblings by m.order_idx asc
+    </select>
+    <select id="getMenus" resultType="Menu">
+        SELECT id, code, name, get_favorite_info(id, 'name', 3) AS service_name, get_favorite_info(id, 'name', 2) AS category_name, parent_id, common_code_id, image_url, opr_svc_id, order_idx, visible_yn, delete_yn, menu_search_option_yn, summary_report_yn
+        FROM   menu
+        WHERE  common_code_id in (4, 7, 10, 24)
+        ORDER  BY order_idx
+    </select>
+    <select id="getMenusByRole" parameterType="RoleRequest" resultType="Menu">
+        <foreach collection="comRoles" item="item" separator=" UNION ALL ">
+            SELECT #{item.name} as roleName, GET_SERVICE_MENU_NM(m.id) as serviceName, GET_CATEGORY_MENU_NM(m.id) as categoryName,
+                   m.id, m.code, m.name, m.visible_yn, m.delete_yn
+            FROM  com_role_menu rm, menu m
+            WHERE rm.menu_id = m.id
+            AND   rm.role_id = #{item.id}
+        </foreach>
+    </select>
+    <select id="getServices" resultType="Menu">
+        SELECT <include refid="menuDefaultColumns" />
+        FROM   menu
+        WHERE  parent_id is null
+        AND    code not in ('dss')
+        ORDER BY id
+    </select>
+    <select id="getNavigationMenu" parameterType="String" resultType="Menu">
+        SELECT CASE WHEN(NVL(count(*), 0) > 0) THEN 'Y' ELSE 'N' END as authority
+        FROM   com_role_user
+        WHERE  role_id in (SELECT role_id FROM com_role_relation where role_type = 1)
+        AND    login_id = #{loginId}
+        UNION ALL
+        SELECT CASE WHEN(NVL(count(*), 0) > 0) THEN 'Y' ELSE 'N' END as authority
+        FROM   com_role_user
+        WHERE  role_id = 10
+        AND    login_id = #{loginId}
+        UNION ALL
+        SELECT CASE WHEN(NVL(count(*), 0) > 0) THEN 'Y' ELSE 'N' END as authority
+        FROM   com_role_user
+        WHERE  role_id = 12
+        AND    login_id = #{loginId}
+        UNION ALL
+        SELECT CASE WHEN(NVL(count(*), 0) > 0) THEN 'Y' ELSE 'N' END as authority
+        FROM   com_role_user
+        WHERE  role_id = 5
+        AND    login_id = #{loginId}
+    </select>
+    <select id="getMenusByLoginIds" resultType="Menu">
+        SELECT distinct id, user_nm, menuLevel, code, pathName, rootName, name, visible_yn, delete_yn
+        FROM (
+            SELECT m.id, p.user_nm, decode(level, 1, '서비스', 2, '카테고리', 3, '메뉴', '기타') as menuLevel, m.code
+            , substr(sys_connect_by_path(m.name, ' > '), 3) as pathName
+            , CONNECT_BY_ROOT m.name as rootName
+            , m.name
+            , m.visible_yn
+            , m.delete_yn
+            FROM  com_user_menu um, menu m, com_person p
+            WHERE um.menu_id = m.id
+            AND   p.login_id = um.login_id
+            AND   um.login_id in
+            <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            START WITH m.parent_id is null and um.login_id in
+            <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            CONNECT BY PRIOR m.id = m.parent_id and um.login_id in
+            <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            order siblings by m.order_idx asc
+        )
+        order by user_nm, pathName
+    </select>
+    <select id="getMenuByName" parameterType="Menu" resultType="Menu">
+        SELECT <include refid="menuDefaultColumns" />
+        FROM   menu
+        WHERE  name = #{name}
+        AND    common_code_id in (4, 7, 10, 24)
+        <if test="visibleYn != null and visibleYn != ''">
+            AND visible_yn = #{visibleYn}
+        </if>
+        <if test="deleteYn != null and deleteYn != ''">
+            AND delete_yn = #{deleteYn}
+        </if>
+    </select>
+    <select id="getMenuTree" resultType="Menu">
+        WITH t AS (
+        	SELECT 996 as id, 'Voyager' as code, 'Voyager' as name, null as parent_id, 11 as common_code_id, 0 as lvl, 10 as order_idx, 'Y' as visible_yn, 'N' as delete_yn, 'N' as menu_search_option_yn, '' as menu_id, '' as menu_nm
+			FROM dual
+			UNION ALL
+            SELECT id, code, name, parent_id, common_code_id, LEVEL lvl, order_idx, visible_yn, delete_yn, menu_search_option_yn, '' as menu_id, '' as menu_nm
+            FROM   menu
+            WHERE  common_code_id in (2, 5, 8, 21, 22, 3, 6, 9, 23, 11)
+            START WITH parent_id is null
+            CONNECT BY PRIOR id = parent_id
+        )
+        SELECT id, code, name, parent_id, common_code_id, order_idx, visible_yn, delete_yn, menu_search_option_yn, menu_id, menu_nm, lvl, (SELECT MAX(lvl) FROM t) max_lvl
+        FROM t
+        ORDER BY order_idx
+    </select>
+    <select id="getTreeMenuBySearch" parameterType="Menu" resultType="Menu">
+        SELECT <include refid="menuDefaultColumns" /> , GET_SERVICE_MENU_NM(id) as serviceName, GET_CATEGORY_MENU_NM(id) as categoryName,
+        decode(visible_yn, 'N', '비활성', 'Y', '활성', 'P', '개발', 'D', '삭제') as state
+        FROM   menu
+        WHERE  common_code_id in (4, 7, 10, 24)
+        <if test="parentId != null and parentId != ''">
+            AND  parent_id = #{parentId}
+        </if>
+        <if test="name != null and name != ''">
+            AND  name = #{name}
+        </if>
+        <if test="visibleYn != null and visibleYn != ''">
+            AND visible_yn = #{visibleYn}
+        </if>
+        <if test="deleteYn != null and deleteYn != ''">
+            AND delete_yn = #{deleteYn}
+        </if>
+    </select>
+    <select id="getMstrMenuByCode" parameterType="Menu" resultType="Menu">
+        SELECT <include refid="menuDefaultColumns" />
+        FROM   menu m, menu_search_option s
+        WHERE  m.id = s.menu_id
+        AND    m.code = #{code}
+        AND    s.add_type = 'mstr'
+    </select>
+    <insert id="createMenuBack" parameterType="Menu">
+        INSERT INTO menu_back (id, code, name, parent_id, common_code_id, image_url, opr_svc_id, visible_yn, menu_search_option_yn, summary_report_yn, order_idx, last_update, audit_id)
+        SELECT id, code, name, parent_id, common_code_id, image_url, opr_svc_id, visible_yn, menu_search_option_yn, summary_report_yn, order_idx, #{lastUpdate}, #{auditId}
+        FROM   menu
+        WHERE  id = #{id}
+    </insert>
+    <delete id="deleteMenu" parameterType="Long">
+        DELETE FROM menu WHERE id = #{menuId}
+    </delete>
+</mapper>

@@ -1,0 +1,14 @@
+<!--<div ng-controller="visitOsCtrl" data-ng-init="init()"  ng-style="style()" resize style="border:1px solid red;">-->
+<div ng-controller="visitOsCtrl" data-ng-init="init()" ng-style="style()" resize>
+    <report-search-box search-callback="search" search-config="searchConfig" menu-context="menuContext"></report-search-box>
+    <div class="non-sub-title obj-section">
+        <report-sub-nav excelConfig="excelConfig"></report-sub-nav>
+    </div>
+    <div class="data-area" ng-style="dataAreaStyle()" resize>
+        <fixed-header id="visitOsPivot_h"></fixed-header>
+        <div id="visitOsPivot" class="pivot-board01" report-indicator="pageState"></div>
+    </div>
+</div>
+<link href="resources/pivot/pivot.css" media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="resources/pivot/pivot.js"></script>
+<script type="text/javascript" src="resources/app/ocb/visit/visitOsCtrl.js"></script>

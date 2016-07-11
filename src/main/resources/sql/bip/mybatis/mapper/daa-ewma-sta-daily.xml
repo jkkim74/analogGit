@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.DaaEwmaStatDailyRepository">
+    <select id="getEwmaChartData" parameterType="WhereCondition" resultType="DaaEwmaStatDaily">
+        SELECT a.ewma_value AS ewma_value,
+               a.ewma_avg AS ewma_avg,
+               a.lcl_value AS lcl_value,
+               a.ucl_value AS ucl_value
+          FROM eisuser.daa_ewma_stat_daily a,
+               eisuser.daa_ewma_svc_boss_map b,
+               eisuser.daa_ewma_kpi_boss_map c
+         WHERE     stat_date = #{searchDate}
+               AND a.svc_id = b.svc_id
+               AND a.kpi_id = c.kpi_id
+               AND b.boss_svc_cd = #{svcId}
+               AND c.boss_kpi_cd = #{idxClGrpCd}
+    </select>
+    <select id="getOcbEwmaChartData" parameterType="WhereCondition" resultType="DaaEwmaStatDaily">
+        SELECT a.ewma_value AS ewma_value,
+               a.ewma_avg AS ewma_avg,
+               a.lcl_value AS lcl_value,
+               a.ucl_value AS ucl_value
+          FROM eisuser.daa_ewma_stat_daily a,
+               eisuser.daa_ewma_svc_boss_map b
+         WHERE     stat_date = #{searchDate}
+               AND a.svc_id = b.svc_id
+               AND a.kpi_id = #{kpiId}
+               AND b.boss_svc_cd = #{svcId}
+    </select>
+    <select id="getBossEwmaData" parameterType="JqGridRequest" resultType="DaaEwmaStatDaily">
+        SELECT /*+ OCB(유실적고객수, 거래건수, 거래액) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{previousEndDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10016', '10014', '10018')
+        AND    b.boss_svc_cd = '25'
+        UNION ALL
+        SELECT /*+ Syrup(신규가입자수, UV) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{endDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10006', '10008')
+        AND    b.boss_svc_cd = '8'
+        UNION ALL
+        SELECT /*+ Tstore(구매액, UV) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{endDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10001', '10008')
+        AND    b.boss_svc_cd = '1'
+        UNION ALL
+        SELECT /*+ Hoppin(매출액, UV) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{endDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10019', '10008')
+        AND    b.boss_svc_cd = '6'
+        UNION ALL
+        SELECT /*+ Tmap(총회원수, UV) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{endDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10007', '10008')
+        AND    b.boss_svc_cd = '4'
+        UNION ALL
+        SELECT /*+ 11번가(구매회원수, 구매액, 직접방문률) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{endDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10010', '10001', '10017')
+        AND    b.boss_svc_cd = '11'
+    </select>
+    <select id="getBossEwmaDataForKid" parameterType="JqGridRequest" resultType="DaaEwmaStatDaily">
+        SELECT /*+ OCB(DAU, TR) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{basicDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10020', '10021', '10022', '10023')
+        AND    b.boss_svc_cd = '25'
+        UNION ALL
+        SELECT /*+ Syrup(DAU, TR) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{basicDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10020', '10021', '10022', '10023')
+        AND    b.boss_svc_cd = '8'
+        UNION ALL
+        SELECT /*+ 11번가(구매확정액, Mobile구매확정액, Mobile Traffic) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{basicDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10024', '10025', '10026', '10027', '10028', '10029')
+        AND    b.boss_svc_cd = '11'
+        UNION ALL
+        SELECT /*+ Tstore(유료아용자, 거래액) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{basicDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10030', '10031', '10032', '10033')
+        AND    b.boss_svc_cd = '1'
+        UNION ALL
+        SELECT /*+ Tmap(MAU) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{basicDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10020', '10021')
+        AND    b.boss_svc_cd = '4'
+        UNION ALL
+        SELECT /*+ Tcloud(UV) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{basicDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10008', '10034')
+        AND    b.boss_svc_cd = '7'
+        UNION ALL
+        SELECT /*+ Hoppin(컨텐츠 이용건수) */ a.stat_date, a.kpi_id, b.boss_svc_cd, a.ewma_value, a.ewma_avg, a.lcl_value, a.ucl_value
+        FROM   eisuser.daa_ewma_stat_daily a, eisuser.daa_ewma_svc_boss_map b
+        WHERE  a.stat_date = #{basicDate}
+        AND    a.svc_id = b.svc_id
+        AND    a.kpi_id in ('10035', '10036')
+        AND    b.boss_svc_cd = '6'
+    </select>
+</mapper>

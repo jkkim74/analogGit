@@ -1,0 +1,64 @@
+<div class="funnel">
+    <div class="floor" data-ng-repeat="(step, datas) in funnelDatas">
+        <div data-ng-repeat="funnelData in datas">
+            <div class="entry">
+                <ul>
+                    <li class="summary"><h4>{{funnelData.oidUsrProc.exInCnt | number:0}}</h4></li>
+                    <li class="detail" data-ng-show="funnelData.entrances.length">
+                        <ul data-ng-repeat="entrance in funnelData.entrances">
+                            <li class="key">{{entrance.pageId}}</li>
+                            <li class="value">{{entrance.cnt | number:0}}</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="step">
+                <ul data-ng-show="step !== 'zlast'">
+                    <div class="ext-rate-temp" data-ng-show="funnelData.multiLayer"><h4>{{funnelData.oidUsrProc.inCnt | number:0}}</h4></div>
+                    <li class="summary">
+                        <ul>
+                            <li><h3>{{funnelData.oidUsrProc.stepNm}}</h3></li>
+                            <li>{{funnelData.oidUsrProc.pageId}}</li>
+                            <li><h3>{{funnelData.oidUsrProc.stepInCnt | number:0}}</h3></li>
+                            <li >
+                                <b class="funnel_bar_graph">
+                                    <b ng-style="{width:funnelData.oidUsrProc.nextStepRate}"></b>
+                                </b>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="detail">
+                        <div class="arrow"><img src="/resources/images/funnel/arrow-down-tail.png" ng-style="{width:funnelData.oidUsrProc.nextStepRate}" /></div>
+                        <div class="rate">
+                            <h4>
+                                {{funnelData.oidUsrProc.nextStepCnt | number:0}}({{funnelData.oidUsrProc.nextStepRate}})
+                                <span>continued to next step</span>
+                            </h4>
+                        </div>
+                        <div class="ext-rate"></div>
+                    </li>
+                </ul>
+                <ul data-ng-show="step === 'zlast'">
+                    <li class="summary">
+                        <ul>
+                            <li><h3>{{funnelData.oidUsrProc.stepNm}}</h3></li>
+                            <li>{{funnelData.oidUsrProc.pageId}}</li>
+                            <li><p>{{funnelData.oidUsrProc.stepInCnt | number:0}}({{funnelData.conversionRate}}% - 유입경로 전환율)</p></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="exit">
+                <ul>
+                    <li class="summary"><h4>{{funnelData.oidUsrProc.outCnt | number:0}}</h4></li>
+                    <li class="detail" data-ng-show="funnelData.exits.length">
+                        <ul data-ng-repeat="exit in funnelData.exits">
+                            <li class="key">{{exit.pageId}}</li>
+                            <li class="value">{{exit.cnt | number:0}}</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.BpmDlyPrstRepository">
+    <select id="getDashboardData" parameterType="WhereCondition" resultType="BpmDlyPrst">
+        SELECT dly_strd_dt
+             , svc_id
+             , idx_cl_grp_cd
+             , idx_cl_cd
+             , idx_ctt_cd
+             , audit_id
+             , audit_dtm
+             , dly_rslt_val
+          FROM eisuser.bpm_dly_prst
+         WHERE dly_strd_dt BETWEEN #{startDate} AND #{endDate}
+           AND idx_cl_grp_cd = #{idxClGrpCd}
+           AND svc_id        = #{svcId}
+           AND idx_cl_cd     = #{idxClCd}
+           AND idx_ctt_cd    = #{idxCttCd}
+    </select>
+
+    <select id="getSummaryDailyResult" parameterType="Condition" resultType="BpmDlyPrst">
+        <foreach collection="whereConditions" item="item" separator=" UNION ALL ">
+            SELECT a.dly_strd_dt           AS dly_strd_dt
+                 , a.svc_id                AS svc_id
+                 , NVL(f.svc_nm, a.svc_id) AS svc_nm
+                 , a.idx_cl_grp_cd
+                 , a.idx_cl_cd
+                 , a.idx_ctt_cd
+                 , a.dly_rslt_val
+                 , e.idx_ctt_cd_val        AS "eisSvcComCd.idx_ctt_cd_val"
+                 , e.ord_idx               AS ord_idx
+              FROM eisuser.bpm_dly_prst a
+              JOIN eis_svc_com_cd e
+                ON a.svc_id        = e.svc_id
+               AND a.idx_cl_grp_cd = e.idx_cl_grp_cd
+               AND a.idx_ctt_cd    = e.idx_ctt_cd
+               AND a.idx_cl_cd     = e.idx_cl_cd
+              LEFT OUTER JOIN eisuser.com_svc f
+                ON a.svc_id        = f.svc_id
+             WHERE a.svc_id        = #{item.svcId}
+               AND a.idx_cl_grp_cd = #{item.idxClGrpCd}
+               AND a.idx_cl_cd     = #{item.idxClCd}
+               AND a.idx_ctt_cd    = #{item.idxCttCd}
+               AND (
+                    /* 1주일 전 OR 1달 전 */
+                    (a.dly_strd_dt BETWEEN TO_CHAR((TO_DATE(#{searchDate}, 'YYYYMMDD')) -7, 'YYYYMMDD') AND TO_CHAR(TO_DATE(#{searchDate}, 'YYYYMMDD'), 'YYYYMMDD'))
+                    OR (a.dly_strd_dt = TO_CHAR(ADD_MONTHS(TO_DATE(#{searchDate}, 'YYYYMMDD') ,-1),'YYYYMMDD') )
+                   )
+        </foreach>
+             ORDER BY svc_id
+                    , ord_idx
+                    , dly_strd_dt
+    </select>
+
+    <select id="getBpmDailyResultSums" parameterType="WhereCondition" resultType="BpmDlyPrst">
+        SELECT a.svc_id
+             , a.idx_cl_grp_cd
+             , a.idx_cl_cd
+             , a.idx_ctt_cd
+             , c.idx_cl_cd_grp_nm
+             , DECODE(d.idx_cl_cd_val, '총계', '1'||d.idx_cl_cd_val, '2'||d.idx_cl_cd_val) AS idx_cl_cd_val
+             , b.idx_ctt_cd_val
+             , TO_CHAR(TO_DATE(a.dly_strd_dt, 'YYYYMMDD'), 'YYYY/MM/DD') dly_strd_dt
+             , a.dly_rslt_val
+          FROM (SELECT svc_id
+                     , idx_cl_grp_cd
+                     , idx_cl_cd
+                     , idx_ctt_cd
+                     , dly_strd_dt
+                     , dly_rslt_val
+                  FROM eisuser.bpm_dly_prst
+                 WHERE svc_id = #{svcId}
+                   AND dly_strd_dt BETWEEN #{startDate} AND #{endDate}
+                <if test="idxClGrpCd != null and idxClGrpCd != ''">
+                   AND idx_cl_grp_cd = #{idxClGrpCd}
+                </if>
+                <if test="idxClCd != null and idxClCd != ''">
+                   AND idx_cl_cd = #{idxClCd}
+                </if>
+               ) a
+             , eisuser.bpm_idx_ctt_info b
+             , eisuser.bpm_idx_cl_grp_info c
+             , eisuser.bpm_idx_cl_info d
+         WHERE a.svc_id        = b.svc_id
+           AND a.idx_cl_grp_cd = b.idx_cl_grp_cd
+           AND a.idx_cl_cd     = b.idx_cl_cd
+           AND a.idx_ctt_cd    = b.idx_ctt_cd
+           AND b.idx_cl_grp_cd = c.idx_cl_grp_cd
+           AND b.idx_cl_cd     = d.idx_cl_cd
+         ORDER BY a.svc_id
+                , a.idx_cl_grp_cd
+                , a.idx_cl_cd
+                , a.idx_ctt_cd
+                , a.dly_strd_dt
+    </select>
+
+    <select id="getBpmDayStrdInfos" parameterType="WhereCondition" resultType="BpmDayStrdInfo">
+        SELECT dly_strd_dt, audit_id, audit_dtm, day_strd_val, cd_seq, dow_nm
+        FROM   EISUSER.BPM_DAY_STRD_INFO
+        WHERE dly_strd_dt >= #{startDate}
+        AND   dly_strd_dt &lt;= #{endDate}
+    </select>
+</mapper>

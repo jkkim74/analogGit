@@ -1,0 +1,93 @@
+@charset "utf-8";
+
+@font-face {
+    font-family: 'dau132';
+    src: url('font/dau132.eot');
+    src: url('font/dau132.eot?#iefix') format('embedded-opentype'),
+    url('font/dau132.woff') format('woff'),
+    url('font/dau132.ttf') format('truetype');
+    src:local(※), url('font/dau132.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'dau142';
+    src: url('font/dau142.eot');
+    src: url('font/dau142.eot?#iefix') format('embedded-opentype'),
+    url('font/dau142.woff') format('woff'),
+    url('font/dau142.ttf') format('truetype');
+    src:local(※), url('font/dau142.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'dau152';
+    src: url('font/dau152.eot');
+    src: url('font/dau152.eot?#iefix') format('embedded-opentype'),
+    url('font/dau152.woff') format('woff'),
+    url('font/dau152.ttf') format('truetype');
+    src:local(※), url('font/dau152.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.dau132{
+    font-family: 'dau132';
+}
+.dau142{
+    font-family: 'dau142';
+}
+.dau152{
+    font-family: 'dau152';
+}
+li span {
+    display: block;
+}
+
+.kidPagination{
+}
+.kidPagination span {
+    background: url(../images/dau/circle.png) #1c1c1c center center no-repeat;
+    width: 7px;
+    height: 7px;
+    display: block;
+    margin: 7px 0px;
+}
+
+.realTime {
+    width: 1280px;
+    height: 720px;
+    background-color: #1c1c1c;
+    padding: 20px
+}
+
+.test {
+    width: 1280px;
+    height: 720px;
+    background: url(../images/kid/test.jpg) #ff3034 center center no-repeat;
+    background-size: contain;
+}
+.test2 {
+    width: 1280px;
+    height: 720px;
+    background: url(../images/kid/test2.jpg) #ff3034 center center no-repeat;
+    background-size: contain;
+}
+.test3 {
+    width: 1280px;
+    height: 720px;
+    background: url(../images/kid/test3.jpg) #ff3034 center center no-repeat;
+    background-size: contain;
+}
+.test4 {
+    width: 1136px;
+    height: 640px;
+    background: url(../images/kid/1.jpg) #ff3034 center center no-repeat;
+    background-size: contain;
+}
+.test5 {
+    width: 1136px;
+    height: 640px;
+    background: url(../images/kid/1.jpg) #ff3034 center center no-repeat;
+    background-size: contain;
+}

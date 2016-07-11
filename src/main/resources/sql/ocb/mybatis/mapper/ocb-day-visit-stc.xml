@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.OcbDayVisitStcRepository">
+
+    <select id="getVisitorListPerDay" parameterType="Map" resultType="OcbDayVisitStc">
+          SELECT b.*
+            FROM (
+                SELECT a.*, rownum rnum
+                FROM (
+                  select count(*) over() totalrecordcount,
+                         substr (base_dt, 0, 4) || '-' || substr (base_dt, 5, 2)|| '-' || substr (base_dt, 7, 2) as base_dt,
+                         sum (uv_cnt) as uv_cnt,
+                         sum (lv_cnt) as lv_cnt,
+                         sum (new_visit_cnt) as new_visit_cnt,
+                         sum (re_visit_cnt) as re_visit_cnt
+                    from ocb_day_visit_stc
+                   where (base_dt between (#{startDate}) and (#{endDate}))
+                group by base_dt
+                order by base_dt desc
+                ) a WHERE rownum &lt;= #{lastIndex}
+            ) b WHERE rnum &gt; #{firstIndex}
+    </select>
+    <select id="getVisitorList" parameterType="Map" resultType="OcbDayVisitStc">
+                  select count(*) over() totalrecordcount,
+                         substr (base_dt, 0, 4) || '-' || substr (base_dt, 5, 2)|| '-' || substr (base_dt, 7, 2) as base_dt,
+                         sum (uv_cnt) as uv_cnt,
+                         sum (lv_cnt) as lv_cnt,
+                         sum (new_visit_cnt) as new_visit_cnt,
+                         sum (re_visit_cnt) as re_visit_cnt
+                    from ocb_day_visit_stc
+                   where (base_dt between (#{startDate}) and (#{endDate}))
+                group by base_dt
+                order by base_dt
+    </select>
+
+
+
+</mapper>

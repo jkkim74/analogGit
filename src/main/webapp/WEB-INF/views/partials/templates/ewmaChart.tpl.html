@@ -1,0 +1,17 @@
+<td class="decline">
+    <div class="bar-container">
+        <div class="bar-area">
+            <span class="{{ewmaData.side=='left'&& ewmaData.overRef=='Y'&&'bar bar-decline'||'bar'}}" style="width:{{ewmaData.side=='left' && ewmaData.val||'0'}}%;"></span>
+        </div>
+        <span class="dotted"></span>
+    </div>
+</td>
+<td class="grow">
+    <div class="bar-container">
+        <div class="bar-area">
+            <span class="{{ewmaData.side=='right' && ewmaData.overRef=='Y'&&'bar bar-grow'||'bar'}}" style="width:{{ewmaData.side=='right' && ewmaData.val||'0'}}%;"></span>
+        </div>
+        <span class="dotted"></span>
+    </div>
+</td>
+<td class="condition"><img src="resources/images/ico/{{ewmaData.icon.length > 0 && ewmaData.icon||'ico_mid.png'}}" alt=""/></td>

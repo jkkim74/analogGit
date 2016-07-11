@@ -1,0 +1,26 @@
+<div class="page-title obj-clear">
+    <h1 class="pull-left">{{menuContext.menu.name}}</h1>
+    <div class="add-bookmark">
+        <favorite-button />
+    </div>
+    <div class="pagenation">
+        {{menuContext.category.name}} <span>&gt;</span> {{menuContext.menu.name}}
+    </div>
+</div>
+<div class="search-select-area obj-clear">
+    <div class="btn-group">
+        <button class="btn btn-white" ng-repeat="type in datePeriodTypes" ng-class="{active:selectedDatePeriodType === type}" type="button" data-ng-click="changeDateType(type)">
+            {{type.label}}
+        </button>
+    </div>
+    <div class="date-picker-area obj-clear">
+        <div class="date-picker input-append success date">
+            <input class="form-control date-pick" type="text" data-ng-model="selectedDate" id="search-date01"/>
+            <span class="add-on pull-left">
+                <span class="arrow"></span>
+                <i class="fa fa-th"></i>
+            </span>
+        </div>
+    </div>
+    <a href="javascript:void(0);" class="btn btn-search pull-left" id="_searchBtn">조회</a>
+</div>

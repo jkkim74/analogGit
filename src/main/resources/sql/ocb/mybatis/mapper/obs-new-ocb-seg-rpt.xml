@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsNewOcbSegRptRepository">
+
+    <select id="getNewOcbSegPerDay" parameterType="JqGridRequest" resultType="ObsNewOcbSegRpt">
+    </select>
+    <select id="getNewOcbSegPerWeek" parameterType="JqGridRequest" resultType="ObsNewOcbSegRpt">
+    </select>
+    <select id="getNewOcbSegPerMonth" parameterType="JqGridRequest" resultType="ObsNewOcbSegRpt">
+        SELECT TO_CHAR (TO_DATE (stndrd_ym, 'yyyymm'), 'yyyy-mm') AS stndrd_ym,
+                 rpt_ind_nm AS rpt_ind_nm,
+                 tot_cust_cnt AS tot_cust_cnt,
+                 tot_tr_cnt AS tot_tr_cnt,
+                 tot_pf_sum AS tot_pf_sum,
+                 rsrv_cust_cnt AS rsrv_cust_cnt,
+                 rsrv_tr_cnt AS rsrv_tr_cnt,
+                 rsrv_pnt_sum AS rsrv_pnt_sum,
+                 use_cust_cnt AS use_cust_cnt,
+                 use_tr_cnt AS use_tr_cnt,
+                 use_pnt_sum AS use_pnt_sum
+            FROM OBS_NEW_OCB_SEG_RPT
+           WHERE stndrd_ym = #{endDate}
+        ORDER BY stndrd_ym, to_number(rpt_ind_cd)
+    </select>
+    <select id="getNewOcbSegPerMonth_bak" parameterType="JqGridRequest" resultType="ObsNewOcbSegRpt">
+        WITH t
+             AS (  SELECT TO_CHAR (TO_DATE (stndrd_ym, 'yyyymm'), 'yyyy-mm')
+                             AS stndrd_ym,
+--                           LPAD (rpt_ind_cd, 2, 0) || rpt_ind_nm AS rpt_ind_nm,
+                          rpt_ind_nm AS rpt_ind_nm,
+                          tot_cust_cnt AS tot_cust_cnt,
+                          tot_tr_cnt AS tot_tr_cnt,
+                          tot_pf_sum AS tot_pf_sum,
+                          rsrv_cust_cnt AS rsrv_cust_cnt,
+                          rsrv_tr_cnt AS rsrv_tr_cnt,
+                          rsrv_pnt_sum AS rsrv_pnt_sum,
+                          use_cust_cnt AS use_cust_cnt,
+                          use_tr_cnt AS use_tr_cnt,
+                          use_pnt_sum AS use_pnt_sum
+                     FROM OBS_NEW_OCB_SEG_RPT
+                    WHERE stndrd_ym = '201405'
+                 ORDER BY stndrd_ym, rpt_ind_cd)
+        SELECT stndrd_ym,
+               rpt_ind_nm,
+               DECODE (measure,
+                       'TOT_CUST_CNT', '01전체고객수',
+                       'TOT_TR_CNT', '02전체TR',
+                       'TOT_PF_SUM', '03전체P/F',
+                       'RSRV_CUST_CNT', '04적립고객수',
+                       'RSRV_TR_CNT', '05적립TR',
+                       'RSRV_PNT_SUM', '06적립포인트',
+                       'USE_CUST_CNT', '07사용고객수',
+                       'USE_TR_CNT', '08사용TR',
+                       'USE_PNT_SUM', '09사용포인트')
+                  AS measure,
+               measure_value
+          FROM t UNPIVOT (measure_value
+                 FOR measure
+                 IN  (tot_cust_cnt,
+                     tot_tr_cnt,
+                     tot_pf_sum,
+                     rsrv_cust_cnt,
+                     rsrv_tr_cnt,
+                     rsrv_pnt_sum,
+                     use_cust_cnt,
+                     use_tr_cnt,
+                     use_pnt_sum))
+    </select>
+</mapper>

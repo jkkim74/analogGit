@@ -1,0 +1,16 @@
+<div class="col-md-12" ng-controller="bpmResultSumCtrl" ng-style="styleNoTab(0)" resize>
+    <bpm-result-search-box search-callback="searchCallback" excel-flag="excelFlag" menu-context="menuContext" init-callback="init"></bpm-result-search-box>
+    <div class="sub-title obj-section">
+        <h2>조회 결과</h2>
+        <div class="btn-group">
+            <boss-report-sub-nav excelConfig="excelConfig"></boss-report-sub-nav>
+        </div>
+    </div>
+    <div class="data-area" ng-style="dataAreaStyleNoTab(240)" resize>
+        <fixed-header id="bpmResultSumGrid_h"></fixed-header>
+        <div id="bpmResultSumGrid" class="pivot-board01" report-indicator="pageState"></div>
+    </div>
+</div>
+<link href="resources/pivot/pivot.css" media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="resources/pivot/pivot.js"></script>
+<script type="text/javascript" src="resources/app/admin/boss/bpmResultSumCtrl.js"></script>

@@ -1,0 +1,69 @@
+<!--qna change start-->
+<div id="notice_article" class="help-desk-modal" tabindex="-1" role="dialog" aria-labelledby="notice" aria-hidden="true"
+     data-ng-init="modalInit()">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel()">×</button>
+        <h1 class="modal-title" id="myModalLabel2">질문 {{form.newItem ? '등록' : '수정' }}</h1>
+    </div>
+    <div class="modal-body">
+        <table class="detail-con board-modify" summary="질문 수정">
+            <caption>질문 수정</caption>
+            <tbody>
+            <tr>
+                <th scope="row">구분</th>
+                <td>
+                    <select class="select" ng-model="form.category"
+                            ng-options="category.codeId as category.codeName for category in categoryList">{{form.category.codeName}}
+                        <option value="">-- 분류선택 --</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">제목</th>
+                <td>
+                    <input data-ng-model="form.title" type="text" id="title"
+                           class="form-control" title="제목 입력" placeholder="제목을 입력하세요."/>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">내용</th>
+                <td>
+                    <summernote data-ng-model="form.context" config="summernoteConfig"></summernote>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">첨부파일</th>
+                <td>
+                    <div class="type-check">
+                        <div class="btn-variable btn-file" style="width:92px;">
+                            <button class="btn btn-white">파일 찾기</button>
+                            <input type="file" nv-file-select="" uploader="uploader" multiple/>
+                        </div>
+                    </div>
+                    <div class="check-list">
+                        <ul class="obj-clear">
+                            <li data-ng-repeat="file in selectQnaFiles" data-ng-hide="form.newItem">
+                                (업로드된 파일)
+                                <a href="/file/download?containerName=helpdesk&uuid={{file.uuid}}&saveFileName={{file.fileName}}">{{file.fileName}}</a>
+                                <span data-ng-show="uploader.isHTML5">( {{file.fileSize/1024/1024|number:2}} MB )</span>
+                                <button data-ng-click="deleteOldFile(file.id)">x</button>
+                            </li>
+
+                            <li data-ng-repeat="item in uploader.queue">
+                                {{item.file.name}}
+                                <span data-ng-show="uploader.isHTML5">( {{item.file.size/1024/1024|number:2}} MB )</span>
+                                <button data-ng-click="item.remove()">x</button>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="control-area">
+        <button class="btn btn-gray" data-ng-click="cancel()">취소</button>
+        <button class="btn btn-orange" data-ng-click="save()">저장</button>
+    </div>
+</div>
+<!--qna change end-->

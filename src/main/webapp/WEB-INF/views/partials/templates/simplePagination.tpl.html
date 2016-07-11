@@ -1,0 +1,17 @@
+<div class="text-center">
+    <ul class="pagination">
+        <li ng-class="{disabled:hdQnaTableInfo.curPage == 1}">
+            <a href data-ng-click="prevPage()">&lt;</a>
+        </li>
+
+        <li ng-repeat="n in hdQnaTableInfo.range"
+            ng-class="{active: n == hdQnaTableInfo.curPage}"
+            ng-click="setPage()">
+            <a href ng-bind="n">1</a>
+        </li>
+
+        <li ng-class="{disabled:hdQnaTableInfo.curPage == hdQnaTableInfo.maxPage}">
+            <a href data-ng-click="nextPage()">&gt;</a>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,13 @@
+<div ng-controller="membershipIssueCtrl" data-ng-init="init()" ng-style="style(0)" resize>
+    <report-olap-search-box-with-drag class="report-search-box" search-callback="search" search-config="searchConfig" menu-context="menuContext" measure="measure" dimensions="dimensions" draggable="draggable"></report-olap-search-box-with-drag>
+    <div class="non-sub-title obj-section">
+        <report-sub-nav excelConfig="excelConfig"></report-sub-nav>
+    </div>
+
+    <div class="data-area" ng-style="dataAreaEasyOlapStyle()">
+        <div id="membershipIssuePivot" class="pivot-board01" report-indicator="pageState"></div>
+    </div>
+</div>
+<script type="text/javascript" src="resources/pivot/pivot.js"></script>
+<script type="text/javascript" src="resources/app/common/utils/pivotRenderer.js"></script>
+<script type="text/javascript" src="resources/app/syrup/membership/membershipIssueCtrl.js"></script>

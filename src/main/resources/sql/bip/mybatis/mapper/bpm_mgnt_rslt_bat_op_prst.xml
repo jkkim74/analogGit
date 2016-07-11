@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.BpmMgntRsltBatOpPrstRepository">
+    <select id="getBpmMgntRsltBatOpPrst" parameterType="java.lang.String" resultType="BpmMgntRsltBatOpPrst">
+        SELECT T0.SVC_ID
+            ,T2.SVC_NM
+            ,'일'  LNKG_CYCL_CD
+            ,T1.OPER_EXEC_ID
+            ,NVL(ERR_CTT, E1.EXIT_CODE) STATUS
+            , substr(E2.EXIT_MESSAGE, 1, instr(E2.EXIT_MESSAGE,chr(10)))  ERR_DTL
+            ,T0.DAY_RCV_EXPT_TM  RCV_EXPT_TM
+            ,'' EXPT_CD
+            ,TO_CHAR(T1.AUDIT_DTM,'YYYY-MM-DD hh24:MI') AUDIT_DTM
+            ,T0.DAY_RCV_ITM_CNT  EXPT_CNT
+            ,T1.RCV_ITM_CNT      RCV_ITM_CNT
+            ,T1.DATA_CNT         DATA_CNT
+            ,T1.TRMS_FL_NM       TRMS_FL_NM
+            ,T1.RCV_YN
+            ,T3.PRT_PRTY_SEQ
+            ,T1.LOG_ID
+        FROM EISUSER.BPM_MGNT_RSLT_BAT_INFO_RGST T0
+            ,EISUSER.BPM_MGNT_RSLT_BAT_OP_PRST T1
+            ,EISUSER.COM_SVC T2
+            ,EISUSER.BATCH_JOB_EXECUTION E1
+            ,EISUSER.BATCH_STEP_EXECUTION E2
+            ,EISUSER.BPM_SVC_PRT_SEQ_INFO T3
+        WHERE T0.SVC_ID=T1.SVC_ID(+)
+        AND T1.OPER_EXEC_ID = E1.JOB_EXECUTION_ID(+)
+        AND T0.DAY_OBJ_YN = 'Y'
+        AND T0.SVC_ID = T2.SVC_ID
+        AND T0.SVC_ID = T3.SVC_ID
+        AND T1.OPER_EXEC_ID = E2.JOB_EXECUTION_ID(+)
+        AND E2.STATUS(+) = 'FAILED'
+        AND T1.STC_STA_DT(+) = TO_CHAR(TO_DATE(#{basicDate}, 'YYYYMMDD') - T0.DISP_STRD_CD,'YYYYMMDD')
+        AND T1.LNKG_CYCL_CD(+) = 'DAY'
+        UNION ALL
+        SELECT T0.SVC_ID
+            ,T2.SVC_NM
+            ,'주'  LNKG_CYCL_CD
+            ,T1.OPER_EXEC_ID
+            ,NVL(ERR_CTT, E1.EXIT_CODE) STATUS
+            ,SUBSTR(E2.EXIT_MESSAGE, 1, INSTR(E2.EXIT_MESSAGE,chr(10)))  ERR_DTL
+            ,T0.WK_RCV_EXPT_TM      RCV_EXPT_TM
+            ,COM.COMM_CD_NM         EXPT_CD
+            ,TO_CHAR(T1.AUDIT_DTM,'YYYY-MM-DD hh24:MI') AUDIT_DTM
+            ,T0.WK_RCV_EXPT_CNT     EXPT_CNT
+            ,T1.RCV_ITM_CNT         RCV_ITM_CNT
+            ,T1.DATA_CNT            DATA_CNT
+            ,T1.TRMS_FL_NM          TRMS_FL_NM
+            ,T1.RCV_YN
+            ,T3.PRT_PRTY_SEQ
+            ,T1.LOG_ID
+        FROM EISUSER.BPM_MGNT_RSLT_BAT_INFO_RGST T0,
+        (
+            SELECT B.SVC_ID
+            , B.AUDIT_DTM
+            , B.OPER_EXEC_ID
+            , B.RCV_ITM_CNT
+            , B.DATA_CNT
+            , B.TRMS_FL_NM
+            , B.ERR_CTT
+            , B.RCV_YN
+            , B.LOG_ID
+            FROM EISUSER.BPM_WK_STRD_INFO A
+            , EISUSER.BPM_MGNT_RSLT_BAT_OP_PRST B
+            WHERE  A.WK_STA_DT(+) &lt;= TO_CHAR(TO_DATE(#{basicDate}, 'YYYYMMDD')-7,'YYYYMMDD')
+            AND    A.WK_END_DT(+) >= TO_CHAR(TO_DATE(#{basicDate}, 'YYYYMMDD')-7,'YYYYMMDD')
+            AND    A.WK_STA_DT &lt;= B.STC_STA_DT
+            AND    A.WK_END_DT >= B.STC_STA_DT
+            AND    B.LNKG_CYCL_CD = 'WEK'
+        ) T1,
+            EISUSER.BATCH_JOB_EXECUTION E1
+            ,EISUSER.COM_COMM_CD COM
+            ,EISUSER.COM_SVC T2
+            ,EISUSER.BATCH_STEP_EXECUTION E2
+            ,EISUSER.BPM_SVC_PRT_SEQ_INFO T3
+        WHERE T0.SVC_ID=T1.SVC_ID(+)
+        AND T1.OPER_EXEC_ID = E1.JOB_EXECUTION_ID(+)
+        AND T0.WK_RCV_EXPT_DOW_CD=TO_CHAR(to_date(#{basicDate}, 'YYYYMMDD'),'D')
+        AND T0.WK_OBJ_YN = 'Y'
+        AND T1.OPER_EXEC_ID = E2.JOB_EXECUTION_ID(+)
+        AND E2.STATUS(+)='FAILED'
+        AND COM.COMM_CD_GRP_ID ='PBPM_C_00008'
+        AND T0.WK_RCV_EXPT_DOW_CD = COM.COMM_CD_ID
+        AND T0.SVC_ID=T2.SVC_ID
+        AND T0.SVC_ID=T3.SVC_ID
+        UNION ALL
+        SELECT T0.SVC_ID
+            , T2.SVC_NM
+            , '월'  LNKG_CYCL_CD
+            ,T1.OPER_EXEC_ID
+            ,NVL(ERR_CTT, E1.EXIT_CODE) STATUS
+            , substr(E2.EXIT_MESSAGE, 1, instr(E2.EXIT_MESSAGE,chr(10)))  ERR_DTL
+            ,T0.MTH_RCV_EXPT_TM   RCV_EXPT_TM
+            ,T0.MTH_RCV_EXPT_DAY  EXPT_CD
+            ,TO_CHAR(T1.AUDIT_DTM,'YYYY-MM-DD hh24:MI') AUDIT_DTM
+            ,T0.MTH_RCV_ITM_CNT   EXPT_CNT
+            ,T1.RCV_ITM_CNT       RCV_ITM_CNT
+            ,T1.DATA_CNT          DATA_CNT
+            ,T1.TRMS_FL_NM        TRMS_FL_NM
+            ,T1.RCV_YN
+            ,T3.PRT_PRTY_SEQ
+            ,T1.LOG_ID
+        FROM EISUSER.BPM_MGNT_RSLT_BAT_INFO_RGST T0,
+        (
+            SELECT A.SVC_ID
+            , A.AUDIT_DTM    AUDIT_DTM
+            , A.OPER_EXEC_ID OPER_EXEC_ID
+            , A.RCV_ITM_CNT  RCV_ITM_CNT
+            , A.DATA_CNT     DATA_CNT
+            , A.TRMS_FL_NM
+            , A.ERR_CTT
+            , A.RCV_YN
+            , A.LOG_ID
+            FROM   EISUSER.BPM_MGNT_RSLT_BAT_OP_PRST A
+            WHERE  STC_STA_DT = TO_CHAR(ADD_MONTHS(#{basicDate}, -1),'YYYYMM')
+            AND    A.LNKG_CYCL_CD = 'MTH'
+        ) T1,
+            EISUSER.BATCH_JOB_EXECUTION E1
+            ,EISUSER.COM_SVC T2
+            ,EISUSER.BATCH_STEP_EXECUTION E2
+            ,EISUSER.BPM_SVC_PRT_SEQ_INFO T3
+        WHERE T0.SVC_ID=T1.SVC_ID(+)
+        AND T1.OPER_EXEC_ID = E1.JOB_EXECUTION_ID(+)
+        AND T0.MTH_RCV_EXPT_DAY = TO_CHAR(TO_DATE(#{basicDate}, 'YYYYMMDD'),'DD')
+        AND T0.MTH_OBJ_YN = 'Y'
+        AND T1.OPER_EXEC_ID = E2.JOB_EXECUTION_ID(+)
+        AND E2.STATUS(+) = 'FAILED'
+        AND T0.SVC_ID=T2.SVC_ID
+        AND T0.SVC_ID=T3.SVC_ID
+        ORDER BY PRT_PRTY_SEQ, LNKG_CYCL_CD, AUDIT_DTM
+    </select>
+</mapper>

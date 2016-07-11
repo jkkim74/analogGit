@@ -1,0 +1,48 @@
+<div id="bookmarkModal" class="modal fade bookmark-modal" tabindex="-1" role="dialog" aria-labelledby="data_widget_addLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <section class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h1 class="modal-title" id="myModalLabel">즐겨찾기 추가</h1>
+            </div>
+            <div class="select-service">
+                <select class="select" data-ng-model="selectedService"
+                    data-ng-options="s.name for s in services"
+                        data-ng-change="changeService()">
+                    <option value="">서비스 선택</option>
+                </select>
+            </div>
+            <div class="modal-body">
+                <p ng-show="!selectedService" class="text-center">서비스를 선택하세요. </p>
+
+                <div class="tree tree-plus-minus">
+                    <div ng-cloak data-ng-repeat="category in selectedService.categories">
+                        <div class="tree-item" data-ng-show="category.deleteYn != 'Y' && category.summaryReportYn == 'Y' && category.menus[0].authority == 'Y'" data-ng-click="selectMenuItem(category, category.menus[0])">
+                            <i class="tree-dot"></i>
+                            <div class="tree-item-name">{{category.name}}</div>
+                        </div>
+                    </div>
+                    <div ng-cloak data-ng-repeat="category in selectedService.categories" repeat-done="doneRender()">
+                        <div class="tree-folder" data-ng-show="category.deleteYn != 'Y' && category.summaryReportYn != 'Y'">
+                            <div class="tree-folder-header">
+                                <i class="fa fa-folder"></i>
+                                <div class="tree-folder-name">{{category.name}}</div>
+                            </div>
+                            <div class="tree-folder-content">
+                                <div class="tree-item" data-ng-show="menu.deleteYn != 'Y' && menu.authority == 'Y'" data-ng-repeat="menu in category.menus" data-ng-click="selectMenuItem(category, menu)">
+                                    <i class="tree-dot"></i>
+                                    <div class="tree-item-name">{{menu.name}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="control-area">
+                <button class="btn btn-gray" data-ng-click="cancelFavoriteModal()">취소</button>
+                <button class="btn btn-orange" ng-disabled="!selectedFavorites.length || loading" data-ng-click="addFavorites()">{{loading ? '추가중...': '추가'}}</button>
+            </div>
+        </section>
+    </div>
+</div>

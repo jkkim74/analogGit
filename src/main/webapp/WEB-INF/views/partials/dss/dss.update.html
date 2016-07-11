@@ -1,0 +1,246 @@
+<!-- main content start -->
+<section id="main-content" data-ng-controller="dssUpdateCtrl" data-ng-init="init()">
+    <article class="wrapper">
+        <div class="row content-wrap">
+            <div class="col-md-12">
+                <div class="page-title obj-clear">
+                    <h1 class="pull-left">보고서 수정</h1>
+                    <div class="pagenation">
+                        Home <span>&gt;</span> Dataset Sharing
+                    </div>
+                </div>
+                <div class="sub-title obj-section" style="padding-bottom:8px;">
+                    <h2>분석정보</h2>
+                </div>
+                <form name="dssUpdateForm" novalidate>
+                <div class="detail-report-wrap">
+                    <div class="detail-section">
+                        <table class="detail-con board-modify" summary="BM 유형, 분석 주제, 분석 내용, 결과 및 시사점, 한계 및 향후 과제, 분석기간, 작성자">
+                            <caption>보고서 등록(분석정보)</caption>
+                            <tbody>
+                            <tr>
+                                <th scope="row">BM 유형<span class="point">*</span></th>
+                                <td>
+                                    <div class="type-check">
+                                        <select ng-model="display.selectedBm" ng-options="bm.name for bm in bms track by bm.id" class="select">
+                                            <option value="">BM 유형 선택</option>
+                                        </select>
+                                        <button ng-click="addBm()" class="btn btn-white">추가</button>
+                                    </div>
+                                    <div class="check-list">
+                                        <!-- <p class="muddy">BM 유형을 선택하여 추가해 주세요.</p> -->
+                                        <ul class="obj-clear">
+                                            <li ng-model="display.bmList" ng-repeat="bm in display.bmList" >
+                                                {{bm.name}} <button ng-click="removeBm(bm)">×</button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">분석 주제 <span class="point">*</span></th>
+                                <td class="">
+                                    <input data-ng-model="form.subject" type="text" class="form-control" name="subject" title="분석 주제 입력" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">분석 내용 <span class="point">*</span></th>
+                                <td>
+                                    <textarea data-ng-model="form.content" class="form-control" name="content" cols="30" rows="10" title="분석 내용 입력" style="height:113px" required></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">결과 및 시사점</th>
+                                <td>
+                                    <textarea data-ng-model="form.conclusion" class="form-control" name="conclusion" cols="30" rows="10" title="결과 및 시사점 입력" style="height:113px"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">한계 및 향후과제</th>
+                                <td>
+                                    <textarea data-ng-model="form.futureWork" class="form-control" name="futureWork" cols="30" rows="10" title="한계 및 향후과제 입력" style="height:113px"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">분석기간 <span class="point">*</span></th>
+                                <td>
+                                    <div class="date-picker-area obj-clear">
+                                        <div class="date-picker input-append success date">
+                                            <input type="text" name="analysisStart" class="form-control" datepicker-popup="{{format}}" ng-model="form.analysisStart" is-open="datePicker.isOpen['analysisStart']" ng-required="true" max-date="form.analysisEnd" required readonly/>
+														<span class="add-on pull-left" data-ng-click="openDatePicker($event, 'analysisStart')">
+															<span class="arrow"></span>
+															<i class="fa fa-th"></i>
+														</span>
+                                        </div>
+                                        <span class="to">~</span>
+                                        <div class="date-picker input-append success date">
+                                            <input type="text" name="analysisEnd" class="form-control" datepicker-popup="{{format}}" ng-model="form.analysisEnd" is-open="datePicker.isOpen['analysisEnd']" ng-required="true" min-date="form.analysisStart" required readonly/>
+														<span class="add-on pull-left" data-ng-click="openDatePicker($event, 'analysisEnd')">
+															<span class="arrow"></span>
+															<i class="fa fa-th"></i>
+														</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="sub-title obj-section" style="padding-bottom:8px;">
+                    <h2>데이터 정보</h2>
+                </div>
+                <div class="detail-report-wrap">
+                    <div class="detail-section">
+                        <table class="detail-con board-modify" summary="데이터 Source, 데이터 기간, 샘플크기, 사용변수">
+                            <caption>보고서 등록(데이터 정보)</caption>
+                            <tbody>
+                            <tr>
+                                <th scope="row">데이터 Source <span class="point">*</span></th>
+                                <td>
+                                    <input data-ng-model="form.dataSource" type="text" name="dataSource" class="form-control" placeholder="분석을 위해 사용한 데이터가 포함된 DB  (e.g. xx클러스터의 yy database)" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">데이터 기간 <span class="point">*</span></th>
+                                <td class="">
+                                    <div class="date-picker-area obj-clear">
+                                        <div class="date-picker input-append success date">
+                                            <input datepicker-popup="{{format}}" data-ng-model="form.dataStart" is-open="datePicker.isOpen['dataStart']" max-date="form.dataEnd" class="form-control date-pick" type="text" name="dataStart" required readonly>
+														<span class="add-on pull-left" data-ng-click="openDatePicker($event, 'dataStart')">
+															<span class="arrow"></span>
+															<i class="fa fa-th"></i>
+														</span>
+                                        </div>
+                                        <span class="to">~</span>
+                                        <div class="date-picker input-append success date">
+                                            <input datepicker-popup="{{format}}" data-ng-model="form.dataEnd" is-open="datePicker.isOpen['dataEnd']" min-date="form.dataStart" class="form-control date-pick" type="text" name="dataEnd" required readonly>
+														<span class="add-on pull-left" data-ng-click="openDatePicker($event, 'dataEnd')">
+															<span class="arrow"></span>
+															<i class="fa fa-th"></i>
+														</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">샘플크기</th>
+                                <td>
+                                    <input data-ng-model="form.sampleSize" number-format type="text" name="sampleSize" class="form-control" placeholder="분석 대상 집단의 크기  (e.g. 3,234,566)" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">사용변수</th>
+                                <td>
+                                    <table class="info-table" summary="변수명, 변수 설명">
+                                        <caption>사용 변수</caption>
+                                        <colgroup>
+                                            <col style="width:195px;" />
+                                            <col style="width:195px;" />
+                                            <col style="width:94px;" />
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">변수명</th>
+                                            <th scope="col">변수 설명</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="interval-modify" data-ng-model="form.variables" data-ng-repeat="variable in form.variables">
+                                            <td><input data-ng-model="variable.name" type="text"></td>
+                                            <td><input data-ng-model="variable.description" type="text"></td>
+                                            <td>
+                                                <button data-ng-click="removeVariable($index)" class="btn btn-white">
+                                                    <i class="fa fa-minus"></i>
+                                                    삭제
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <button data-ng-click="addVariable()" class="btn btn-white" style="margin-top:10px;">
+                                        <i class="fa fa-plus"></i>
+                                        변수 추가
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="sub-title obj-section" style="padding-bottom:8px;">
+                    <h2>파일첨부</h2>
+                </div>
+                <div class="detail-report-wrap">
+                    <div class="detail-section">
+                        <table class="detail-con board-modify" summary="보고서 파일 첨부, 데이터 첨부, 쿼리 첨부">
+                            <caption>보고서 등록(파일 첨부)</caption>
+                            <tbody>
+                            <tr>
+                                <th scope="row">보고서 파일 첨부 <span class="point">*</span></th>
+                                <td>
+                                    <div class="data-file-set">
+                                        <div class="form-control check-list">
+                                            <ul class="obj-clear">
+                                                <li data-ng-repeat="fileItem in uploader.queue | filter:{alias:'report', isCancel:false}">{{fileItem.file.name}} <button data-ng-click="removeFile(fileItem)">×</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-variable">
+                                            <button class="btn btn-white">파일 첨부</button>
+                                            <input nv-file-select uploader="uploader" options="{alias: 'report'}" filters="oneFileForTypeFilter" type="file" name="" id="" class="form-control" multiple/>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">데이터 첨부</th>
+                                <td class="">
+                                    <div class="data-file-set">
+                                        <div class="form-control check-list">
+                                            <ul class="obj-clear">
+                                                <li data-ng-repeat="fileItem in uploader.queue | filter:{alias:'data', isCancel:false}">{{fileItem.file.name}} <button data-ng-click="removeFile(fileItem)">×</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-variable">
+                                            <button class="btn btn-white">파일 첨부</button>
+                                            <input nv-file-select uploader="uploader" options="{alias: 'data'}" filters="oneFileForTypeFilter" type="file" name="" class="form-control" multiple/>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">쿼리 첨부</th>
+                                <td>
+                                    <div class="data-file-set">
+                                        <div class="form-control check-list">
+                                            <ul class="obj-clear">
+                                                <li data-ng-repeat="fileItem in uploader.queue | filter:{alias:'query', isCancel:false}">{{fileItem.file.name}} <button data-ng-click="removeFile(fileItem)">×</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-variable">
+                                            <button class="btn btn-white">파일 첨부</button>
+                                            <input nv-file-select uploader="uploader" options="{alias: 'query'}" filters="oneFileForTypeFilter" type="file" name="" class="form-control" multiple/>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="text-center" style="margin-top:45px;">
+                    <button data-ng-click="cancel()" class="btn btn-gray basic">취소</button>
+                    <button data-ng-click="update()" data-ng-disabled="isDisabledSave" class="btn btn-orange basic">저장</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </article>
+</section>
+<!-- main content end -->
+
+<script type="text/javascript" src="resources/app/dss/controller/dssUpdateCtrl.js"></script>

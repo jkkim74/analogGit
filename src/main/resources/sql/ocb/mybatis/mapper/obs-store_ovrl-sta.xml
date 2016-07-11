@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsStoreOvrlStaRepository">
+    <select id="getStoreTotalForPivotPerDay" parameterType="JqGridRequest" resultType="ObsStoreOvrlSta">
+                WITH t AS (
+                          SELECT  TO_CHAR (TO_DATE (std_dt, 'YYYYMMDD'), 'YYYY-MM-DD')|| '('|| TO_CHAR (TO_DATE (std_dt, 'yyyymmdd'), 'dy')|| ')' AS std_dt
+                                  ,chkin_cnt AS chkin_cnt
+                                  ,chkin_avg_cnt AS chkin_avg_cnt
+                                  ,call_cnt AS call_cnt
+                                  ,call_avg_cnt AS call_avg_cnt
+                                  ,photo_reg_cnt AS photo_reg_cnt
+                                  ,photo_reg_avg_cnt AS photo_reg_avg_cnt
+                                  ,rview_reg_cnt AS rview_reg_cnt
+                                  ,rview_reg_avg_cnt AS rview_reg_avg_cnt
+                                  ,shr_click_cnt AS shr_click_cnt
+                                  ,shr_click_avg_cnt AS shr_click_avg_cnt
+                                  ,bnft_offer_cnt AS bnft_offer_cnt
+                                  ,bnft_offer_avg_cnt AS bnft_offer_avg_cnt
+                                  ,ptrn_cnt AS ptrn_cnt
+                                  ,ptrn_avg_cnt AS ptrn_avg_cnt
+                                  ,star_cnt AS star_cnt
+                             FROM obs_d_store_ovrl_sta
+                            WHERE std_dt BETWEEN #{startDate} AND #{endDate}
+                              AND poc_ind_cd = '01'
+                         ORDER BY std_dt)
+                SELECT std_dt,
+                       DECODE (
+                          measure
+                          ,'CHKIN_CNT','01체크인 발생 매장수'
+                          ,'CHKIN_AVG_CNT','02매장 당 체크인 횟수 평균'
+                          ,'CALL_CNT','03전화걸기 발생 매장수'
+                          ,'CALL_AVG_CNT','04매장 당 전화걸기 횟수 평균'
+                          ,'PHOTO_REG_CNT','05사진등록 완료 발생 매장수'
+                          ,'PHOTO_REG_AVG_CNT','06매장 당 사진등록 횟수 평균'
+                          ,'RVIEW_REG_CNT','07리뷰등록 완료 발생 매장수'
+                          ,'RVIEW_REG_AVG_CNT','08매장 당 리뷰등록 완료 횟수 평균'
+--                           ,'SHR_CLICK_CNT','09공유버튼 클릭 건수'
+--                           ,'SHR_CLICK_AVG_CNT','10매장 당 공유버튼 클릭 건수 평균'
+--                           ,'BNFT_OFFER_CNT','11혜택 제공 건수'
+--                           ,'BNFT_OFFER_AVG_CNT','12매장당 제공혜택 평균'
+                          ,'PTRN_CNT','13단골맺기 발생 매장수'
+                          ,'PTRN_AVG_CNT','14매장 당 단골맺기 횟수 평균'
+--                           ,'STAR_CNT','15스타 보유 건수'
+                          )
+                          AS measure,
+                       measure_value
+                  FROM t UNPIVOT (measure_Value
+                         FOR measure
+                         IN  (CHKIN_CNT
+                              ,CHKIN_AVG_CNT
+                              ,CALL_CNT
+                              ,CALL_AVG_CNT
+                              ,PHOTO_REG_CNT
+                              ,PHOTO_REG_AVG_CNT
+                              ,RVIEW_REG_CNT
+                              ,RVIEW_REG_AVG_CNT
+--                               ,SHR_CLICK_CNT
+--                               ,SHR_CLICK_AVG_CNT
+--                               ,BNFT_OFFER_CNT
+--                               ,BNFT_OFFER_AVG_CNT
+                              ,PTRN_CNT
+                              ,PTRN_AVG_CNT
+--                               ,STAR_CNT
+                             ))
+    </select>
+    <select id="getStoreTotalForPivotPerWeek" parameterType="JqGridRequest" resultType="ObsStoreOvrlSta">
+                WITH t AS (
+                          SELECT  TO_CHAR (TO_DATE (std_dt, 'YYYYMMDD'), 'YYYY-MM-DD')|| '('|| TO_CHAR (TO_DATE (std_dt, 'yyyymmdd'), 'dy')|| ')' AS std_dt
+                                  ,chkin_cnt AS chkin_cnt
+                                  ,chkin_avg_cnt AS chkin_avg_cnt
+                                  ,call_cnt AS call_cnt
+                                  ,call_avg_cnt AS call_avg_cnt
+                                  ,photo_reg_cnt AS photo_reg_cnt
+                                  ,photo_reg_avg_cnt AS photo_reg_avg_cnt
+                                  ,rview_reg_cnt AS rview_reg_cnt
+                                  ,rview_reg_avg_cnt AS rview_reg_avg_cnt
+                                  ,shr_click_cnt AS shr_click_cnt
+                                  ,shr_click_avg_cnt AS shr_click_avg_cnt
+                                  ,bnft_offer_cnt AS bnft_offer_cnt
+                                  ,bnft_offer_avg_cnt AS bnft_offer_avg_cnt
+                                  ,ptrn_cnt AS ptrn_cnt
+                                  ,ptrn_avg_cnt AS ptrn_avg_cnt
+                                  ,star_cnt AS star_cnt
+                             FROM obs_w_store_ovrl_sta
+                            WHERE std_dt <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />
+                              AND poc_ind_cd = '01'
+                         ORDER BY std_dt)
+                SELECT std_dt,
+                       DECODE (
+                          measure
+                          ,'CHKIN_CNT','01체크인 발생 매장수'
+                          ,'CHKIN_AVG_CNT','02매장 당 체크인 횟수 평균'
+                          ,'CALL_CNT','03전화걸기 발생 매장수'
+                          ,'CALL_AVG_CNT','04매장 당 전화걸기 횟수 평균'
+                          ,'PHOTO_REG_CNT','05사진등록 완료 발생 매장수'
+                          ,'PHOTO_REG_AVG_CNT','06매장 당 사진등록 횟수 평균'
+                          ,'RVIEW_REG_CNT','07리뷰등록 완료 발생 매장수'
+                          ,'RVIEW_REG_AVG_CNT','08매장 당 리뷰등록 완료 횟수 평균'
+--                           ,'SHR_CLICK_CNT','09공유버튼 클릭 건수'
+--                           ,'SHR_CLICK_AVG_CNT','10매장 당 공유버튼 클릭 건수 평균'
+--                           ,'BNFT_OFFER_CNT','11혜택 제공 건수'
+--                           ,'BNFT_OFFER_AVG_CNT','12매장당 제공혜택 평균'
+                          ,'PTRN_CNT','13단골맺기 발생 매장수'
+                          ,'PTRN_AVG_CNT','14매장 당 단골맺기 횟수 평균'
+--                           ,'STAR_CNT','15스타 보유 건수'
+                          )
+                          AS measure,
+                       measure_value
+                  FROM t UNPIVOT (measure_Value
+                         FOR measure
+                         IN  (CHKIN_CNT
+                              ,CHKIN_AVG_CNT
+                              ,CALL_CNT
+                              ,CALL_AVG_CNT
+                              ,PHOTO_REG_CNT
+                              ,PHOTO_REG_AVG_CNT
+                              ,RVIEW_REG_CNT
+                              ,RVIEW_REG_AVG_CNT
+--                               ,SHR_CLICK_CNT
+--                               ,SHR_CLICK_AVG_CNT
+--                               ,BNFT_OFFER_CNT
+--                               ,BNFT_OFFER_AVG_CNT
+                              ,PTRN_CNT
+                              ,PTRN_AVG_CNT
+--                               ,STAR_CNT
+                             ))
+    </select>
+    <select id="getStoreTotalForPivotPerMonth" parameterType="JqGridRequest" resultType="ObsStoreOvrlSta">
+                WITH t AS (
+                          SELECT  TO_CHAR (TO_DATE (std_ym, 'YYYYMM'), 'YYYY-MM') AS std_dt
+                                  ,chkin_cnt AS chkin_cnt
+                                  ,chkin_avg_cnt AS chkin_avg_cnt
+                                  ,call_cnt AS call_cnt
+                                  ,call_avg_cnt AS call_avg_cnt
+                                  ,photo_reg_cnt AS photo_reg_cnt
+                                  ,photo_reg_avg_cnt AS photo_reg_avg_cnt
+                                  ,rview_reg_cnt AS rview_reg_cnt
+                                  ,rview_reg_avg_cnt AS rview_reg_avg_cnt
+                                  ,shr_click_cnt AS shr_click_cnt
+                                  ,shr_click_avg_cnt AS shr_click_avg_cnt
+                                  ,bnft_offer_cnt AS bnft_offer_cnt
+                                  ,bnft_offer_avg_cnt AS bnft_offer_avg_cnt
+                                  ,ptrn_cnt AS ptrn_cnt
+                                  ,ptrn_avg_cnt AS ptrn_avg_cnt
+                                  ,star_cnt AS star_cnt
+                             FROM obs_m_store_ovrl_sta
+                            WHERE std_ym BETWEEN #{startDate} AND #{endDate}
+                              AND poc_ind_cd = '01'
+                         ORDER BY std_ym)
+                SELECT std_dt,
+                       DECODE (
+                          measure
+                          ,'CHKIN_CNT','01체크인 발생 매장수'
+                          ,'CHKIN_AVG_CNT','02매장 당 체크인 횟수 평균'
+                          ,'CALL_CNT','03전화걸기 발생 매장수'
+                          ,'CALL_AVG_CNT','04매장 당 전화걸기 횟수 평균'
+                          ,'PHOTO_REG_CNT','05사진등록 완료 발생 매장수'
+                          ,'PHOTO_REG_AVG_CNT','06매장 당 사진등록 횟수 평균'
+                          ,'RVIEW_REG_CNT','07리뷰등록 완료 발생 매장수'
+                          ,'RVIEW_REG_AVG_CNT','08매장 당 리뷰등록 완료 횟수 평균'
+--                           ,'SHR_CLICK_CNT','09공유버튼 클릭 건수'
+--                           ,'SHR_CLICK_AVG_CNT','10매장 당 공유버튼 클릭 건수 평균'
+--                           ,'BNFT_OFFER_CNT','11혜택 제공 건수'
+--                           ,'BNFT_OFFER_AVG_CNT','12매장당 제공혜택 평균'
+                          ,'PTRN_CNT','13단골맺기 발생 매장수'
+                          ,'PTRN_AVG_CNT','14매장 당 단골맺기 횟수 평균'
+--                           ,'STAR_CNT','15스타 보유 건수'
+                          )
+                          AS measure,
+                       measure_value
+                  FROM t UNPIVOT (measure_Value
+                         FOR measure
+                         IN  (CHKIN_CNT
+                              ,CHKIN_AVG_CNT
+                              ,CALL_CNT
+                              ,CALL_AVG_CNT
+                              ,PHOTO_REG_CNT
+                              ,PHOTO_REG_AVG_CNT
+                              ,RVIEW_REG_CNT
+                              ,RVIEW_REG_AVG_CNT
+--                               ,SHR_CLICK_CNT
+--                               ,SHR_CLICK_AVG_CNT
+--                               ,BNFT_OFFER_CNT
+--                               ,BNFT_OFFER_AVG_CNT
+                              ,PTRN_CNT
+                              ,PTRN_AVG_CNT
+--                               ,STAR_CNT
+                             ))
+    </select>
+</mapper>

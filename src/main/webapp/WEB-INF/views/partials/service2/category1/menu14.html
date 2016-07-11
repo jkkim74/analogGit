@@ -1,0 +1,26 @@
+<div ng-controller="d3MultiTrendLine" data-ng-init="init()">
+
+    <report-search-box search-callback="search" add-condition="searchPocCode"></report-search-box>
+
+    <nvd3-line-chart
+            data="currentDate"
+            id="visitorChart"
+            height="350"
+            margin="{left:75,top:0,bottom:30,right:40}"
+            xAxisTickFormat="xAxisTickFormatFunction()"
+            yAxisTickFormat="yAxisTickFormatFunction()"
+            x="xFunction()"
+            y="yFunction()"
+            showXAxis="true"
+            showYAxis="true"
+            showLegend="true"
+            tooltips="true"
+            useInteractiveGuideLine="true"
+            interactive="true"
+            trandlines="true"
+            noData="No Data For You!">
+        <svg></svg>
+    </nvd3-line-chart>
+
+</div>
+<script type="text/javascript" src="resources/app/service2/d3MultiTrendLine.js"></script>

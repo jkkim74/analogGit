@@ -1,0 +1,462 @@
+@charset "utf-8";
+
+@font-face {
+    font-family: 'dau132';
+    src: url('font/dau132.eot');
+    src: url('font/dau132.eot?#iefix') format('embedded-opentype'),
+    url('font/dau132.woff') format('woff'),
+    url('font/dau132.ttf') format('truetype');
+    src:local(※), url('font/dau132.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'dau142';
+    src: url('font/dau142.eot');
+    src: url('font/dau142.eot?#iefix') format('embedded-opentype'),
+    url('font/dau142.woff') format('woff'),
+    url('font/dau142.ttf') format('truetype');
+    src:local(※), url('font/dau142.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'dau152';
+    src: url('font/dau152.eot');
+    src: url('font/dau152.eot?#iefix') format('embedded-opentype'),
+    url('font/dau152.woff') format('woff'),
+    url('font/dau152.ttf') format('truetype');
+    src:local(※), url('font/dau152.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.dau132{
+    font-family: 'dau132';
+}
+.dau142{
+    font-family: 'dau142';
+}
+.dau152{
+    font-family: 'dau152';
+}
+li span {
+    display: block;
+}
+
+.dauPagination{
+    width: 13px;
+}
+
+.dauPagination span {
+    background: url(../images/dau/circle.png) #1c1c1c center center no-repeat;
+    width: 7px;
+    height: 7px;
+    display: block;
+    margin: 7px 0px;
+}
+
+.dauPagination span.active {
+    width: 7px;
+    height: 25px;
+    background: url(../images/dau/bar.png) #1c1c1c center center no-repeat;
+}
+
+.skpLogo {
+    width: 100%;
+    height: 60px;
+    text-align: right;
+    padding-top: 10px;
+    padding-right: 5px;
+}
+
+.realTime {
+    width: 1280px;
+    height: 720px;
+    background-color: #1c1c1c;
+    /*background-color: #f9f9f9;*/
+    /*background-color: #000000;*/
+    padding: 20px;
+    margin:0 auto;
+    margin-top:0px;
+}
+.pastTime {
+    width: 1280px;
+    height: 720px;
+    background-color: #1c1c1c;
+    padding: 20px
+}
+.mainBox {
+    list-style: none;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.mainBox li.boxTitle {
+    /*background-color: #f00000;*/
+    /*background-color: #000000;*/
+	position:relative;
+    background-color: #1c1c1c;
+    width: 100%;
+    height: 60px;
+}
+.mainBox li.boxContent{
+    background-color: #00bdd2;
+    width: 100%;
+    height: 620px;
+    border-radius: 5px;
+    /*box-shadow: 0px 0px 15px 0px #006672;    */
+}
+
+.mainBox h1 {
+    font-weight: 300;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: 2px;
+    margin: 0px;
+    top: 0;
+    width: 100%;
+    text-align: left;
+    word-spacing: -0.3em;
+    padding-top: 0;
+    padding-left: 30px;
+    color: #1c1c1c;
+}
+
+
+.dauBox {
+    list-style: none;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.dauBox h1 {
+    font-weight: 300;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: 2px;
+    margin: 0px;
+    top: 0;
+    width: 100%;
+    text-align: left;
+    word-spacing: -0.3em;
+    padding-top: 0;
+}
+
+.dauBox h2 {
+    font-weight: 300;
+    font-size: 52px;
+    line-height: 1;
+    letter-spacing: 2px;
+    margin: 0;
+    width: 100%;
+    word-spacing: 0.1em;
+    text-align: center;
+    margin-top: 70px;
+}
+
+.dauBox h3 {
+    font-weight: 300;
+    font-size: 33px;
+    line-height: 1;
+    letter-spacing: 2px;
+    margin: 0;
+    width: 100%;
+    word-spacing: -0.3em;
+    text-align: center;
+    margin-top: 55px;
+
+}
+
+.dauBox h4 {
+    color: #fff;
+    font-weight: 300;
+    font-size: 21px;
+    line-height: 1;
+    letter-spacing: 1px;
+    margin: 0;
+    width: 100%;
+    word-spacing: -0.3em;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.dauBox h5 {
+    color: #548400;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 1;
+    letter-spacing: 0px;
+    margin: 0;
+    width: 100%;
+    word-spacing: -0.3em;
+    text-align: center;
+    margin-top: 5px;
+
+}
+
+#yesterBox {width:340px; float:left; position:relative; margin-left:52px;}
+#yesterBox h2 {color:#006e81; font-size:21px; margin-top:70px; letter-spacing:-1px;}
+#yesterBox h3 {color:#006e81; font-size:40px; margin-top:16px; letter-spacing:-1px;}
+#ocbBox h4 {color:#800000; font-size:21px;}
+#ocbBox h4 font {font-size:32px; padding-left:15px; vertical-align:middle;}
+#syrupBox h4 {color:#800000; font-size:21px;}
+#syrupBox h4 font {font-size:32px; padding-left:15px; vertical-align:middle;}
+
+
+.dauBox li {
+    height: 300px;
+    background: #1c1c1c;
+    color: #fff;
+    display: block;
+    float: left;
+    position: relative;
+}
+
+.dauBox li.boxTitle {
+    width: 100%;
+    height: 60px;
+}
+
+.boxTitle h1 strong {
+    font-family: 'dau142';
+    font-weight: 400;
+    font-size: 80%;
+    text-transform: none;
+    word-spacing: 0;
+    letter-spacing: 0;
+    /*opacity: 0.4;*/
+    /*color: #ffffff;*/
+    color: #b4b4b4;
+    margin-left: 10px;
+}
+
+.dauBox li.box1 {
+    background: #00bdd2;
+    width: 1180px;
+    height: 230px;
+    margin-left: 30px;
+}
+
+.dauBox li.box2 {
+    background: #474747;
+    width: 305px;
+    height: 300px
+}
+
+.dauBox li.box3 {
+    background: url(../images/dau/ocb.png) #ff3034 center center no-repeat;
+    background-size: contain;
+    /*width: 386.6px;*/
+    width: 585px;
+    height: 250px;
+    margin-top: 110px;
+    margin-left: 30px;
+    margin-right: 10px;
+    margin-bottom: 30px;
+    /*border: 2px solid #F9F9F9;*/
+    border-radius: 5px;
+    box-shadow: 0px 0px 15px 0px #006672;
+}
+
+.dauBox li.box4 {
+    background: url(../images/dau/syrup.png) #ff8400 center center no-repeat;
+    background-size: contain;
+    width: 585px;
+    height: 250px;
+    margin-top: 110px;
+    margin-right: 10px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 15px 0px #006672;
+}
+
+.dauBox li.box6 {
+    background: #00bdd2;
+    width: 66.1%;
+    height: 620px;
+    margin-right: 20px;
+}
+
+.dauBox li.dauBoxSub {
+    /*background: #000000;*/
+    background: #1c1c1c;
+    width: 32.2%;
+    height: 620px;
+}
+
+.dauBox li.box7 {
+    background: #ff3034;
+    width: 100%;
+    height: 193.33px;
+}
+
+.dauBox li.box8 {
+    background: #ff8400;
+    width: 100%;
+    height: 193.33px;
+    margin-top: 20px;
+}
+
+.dauBox li.box9 {
+    background: #9fcd00;
+    width: 100%;
+    height: 193.33px;
+    margin-top: 20px;
+}
+
+.flipBox {
+    background: darksalmon;
+    height: 300px;
+}
+
+.flipBox h3 {
+    margin-top: 0px;
+}
+.dauTimer {
+    position: absolute;
+    left: 10px;
+    top: 20px;
+}
+.dauTimer span{
+    display: inline;
+    margin-right: -4px;
+}
+.timer-font-c {
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: 2px;
+    width: 100%;
+    text-align: center;
+    word-spacing: -0.3em;
+}
+
+.timer-font-l {
+    color: #006e81;
+    font-size: 30px;
+    /*margin-top: 20px;*/
+}
+
+.timer-font-m {
+    color: #006e81;
+    font-size: 16.5px;
+    /*opacity: 0.4;*/
+}
+
+.timer-font-s {
+    font-size: 24px;
+    margin-top: 33px;
+    margin-bottom: 15px;
+}
+
+.timer-font-d {
+    font-size: 17px;
+    margin-top: 20px;
+}
+
+.num-c {
+    text-align: center;
+    display: block;
+    opacity: 0.5;
+    -webkit-transition: opacity 0.3s ease-in-out;
+    -moz-transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.num-l {
+    font-size: 115px;
+    opacity: 1;
+    margin-top: 10px;
+}
+
+.num-m {
+    font-size: 53px;
+    opacity: 1;
+	/*margin-bottom:80px;*/
+}
+
+.num-s {
+    font-size: 40px;
+    opacity: 0.5;
+    margin-top: 10px;
+}
+
+.num-per-l {
+    font-size: 55px;
+    opacity: 1;
+}
+
+.num-per-m {
+    font-size: 45px;
+    opacity: 1;
+}
+
+.num-per-s {
+    font-size: 36px;
+    opacity: 1;
+}
+
+.weekdays {
+    font-size: 15.5px;
+    /*position:absolute;*/
+    width: 100%;
+    /*top:10px;*/
+    left: 0;
+    text-align: center;
+    letter-spacing: 1.5px;
+
+}
+
+.weekdays span {
+    /*float:left;*/
+    display: inline-block;
+    clear: both;
+    /*opacity: 0.2;*/
+    padding: 0 5px;
+    text-align: center;
+    color: #b4b4b4;
+}
+
+.weekdays span.active {
+    font-family: 'dau152';
+    opacity: 1;
+    color: #ffffff;
+}
+
+/*Temp setting for prototype.*/
+.pastTime h2 {
+    margin-top: 185px;
+}
+
+.d3-graph {
+    /*background: #1f77b4;    *//*d3.scale.category20() https://github.com/mbostock/d3/wiki/Ordinal-Scales*/
+    /*background: #ff0000;*/
+    background: #00bdd2;
+    height: 300px;
+}
+.d3-graph-extra{
+    height: 115px;
+    background: rgb(136,185,223);
+}
+
+/* d3 graph custom css */
+nvd3-stacked-area-chart svg g.tick text {
+    /*fill: red;*/
+}
+
+.nvd3 .nv-axis text {
+  fill:white;
+  /*font-weight: bold;*/
+}
+
+.nvd3 .nv-axis .nv-axisMaxMin text {
+  font-weight: normal;
+}
+
+#totalBox {width:615px; float:left; margin-left:115px;}
+.time {position:absolute; margin:14px auto 0 auto; width:340px; overflow:hidden; height:122px; z-index:100;}
+.time span {float:left; display:inline-block; position:absolute;}
+.man {position:relative; margin:42px auto 0 auto; width:340px; background:#0095a9; height:96px;}
+.man img {z-index:10;}
+.man .bar {background:#fff; float:left; height:102px; z-index:1; position:absolute; top:0;}
+.man_bg {position:absolute; z-index:10; left:0; top:189px;}

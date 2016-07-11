@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.syrup.SmwSyrupDauFunnelsRepository">
+    <select id="getInflRtVisitSituationPerDay" parameterType="JqGridRequest" resultType="SmwSyrupDauFunnels">
+          WITH t AS (SELECT TO_CHAR(TO_DATE(STRD_DT, 'YYYYMMDD'), 'YYYY-MM-DD') || '(' || TO_CHAR(TO_DATE(STRD_DT, 'yyyymmdd'), 'dy') ||')' AS STRD_DT
+                          , CATEGORY, PAGE_ID, MBR_CNT
+                       FROM SMW_D_DAU_USR_ENT_STAT
+                      WHERE STRD_DT BETWEEN #{startDate} AND #{endDate}
+                      ORDER BY STRD_DT, CATEGORY, MBR_CNT DESC
+                    )
+        SELECT STRD_DT
+             , CATEGORY
+             , PAGE_ID
+             , MEASURE_VALUE
+          FROM t UNPIVOT(MEASURE_VALUE FOR MEASURE IN(MBR_CNT))
+    </select>
+</mapper>

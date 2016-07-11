@@ -1,0 +1,41 @@
+<div class="content" ng-controller="service1Ctrl">
+    <div class="row">
+        <h2>D3 line-chart</h2>
+        <nvd3-line-chart
+            data="exampleData1"
+            showXAxis="true"
+            showYAxis="true"
+            tooltips="true"
+            height="300"
+            interactive="true">
+        </nvd3-line-chart>
+    </div>
+
+    <div class="row">
+        <h2>D3 multi-bar-chart</h2>
+        <nvd3-multi-bar-chart
+                data="exampleData2"
+                xAxisTickFormat="xAxisTickFormatFunction()"
+                showXAxis="true"
+                showYAxis="true"
+                height="300">
+            <svg></svg>
+        </nvd3-multi-bar-chart>
+    </div>
+
+    <div class="row">
+        <h2>D3 donut chart</h2>
+        <nvd3-pie-chart
+                data="exampleData3"
+                height="300"
+                x="keyFunction()"
+                y="yFunction()"
+                showLabels="true"
+                donut="true"
+                showLabels="true"
+                donutLabelsOutside="true">
+            <svg height="300"></svg>
+        </nvd3-pie-chart>
+    </div>
+</div>
+<script type="text/javascript" src="resources/app/service1/service1Ctrl.js"></script>

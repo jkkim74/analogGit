@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.syrup.SmwSyrupDauRepository">
+
+    <select id="getSyrupDauForPivotPerWeek" parameterType="JqGridRequest" resultType="RtdDau">
+          WITH t AS (SELECT TO_CHAR(TO_DATE(STRD_DT,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE(STRD_DT,'yyyymmdd'),'dy')||')' AS STRD_DT
+                          , MBR_CNT
+                          , AUTH_MBR_CNT
+                          , CI_MBR_CNT
+                          , OPER_DT
+                       FROM SMW_W_SYRUP_WAU
+                      WHERE STRD_DT
+                      <include refid="SmwCommonMapper.betweenStartDateAndEndDatePerWeek"/>
+                      ORDER BY STRD_DT
+                    )
+        SELECT STRD_DT
+             , DECODE (MEASURE
+                       , 'MBR_CNT','01회원수'
+                       , 'AUTH_MBR_CNT','02인증회원수'
+                       , 'CI_MBR_CNT','03CI회원수'
+                      ) AS MEASURE
+             , MEASURE_VALUE
+          FROM t UNPIVOT (MEASURE_VALUE FOR MEASURE
+                                         IN (MBR_CNT
+                                             , AUTH_MBR_CNT
+                                             , CI_MBR_CNT
+                                            )
+                         )
+    </select>
+    <select id="getSyrupDauForPivotPerMonth" parameterType="JqGridRequest" resultType="RtdDau">
+          WITH t AS (SELECT TO_CHAR(TO_DATE(STRD_YM,'YYYYMM'),'YYYY-MM') AS STRD_DT
+                          , MBR_CNT
+                          , AUTH_MBR_CNT
+                          , CI_MBR_CNT
+                          , OPER_DT
+                       FROM SMW_M_SYRUP_MAU
+                      WHERE STRD_YM BETWEEN #{startDate} AND #{endDate}
+                      ORDER BY STRD_YM
+                    )
+        SELECT STRD_DT
+             , DECODE (MEASURE
+                       , 'MBR_CNT','01회원수'
+                       , 'AUTH_MBR_CNT','02인증회원수'
+                       , 'CI_MBR_CNT','03CI회원수'
+                      ) AS MEASURE
+             , MEASURE_VALUE
+          FROM t UNPIVOT (MEASURE_VALUE FOR MEASURE
+                                         IN (MBR_CNT
+                                             , AUTH_MBR_CNT
+                                             , CI_MBR_CNT
+                                            )
+                         )
+    </select>
+
+</mapper>

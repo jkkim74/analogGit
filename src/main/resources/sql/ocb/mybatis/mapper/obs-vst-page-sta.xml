@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsVstPageStaRepository">
+
+    <select id="getVisitorsPagePerDay" parameterType="JqGridRequest" resultType="ObsVstPageSta">
+        WITH t AS (
+				  SELECT page_id,
+                          TO_CHAR (TO_DATE (std_dt, 'YYYYMMDD'), 'YYYY-MM-DD')|| '('|| TO_CHAR (TO_DATE (std_dt, 'yyyymmdd'), 'dy')|| ')' AS std_dt,
+                          NVL (uv, 0) AS uv,
+                          NVL (lv, 0) AS lv,
+                          NVL (vst_cnt, 0) AS vst_cnt,
+                          NVL (pv, 0) AS pv,
+                          round(NVL (time_spt_f_vst, 0)/1000) AS time_spt_f_vst
+                     FROM obs_d_vst_page_sta
+                    WHERE (std_dt between #{startDate} and #{endDate})
+                      AND poc_ind_cd = '01'
+                 ORDER BY page_id, std_dt)
+        SELECT tt.std_dt as std_dt,
+               tt.page_id as page_id,
+			   nvl(pi.depth_1_nm,' ') as depth_1_nm,
+			   nvl(pi.depth_2_nm,' ') as depth_2_nm,
+			   nvl(pi.depth_3_nm,' ') as depth_3_nm,
+			   nvl(pi.depth_4_nm,' ') as depth_4_nm,
+			   nvl(pi.depth_5_nm,' ') as depth_5_nm,
+               DECODE (measure,
+                       'UV', 'UV',
+                       'PV', 'PV',
+                       'LV', 'LV (login visitor)',
+                       'VST_CNT', '방문횟수',
+                       'TIME_SPT_F_VST', 'Time spent fot visits')
+                  AS measure,
+               measure_value
+          FROM t UNPIVOT (measure_value
+                 FOR measure
+                 IN (uv, lv, pv, vst_cnt, time_spt_f_vst)) tt, obs_page_info pi
+        		WHERE measure = #{measureCode}
+				AND tt.page_id = pi.page_id
+    </select>
+
+    <select id="getVisitorsPagePerWeek" parameterType="JqGridRequest" resultType="ObsVstPageSta">
+        WITH t AS (
+				  SELECT page_id,
+                          TO_CHAR (TO_DATE (std_dt, 'YYYYMMDD'), 'YYYY-MM-DD')|| '('|| TO_CHAR (TO_DATE (std_dt, 'yyyymmdd'), 'dy')|| ')' AS std_dt,
+                          NVL (uv, 0) AS uv,
+                          NVL (lv, 0) AS lv,
+                          NVL (vst_cnt, 0) AS vst_cnt,
+                          NVL (pv, 0) AS pv,
+                          round(NVL (time_spt_f_vst, 0)/1000) AS time_spt_f_vst
+                     FROM obs_w_vst_page_sta
+                    WHERE (std_dt <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />)
+                      AND poc_ind_cd = '01'
+                 ORDER BY page_id, std_dt)
+        SELECT tt.std_dt as std_dt,
+               tt.page_id as page_id,
+			   nvl(pi.depth_1_nm,' ') as depth_1_nm,
+			   nvl(pi.depth_2_nm,' ') as depth_2_nm,
+			   nvl(pi.depth_3_nm,' ') as depth_3_nm,
+			   nvl(pi.depth_4_nm,' ') as depth_4_nm,
+			   nvl(pi.depth_5_nm,' ') as depth_5_nm,
+               DECODE (measure,
+                       'UV', 'UV',
+                       'PV', 'PV',
+                       'LV', 'LV (login visitor)',
+                       'VST_CNT', '방문횟수',
+                       'TIME_SPT_F_VST', 'Time spent fot visits')
+                  AS measure,
+               measure_value
+          FROM t UNPIVOT (measure_value
+                 FOR measure
+                 IN (uv, lv, pv, vst_cnt, time_spt_f_vst)) tt, obs_page_info pi
+        		WHERE measure = #{measureCode}
+				AND tt.page_id = pi.page_id
+    </select>
+
+    <select id="getVisitorsPagePerMonth" parameterType="JqGridRequest" resultType="ObsVstPageSta">
+        WITH t AS (
+				  SELECT page_id,
+                          TO_CHAR (TO_DATE (std_ym, 'YYYYMM'), 'YYYY-MM') AS std_dt,
+                          NVL (uv, 0) AS uv,
+                          NVL (lv, 0) AS lv,
+                          NVL (vst_cnt, 0) AS vst_cnt,
+                          NVL (pv, 0) AS pv,
+                          round(NVL (time_spt_f_vst, 0)/1000) AS time_spt_f_vst
+                     FROM obs_m_vst_page_sta
+                    WHERE (std_ym between #{startDate} and #{endDate})
+                      AND poc_ind_cd = '01'
+                 ORDER BY page_id, std_ym)
+        SELECT tt.std_dt as std_dt,
+               tt.page_id as page_id,
+			   nvl(pi.depth_1_nm,' ') as depth_1_nm,
+			   nvl(pi.depth_2_nm,' ') as depth_2_nm,
+			   nvl(pi.depth_3_nm,' ') as depth_3_nm,
+			   nvl(pi.depth_4_nm,' ') as depth_4_nm,
+			   nvl(pi.depth_5_nm,' ') as depth_5_nm,
+               DECODE (measure,
+                       'UV', 'UV',
+                       'PV', 'PV',
+                       'LV', 'LV (login visitor)',
+                       'VST_CNT', '방문횟수',
+                       'TIME_SPT_F_VST', 'Time spent fot visits')
+                  AS measure,
+               measure_value
+          FROM t UNPIVOT (measure_value
+                 FOR measure
+                 IN (uv, lv, pv, vst_cnt, time_spt_f_vst)) tt, obs_page_info pi
+        		WHERE measure = #{measureCode}
+				AND tt.page_id = pi.page_id
+    </select>
+    <select id="getVisitorTrackingPerDay" parameterType="JqGridRequest" resultType="SankeyAccessLog">
+        SELECT sid, path, referer, time
+        FROM   sankey_accesslog
+        ORDER  BY sid, seq
+    </select>
+</mapper>

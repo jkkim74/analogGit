@@ -1,0 +1,76 @@
+<div class="page-title obj-clear" >
+    <h1 class="pull-left">요약 리포트</h1>
+    <div class="add-bookmark">
+        <favorite-button />
+    </div>
+    <div class="pagenation">
+        요약 리포트
+    </div>
+</div>
+
+<div class="search-select-area obj-clear">
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-white"
+                ng-repeat="type in datePeriodTypes"
+                ng-class="{active:selectedDatePeriodType === type}"
+                data-ng-click="changeDateType(type)">
+            {{type.label}}
+        </button>
+    </div>
+
+    <div class="input-group indicator-select-group none-arrow">
+        <input type="text" class="form-control" value="지표 선택" />
+        <div class="input-group-btn">
+            <button tabindex="-1" class="btn btn-gray indicator-select" type="button" rel="popover"
+                data-trigger="click"
+                data-toggle="popover">
+                <span class="caret"></span>
+            </button>
+        </div>
+    </div>
+    <div class="date-picker-area obj-clear">
+        <div class="date-picker input-append success date">
+            <input class="form-control date-pick" type="text" data-ng-model="selectedDate" id="search-date01"/>
+            <span class="add-on pull-left">
+                <span class="arrow"></span>
+                <i class="fa fa-th"></i>
+            </span>
+        </div>
+    </div>
+    <a href="javascript:void(0);" id="_summaryReportSearchBtn" class="btn btn-search pull-left">조회</a>
+</div>
+
+<!-- popoverContents.tpl.html start -->
+<script type="text/ng-template" id="popoverContents.tpl.html">
+    <div class="select-group">
+        <div class="control-area obj-clear">
+            <p class="selected-result">
+                지표: <span>{{addedMeasures.length}}</span> selected
+            </p>
+            <div class="pull-right">
+                <button class="reset" data-ng-click="selectAllMeasures()">Select All</button>
+                <button class="reset" data-ng-click="clearMeasures()">Clear All</button>
+                <button class="btn btn-round btn-gray01" data-ng-click="applyMeasures()">Apply</button>
+            </div>
+        </div>
+        <ul class="selected-list">
+            <li class="checkbox" ng-repeat="m in addedMeasures">
+                <input id="selected_0{{$index}}" type="checkbox" ng-checked="m.checked"
+                       data-ng-click="selectMeasure(m)">
+                &nbsp;<label for="selected_0{{$index}}">{{m.idxCttCdVal}}</label>
+            </li>
+        </ul>
+        <div class="default-list obj-clear">
+            <div class="list-check" ng-repeat="stack in measureStack" ng-init="stackIndex = $index">
+                <ul>
+                    <li class="checkbox check-default" ng-repeat="measure in stack" ng-init="measureIndex = $index">
+                        <input id="select_{{stackIndex}}{{measureIndex}}" type="checkbox" data-ng-click="selectMeasure(measure)" ng-checked="measure.checked">
+                        <label for="select_{{stackIndex}}{{measureIndex}}">{{measure.idxCttCdVal}}</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- popoverContents.tpl.html end -->

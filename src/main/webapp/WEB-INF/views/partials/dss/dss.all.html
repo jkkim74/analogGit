@@ -1,0 +1,143 @@
+<!-- main content start -->
+<section id="main-content" data-ng-controller="dssAllCtrl" data-ng-init="init()">
+    <article class="wrapper">
+        <div class="row content-wrap">
+            <div class="col-md-12">
+                <div class="page-title obj-clear">
+                    <h1 class="pull-left">모든 보고서</h1>
+                    <div class="add-bookmark btn-group">
+                        <a ui-sref="main.dss.menu({menu: 'add'})">
+                            <button class="btn btn-white btn-report">보고서 등록</button>
+                        </a>
+                    </div>
+
+                    <div class="pagenation">
+                        Home <span>&gt;</span> Dataset Sharing
+                    </div>
+                </div>
+                <div class="search-report-info">
+                    <table summary="조회할 보고서 정보 입력 표(BM 유형, 등록일자, 작성자, 내용)">
+                        <caption>조회할 보고서 정보 입력 표</caption>
+                        <tbody>
+                        <tr>
+                            <th scope="row">BM 유형</th>
+                            <td>
+                                <select data-ng-class="{disable: selectBm.all}" data-ng-disabled="selectBm.all" data-ng-model="selectBm.bm01" data-ng-options="bm.name for bm in bms track by bm.id" name="" class="select">
+                                    <option value="">BM선택 01</option>
+                                </select>
+                                <select data-ng-class="{disable: selectBm.all}" data-ng-disabled="selectBm.all" data-ng-model="selectBm.bm02" data-ng-options="bm.name for bm in bms track by bm.id" name="" class="select">
+                                    <option value="">BM선택 02</option>
+                                </select>
+                                <select data-ng-class="{disable: selectBm.all}" data-ng-disabled="selectBm.all" data-ng-model="selectBm.bm03" data-ng-options="bm.name for bm in bms track by bm.id" name="" class="select">
+                                    <option value="">BM선택 03</option>
+                                </select>
+                                <span class="checkbox">
+                                    <input data-ng-model="selectBm.all" type="checkbox" name="" id="dss01" />
+                                    <label for="dss01">전체</label>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">등록일자</th>
+                            <td>
+                                <div class="date-picker-area obj-clear">
+                                    <div class="date-picker input-append success date">
+                                        <input datepicker-popup="{{format}}" ng-model="selectDay.searchStart" is-open="datePicker.isOpen['searchStart']" ng-required="true" max-date="selectDay.searchEnd" class="form-control date-pick" type="text" readonly>
+                                        <span data-ng-click="openDatePicker($event, 'searchStart')" class="add-on pull-left">
+                                            <span class="arrow"></span>
+                                            <i class="fa fa-th"></i>
+                                        </span>
+                                    </div>
+                                    <span class="to">~</span>
+                                    <div class="date-picker input-append success date">
+                                        <input datepicker-popup="{{format}}" ng-model="selectDay.searchEnd" is-open="datePicker.isOpen['searchEnd']" ng-required="true" min-date="selectDay.searchStart" class="form-control date-pick" type="text" readonly>
+                                        <span data-ng-click="openDatePicker($event, 'searchEnd')" class="add-on pull-left">
+                                            <span class="arrow"></span>
+                                            <i class="fa fa-th"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <span class="checkbox">
+                                    <input data-ng-model="selectDay.all" type="checkbox" name="" id="dss02" />
+                                    <label for="dss02">전체</label>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                작성자
+                            </th>
+                            <td class="search-article"><!--201410수정 : class 추가-->
+                                <input data-ng-model="createName" type="text" class="form-control" name="" title="작성자 입력" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                내용
+                            </th>
+                            <td class="search-article">
+                                <select data-ng-model="contentType" name="" class="select">
+                                    <option value="all">분석주제 + 내용</option>
+                                    <option value="subject">분석주제</option>
+                                    <option value="content">내용</option>
+                                </select>
+                                <input data-ng-model="content" type="text" class="form-control" name="" title="내용 입력" />
+                            </td>
+                        </tr>
+                        <!--201410수정 : tr추가-->
+                        <tr>
+                            <td colspan="2" class="report-control">
+                                <button data-ng-click="searchButton()"  class="btn btn-search">조회</button>
+                                <button data-ng-click="initSearchForm()"  class="btn btn-white btn-return">선택 초기화</button>
+                            </td>
+                        </tr>
+                        <!--//201410수정 : tr추가-->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="report-wrap">
+                    <div class="sub-title obj-clear report-section">
+                        <h2 class="pull-left ">전체 보고서</h2>
+                        <div class="btn-group pull-right">
+                            <button data-ng-class="{'btn-search':  orderBy === 'createDate'}" data-ng-model="orderBy" data-ng-click="orderByCreateDate()" class="btn btn-white" type="button">
+                                최신순
+                            </button>
+                            <button data-ng-class="{'btn-search':  orderBy === 'viewCount'}" data-ng-model="orderBy" data-ng-click="orderByViewCount()" class="btn btn-white" type="button">
+                                인기순
+                            </button>
+                        </div>
+                    </div>
+                    <div class="report-list">
+                        <div infinite-scroll='loadMore()' infinite-scroll-distance='1' infinite-scroll-disabled="infiniteScrolling" infinite-scroll-container="infiniteScrollContainerQuerySelector">
+                            <ul class="report obj-clear">
+                                <li data-ng-repeat="dss in dssList" on-finish-render>
+                                    <a ui-sref="main.dss.detail({dssId:dss.id})">
+                                        <section class="data-summary bg-0{{$index%5 + 1}}">
+                                            <span class="date">{{dss.displayCreateDate}}</span>
+                                            <div class="con">
+                                                <span data-ng-repeat="bm in dss.bmList" class="badge">{{bm.bmName}}</span>
+                                                <h1 class="data-tit">{{dss.subject}}</h1>
+                                            </div>
+                                            <p class="data-description">
+                                                {{dss.content}}
+                                            </p>
+                                            <div class="data-info">
+                                                <ul class="detail obj-clear">
+                                                    <li class="name">{{dss.createUser.fullname}}</li>
+                                                    <li class="count">조회수 <span class="delimiter">|</span> <span class="num">{{dss.viewCount}}</span></li>
+                                                </ul>
+                                            </div>
+                                        </section>
+                                    </a>
+                                    <span class="bg-bottom-line"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+</section>
+<!-- main content end -->
+<script type="text/javascript" src="resources/app/dss/controller/dssAllCtrl.js"></script>

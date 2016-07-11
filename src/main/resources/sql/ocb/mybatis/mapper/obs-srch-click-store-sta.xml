@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsSrchClickStoreStaRepository">
+    <select id="getSearchResultClickStoreForPivotPerDay2" parameterType="JqGridRequest" resultType="ObsSrchClickStoreSta">
+        WITH k AS (
+            SELECT TO_CHAR(TO_DATE(t.std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(t.std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                    MAX (t.store_id) AS store_id,
+                    MAX (tmp.store_nm) AS store_nm,
+                    MAX (t.store_id) ||', '||MAX(tmp.store_nm) AS store_id_nm,
+                    to_char(SUM (t.click_cnt)) AS click_cnt_two,
+                    RANK () OVER (PARTITION BY t.std_dt ORDER BY SUM (t.click_cnt) DESC) AS RANK
+               FROM obs_d_srch_click_store_sta t, tmp_store_info tmp
+              WHERE t.std_dt BETWEEN #{startDate} AND #{endDate}
+              AND t.poc_ind_cd = '01'
+                AND t.store_id = tmp.store_id
+           GROUP BY t.std_dt, t.store_id
+           ORDER BY t.std_dt, SUM (t.click_cnt) DESC, MAX (tmp.store_nm)
+        )
+        SELECT std_dt, rank, decode(measure, 'STORE_ID','STORE_ID','STORE_NM','STORE_NM','STORE_ID_NM','STORE_ID_NM','CLICK_CNT_TWO','CLICK_CNT_TWO') as measure, measure_value
+          FROM k unpivot(measure_value for measure in (store_id, store_nm, store_id_nm, click_cnt_two))
+         WHERE RANK &lt;= 100
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}, rank
+        </if>
+
+    </select>
+    <select id="getSearchResultClickStoreForPivotPerDay" parameterType="JqGridRequest" resultType="ObsSrchClickStoreSta">
+        WITH k AS (
+             SELECT TO_CHAR(TO_DATE(t.std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(t.std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                    MAX (t.store_id) AS store_id,
+                    MAX (tmp.store_nm) AS store_nm,
+                    MAX (t.store_id) ||' '||MAX(tmp.store_nm) AS store_id_nm,
+                    SUM (t.click_cnt) AS click_cnt,
+                    RANK () OVER (PARTITION BY t.std_dt ORDER BY SUM (t.click_cnt) DESC) AS RANK
+               FROM obs_d_srch_click_store_sta t, tmp_store_info tmp
+              WHERE t.std_dt BETWEEN #{startDate} AND #{endDate}
+                AND t.poc_ind_cd = '01'
+                AND t.store_id = tmp.store_id
+           GROUP BY t.std_dt, t.store_id
+           ORDER BY t.std_dt, SUM (t.click_cnt) DESC, MAX (tmp.store_nm))
+        SELECT *
+          FROM k
+         WHERE RANK &lt;= 100
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}, rank
+        </if>
+    </select>
+    <select id="getSearchResultClickStoreForPivotPerWeek" parameterType="JqGridRequest" resultType="ObsSrchClickStoreSta">
+        WITH k AS (
+             SELECT TO_CHAR(TO_DATE(t.std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(t.std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                    MAX (t.store_id) AS store_id,
+                    MAX (tmp.store_nm) AS store_nm,
+                    MAX (t.store_id) ||' '||MAX(tmp.store_nm) AS store_id_nm,
+                    SUM (t.click_cnt) AS click_cnt,
+                    RANK () OVER (PARTITION BY t.std_dt ORDER BY SUM (t.click_cnt) DESC) AS RANK
+               FROM obs_w_srch_click_store_sta t, tmp_store_info tmp
+              WHERE t.std_dt <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />
+                AND t.poc_ind_cd = '01'
+                AND t.store_id = tmp.store_id
+           GROUP BY t.std_dt, t.store_id
+           ORDER BY t.std_dt, SUM (t.click_cnt) DESC, MAX (tmp.store_nm))
+        SELECT *
+          FROM k
+         WHERE RANK &lt;= 100
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}, rank
+        </if>
+    </select>
+    <select id="getSearchResultClickStoreForPivotPerMonth" parameterType="JqGridRequest" resultType="ObsSrchClickStoreSta">
+        WITH k AS (
+             SELECT substr (t.std_ym, 0, 4) || '-' || substr (t.std_ym, 5, 2) AS std_dt,
+                    MAX (t.store_id) AS store_id,
+                    MAX (tmp.store_nm) AS store_nm,
+                    MAX (t.store_id) ||' '||MAX(tmp.store_nm) AS store_id_nm,
+                    SUM (t.click_cnt) AS click_cnt,
+                    RANK () OVER (PARTITION BY t.std_ym ORDER BY SUM (t.click_cnt) DESC) AS RANK
+               FROM obs_m_srch_click_store_sta t, tmp_store_info tmp
+              WHERE t.std_ym BETWEEN #{startDate} AND #{endDate}
+                AND t.poc_ind_cd = '01'
+                AND t.store_id = tmp.store_id
+           GROUP BY t.std_ym, t.store_id
+           ORDER BY t.std_ym, SUM (t.click_cnt) DESC, MAX (tmp.store_nm))
+        SELECT *
+          FROM k
+         WHERE RANK &lt;= 100
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}, rank
+        </if>
+    </select>
+    <select id="getSearchResultClickStoreForGridPerDay" parameterType="JqGridRequest" resultType="ObsSrchClickStoreSta">
+        WITH k AS (
+             SELECT TO_CHAR(TO_DATE(t.std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(t.std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                    MAX (t.store_id) AS store_id,
+                    MAX (tmp.store_nm) AS store_nm,
+                    SUM (t.click_cnt) AS click_cnt,
+                    RANK () OVER (PARTITION BY t.std_dt ORDER BY SUM (t.click_cnt) DESC) AS RANK
+               FROM obs_d_srch_click_store_sta t, tmp_store_info tmp
+              WHERE t.std_dt BETWEEN #{startDate} AND #{endDate}
+                AND t.poc_ind_cd = '01'
+                AND t.store_id = tmp.store_id
+           GROUP BY t.std_dt, t.store_id
+           ORDER BY t.std_dt, SUM (t.click_cnt) DESC, MAX (tmp.store_nm))
+        SELECT *
+          FROM k
+         WHERE RANK &lt;= 100
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}, rank
+        </if>
+    </select>
+    <select id="getSearchResultClickStoreForGridPerWeek" parameterType="JqGridRequest" resultType="ObsSrchClickStoreSta">
+        WITH k AS (
+             SELECT TO_CHAR(TO_DATE(t.std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(t.std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+                    MAX (t.store_id) AS store_id,
+                    MAX (tmp.store_nm) AS store_nm,
+                    SUM (t.click_cnt) AS click_cnt,
+                    RANK () OVER (PARTITION BY t.std_dt ORDER BY SUM (t.click_cnt) DESC) AS RANK
+               FROM obs_w_srch_click_store_sta t, tmp_store_info tmp
+              WHERE t.std_dt <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />
+                AND t.poc_ind_cd = '01'
+                AND t.store_id = tmp.store_id
+           GROUP BY t.std_dt, t.store_id
+           ORDER BY t.std_dt, SUM (t.click_cnt) DESC, MAX (tmp.store_nm))
+        SELECT *
+          FROM k
+         WHERE RANK &lt;= 100
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}, rank
+        </if>
+    </select>
+    <select id="getSearchResultClickStoreForGridPerMonth" parameterType="JqGridRequest" resultType="ObsSrchClickStoreSta">
+        WITH k AS (
+             SELECT substr (t.std_ym, 0, 4) || '-' || substr (t.std_ym, 5, 2) AS std_dt,
+                    MAX (t.store_id) AS store_id,
+                    MAX (tmp.store_nm) AS store_nm,
+                    SUM (t.click_cnt) AS click_cnt,
+                    RANK () OVER (PARTITION BY t.std_ym ORDER BY SUM (t.click_cnt) DESC) AS RANK
+               FROM obs_m_srch_click_store_sta t, tmp_store_info tmp
+              WHERE t.std_ym BETWEEN #{startDate} AND #{endDate}
+                AND t.poc_ind_cd = '01'
+                AND t.store_id = tmp.store_id
+           GROUP BY t.std_ym, t.store_id
+           ORDER BY t.std_ym, SUM (t.click_cnt) DESC, MAX (tmp.store_nm))
+        SELECT *
+          FROM k
+         WHERE RANK &lt;= 100
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}, rank
+        </if>
+    </select>
+</mapper>

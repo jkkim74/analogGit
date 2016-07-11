@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.tmap.TmapMonKpiStcRepository">
+
+    <select id="getMonthKpiManagement" parameterType="JqGridRequest" resultType="TmapMonKpiStc">
+		with t1 as (
+			select strd_ym, kpi_cd, trgt_uv, rslt_uv, uv_achiv_rt
+			from tmap_mon_kpi_stc
+			where strd_ym between  #{startDate} AND #{endDate}
+			order by strd_ym
+		),
+		t2 as (
+			select strd_ym, kpi_cd, trgt_avg_use_dt_cnt, rslt_avg_use_dt_cnt, use_dt_cnt_achiv_rt
+			from tmap_mon_kpi_stc
+			where strd_ym between  #{startDate} AND #{endDate}
+			order by strd_ym
+		),
+		result as (
+		select 	TO_CHAR(TO_DATE(t1.strd_ym, 'yyyymm'),'yyyy-mm') AS strd_ym,
+				max('1목표') AS kpi_sort,
+				max(decode(t1.kpi_cd,'04', t1.trgt_uv)) AS uv_active_uv,
+				max(decode(t1.kpi_cd,'02', t1.trgt_uv)) AS uv_tmap,
+				max(decode(t1.kpi_cd,'03', t1.trgt_uv)) AS uv_tmap_public,
+				max(decode(t2.kpi_cd,'04', t2.trgt_avg_use_dt_cnt)) AS avg_active_uv,
+				max(decode(t2.kpi_cd,'02', t2.trgt_avg_use_dt_cnt)) AS avg_tmap,
+				max(decode(t2.kpi_cd,'03', t2.trgt_avg_use_dt_cnt)) AS avg_tmap_public
+		from t1, t2
+		where t1.strd_ym = t2.strd_ym
+		and t1.kpi_cd = t2.kpi_cd
+		group by t1.strd_ym
+		union all
+		select 	TO_CHAR(TO_DATE(t1.strd_ym, 'yyyymm'),'yyyy-mm') AS strd_ym,
+				max('2실적') AS kpi_sort,
+				max(decode(t1.kpi_cd,'04', t1.rslt_uv)) AS uv_active_uv,
+				max(decode(t1.kpi_cd,'02', t1.rslt_uv)) AS uv_tmap,
+				max(decode(t1.kpi_cd,'03', t1.rslt_uv)) AS uv_tmap_public,
+				max(decode(t2.kpi_cd,'04', ROUND(t2.rslt_avg_use_dt_cnt,1))) AS avg_active_uv,
+				max(decode(t2.kpi_cd,'02', ROUND(t2.rslt_avg_use_dt_cnt,1))) AS avg_tmap,
+				max(decode(t2.kpi_cd,'03', ROUND(t2.rslt_avg_use_dt_cnt,1))) AS avg_tmap_public
+		from t1, t2
+		where t1.strd_ym = t2.strd_ym
+		and t1.kpi_cd = t2.kpi_cd
+		group by t1.strd_ym
+		union all
+		select 	TO_CHAR(TO_DATE(t1.strd_ym, 'yyyymm'),'yyyy-mm') AS strd_ym,
+				max('3달성율(%)') AS kpi_sort,
+				max(decode(t1.kpi_cd,'04', ROUND(t1.uv_achiv_rt * 100, 0))) AS uv_active_uv,
+				max(decode(t1.kpi_cd,'02', ROUND(t1.uv_achiv_rt * 100, 0))) AS uv_tmap,
+				max(decode(t1.kpi_cd,'03', ROUND(t1.uv_achiv_rt * 100, 0))) AS uv_tmap_public,
+				max(decode(t2.kpi_cd,'04', ROUND(t2.use_dt_cnt_achiv_rt * 100, 1))) AS avg_active_uv,
+				max(decode(t2.kpi_cd,'02', ROUND(t2.use_dt_cnt_achiv_rt * 100, 1))) AS avg_tmap,
+				max(decode(t2.kpi_cd,'03', ROUND(t2.use_dt_cnt_achiv_rt * 100, 1))) AS avg_tmap_public
+		from t1, t2
+		where t1.strd_ym = t2.strd_ym
+		and t1.kpi_cd = t2.kpi_cd
+		group by t1.strd_ym
+		)
+		select strd_ym
+		 	  ,subStr(kpi_sort, 2) AS kpi
+		 	  ,uv_active_uv
+		 	  ,uv_tmap
+		 	  ,uv_tmap_public
+		 	  ,avg_active_uv
+		 	  ,avg_tmap
+		 	  ,avg_tmap_public
+		from result
+		order by strd_ym desc, kpi_sort
+   </select>
+</mapper>

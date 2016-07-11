@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.sankey.SankeyRepository">
+
+    <select id="getSankeyDataSet_bak2" parameterType="SankeyRequest" resultType="SankeyResponse">
+      SELECT SITE,
+             SERVICE,
+             DEPTH,
+             SOURCE,
+             TARGET,
+             sum(VALUE) VALUE
+        FROM SANKEY_DATA
+       WHERE KEY_DATE BETWEEN #{startDate} AND #{endDate}
+         AND SITE = #{site}
+         AND SERVICE = #{service}
+    GROUP BY site, service, depth, source, target
+    ORDER BY site, service, depth, source, target
+   </select>
+
+   <select id="getSankeyDataSet_bak" parameterType="SankeyRequest" resultType="SankeyResponse">
+      SELECT sd.SITE AS SITE,
+             sd.SERVICE AS SERVICE,
+             sd.DEPTH AS DEPTH,
+             sni1.PATH AS SOURCE,
+             sni2.PATH AS TARGET,
+             sum(sd.VALUE) VALUE
+        FROM SANKEY_DATA_BAK sd, SANKEY_NODES_INFO_BAK sni1, SANKEY_NODES_INFO_BAK sni2
+       WHERE sd.KEY_DATE BETWEEN #{startDate} AND #{endDate}
+         AND sd.SITE = #{site}
+         AND sd.SERVICE = #{service}
+         AND sd.SITE = sni1.SITE
+         AND sd.SITE = sni2.SITE
+         AND sd.SERVICE = sni1.SERVICE
+         AND sd.SERVICE = sni2.SERVICE
+         AND sd.SOURCE = sni1.ID
+         AND sd.TARGET = sni2.ID
+    GROUP BY sd.site, sd.service, sd.depth, sni1.PATH, sni2.PATH
+    ORDER BY sd.site, sd.service, sd.depth, sni1.PATH, sni2.PATH
+   </select>
+
+   <select id="getSankeyDataSet" parameterType="SankeyRequest" resultType="SankeyResponse">
+        WITH t AS (
+          SELECT
+            SITE    AS SITE,
+            SERVICE AS SERVICE,
+            DEPTH   AS DEPTH,
+            SOURCE  AS SOURCE,
+            TARGET  AS TARGET,
+            sum(VALUE) VALUE
+          FROM SANKEY_DATA
+          WHERE KEY_DATE BETWEEN #{startDate} AND #{endDate}
+                AND SITE = #{site}
+                AND SERVICE = #{service}
+                AND TYPE = #{type}
+                AND DEPTH = 1
+                AND value &gt; #{minValue}
+          GROUP BY SITE, SERVICE, DEPTH, SOURCE, TARGET
+          UNION ALL
+          SELECT
+            SITE    AS SITE,
+            SERVICE AS SERVICE,
+            DEPTH   AS DEPTH,
+            SOURCE  AS SOURCE,
+            TARGET  AS TARGET,
+            sum(VALUE) VALUE
+          FROM SANKEY_DATA
+          WHERE KEY_DATE BETWEEN #{startDate} AND #{endDate}
+                AND SITE = #{site}
+                AND SERVICE = #{service}
+                AND TYPE = 'page'
+                AND DEPTH != 1
+                AND DEPTH &lt; #{maxDepth}
+                AND value &gt; #{minValue}
+          GROUP BY SITE, SERVICE, DEPTH, SOURCE, TARGET
+        )
+        SELECT
+          sd.SITE    AS SITE,
+          sd.SERVICE AS SERVICE,
+          sd.DEPTH   AS DEPTH,
+          sni1.PATH  AS SOURCE,
+          sni2.PATH  AS TARGET,
+          sd.VALUE      VALUE
+        FROM t sd, SANKEY_NODES_INFO sni1, SANKEY_NODES_INFO sni2
+        WHERE sd.SITE = sni1.SITE
+              AND sd.SITE = sni2.SITE
+              AND sd.SERVICE = sni1.SERVICE
+              AND sd.SERVICE = sni2.SERVICE
+              AND sd.SOURCE = sni1.ID
+              AND sd.TARGET = sni2.ID
+        ORDER BY sd.site, sd.service, sd.depth, sni1.seq, sni2.seq
+   </select>
+</mapper>

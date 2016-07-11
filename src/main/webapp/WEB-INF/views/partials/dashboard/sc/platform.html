@@ -1,0 +1,12 @@
+<div ng-controller="platformCtrl" data-ng-init="init()" ng-style="style()" resize>
+    <dashboard-bm-search-box search-callback="search" class="report-search-box" search-config="searchConfig" menu-context="menuContext" searchBoxHieght="searchBoxHieght"></dashboard-bm-search-box>
+    <div class="non-sub-title obj-section">
+        <div class="btn-group">
+            <dashboard-bm-sub-nav excelConfig="excelConfig"></dashboard-bm-sub-nav>
+        </div>
+    </div>
+    <div class="data-area jq-board jq-board03" ng-style="dataAreaStyle('summary')" resize>
+        <div id="platformForGrid" class="jqGridTableContainer" report-indicator="pageState"></div>
+    </div>
+</div>
+<script type="text/javascript" src="resources/app/dashboard/sc/platformCtrl.js"></script>

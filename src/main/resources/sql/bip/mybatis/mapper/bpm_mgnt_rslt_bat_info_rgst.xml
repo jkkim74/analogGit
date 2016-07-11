@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.BpmMgntRsltBatInfoRgstRepository">
+    <select id="getAllBpmMgntRsltBatInfoRgst" resultType="BpmMgntRsltBatInfoRgst">
+        SELECT s.svc_nm, b.day_obj_yn, b.wk_obj_yn, b.mth_obj_yn, b.day_rcv_itm_cnt, 'D-'||b.disp_strd_cd as disp_strd_cd, b.day_rcv_expt_tm,
+               b.wk_rcv_expt_cnt, b.wk_rcv_expt_dow_cd, c.comm_cd_nm  wk_rcv_expt_dow_cd_nm, b.wk_rcv_expt_tm, b.mth_rcv_itm_cnt, b.mth_rcv_expt_day, b.mth_rcv_expt_tm
+        FROM   EISUSER.BPM_MGNT_RSLT_BAT_INFO_RGST b, EISUSER.COM_SVC s, EISUSER.COM_COMM_CD c
+        WHERE  b.svc_id = s.svc_id
+		AND    b.wk_rcv_expt_dow_cd = c.comm_cd_id(+)
+        AND    c.comm_cd_grp_id(+) ='PBPM_C_00008'
+    </select>
+</mapper>

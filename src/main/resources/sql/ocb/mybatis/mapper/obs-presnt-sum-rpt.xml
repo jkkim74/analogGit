@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsPresntSumRptRepository">
+    <select id="getPointPresentSum" parameterType="JqGridRequest" resultType="ObsPresntSumRpt">
+        SELECT
+              <choose>
+                  <when test="dateType.value() == 'month'">
+                      SUBSTR(TO_CHAR (TO_DATE (stndrd_dt, 'yyyymmdd'), 'yyyy-mm-dd'), 1, 7) AS stndrd_dt,
+                  </when>
+                  <otherwise>
+                      TO_CHAR(TO_DATE(stndrd_dt, 'YYYYMMDD'), 'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE(stndrd_dt, 'yyyymmdd'), 'dy')|| ')' AS stndrd_dt,
+                  </otherwise>
+              </choose>
+               presnt_snd_acm_cust_cnt,
+               presnt_snd_cust_cnt,
+               presnt_snd_tr_cnt,
+               presnt_snd_pnt_sum,
+               presnt_snd_acm_pnt_sum,
+               presnt_rcv_acm_cust_cnt,
+               presnt_rcv_cust_cnt,
+               presnt_rcv_tr_cnt,
+               presnt_rcv_pnt_sum,
+               entr_rqst_cust_cnt,
+               yachv_cust_cnt,
+               yachv_acm_cust_cnt,
+               own_pnt_use_acm_cust_cnt,
+               own_pnt_use_cust_cnt,
+               own_pnt_use_tr_cnt,
+               own_pnt_use_pnt_sum,
+               own_pnt_use_acm_pnt_sum,
+               oth_pnt_use_acm_cust_cnt,
+               oth_pnt_use_cust_cnt,
+               oth_pnt_use_tr_cnt,
+               oth_pnt_use_pnt_sum,
+               oth_pnt_use_acm_pnt_sum
+          FROM obs_presnt_sum_rpt
+         WHERE stndrd_dt BETWEEN #{startDate} AND #{endDate}
+           AND
+              <choose>
+                  <when test="dateType.value() == 'month'">
+                    cyl_ind_cd = 'M'
+                  </when>
+                  <when test="dateType.value() == 'week'">
+                    cyl_ind_cd = 'W'
+                  </when>
+                  <otherwise>
+                    cyl_ind_cd = 'D'
+                  </otherwise>
+              </choose>
+           AND tot_yn = 0
+      ORDER BY stndrd_dt
+    </select>
+</mapper>

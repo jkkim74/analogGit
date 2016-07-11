@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsActvJoinsRptRepository">
+
+    <select id="getActivityJoinsReportPerDay" parameterType="JqGridRequest" resultType="ObsActvJoinsRpt">
+    </select>
+    <select id="getActivityJoinsReportPerWeek" parameterType="JqGridRequest" resultType="ObsActvJoinsRpt">
+    </select>
+    <select id="getActivityJoinsReportPerMonth" parameterType="JqGridRequest" resultType="ObsActvJoinsRpt">
+        WITH t
+             AS (SELECT TO_CHAR (TO_DATE (stndrd_ym, 'yyyymm'), 'yyyy-mm') AS stndrd_ym,
+			 			rpt_ind_cd||rpt_ind_nm AS rpt_ind_nm,
+						rpt_ind_detl_cd||rpt_ind_detl_nm AS rpt_ind_detl_nm,
+                        nvl(actv_joins_cnt,0) AS actv_joins_cnt
+                   FROM obs_actv_joins_rpt
+				  WHERE stndrd_ym BETWEEN #{startDate} AND #{endDate}
+		       ORDER BY stndrd_ym, rpt_ind_cd, rpt_ind_detl_cd)
+        SELECT stndrd_ym,
+			   rpt_ind_nm,
+			   rpt_ind_detl_nm,
+               measure_value
+          FROM t UNPIVOT (measure_value FOR measure IN (actv_joins_cnt))
+    </select>
+</mapper>

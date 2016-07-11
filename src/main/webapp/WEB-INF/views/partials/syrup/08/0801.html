@@ -1,0 +1,15 @@
+<div ng-controller="sankeyCtrl" data-ng-init="init()" resize>
+    <sankey-search-box search-callback="search" menu-context="menuContext" search-config="searchConfig"></sankey-search-box>
+    <div class="data-area">
+        <div data-ng-if="receiveRawData == null">
+            <h2>{{sankeyChartMsg}}</h2>
+        </div>
+        <div id="sankeyChart"></div>
+    </div>
+</div>
+<link href="resources/css/d3.sankey.css" rel="stylesheet"/>
+<link href="resources/css/d3-tip.min.css" rel="stylesheet"/>
+<script type="text/javascript" src="/resources/d3/plugins/sankey/sankey-custom.js"></script>
+<script type="text/javascript" src="resources/d3/plugins/tip/d3-tip.min.js"></script>
+
+<script type="text/javascript" src="resources/app/ocb/visit/sankeyCtrl.js"></script>

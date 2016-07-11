@@ -1,0 +1,194 @@
+<div class="col-md-12" ng-controller="userRoleMenuCtrl" data-ng-init="init()" style="height: 700px">
+    <div class="page-title obj-clear">
+        <h1 class="pull-left">{{menuContext.menu.name}}</h1>
+        <div class="pagenation">
+            {{menuContext.category.name}} <span>&gt;</span> {{menuContext.menu.name}}
+        </div>
+    </div>
+    <div class="search-select-area obj-clear">
+        <div class="select-box">
+            <label for="searchedUser1" class="text-check">사번</label>
+            <input id="searchedUser1" class="select" type="text" data-ng-click="activeUserModal()" data-ng-model="searchedUser" />
+        </div>
+        <a href="javascript:void(0);" class="btn btn-search pull-left" ng-disabled="!searchedUser" data-ng-click="searchUserRoleMenu()" id="adminRoleSearchBtn">조회</a>
+    </div>
+
+    <div class="data-area jq-board" >
+        <div class="page-body-title">
+            <h2>권한</h2>
+        </div>
+       <jq-grid config="userRoleForGridConfig" id="userRoleForGrid"></jq-grid>
+        <div class="page-body-title">
+            <h2>메뉴</h2>
+        </div>
+        <jq-grid config="userMenuForGridConfig" id="userMenuForGrid"></jq-grid>
+        <div class="mar-t10 pull-right">
+            <button class="btn btn-warning basic" id="registUserRole" ng-disabled="!searchedUser" data-ng-click="activeUserRoleModal();">사용자 권한 등록</button>
+            <button class="btn btn-warning basic mar-l10" id="registUserMenu" ng-disabled="!searchedUser" data-ng-click="activeUserMenuModal();">사용자 메뉴 권한 등록</button>
+            <button class="btn btn-warning basic" id="removeUserRole" ng-disabled="!searchedUser" data-ng-click="removeUserRole();">사용자 권한 삭제</button>
+            <button class="btn btn-warning basic" id="removeUserMenu" ng-disabled="!searchedUser" data-ng-click="removeUserMenu();">사용자 메뉴 권한 삭제</button>
+        </div>
+    </div>
+
+    <div id="userSearchModal" class="modal fade bookmark-modal" tabindex="-1" role="dialog" aria-labelledby="data_widget_addLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <section class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h1 class="modal-title" id="userSearchModalLabel">사용자 선택</h1>
+                </div>
+                <div class="select-text mar-b10">
+                    <label for="searchedText" class="text-check">사용자명 :</label>
+                    <input id="searchedText" class="select" type="text" data-ng-model="searchedText" />
+                    <a href="javascript:void(0);" class="btn btn-search" ng-disabled="!searchedText" data-ng-click="searchUser()" id="userSearchBtn">검색</a>
+                </div>
+                <div class="modal-body">
+                    <div class="data-table" style="margin-top:10px;">
+                        <table class="table">
+                            <colgroup>
+                                <col style="width:5%;">
+                                <col style="width:30%;">
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>
+                                    <span class="checkbox only">
+                                        <input type="checkbox" name="" id="basic01">
+                                        <label for="basic01"></label>
+                                    </span>
+                                </th>
+                                <th>이름</th>
+                                <th>조직</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="orgUser in OrgUsers">
+                                <td>
+                                    <span class="checkbox only">
+                                        <input type="checkbox" name="chk_user" id="chk_user_{$index}}" value="{{orgUser.loginId}}">
+                                        <label for="chk_user_{$index}}"></label>
+                                    </span>
+                                </td>
+                                <td>{{orgUser.userNm}}</td>
+                                <td>{{orgUser.orgNm}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="control-area">
+                    <button class="btn btn-gray" data-ng-click="cancelUserSearchl()">취소</button>
+                    <button class="btn btn-orange" ng-disabled="!OrgUsers.length" data-ng-click="addSearchUser()">적용</button>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- 사용자별 권한 등록 모달 -->
+    <div id="userRoleModal" class="modal fade custom-modal in" tabindex="-1" role="dialog" aria-labelledby="userRoleModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <section class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h1 class="modal-title" id="userRoleModalLabel">사용자 권한 등록</h1>
+                </div>
+                <div class="modal-body">
+                    <div class="data-table hover-table" style="margin-top:10px;">
+                        <table class="table">
+                            <colgroup>
+                                <col style="width:5%;">
+                                <col style="width:10%;">
+                                <col style="width:30%;">
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>
+                                    <span class="checkbox only">
+                                        <input type="checkbox" name="" id="border01">
+                                        <label for="border01"></label>
+                                    </span>
+                                </th>
+                                <th>ID</th>
+                                <th>권한명</th>
+                                <th>권한설명</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="role in roles">
+                                <td>
+                                    <span class="checkbox only">
+                                        <input type="checkbox" name="chk_role" id="chk_role_{{$index}}" value="{{role.id}}">
+                                        <label for="chk_role_{{$index}}"></label>
+                                    </span>
+                                </td>
+                                <td>{{role.id}}</td>
+                                <td>{{role.name}}</td>
+                                <td>{{role.description}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="obj-section">
+                        <button class="btn btn-danger basic text-right" data-ng-click="addUserRole()">등록</button>
+                   </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- 사용자별 권한 등록 모달 -->
+    <!-- 사용자별 메뉴 권한 등록 모달 -->
+    <div id="userMenuModal" class="modal fade custom-modal in" tabindex="-1" role="dialog" aria-labelledby="userMenuModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <section class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h1 class="modal-title" id="userMenuModallLabel">사용자 메뉴 권한 등록</h1>
+                </div>
+                <div class="modal-body">
+                    <div class="data-table hover-table" style="margin-top:10px;">
+                        <table class="table">
+                            <colgroup>
+                                <col style="width:5%;">
+                                <col style="width:15%;">
+                                <col style="width:20%;">
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>
+                                    <span class="checkbox only">
+                                        <input type="checkbox" name="" id="border02">
+                                        <label for="border02"></label>
+                                    </span>
+                                </th>
+                                <th>서비스</th>
+                                <th>레벨</th>
+                                <th>경로명(서비스>카테고리>메뉴)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="menu in menus">
+                                <td>
+                                    <span class="checkbox only">
+                                        <input type="checkbox" name="chk_menu" id="chk_menu_{{$index}}" value="{{menu.id}}">
+                                        <label for="chk_menu_{{$index}}"></label>
+                                    </span>
+                                </td>
+                                <td>{{menu.rootName}}</td>
+                                <td>{{menu.menuLevel}}</td>
+                                <td>{{menu.pathName}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="obj-section">
+                        <button class="btn btn-danger basic text-right" data-ng-click="addUserMenu()">등록</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- 사용자별 메뉴 권한 등록 모달 -->
+</div>
+<script type="text/javascript" src="resources/app/admin/role/userRoleMenuCtrl.js"></script>

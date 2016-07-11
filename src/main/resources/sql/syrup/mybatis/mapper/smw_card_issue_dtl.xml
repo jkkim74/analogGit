@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.syrup.SmwCardIssueDtlRepository">
+    <select id="getCardIssueMem" parameterType="JqGridRequest" resultType="SmwCardIssueDtl">
+        <![CDATA[
+            SELECT CARD_NAME, OPEN_DT, TOT_ISSUE_CNT, DAY_ISSUE_CNT, CARD_EXEC_CNT, CARD_EXEC_USER_CNT, PNT_QRY_EXEC_CNT, PNT_QRY_EXEC_USER_CNT, PAGE_QRY_CNT, PAGE_QRY_USER_CNT
+            FROM (
+                SELECT /*+ FULL(SMW_D_CARD_ISSUE_DTL) */ CARD_NAME
+                     , TO_CHAR(TO_DATE(OPEN_DT, 'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE(OPEN_DT, 'yyyymmdd'), 'dy')||')' AS OPEN_DT
+                     , SUM(CASE WHEN STRD_DT = #{endDate} THEN TOT_ISSUE_CNT ELSE 0 END) AS TOT_ISSUE_CNT
+                     , SUM(DAY_ISSUE_CNT) AS DAY_ISSUE_CNT
+                     , SUM(CARD_EXEC_CNT) AS CARD_EXEC_CNT
+                     , SUM(CARD_EXEC_USER_CNT) AS CARD_EXEC_USER_CNT
+                     , SUM(PNT_QRY_EXEC_CNT) AS PNT_QRY_EXEC_CNT
+                     , SUM(PNT_QRY_EXEC_USER_CNT) AS PNT_QRY_EXEC_USER_CNT
+                     , SUM(PAGE_QRY_CNT) AS PAGE_QRY_CNT
+                     , SUM(PAGE_QRY_USER_CNT) AS PAGE_QRY_USER_CNT
+                FROM  SMW_D_CARD_ISSUE_DTL
+                WHERE STRD_DT BETWEEN #{startDate} AND #{endDate}
+                AND   MEM_CARD_CL_CD = '01'
+                GROUP BY CARD_NAME, OPEN_DT
+            )
+            ORDER BY TOT_ISSUE_CNT DESC, CARD_NAME, OPEN_DT
+      ]]>
+    </select>
+    <select id="getCardIssuePaVou" parameterType="JqGridRequest" resultType="SmwCardIssueDtl">
+        <![CDATA[
+            SELECT CARD_NAME, OPEN_DT, TOT_ISSUE_CNT, DAY_ISSUE_CNT, CARD_EXEC_CNT, CARD_EXEC_USER_CNT, PNT_QRY_EXEC_CNT, PNT_QRY_EXEC_USER_CNT, PAGE_QRY_CNT, PAGE_QRY_USER_CNT
+            FROM (
+                SELECT /*+ FULL(SMW_D_CARD_ISSUE_DTL) */ CARD_NAME
+                     , TO_CHAR(TO_DATE(OPEN_DT, 'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE (OPEN_DT, 'yyyymmdd'), 'dy')||')' AS OPEN_DT
+                     , SUM(CASE WHEN STRD_DT = #{endDate} THEN TOT_ISSUE_CNT ELSE 0 END) AS TOT_ISSUE_CNT
+                     , SUM(DAY_ISSUE_CNT) AS DAY_ISSUE_CNT
+                     , SUM(CARD_EXEC_CNT) AS CARD_EXEC_CNT
+                     , SUM(CARD_EXEC_USER_CNT) AS CARD_EXEC_USER_CNT
+                     , SUM(PNT_QRY_EXEC_CNT) AS PNT_QRY_EXEC_CNT
+                     , SUM(PNT_QRY_EXEC_USER_CNT) AS PNT_QRY_EXEC_USER_CNT
+                     , SUM(PAGE_QRY_CNT) AS PAGE_QRY_CNT
+                     , SUM(PAGE_QRY_USER_CNT) AS PAGE_QRY_USER_CNT
+                FROM  SMW_D_CARD_ISSUE_DTL
+                WHERE STRD_DT BETWEEN #{startDate} AND #{endDate}
+                AND   MEM_CARD_CL_CD = '02'
+                GROUP BY CARD_NAME, OPEN_DT
+            )
+            ORDER BY TOT_ISSUE_CNT DESC, CARD_NAME, OPEN_DT
+      ]]>
+    </select>
+</mapper>

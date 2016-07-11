@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.CommonCodeRepository">
+    <select id="getCommonCodeByName" parameterType="String" resultType="CommonCode">
+        SELECT id, name, description, delete_yn
+        FROM   common_code
+        WHERE  name = #{name}
+    </select>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.DssRepository">
+
+    <insert id="addDssComment" parameterType="DssComment">
+        INSERT INTO DSS_COMMENT
+            (
+            ID,
+            DSS_ID,
+            "COMMENT",
+            CREATE_ID,
+            CREATE_DATE
+            )
+        VALUES
+            (
+            DSS_COMMENT_SEQ.nextval,
+            #{dssId},
+            #{comment},
+            #{createId},
+            to_char(sysdate,'YYYYMMDDHH24MISS')
+            )
+    </insert>
+
+    <select id="getDssComments" parameterType="Long" resultType="DssComment">
+        SELECT
+            ID,
+            DSS_ID,
+            "COMMENT",
+            CREATE_ID,
+            (SELECT fullname FROM bip_user WHERE username = create_id AND delete_yn = 'N') create_name,
+            CREATE_DATE
+        FROM
+            DSS_COMMENT
+        WHERE
+            DELETE_YN = 'N'
+            AND DSS_ID = #{dssId}
+        ORDER BY ID ASC
+    </select>
+
+    <update id="updateDssComment" parameterType="DssComment">
+        UPDATE DSS_COMMENT SET
+            "COMMENT" = #{comment},
+            UPDATE_DATE = to_char(sysdate,'YYYYMMDDHH24MISS'),
+            UPDATE_ID = #{updateId}
+        WHERE
+            ID = #{id}
+    </update>
+
+    <update id="deleteDssComment" parameterType="java.util.Map">
+        UPDATE DSS_COMMENT SET
+        DELETE_YN = 'Y',
+        UPDATE_DATE = to_char(sysdate,'YYYYMMDDHH24MISS'),
+        UPDATE_ID = #{updateId}
+        WHERE
+        DELETE_YN = 'N'
+        AND ID = #{dssCommentId}
+    </update>
+</mapper>

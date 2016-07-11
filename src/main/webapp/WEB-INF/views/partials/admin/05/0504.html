@@ -1,0 +1,15 @@
+<div class="col-md-12" ng-controller="menuInfoCtrl" data-ng-init="init()" ng-style="styleNoTab(-150)" resize table-id="tableId">
+    <div class="page-title obj-clear">
+        <h1 class="pull-left">{{menuContext.menu.name}}</h1>
+        <div class="pagenation">
+            {{menuContext.category.name}} <span>&gt;</span> {{menuContext.menu.name}}
+        </div>
+    </div>
+    <div class="search-select-area obj-clear">
+    </div>
+    <div class="data-area jq-board" ng-style="dataAreaStyleNoTab(20)" resize>
+        <div id="menuInfoForGrid" report-indicator="pageState"></div>
+    </div>
+
+</div>
+<script type="text/javascript" src="resources/app/admin/role/menuInfoCtrl.js"></script>

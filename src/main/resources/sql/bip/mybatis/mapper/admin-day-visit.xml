@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.StatisticsRepository">
+    <select id="getDayVisitor" parameterType="JqGridRequest" resultType="DayVisitor">
+        SELECT TO_CHAR(TO_DATE(SUBSTR(ACL.LAST_UPDATE, 1, 8),'YYYYMMDD'),'YYYY-MM-DD') visitDate
+        , ACL.SERVICE_CODE
+        , ACL.CATEGORY_CODE
+        , GET_CATE_NM(ACL.SERVICE_CODE, ACL.CATEGORY_CODE) CATEGORY_NM
+        , ACL.MENU_CODE
+        , GET_MENU_NM(ACL.SERVICE_CODE, ACL.CATEGORY_CODE, ACL.MENU_CODE) MENU_NM
+        , COUNT(ACL.USERNAME) visitCount
+        FROM ACCESS_LOG ACL
+        WHERE SUBSTR(ACL.LAST_UPDATE, 1, 8) BETWEEN #{startDate} AND #{endDate}
+        GROUP BY SUBSTR(ACL.LAST_UPDATE, 1, 8)
+        , ACL.SERVICE_CODE
+        , ACL.CATEGORY_CODE
+        , ACL.MENU_CODE
+        ORDER BY SUBSTR(ACL.LAST_UPDATE, 1, 8)
+        , ACL.SERVICE_CODE
+        , ACL.CATEGORY_CODE
+        , ACL.MENU_CODE
+    </select>
+</mapper>

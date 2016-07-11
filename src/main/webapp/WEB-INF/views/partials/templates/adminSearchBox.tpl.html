@@ -1,0 +1,27 @@
+<div class="page-title obj-clear">
+    <h1 class="pull-left">{{menuContext.menu.name}}</h1>
+    <div class="pagenation">
+        {{menuContext.category.name}} <span>&gt;</span> {{menuContext.menu.name}}
+    </div>
+</div>
+<div class="search-select-area obj-clear">
+    <div class="btn-group" data-ng-show="adminDateTypes">
+        <button class="btn btn-white" ng-repeat="type in adminDateTypes" ng-class="{active:selectedDateType === type}" type="button" data-ng-click="changeDateType(type)">
+            {{type.label}}
+        </button>
+    </div>
+    <div class="date-picker-area obj-clear" data-ng-show="selectedDate">
+        <div class="date-picker input-append success date">
+            <input class="form-control date-pick" type="text" data-ng-model="selectedDate" />
+            <span class="add-on pull-left">
+                <span class="arrow"></span>
+                <i class="fa fa-th"></i>
+            </span>
+        </div>
+    </div>
+    <div class="select-box" data-ng-show="textFlag">
+        <label for="add_condition2" class="text-check">권한명</label>
+        <input id="add_condition2" class="select" type="text" data-ng-model="searchedText" />
+    </div>
+    <a data-ng-show="dateFlag || textFlag " href="javascript:void(0);" class="btn btn-search pull-left" id="_adminSearchBtn">조회</a>
+</div>

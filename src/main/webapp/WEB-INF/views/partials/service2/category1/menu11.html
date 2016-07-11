@@ -1,0 +1,15 @@
+<div ng-controller="feedExposureOrderCtrl" data-ng-init="init()">
+    <report-search-box search-callback="search"></report-search-box>
+    <div class="sub-title obj-section">
+        <report-sub-nav excelConfig="excelConfig"></report-sub-nav>
+    </div>
+
+    <div class="data-area jq-board" >
+        <jq-grid config="feedsExposureOrderGrid"></jq-grid>
+    </div>
+
+</div>
+<link href="resources/pivot/pivot.css" media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="resources/pivot/pivot.js"></script>
+<script type="text/javascript" src="resources/app/ocb/contentsDetailAnalisys/feedExposureOrderCtrl2.js"></script>
+

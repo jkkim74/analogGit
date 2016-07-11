@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsCntntMbilFlyrCopnStaRepository">
+
+    <select id="getMobileFrontCouponPerDay" parameterType="JqGridRequest" resultType="ObsCntntMbilFlyrCopnSta">
+       SELECT TO_CHAR (TO_DATE (std_dt, 'YYYYMMDD'), 'YYYY-MM-DD')|| '('|| TO_CHAR (TO_DATE (std_dt, 'YYYYMMDD'), 'dy')|| ')' AS std_dt,
+              poc_ind_cd, flyr_id, flyr_title, store_nm, TO_CHAR(TO_DATE(snd_start_dt, 'YYYYMMDD'), 'YYYY.MM.DD') AS snd_start_dt, copn_id, copn_nm,
+              <if test="measureCode != null and measureCode.equals('UV')">
+                  NVL(dnld_cnt_on_uv, 0) as measureValue
+              </if>
+              <if test="measureCode != null and measureCode.equals('LV')">
+                  NVL(dnld_cnt_on_lv, 0) as measureValue
+              </if>
+              <if test="measureCode != null and measureCode.equals('PV')">
+                  NVL(dnld_cnt_on_pv, 0) as measureValue
+              </if>
+       FROM   OBS_D_CNTNT_MBIL_FLYR_COPN_STA
+       WHERE  std_dt between #{startDate} and #{endDate}
+       AND    poc_ind_cd = '01'
+       ORDER  BY flyr_id, std_dt
+    </select>
+
+    <select id="getMobileFrontCouponPerWeek" parameterType="JqGridRequest" resultType="ObsCntntMbilFlyrCopnSta">
+        SELECT TO_CHAR (TO_DATE (std_dt, 'YYYYMMDD'), 'YYYY-MM-DD')|| '('|| TO_CHAR (TO_DATE (std_dt, 'YYYYMMDD'), 'dy')|| ')' AS std_dt,
+               poc_ind_cd, flyr_id, flyr_title, store_nm, TO_CHAR(TO_DATE(snd_start_dt, 'YYYYMMDD'), 'YYYY.MM.DD') AS snd_start_dt, copn_id, copn_nm,
+               <if test="measureCode != null and measureCode.equals('UV')">
+                   NVL(dnld_cnt_on_uv, 0) as measureValue
+               </if>
+               <if test="measureCode != null and measureCode.equals('LV')">
+                   NVL(dnld_cnt_on_lv, 0) as measureValue
+               </if>
+               <if test="measureCode != null and measureCode.equals('PV')">
+                   NVL(dnld_cnt_on_pv, 0) as measureValue
+               </if>
+        FROM   OBS_W_CNTNT_MBIL_FLYR_COPN_STA
+        WHERE (std_dt <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />)
+        AND    poc_ind_cd = '01'
+        ORDER  BY flyr_id, std_dt
+    </select>
+
+    <select id="getMobileFrontCouponPerMonth" parameterType="JqGridRequest" resultType="ObsCntntMbilFlyrCopnSta">
+        SELECT TO_CHAR (TO_DATE (std_ym, 'YYYYMM'), 'YYYY-MM') AS std_dt,
+               poc_ind_cd, flyr_id, flyr_title, store_nm, TO_CHAR(TO_DATE(snd_start_dt, 'YYYYMMDD'), 'YYYY.MM.DD') AS snd_start_dt, copn_id, copn_nm,
+               <if test="measureCode != null and measureCode.equals('UV')">
+                   NVL(dnld_cnt_on_uv, 0) as measureValue
+               </if>
+               <if test="measureCode != null and measureCode.equals('LV')">
+                   NVL(dnld_cnt_on_lv, 0) as measureValue
+               </if>
+               <if test="measureCode != null and measureCode.equals('PV')">
+                   NVL(dnld_cnt_on_pv, 0) as measureValue
+               </if>
+        FROM   OBS_M_CNTNT_MBIL_FLYR_COPN_STA
+        WHERE  std_ym between #{startDate} and #{endDate}
+        AND    poc_ind_cd = '01'
+        ORDER  BY flyr_id, std_dt
+    </select>
+</mapper>

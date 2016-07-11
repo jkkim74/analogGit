@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.OcbMktPushSndRsltRepository">
+    <select id="getMktPushSndRslt" parameterType="JqGridRequest" resultType="ObsDPushRespSta">
+        SELECT TO_CHAR(TO_DATE(STD_DT, 'YYYYMMDD'), 'YYYY-MM-DD')|| '('|| TO_CHAR(TO_DATE(STD_DT, 'yyyymmdd'), 'dy')|| ')' AS STD_DT, PUSH_TYP, SND_MSG, APP_VER, SND_CUST_CNT, RCV_CUST_CNT, LCH_CUST_CNT, RCV_RATE, LCH_RATE
+        FROM (
+                SELECT /*+ ORDERED INDEX(OBS_D_PUSH_RESP_STA IDX_OBS_D_PUSH_RESP_STA_PK) */ A.STD_DT, A.PUSH_TYP, A.SND_MSG, DECODE(A.APP_VER, 'TOTAL', 'ZTOTAL', A.APP_VER) AS APP_VER, A.SND_CUST_CNT, A.RCV_CUST_CNT, A.LCH_CUST_CNT, B.RCV_RATE, B.LCH_RATE
+                FROM OBS_D_PUSH_RESP_STA A,
+                  (SELECT /*+ INDEX(OBS_D_PUSH_RESP_STA IDX_OBS_D_PUSH_RESP_STA_PK) */ STD_DT, PUSH_TYP, SND_MSG, RCV_RATE, LCH_RATE
+                   FROM   OBS_D_PUSH_RESP_STA
+                   WHERE  APP_VER = 'TOTAL'
+                   AND    STD_DT BETWEEN #{startDate} AND #{endDate}) B
+                WHERE A.STD_DT = B.STD_DT
+                AND   A.PUSH_TYP = B.PUSH_TYP
+                AND   A.SND_MSG = B.SND_MSG
+                AND   A.STD_DT BETWEEN #{startDate} AND #{endDate}
+        )
+        ORDER BY STD_DT, PUSH_TYP, SND_MSG, APP_VER ASC
+    </select>
+</mapper>

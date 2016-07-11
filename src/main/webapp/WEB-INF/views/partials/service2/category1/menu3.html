@@ -1,0 +1,48 @@
+<div class="content" ng-controller="service2Ctrl" data-ng-init="testInit()">
+    <div class="row">
+        <table id="testGrid"></table>
+        <div id="testGridPager"></div>
+    </div>
+
+    <a href="javascript:void(0)" id="a1" >Get data from selected row</a><br />
+    <a href="javascript:void(0)" id="a2" >Delete row 2</a><br />
+    <a href="javascript:void(0)" id="a3" >Update amounts in row 1</a><br />
+    <a href="javascript:void(0)" id="a4" >Add row with id 99</a><br />
+    <a href="javascript:void(0)" id="a5" >Get Data Type requested</a><br />
+    <a href="javascript:void(0)" id="a6" >multiselect(if you can..)</a><br />
+    <a href="javascript:void(0)" id="a7" >hide tax column</a>
+    <a href="javascript:void(0)" id="a8" >show tax column</a><br />
+    <input type="button" id="a9" value="edit row 7"/>
+    <input type="button" id="a10" value="save row 7"/>
+    <input type="button" id="a11" value="cancel save"/>
+    <a href="javascript:void(0)" id="a12" >add new</a><br />
+
+
+    <hr/><hr/><hr/>
+    <h2 class="page-header">월별 가입자 수 통계2</h2>
+
+    <div class="row">
+        <h3>월별 가입자 수 통계2</h3>
+        <jq-grid config="salesUsersSumCount"></jq-grid>
+    </div>
+    <div class="row">
+        <h3>월별 가입자 수 그래프2</h3>
+        <nvd3-multi-bar-chart
+                data="salesUserSumCountData"
+                xAxisTickFormat="xAxisTickFormatFunction()"
+                x="xFunction()"
+                y="yFunction()"
+                showXAxis="true"
+                showYAxis="true"
+                tooltips="true"
+                tooltipcontent="toolTipContentFunction()"
+                height="300"
+                interactive="true"
+                delay="3000"
+                color="colorFunction()">
+        </nvd3-multi-bar-chart>
+    </div>
+
+
+</div>
+<script type="text/javascript" src="resources/app/service2/service2Ctrl.js"></script>

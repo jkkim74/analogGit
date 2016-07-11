@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.bip.HelpDeskReplyRepository">
+    <select id="selectHelpDeskQnaReply" parameterType="HelpDeskRequest" resultType="HelpDeskReply">
+          SELECT sn AS sn, id AS id, context AS context, writer AS writer,
+                 TO_CHAR (TO_DATE (SUBSTR (write_date, 0, 8), 'yyyymmdd'),'yyyy-mm-dd') AS write_date,
+                 write_ip AS write_ip,
+                 TO_CHAR (TO_DATE (SUBSTR (update_date, 0, 8), 'yyyymmdd'),'yyyy-mm-dd') AS update_date,
+                 update_ip AS update_ip, writer_id AS writer_id
+            FROM help_desk_reply
+           WHERE id = #{id}
+             AND delete_yn = 'N'
+        ORDER BY sn
+    </select>
+
+    <insert id="insertHelpDeskQnaReply" parameterType="HelpDesk">
+        INSERT INTO HELP_DESK_REPLY (SN, ID, CONTEXT, DELETE_YN, WRITER, WRITER_ID, WRITE_DATE, WRITE_IP, UPDATE_DATE, UPDATE_IP )
+        VALUES (
+              help_desk_reply_seq.NEXTVAL, #{id}, #{context}, 'N', #{writer}, #{writerId}, to_char(sysdate,'YYYYMMDDHH24MISS')
+            , #{writeIp}, to_char(sysdate,'YYYYMMDDHH24MISS'), #{writeIp} )
+    </insert>
+
+    <update id="updateHelpDeskQnaReply" parameterType="HelpDeskReply">
+        UPDATE HELP_DESK_REPLY SET
+               context = #{context},
+               update_date = to_char(sysdate,'YYYYMMDDHH24MISS'),
+               update_ip = #{updateIp}
+         WHERE sn = #{sn}
+           AND id = #{id}
+    </update>
+
+    <update id="deleteHelpDeskQnaReply" parameterType="HelpDeskReply">
+        UPDATE HELP_DESK_REPLY SET
+               update_date = to_char(sysdate,'YYYYMMDDHH24MISS'),
+               update_ip = #{updateIp},
+               delete_yn = 'Y'
+         WHERE sn = #{sn}
+    </update>
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsMbilAchvRptRepository">
+
+    <select id="getMobileAchieveReport" parameterType="JqGridRequest" resultType="ObsMbilAchvRpt">
+        WITH t
+             AS (  SELECT
+                          <choose>
+                              <when test="dateType.value() == 'month'">
+                                  SUBSTR(TO_CHAR (TO_DATE (stndrd_dt, 'yyyymmdd'), 'yyyy-mm-dd'),1,7) AS stndrd_dt,
+                              </when>
+                              <otherwise>
+                                  TO_CHAR(TO_DATE(stndrd_dt, 'YYYYMMDD'), 'YYYY-MM-DD')||'('||TO_CHAR(TO_DATE(stndrd_dt, 'YYYYMMDD'), 'dy')|| ')' AS stndrd_dt,
+                              </otherwise>
+                          </choose>
+                          LPAD(rpt_ind_cd,2,0)||rpt_ind_nm AS rpt_ind_nm,
+                          LPAD(rpt_ind_detl_cd,2,0)||rpt_ind_detl_nm AS rpt_ind_detl_nm,
+                          cust_cnt AS cust_cnt,
+                          tr_cnt AS tr_cnt,
+                          pnt_sum AS pnt_sum,
+                          cmmsn_sum AS cmmsn_sum
+                     FROM OBS_MBIL_ACHV_RPT
+                    WHERE stndrd_dt BETWEEN #{startDate} AND #{endDate}
+                      AND
+                          <choose>
+                              <when test="dateType.value() == 'month'">
+                                cyl_ind_cd = 'M'
+                              </when>
+                              <when test="dateType.value() == 'week'">
+                                cyl_ind_cd = 'W'
+                              </when>
+                              <otherwise>
+                                cyl_ind_cd = 'D'
+                              </otherwise>
+                          </choose>
+                 ORDER BY stndrd_dt, rpt_ind_cd, rpt_ind_detl_cd)
+        SELECT stndrd_dt,
+               rpt_ind_nm,
+               rpt_ind_detl_nm,
+               DECODE (measure,
+                       'CUST_CNT', '01Uniq고객수',
+                       'TR_CNT', '02건수',
+                       'PNT_SUM', '03포인트',
+                       'CMMSN_SUM', '04수수료')
+                  AS measure,
+               measure_value
+          FROM t UNPIVOT (measure_Value
+                 FOR measure
+                 IN (cust_cnt, tr_cnt, pnt_sum, cmmsn_sum))
+    </select>
+</mapper>

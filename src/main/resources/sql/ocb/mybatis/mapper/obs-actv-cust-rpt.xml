@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsActvCustRptRepository">
+
+    <select id="getActivityCustomerReportPerDay" parameterType="JqGridRequest" resultType="ObsActvCustRpt">
+    </select>
+    <select id="getActivityCustomerReportPerWeek" parameterType="JqGridRequest" resultType="ObsActvCustRpt">
+    </select>
+    <select id="getActivityCustomerReportPerMonth" parameterType="JqGridRequest" resultType="ObsActvCustRpt">
+        WITH t
+             AS (SELECT TO_CHAR (TO_DATE (stndrd_ym, 'yyyymm'), 'yyyy-mm') AS stndrd_ym,
+                        nvl(actv_cust_cnt,0) AS actv_cust_cnt
+                   FROM obs_actv_cust_rpt
+                  WHERE stndrd_ym BETWEEN #{startDate} AND #{endDate})
+        SELECT stndrd_ym,
+               DECODE (measure, 'ACTV_CUST_CNT', '단위:명') AS measure,
+               measure_value
+          FROM t UNPIVOT (measure_value FOR measure IN (actv_cust_cnt))
+    </select>
+</mapper>

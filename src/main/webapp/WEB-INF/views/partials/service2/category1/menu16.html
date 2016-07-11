@@ -1,0 +1,117 @@
+<div ng-controller="rSankeyCtrl" data-ng-init="init()">
+    <h2>raphael sankey</h2>
+    <input type="button" onclick="updateSankey();" value="update">
+    <input type="button" onclick="unDo();" value="undo">
+    <div id='sankey' style=""></div>
+</div>
+
+<script type="text/javascript" src="/resources/app/service2/rSankey/ext/raphael.js"></script>
+<script type="text/javascript" src="/resources/app/service2/rSankey/js/sankey.js"></script>
+<link rel="stylesheet" href="/resources/app/service2/rSankey/css/jquery-ui.css">
+<link rel="stylesheet" href="/resources/app/service2/rSankey/css/style.css">
+
+<script type="text/javascript" src="resources/app/service2/rSankeyCtrl.js"></script>
+<script>
+
+    var tmpDate = [
+        ["in01",15.4,"center"]
+        ,["in02",8.6,"center"]
+        ,["in03",4.8,"center"]
+        ,["in04",3.7,"center"]
+        ,["in05",2.1,"center"]
+        ,["in06",65.4,"center"]
+        ,["center",30.2,"out01"]
+        ,["center",15.4,"out02"]
+        ,["center",8.6,"out03"]
+        ,["center",4.8,"out04"]
+        ,["center",3.7,"out05"]
+        ,["center",2.1,"out06"]
+        ,["center",35.2,"out07"]
+    ];
+    var sankey = new Sankey();
+
+    var name_conversions = {
+        "in01":"유입 페이지 01",
+        "in02":"유입 페이지 02",
+        "in03":"유입 페이지 03",
+        "in04":"유입 페이지 04",
+        "in05":"유입 페이지 05",
+        "in06":"직접유입",
+        "out01":"유출 페이지 01",
+        "out02":"유출 페이지 02",
+        "out03":"유출 페이지 03",
+        "out04":"유출 페이지 04",
+        "out05":"유출 페이지 05",
+        "out06":"유출 페이지 06",
+        "out07":"이탈수",
+        "center":"페이지 명\n(main page)"
+    }
+
+    sankey.convert_box_description_labels_callback = function(name){
+        var alternative_name = name_conversions[name];
+        if(alternative_name == null) alternative_name = name;
+        return alternative_name;
+    };
+
+    sankey.stack(0,["in01","in02","in03","in04","in05","in06"]);
+    sankey.stack(1,["center"], "in03");
+    sankey.stack(2,["out01","out02","out03","out04","out05","out06","out07"]);
+
+    sankey.y_space = 25;
+    sankey.right_margin = 150;
+    sankey.left_margin = 100;
+    sankey.box_width = 80;
+
+    sankey.convert_flow_labels_callback = function(flow) {
+        return Math.round(flow);
+    };
+    sankey.convert_box_value_labels_callback = function(flow){
+        return (" " + Math.round(flow) + "%");
+    }
+
+    // Colours
+    sankey.setColors({
+        "in01":"#811138",
+        "in02":"#8F2138",
+        "in03":"#8F6F38",
+        "in04":"#A90986",
+        "out01":"#002368",
+        "out02":"#18F268",
+        "out03":"#DD3FC4",
+        "out05":"#D004C4",
+        "center":"#FF6FCF"
+    });
+
+    sankey.setData(tmpDate);
+    sankey.draw();
+
+    function updateSankey(){
+        sankey.updateData([
+            ["in01",10,"center"],
+            ["in02",50,"center"],
+            ["center",10,"out01"],
+            ["center",30,"out02"],
+            ["center",10,"out03"],
+            ["center",10,"out04"]
+        ]);
+        sankey.setBubbles([["out02",100]]);
+        sankey.redraw();
+    }
+    function unDo(){
+        sankey.updateData([
+            ["in04",50,"center"],
+            ["in05",60,"center"],
+            ["center",10,"out01"],
+            ["center",30,"out04"],
+            ["center",10,"out06"],
+            ["center",10,"out02"]
+        ]);
+//        sankey.setBubbles([["Bad",100]]);
+        sankey.redraw();
+    }
+
+
+    setTimeout( function() {
+    },1000)
+
+</script>

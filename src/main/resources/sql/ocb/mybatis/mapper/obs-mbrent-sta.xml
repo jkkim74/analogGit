@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsMbrentStaRepository">
+
+    <select id="getEnterForGridPerDay" parameterType="JqGridRequest" resultType="ObsMbrentSta">
+        SELECT TO_CHAR(TO_DATE(std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+            SUM (new_entr_cnt) AS new_entr_cnt,
+            SUM (acm_entr_cnt) as acm_entr_cnt
+        FROM obs_d_mbrent_sta
+        WHERE std_dt between #{startDate} and #{endDate}
+        GROUP BY std_dt
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}
+        </if>
+        <if test="sidx == 'newEntrCnt'">
+            ORDER BY new_entr_cnt ${sord}
+        </if>
+        <if test="sidx == 'acmEntrCnt'">
+            ORDER BY acm_entr_cnt ${sord}
+        </if>
+    </select>
+
+    <select id="getEnterForGridPerWeek" parameterType="JqGridRequest" resultType="ObsMbrentSta">
+        SELECT
+            TO_CHAR(TO_DATE(std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(std_dt,'yyyymmdd'),'dy')||')' as std_dt,
+            SUM (new_entr_cnt) AS new_entr_cnt,
+            SUM (acm_entr_cnt) as acm_entr_cnt
+        FROM obs_w_mbrent_sta
+        WHERE
+           std_dt <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />
+        GROUP BY std_dt
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_dt ${sord}
+        </if>
+        <if test="sidx == 'newEntrCnt'">
+            ORDER BY new_entr_cnt ${sord}
+        </if>
+        <if test="sidx == 'acmEntrCnt'">
+            ORDER BY acm_entr_cnt ${sord}
+        </if>
+    </select>
+
+    <select id="getEnterForGridPerMonth" parameterType="JqGridRequest" resultType="ObsMbrentSta">
+        SELECT   SUBSTR (std_ym, 0, 4)|| '-'|| SUBSTR (std_ym, 5, 2) AS std_dt,
+            SUM (new_entr_cnt) AS new_entr_cnt,
+            SUM (acm_entr_cnt) as acm_entr_cnt
+        FROM obs_m_mbrent_sta
+        WHERE std_ym between #{startDate} and #{endDate}
+        GROUP BY std_ym
+        <if test="sidx == 'stdDt'">
+            ORDER BY std_ym ${sord}
+        </if>
+        <if test="sidx == 'newEntrCnt'">
+            ORDER BY new_entr_cnt ${sord}
+        </if>
+        <if test="sidx == 'acmEntrCnt'">
+            ORDER BY acm_entr_cnt ${sord}
+        </if>
+    </select>
+
+    <select id="getEnterDetailForGridPerDay" parameterType="JqGridRequest" resultType="ObsMbrentSta">
+        WITH T_SEXCODE AS (
+				   SELECT COM_CD, COM_CD_NM
+                     FROM COMUSER.COM_INTG_COM_CD
+                    WHERE USE_YN = 'Y' AND SYS_IND_CD = 'OBS' AND COM_GRP_CD = 'OBC002'
+                 ORDER BY SORT_SEQ),
+             T_AGECODE AS (
+			       SELECT COM_CD, COM_CD_NM
+                     FROM COMUSER.COM_INTG_COM_CD
+                    WHERE USE_YN = 'Y' AND SYS_IND_CD = 'OBS' AND COM_GRP_CD = 'OBC003'
+                 ORDER BY SORT_SEQ)
+          SELECT TO_CHAR(TO_DATE(T_MAIN.STD_DT,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(T_MAIN.STD_DT,'yyyymmdd'),'dy')||')' as std_dt,
+                 T_MAIN.SEX_IND_CD AS SEX_IND_CD,
+                 T_SEXCODE.COM_CD_NM AS SEX_IND_NM,
+                 T_MAIN.AGE_LGRP_CD AS AGE_LGRP_CD,
+                 T_AGECODE.COM_CD_NM AS AGE_LGRP_NM,
+                 NEW_ENTR_CNT AS NEW_ENTR_CNT,
+                 ACM_ENTR_CNT AS ACM_ENTR_CNT
+            FROM OBS_D_MBRENT_STA T_MAIN, T_SEXCODE, T_AGECODE
+           WHERE STD_DT BETWEEN #{startDate} AND #{endDate}
+             AND T_MAIN.SEX_IND_CD = T_SEXCODE.COM_CD
+             AND T_MAIN.AGE_LGRP_CD = T_AGECODE.COM_CD
+        <if test="sidx == 'stdDt'">
+        ORDER BY T_MAIN.std_dt ${sord}, T_MAIN.sex_ind_cd, to_number(T_MAIN.age_lgrp_cd)
+        </if>
+        <if test="sidx == 'sexIndCd'">
+            ORDER BY T_MAIN.sex_ind_cd ${sord}, T_MAIN.STD_YM, to_number(T_MAIN.age_lgrp_cd)
+        </if>
+        <if test="sidx == 'ageLgrpCd'">
+            ORDER BY to_number(T_MAIN.age_lgrp_cd) ${sord}, T_MAIN.STD_YM, T_MAIN.SEX_IND_CD
+        </if>
+        <if test="sidx == 'newEntrCnt'">
+        ORDER BY T_MAIN.new_entr_cnt ${sord}
+        </if>
+        <if test="sidx == 'acmEntrCnt'">
+        ORDER BY T_MAIN.acm_entr_cnt ${sord}
+        </if>
+    </select>
+
+    <select id="getEnterDetailForGridPerWeek" parameterType="JqGridRequest" resultType="ObsMbrentSta">
+        WITH T_SEXCODE AS (
+				   SELECT COM_CD, COM_CD_NM
+                     FROM COMUSER.COM_INTG_COM_CD
+                    WHERE USE_YN = 'Y' AND SYS_IND_CD = 'OBS' AND COM_GRP_CD = 'OBC002'
+                 ORDER BY SORT_SEQ),
+             T_AGECODE AS (
+			       SELECT COM_CD, COM_CD_NM
+                     FROM COMUSER.COM_INTG_COM_CD
+                    WHERE USE_YN = 'Y' AND SYS_IND_CD = 'OBS' AND COM_GRP_CD = 'OBC003'
+                 ORDER BY SORT_SEQ)
+          SELECT TO_CHAR(TO_DATE(T_MAIN.STD_DT,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(T_MAIN.STD_DT,'yyyymmdd'),'dy')||')' as std_dt,
+                 T_MAIN.SEX_IND_CD AS SEX_IND_CD,
+                 T_SEXCODE.COM_CD_NM AS SEX_IND_NM,
+                 T_MAIN.AGE_LGRP_CD AS AGE_LGRP_CD,
+                 T_AGECODE.COM_CD_NM AS AGE_LGRP_NM,
+                 NEW_ENTR_CNT AS NEW_ENTR_CNT,
+                 ACM_ENTR_CNT AS ACM_ENTR_CNT
+            FROM OBS_W_MBRENT_STA T_MAIN, T_SEXCODE, T_AGECODE
+           WHERE
+                std_dt <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />
+                AND T_MAIN.SEX_IND_CD = T_SEXCODE.COM_CD
+                AND T_MAIN.AGE_LGRP_CD = T_AGECODE.COM_CD
+        <if test="sidx == 'stdDt'">
+            ORDER BY T_MAIN.std_dt ${sord}, T_MAIN.sex_ind_cd, to_number(T_MAIN.age_lgrp_cd)
+        </if>
+        <if test="sidx == 'sexIndCd'">
+            ORDER BY T_MAIN.sex_ind_cd ${sord}, T_MAIN.STD_YM, to_number(T_MAIN.age_lgrp_cd)
+        </if>
+        <if test="sidx == 'ageLgrpCd'">
+            ORDER BY to_number(T_MAIN.age_lgrp_cd) ${sord}, T_MAIN.STD_YM, T_MAIN.SEX_IND_CD
+        </if>
+        <if test="sidx == 'newEntrCnt'">
+            ORDER BY T_MAIN.new_entr_cnt ${sord}
+        </if>
+        <if test="sidx == 'acmEntrCnt'">
+            ORDER BY T_MAIN.acm_entr_cnt ${sord}
+        </if>
+    </select>
+
+    <select id="getEnterDetailForGridPerMonth" parameterType="JqGridRequest" resultType="ObsMbrentSta">
+        WITH T_SEXCODE AS (
+				   SELECT COM_CD, COM_CD_NM
+                     FROM COMUSER.COM_INTG_COM_CD
+                    WHERE USE_YN = 'Y' AND SYS_IND_CD = 'OBS' AND COM_GRP_CD = 'OBC002'
+                 ORDER BY SORT_SEQ),
+             T_AGECODE AS (
+			       SELECT COM_CD, COM_CD_NM
+                     FROM COMUSER.COM_INTG_COM_CD
+                    WHERE USE_YN = 'Y' AND SYS_IND_CD = 'OBS' AND COM_GRP_CD = 'OBC003'
+                 ORDER BY SORT_SEQ)
+          SELECT SUBSTR (T_MAIN.STD_YM, 0, 4)|| '-'|| SUBSTR (T_MAIN.STD_YM, 5, 2) AS STD_DT,
+                 T_MAIN.SEX_IND_CD AS SEX_IND_CD,
+                 T_SEXCODE.COM_CD_NM AS SEX_IND_NM,
+                 T_MAIN.AGE_LGRP_CD AS AGE_LGRP_CD,
+                 T_AGECODE.COM_CD_NM AS AGE_LGRP_NM,
+                 NEW_ENTR_CNT AS NEW_ENTR_CNT,
+                 ACM_ENTR_CNT AS ACM_ENTR_CNT
+            FROM OBS_M_MBRENT_STA T_MAIN, T_SEXCODE, T_AGECODE
+           WHERE STD_YM BETWEEN #{startDate} AND #{endDate}
+             AND T_MAIN.SEX_IND_CD = T_SEXCODE.COM_CD
+             AND T_MAIN.AGE_LGRP_CD = T_AGECODE.COM_CD
+        <if test="sidx == 'stdDt'">
+            ORDER BY T_MAIN.std_ym ${sord}, T_MAIN.sex_ind_cd, to_number(T_MAIN.age_lgrp_cd)
+        </if>
+        <if test="sidx == 'sexIndCd'">
+            ORDER BY T_MAIN.sex_ind_cd ${sord}, T_MAIN.STD_YM, to_number(T_MAIN.age_lgrp_cd)
+        </if>
+        <if test="sidx == 'ageLgrpCd'">
+            ORDER BY to_number(T_MAIN.age_lgrp_cd) ${sord}, T_MAIN.STD_YM, T_MAIN.SEX_IND_CD
+        </if>
+        <if test="sidx == 'newEntrCnt'">
+            ORDER BY T_MAIN.new_entr_cnt ${sord}
+        </if>
+        <if test="sidx == 'acmEntrCnt'">
+            ORDER BY T_MAIN.acm_entr_cnt ${sord}
+        </if>
+    </select>
+</mapper>

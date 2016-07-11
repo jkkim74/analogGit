@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.ocb.ObsPushCnfgStaRepository">
+    <select id="getNotificationSetForPivotPerDay" parameterType="JqGridRequest" resultType="ObsPushCnfgSta">
+        WITH t AS (
+                  SELECT TO_CHAR(TO_DATE(std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(std_dt,'yyyymmdd'),'dy')||')' as std_dt
+                          ,all_user_cnt AS all_user_cnt
+                          ,bnft_on_user_cnt AS bnft_on_user_cnt
+                          ,tr_on_user_cnt AS tr_on_user_cnt
+                          ,arnd_store_on_user_cnt AS arnd_store_on_user_cnt
+                          ,prsnt_on_user_cnt AS prsnt_on_user_cnt
+                          ,info_on_user_cnt AS info_on_user_cnt
+                          ,p2p_on_user_cnt AS p2p_on_user_cnt
+                          ,ocb_bnft_on_user_cnt AS ocb_bnft_on_user_cnt
+                          ,push_noti_on_user_cnt AS push_noti_on_user_cnt
+                     FROM obs_d_push_cnfg_sta
+                    WHERE std_dt BETWEEN #{startDate} AND #{endDate}
+                      AND poc_ind_cd = '01'
+                 ORDER BY std_dt)
+        SELECT std_dt,
+               DECODE (
+                  measure
+                  ,'ALL_USER_CNT','01전체'
+                  ,'PUSH_NOTI_ON_USER_CNT','02PUSH 알림'
+                  ,'TR_ON_USER_CNT','03체크인 알림'
+                  ,'BNFT_ON_USER_CNT','04혜택 알림'
+                  ,'ARND_STORE_ON_USER_CNT','05단골정보 알림'
+                  ,'INFO_ON_USER_CNT','06정보성 알림'
+                  ,'P2P_ON_USER_CNT','07친구와 같이쓰기 알림'
+               ) AS measure,
+               measure_value
+          FROM t UNPIVOT (measure_value
+                 FOR measure
+                 IN  (
+                   ALL_USER_CNT
+                  ,PUSH_NOTI_ON_USER_CNT
+                  ,TR_ON_USER_CNT
+                  ,BNFT_ON_USER_CNT
+                  ,ARND_STORE_ON_USER_CNT
+                  ,INFO_ON_USER_CNT
+                  ,P2P_ON_USER_CNT
+                  ))
+    </select>
+    <select id="getNotificationSetForPivotPerWeek" parameterType="JqGridRequest" resultType="ObsPushCnfgSta">
+        WITH t AS (
+                  SELECT TO_CHAR(TO_DATE(std_dt,'YYYYMMDD'),'YYYY-MM-DD')||'('||TO_CHAR(to_Date(std_dt,'yyyymmdd'),'dy')||')' as std_dt
+                          ,all_user_cnt AS all_user_cnt
+                          ,bnft_on_user_cnt AS bnft_on_user_cnt
+                          ,tr_on_user_cnt AS tr_on_user_cnt
+                          ,arnd_store_on_user_cnt AS arnd_store_on_user_cnt
+                          ,prsnt_on_user_cnt AS prsnt_on_user_cnt
+                          ,info_on_user_cnt AS info_on_user_cnt
+                          ,p2p_on_user_cnt AS p2p_on_user_cnt
+                          ,ocb_bnft_on_user_cnt AS ocb_bnft_on_user_cnt
+                          ,push_noti_on_user_cnt AS push_noti_on_user_cnt
+                     FROM obs_w_push_cnfg_sta
+                    WHERE std_dt  <include refid="ObsCommonMapper.betweenStartDateAndEndDatePerWeek" />
+                      AND poc_ind_cd = '01'
+                 ORDER BY std_dt)
+        SELECT std_dt,
+               DECODE (
+                  measure
+                  ,'ALL_USER_CNT','01전체'
+                  ,'PUSH_NOTI_ON_USER_CNT','02PUSH 알림'
+                  ,'TR_ON_USER_CNT','03체크인 알림'
+                  ,'BNFT_ON_USER_CNT','04혜택 알림'
+                  ,'ARND_STORE_ON_USER_CNT','05단골정보 알림'
+                  ,'INFO_ON_USER_CNT','06정보성 알림'
+                  ,'P2P_ON_USER_CNT','07친구와 같이쓰기 알림'
+--                   ,'PRSNT_ON_USER_CNT','08선물 푸쉬 수신 ON 유저수'
+--                   ,'OCB_BNFT_ON_USER_CNT','09OCB 혜택 푸쉬 수신 ON 유저수'
+               ) AS measure,
+               measure_value
+          FROM t UNPIVOT (measure_value
+                 FOR measure
+                 IN  (
+                   ALL_USER_CNT
+                  ,PUSH_NOTI_ON_USER_CNT
+                  ,TR_ON_USER_CNT
+                  ,BNFT_ON_USER_CNT
+                  ,ARND_STORE_ON_USER_CNT
+                  ,INFO_ON_USER_CNT
+                  ,P2P_ON_USER_CNT
+--                   ,PRSNT_ON_USER_CNT
+--                   ,OCB_BNFT_ON_USER_CNT
+                  ))
+    </select>
+    <select id="getNotificationSetForPivotPerMonth" parameterType="JqGridRequest" resultType="ObsPushCnfgSta">
+        WITH t AS (
+                  SELECT TO_CHAR(TO_DATE(std_ym,'YYYYMM'),'YYYY-MM') as std_dt
+                          ,all_user_cnt AS all_user_cnt
+                          ,bnft_on_user_cnt AS bnft_on_user_cnt
+                          ,tr_on_user_cnt AS tr_on_user_cnt
+                          ,arnd_store_on_user_cnt AS arnd_store_on_user_cnt
+                          ,prsnt_on_user_cnt AS prsnt_on_user_cnt
+                          ,info_on_user_cnt AS info_on_user_cnt
+                          ,p2p_on_user_cnt AS p2p_on_user_cnt
+                          ,ocb_bnft_on_user_cnt AS ocb_bnft_on_user_cnt
+                          ,push_noti_on_user_cnt AS push_noti_on_user_cnt
+                     FROM obs_m_push_cnfg_sta
+                    WHERE std_ym BETWEEN #{startDate} AND #{endDate}
+                      AND poc_ind_cd = '01'
+                 ORDER BY std_ym)
+        SELECT std_dt,
+               DECODE (
+                  measure
+                  ,'ALL_USER_CNT','01전체'
+                  ,'PUSH_NOTI_ON_USER_CNT','02PUSH 알림'
+                  ,'TR_ON_USER_CNT','03체크인 알림'
+                  ,'BNFT_ON_USER_CNT','04혜택 알림'
+                  ,'ARND_STORE_ON_USER_CNT','05단골정보 알림'
+                  ,'INFO_ON_USER_CNT','06정보성 알림'
+                  ,'P2P_ON_USER_CNT','07친구와 같이쓰기 알림'
+--                   ,'PRSNT_ON_USER_CNT','08선물 푸쉬 수신 ON 유저수'
+--                   ,'OCB_BNFT_ON_USER_CNT','09OCB 혜택 푸쉬 수신 ON 유저수'
+               ) AS measure,
+               measure_value
+          FROM t UNPIVOT (measure_value
+                 FOR measure
+                 IN  (
+                   ALL_USER_CNT
+                  ,PUSH_NOTI_ON_USER_CNT
+                  ,TR_ON_USER_CNT
+                  ,BNFT_ON_USER_CNT
+                  ,ARND_STORE_ON_USER_CNT
+                  ,INFO_ON_USER_CNT
+                  ,P2P_ON_USER_CNT
+--                   ,PRSNT_ON_USER_CNT
+--                   ,OCB_BNFT_ON_USER_CNT
+                  ))
+    </select>
+</mapper>

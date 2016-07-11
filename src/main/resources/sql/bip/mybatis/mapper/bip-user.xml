@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.bisportal.repository.acl.UserRepository">
+    <insert id="createBipUser" parameterType="BipUser" >
+        <selectKey keyProperty="id" order="BEFORE" resultType="int">
+            SELECT user_seq.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO bip_user (id, organization_id, username, fullname, email, mobile, ip, signup_date, last_update)
+        VALUES (#{id}, #{organizationId}, #{username}, #{fullname}, #{email, jdbcType=VARCHAR}, #{mobile, jdbcType=VARCHAR}, #{ip}, #{signupDate}, #{lastupDate})
+    </insert>
+    <update id="updateBipUser" parameterType="BipUser">
+      UPDATE bip_user
+      SET    fullname = #{fullname},
+             email = #{email, jdbcType=VARCHAR},
+             mobile = #{mobile, jdbcType=VARCHAR},
+             ip = #{ip},
+             last_update = #{lastupDate}
+      WHERE id = #{id}
+    </update>
+    <select id="getBipUser" parameterType="String" resultType="BipUser">
+        SELECT id, organization_id, username, fullname, sex, email, mobile, active, ip, signup_date, last_update
+        FROM   bip_user
+        WHERE  username = #{username}
+    </select>
+    <select id="getComRoles" parameterType="ComRole" resultType="ComRole">
+        SELECT id, name, description, delete_yn, decode(delete_yn, 'N', '활성', 'Y', '삭제', '비활성') as state, audit_id, audit_dtm, TO_CHAR(TO_DATE(aply_sta_dt,'YYYYMMDD'),'YYYY-MM-DD') as aply_sta_dt, TO_CHAR(TO_DATE(aply_end_dt,'YYYYMMDD'),'YYYY-MM-DD') as aply_end_dt
+        FROM   com_role
+        <if test="name != null and name != ''">
+        WHERE  name like #{name}
+        </if>
+        <if test="name != null and name != '' and roleType != null and !roleType.equals('all')">
+        AND delete_yn = #{roleType}
+        </if>
+        order by id
+    </select>
+    <update id="updateComRole" parameterType="ComRole">
+        UPDATE com_role
+        SET    name = #{name},
+               description = #{description},
+               delete_yn = #{deleteYn},
+               audit_id = #{auditId},
+               audit_dtm = sysdate
+        WHERE  id = #{id}
+    </update>
+    <select id="getUserRoles" parameterType="String" resultType="ComRole">
+        SELECT r.id, r.name, r.description, r.delete_yn, r.audit_id, r.audit_dtm
+        FROM   com_role r, com_role_user u
+        WHERE  r.id = u.role_id
+        AND    u.login_id = #{loginId}
+    </select>
+    <select id="getOrgRoles" parameterType="String" resultType="ComRole">
+        SELECT r.id, r.name, r.description, r.delete_yn, r.audit_id, r.audit_dtm
+        FROM   com_role r, com_role_org o
+        WHERE  r.id = o.role_id
+        AND    o.org_cd = #{orgCd}
+    </select>
+    <select id="getUserMenus" parameterType="String" resultType="Menu">
+        SELECT m.id, decode(level, 1, '서비스', 2, '카테고리', 3, '메뉴', '기타') as menuLevel, m.code
+         , substr(sys_connect_by_path(m.name, ' > '), 3) as pathName
+         , CONNECT_BY_ROOT m.name as rootName
+         , m.name
+         , m.visible_yn
+         , m.delete_yn
+        FROM  menu m, com_user_menu um
+        WHERE m.id = um.menu_id
+        AND   um.login_id = #{loginId}
+        START WITH m.parent_id is null and um.login_id = #{loginId}
+        CONNECT BY PRIOR m.id = m.parent_id and um.login_id = #{loginId}
+        ORDER SIBLINGS BY m.order_idx asc
+    </select>
+    <select id="getComUserMenus" parameterType="String" resultType="ComUserMenu">
+        SELECT m.id as menuId
+        FROM   menu m, com_user_menu um
+        WHERE  m.id = um.menu_id
+        AND    um.login_id = #{loginId}
+        UNION
+        SELECT m.menu_id as menuId
+        FROM  com_role r, com_role_menu m, com_role_user ru
+        WHERE r.id = m.role_id
+        AND   r.id = ru.role_id
+        AND   ru.login_id = #{loginId}
+        UNION
+        SELECT m.menu_id as menuId
+        FROM  com_role r, com_role_menu m, com_role_org ro, com_dept d, com_person p
+        WHERE r.id = m.role_id
+        AND   r.id = ro.role_id
+        AND   ro.org_cd = d.org_cd
+        AND   d.org_cd = p.org_cd
+        and   p.login_id = #{loginId}
+    </select>
+    <select id="getComRoleUser" parameterType="ComRoleUser" resultType="ComRoleUser">
+        SELECT role_id, login_id, audit_id, audit_dtm
+        FROM   com_role_user
+        WHERE  role_id = #{roleId}
+        AND    login_id = #{loginId}
+    </select>
+    <select id="getComRoleOrg" parameterType="ComRoleOrg" resultType="ComRoleOrg">
+        SELECT role_id, org_cd, audit_id, audit_dtm
+        FROM   com_role_org
+        WHERE  role_id = #{roleId}
+        AND    org_cd = #{orgCd}
+    </select>
+    <select id="getComUserMenu" parameterType="ComUserMenu" resultType="ComUserMenu">
+        SELECT login_id, menu_id, create_yn, read_yn, update_yn, delete_yn, audit_id, audit_dtm
+        FROM   com_user_menu
+        WHERE  login_id = #{loginId}
+        AND    menu_id = #{menuId}
+    </select>
+    <insert id="addComRole" parameterType="ComRole" >
+        INSERT INTO com_role (id, name, description, delete_yn, audit_id, audit_dtm, aply_sta_dt, aply_end_dt)
+        VALUES (#{id}, #{name}, #{description}, #{deleteYn}, #{auditId}, sysdate, #{aplyStaDt}, #{aplyEndDt})
+    </insert>
+    <insert id="createComRoleUser" parameterType="ComRoleUser" >
+        MERGE INTO com_role_user
+        USING DUAL ON (role_id = #{roleId}
+                 AND login_id   = #{loginId})
+        WHEN MATCHED THEN
+        UPDATE SET audit_id = #{auditId}, audit_dtm = sysdate
+        WHEN NOT MATCHED THEN
+            INSERT (role_id, login_id, audit_id, audit_dtm)
+            VALUES (#{roleId}, #{loginId}, #{auditId}, sysdate)
+    </insert>
+    <insert id="createComRoleOrg" parameterType="ComRoleOrg" >
+        INSERT INTO com_role_org (role_id, org_cd, audit_id, audit_dtm)
+        VALUES (#{roleId}, #{orgCd}, #{auditId}, sysdate)
+    </insert>
+    <insert id="createComUserMenu" parameterType="ComUserMenu" >
+        INSERT INTO com_user_menu (login_id, menu_id, create_yn, read_yn, update_yn, delete_yn, audit_id, audit_dtm)
+        VALUES (#{loginId}, #{menuId}, #{createYn}, #{readYn}, #{updateYn}, #{deleteYn}, #{auditId}, sysdate)
+    </insert>
+    <delete id="deleteComUserMenu" parameterType="ComUserMenu">
+        DELETE FROM com_user_menu WHERE login_id = #{loginId} AND menu_id = #{menuId}
+    </delete>
+    <select id="getComRoleMenu" parameterType="ComRoleMenu" resultType="ComRoleMenu">
+        SELECT role_id, menu_id, audit_id, audit_dtm
+        FROM   com_role_menu
+        WHERE  role_id = #{roleId}
+        AND    menu_id = #{menuId}
+    </select>
+    <insert id="createComRoleMenu" parameterType="ComRoleMenu" >
+        MERGE INTO com_role_menu
+        USING DUAL ON (role_id = #{roleId}
+                 AND menu_id   = #{menuId})
+        WHEN MATCHED THEN
+        UPDATE SET audit_id = #{auditId}, audit_dtm = sysdate
+        WHEN NOT MATCHED THEN
+            INSERT (role_id, menu_id, audit_id, audit_dtm)
+            VALUES (#{roleId}, #{menuId}, #{auditId}, sysdate)
+    </insert>
+    <delete id="deleteComRoleMenu" parameterType="ComRoleMenu">
+        DELETE FROM com_role_menu WHERE menu_id = #{menuId}
+        <if test="roleId != null">
+            AND role_id = #{roleId}
+        </if>
+    </delete>
+    <delete id="deleteComRoleUser" parameterType="ComRoleUser">
+        DELETE FROM com_role_user WHERE role_id = #{roleId} AND login_id = #{loginId}
+    </delete>
+    <delete id="deleteComRoleOrg" parameterType="ComRoleOrg">
+        DELETE FROM com_role_org WHERE role_id = #{roleId} AND org_cd = #{orgCd}
+    </delete>
+    <select id="getComRoleUserByLoginids" resultType="ComRoleUser">
+        SELECT u.role_id, r.name, u.login_id, p.user_nm, u.login_id||'('||p.user_nm||')' as loginidUserNm
+        FROM   com_role_user u, com_role r, com_person p
+        WHERE  u.role_id = r.id
+        AND    u.login_id = p.login_id
+        AND    u.login_id in
+        <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getComRoleOrgByOrgCds" resultType="ComRoleOrg">
+        SELECT o.role_id, r.name, o.org_cd, d.org_nm, o.org_cd||'('||d.org_nm||')' as orgCdOrgNm
+        FROM   com_role_org o, com_role r, com_dept d
+        WHERE  o.role_id = r.id
+        AND    o.org_cd = d.org_cd
+        AND    o.org_cd in
+        <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getComRoleMenuByRoleIds" resultType="ComRoleMenu">
+        SELECT rm.role_id, r.name, rm.menu_id, m.name as menuName, r.name||'('||rm.role_id||')' as roleIdroleName
+        FROM   com_role_menu rm, com_role r, menu m
+        WHERE  rm.role_id = r.id
+        AND    rm.menu_id = m.id
+        AND    rm.role_id in
+        <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getRoleCountByLoginIds" resultType="ComRoleUser">
+        SELECT u.role_id, r.name, count(*) count
+        FROM   com_role_user u, com_role r
+        WHERE  u.role_id = r.id
+        AND    u.login_id in
+        <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        GROUP  BY u.role_id, r.name
+    </select>
+    <select id="getRoleCountByOrgCds" resultType="ComRoleOrg">
+        SELECT o.role_id, r.name, count(*) count
+        FROM   com_role_org o, com_role r
+        WHERE  o.role_id = r.id
+        AND    o.org_cd in
+        <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        GROUP  BY o.role_id, r.name
+    </select>
+    <select id="getRoleCountByRoleIds" resultType="ComRoleMenu">
+        SELECT rm.menu_id, m.name as menuName, count(*) count
+        FROM   com_role_menu rm, com_role r, menu m
+        WHERE  rm.role_id = r.id
+        AND    rm.menu_id = m.id
+        AND    rm.role_id in
+        <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        GROUP  BY rm.menu_id, m.name
+    </select>
+    <select id="getComRoleUserByRoleIds" resultType="ComRoleUser">
+        SELECT ru.role_id, r.name, p.login_id||'('||p.user_nm||')' as loginidUserNm, d.org_nm,
+            DECODE(SUBSTR(p.login_id, 1, 2), '10', '정규', '50', '파견', '70', '임원', '90', '외부', 'PP', 'BP', '기타') as userType
+        FROM   com_role_user ru, com_role r, com_person p, com_dept d
+        WHERE  ru.role_id = r.id
+        AND    ru.login_id = p.login_id
+        AND    p.org_cd = d.org_cd
+        AND    ru.role_id in
+        <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        UNION
+        SELECT ro.role_id, r.name, p.login_id||'('||p.user_nm||')' as loginidUserNm, d.org_nm,
+            DECODE(SUBSTR(p.login_id, 1, 2), '10', '정규', '50', '파견', '70', '임원', '90', '외부', 'PP', 'BP', '기타') as userType
+        FROM   com_role_org ro, com_role r, com_person p, com_dept d
+        WHERE  ro.role_id = r.id
+        AND    ro.org_cd = p.org_cd
+        AND    p.org_cd = d.org_cd
+        AND    ro.role_id in
+        <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getMenuCountByMenuIds" resultType="ComRoleMenu">
+        SELECT rm.role_id, r.name, count(*) count
+        FROM   com_role_menu rm, com_role r, menu m
+        WHERE  rm.role_id = r.id
+        AND    rm.menu_id = m.id
+        AND    rm.menu_id in
+        <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        GROUP  BY rm.role_id, r.name
+    </select>
+    <select id="getComRoleMenuByMenuIds" resultType="ComRoleMenu">
+        SELECT rm.role_id, r.name, rm.menu_id, m.name as menuName, m.name||'('||m.id||')' as menuIdMenuName
+        FROM   com_role_menu rm, com_role r, menu m
+        WHERE  rm.role_id = r.id
+        AND    rm.menu_id = m.id
+        AND    rm.menu_id in
+        <foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+    <insert id="createUserSign" parameterType="String">
+        INSERT INTO USER_SIGN (SIGN_YR, DOC_KND_IND_CD, LOGIN_ID, SIGN_YN, SIGN_DT, USER_NAME, DEPT_CODE, DEPT_NAME)
+        SELECT TO_CHAR(SYSDATE, 'YYYY'), '01', #{loginId}, 'Y', SYSDATE, CUSER.USER_NM, CUSER.ORG_CD, CORG.ORG_NM
+        FROM   COM_PERSON CUSER, COM_DEPT CORG
+        WHERE  LOGIN_ID = #{loginId}
+        AND    CORG.ORG_CD = CUSER.ORG_CD
+    </insert>
+    <select id="getCntUserSign" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM   USER_SIGN
+        WHERE  LOGIN_ID = #{loginId}
+        AND    SIGN_YR = TO_CHAR(SYSDATE, 'YYYY')
+        AND    DOC_KND_IND_CD = '01'
+    </select>
+    <select id="getUserSign" parameterType="String" resultType="UserSign">
+        SELECT CUSER.LOGIN_ID AS LOGIN_ID
+        , PUS.USER_NM
+        , PUS.ORG_NM
+        , PUS.SIGN_DT AS SIGN_DT
+        , PUS.LOGIN_ID AS USER_ID
+        , PUS.SIGN_YN AS SIGN_YN
+        , CUSER.USER_NM AS CUSER_NM
+        , CORG.ORG_CD AS CORG_ID
+        , CORG.ORG_NM AS CORG_NM
+        FROM COM_PERSON CUSER
+        , PNET_USER_SIGN PUS
+        , COM_DEPT CORG
+        WHERE CUSER.LOGIN_ID = #{LOGINID}
+        AND CORG.ORG_CD = CUSER.ORG_CD
+        AND PUS.LOGIN_ID = CUSER.LOGIN_ID
+        AND PUS.CURRSTFF_YN = '1'
+        AND PUS.SIGN_YR = TO_CHAR(SYSDATE, 'YYYY')
+        AND PUS.DOC_KND_IND_CD = '01'
+    </select>
+    <select id="getUserSignTrm" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM   USER_SIGN_MNGMT
+        WHERE  SIGN_YR = #{signYr}
+        AND    DOC_KND_IND_CD = #{docKndIndCd}
+        AND    #{currentDate} BETWEEN SIGN_START_DT AND SIGN_END_DT
+    </select>
+    <insert id="createMstrSession" parameterType="MstrSession" >
+        MERGE INTO COM_MSTR_SESSION
+             USING DUAL
+                ON (USERNAME  = #{username}
+               AND IP         = #{ip}
+               AND PROJECT_ID = #{projectId})
+              WHEN MATCHED
+              THEN UPDATE SET SESSION_ID = #{sessionId}
+              WHEN NOT MATCHED
+              THEN INSERT (USERNAME, IP, PROJECT_ID, SESSION_ID)
+                   VALUES (#{username}, #{ip}, #{projectId}, #{sessionId})
+    </insert>
+    <delete id="deleteMstrSession" parameterType="MstrSession">
+        DELETE
+          FROM COM_MSTR_SESSION
+         WHERE USERNAME   = #{username}
+           AND IP         = #{ip}
+        <if test="projectId != null">
+           AND PROJECT_ID = #{projectId}
+        </if>
+    </delete>
+    <select id="getMstrSession" parameterType="MstrSession" resultType="String">
+        SELECT SESSION_ID
+          FROM COM_MSTR_SESSION
+         WHERE USERNAME   = #{username}
+           AND IP         = #{ip}
+           AND PROJECT_ID = #{projectId}
+    </select>
+</mapper>
