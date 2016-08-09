@@ -29,7 +29,7 @@
         </bean>
 
         <bean id="mysqlMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-            <property name="basePakcage" value="com.skplanet.bisportal.repository" />
+            <property name="basePackage" value="com.skplanet.bisportal.repository" />
             <property name="sqlSessionFactoryBeanName" value="mysqlSqlSessionFactory" />
         </bean>
 
@@ -57,7 +57,7 @@
         </bean>
 
         <bean id="oracleMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-            <property name="basePakcage" value="com.skplanet.pandora.repository.oracle" />
+            <property name="basePackage" value="com.skplanet.pandora.repository.oracle" />
             <property name="sqlSessionFactoryBeanName" value="oracleSqlSessionFactory" />
         </bean>
 
