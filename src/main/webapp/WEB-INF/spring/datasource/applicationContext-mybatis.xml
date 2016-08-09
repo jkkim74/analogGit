@@ -5,7 +5,63 @@
        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
     <beans>
-        <bean id="ocbDataSource"
+        <bean id="mysqlDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+            <property name="driverClassName" value="#{common['jdbc.pandora.mysql.driverClass']}"/>
+            <property name="url" value="#{common['jdbc.pandora.mysql.url']}"/>
+            <property name="username" value="#{common['jdbc.pandora.mysql.username']}"/>
+            <property name="password" value="#{common['jdbc.pandora.mysql.password']}"/>
+            <property name="initialSize" value="#{common['jdbc.pandora.mysql.initialSize']}"/>
+            <property name="maxActive" value="50"/>
+            <property name="maxIdle" value="15" />
+            <property name="minIdle" value="#{common['jdbc.pandora.mysql.initialSize']}" />
+            <property name="testOnBorrow" value="false" />
+            <property name="validationQuery" value="select 1 from dual" />
+            <property name="timeBetweenEvictionRunsMillis" value="10000" />
+            <property name="testWhileIdle" value="true" />
+            <property name="numTestsPerEvictionRun" value="3" />
+            <property name="minEvictableIdleTimeMillis" value="-1" />
+        </bean>
+
+        <bean id="mysqlSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+            <property name="dataSource" ref="mysqlDataSource" />
+            <property name="configLocation" value="classpath:config/pandora/mybatis-config.xml" />
+            <property name="mapperLocations" value="classpath*:sql/**/*.xml" />
+        </bean>
+
+        <bean id="mysqlMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+            <property name="basePakcage" value="com.skplanet.bisportal.repository" />
+            <property name="sqlSessionFactoryBeanName" value="mysqlSqlSessionFactory" />
+        </bean>
+
+        <bean id="oracleDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+            <property name="driverClassName" value="#{common['jdbc.pandora.oracle.driverClass']}"/>
+            <property name="url" value="#{common['jdbc.pandora.oracle.url']}"/>
+            <property name="username" value="#{common['jdbc.pandora.oracle.username']}"/>
+            <property name="password" value="#{common['jdbc.pandora.oracle.password']}"/>
+            <property name="initialSize" value="#{common['jdbc.pandora.oracle.initialSize']}"/>
+            <property name="maxActive" value="50"/>
+            <property name="maxIdle" value="15" />
+            <property name="minIdle" value="#{common['jdbc.pandora.oracle.initialSize']}" />
+            <property name="testOnBorrow" value="false" />
+            <property name="validationQuery" value="select 1 from dual" />
+            <property name="timeBetweenEvictionRunsMillis" value="10000" />
+            <property name="testWhileIdle" value="true" />
+            <property name="numTestsPerEvictionRun" value="3" />
+            <property name="minEvictableIdleTimeMillis" value="-1" />
+        </bean>
+
+        <bean id="oracleSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+            <property name="dataSource" ref="oracleDataSource" />
+            <property name="configLocation" value="classpath:config/pandora/mybatis-config.xml" />
+            <property name="mapperLocations" value="classpath*:sql/oracle/mybatis/mapper/**/*.xml" />
+        </bean>
+
+        <bean id="oracleMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+            <property name="basePakcage" value="com.skplanet.pandora.repository.oracle" />
+            <property name="sqlSessionFactoryBeanName" value="oracleSqlSessionFactory" />
+        </bean>
+
+        <!--<bean id="ocbDataSource"
               class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
             <property name="driverClassName" value="#{common['jdbc.ocb.oracle.driverClass']}"/>
             <property name="url" value="#{common['jdbc.ocb.oracle.url']}"/>
@@ -27,13 +83,13 @@
             <property name="dataSource" ref="ocbDataSource" />
             <property name="configLocation" value="classpath:config/ocb/mybatis-config.xml" />
             <property name="mapperLocations" value="classpath*:sql/ocb/mybatis/mapper/**/*.xml" />
-        </bean>
+        </bean>-->
 
         <bean id="ocbSqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
-            <constructor-arg index="0" ref="ocbSqlSessionFactory" />
+            <constructor-arg index="0" ref="mysqlSqlSessionFactory" />
         </bean>
 
-        <bean id="syrupDataSource"
+        <!--<bean id="syrupDataSource"
               class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
             <property name="driverClassName" value="#{common['jdbc.syrup.oracle.driverClass']}"/>
             <property name="url" value="#{common['jdbc.syrup.oracle.url']}"/>
@@ -55,13 +111,13 @@
             <property name="dataSource" ref="syrupDataSource" />
             <property name="configLocation" value="classpath:config/syrup/mybatis-config.xml" />
             <property name="mapperLocations" value="classpath*:sql/syrup/mybatis/mapper/**/*.xml" />
-        </bean>
+        </bean>-->
 
         <bean id="syrupSqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
-            <constructor-arg index="0" ref="syrupSqlSessionFactory" />
+            <constructor-arg index="0" ref="mysqlSqlSessionFactory" />
         </bean>
 
-        <bean id="tcloudDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <!--<bean id="tcloudDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
             <property name="driverClassName" value="#{common['jdbc.tcloud.oracle.driverClass']}"/>
             <property name="url" value="#{common['jdbc.tcloud.oracle.url']}"/>
             <property name="username" value="#{common['jdbc.tcloud.oracle.username']}"/>
@@ -82,13 +138,13 @@
             <property name="dataSource" ref="tcloudDataSource" />
             <property name="configLocation" value="classpath:config/tcloud/mybatis-config.xml" />
             <property name="mapperLocations" value="classpath*:sql/tcloud/mybatis/mapper/**/*.xml" />
-        </bean>
+        </bean>-->
 
         <bean id="tcloudSqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
-            <constructor-arg index="0" ref="tcloudSqlSessionFactory" />
+            <constructor-arg index="0" ref="mysqlSqlSessionFactory" />
         </bean>
 
-        <bean id="tmapDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <!--<bean id="tmapDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
             <property name="driverClassName" value="#{common['jdbc.tmap.oracle.driverClass']}"/>
             <property name="url" value="#{common['jdbc.tmap.oracle.url']}"/>
             <property name="username" value="#{common['jdbc.tmap.oracle.username']}"/>
@@ -109,13 +165,13 @@
             <property name="dataSource" ref="tmapDataSource" />
             <property name="configLocation" value="classpath:config/tmap/mybatis-config.xml" />
             <property name="mapperLocations" value="classpath*:sql/tmap/mybatis/mapper/**/*.xml" />
-        </bean>
+        </bean>-->
 
         <bean id="tmapSqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
-            <constructor-arg index="0" ref="tmapSqlSessionFactory" />
+            <constructor-arg index="0" ref="mysqlSqlSessionFactory" />
         </bean>
 
-        <bean id="oneidDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <!--<bean id="oneidDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
             <property name="driverClassName" value="#{common['jdbc.oneid.oracle.driverClass']}"/>
             <property name="url" value="#{common['jdbc.oneid.oracle.url']}"/>
             <property name="username" value="#{common['jdbc.oneid.oracle.username']}"/>
@@ -136,13 +192,13 @@
             <property name="dataSource" ref="oneidDataSource" />
             <property name="configLocation" value="classpath:config/oneid/mybatis-config.xml" />
             <property name="mapperLocations" value="classpath*:sql/oneid/mybatis/mapper/**/*.xml" />
-        </bean>
+        </bean>-->
 
         <bean id="oneidSqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
-            <constructor-arg index="0" ref="oneidSqlSessionFactory" />
+            <constructor-arg index="0" ref="mysqlSqlSessionFactory" />
         </bean>
 
-        <bean id="bipDataSource"
+        <!--<bean id="bipDataSource"
               class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
             <property name="driverClassName" value="#{common['jdbc.bip.oracle.driverClass']}"/>
             <property name="url" value="#{common['jdbc.bip.oracle.url']}"/>
@@ -165,15 +221,15 @@
             <property name="dataSource" ref="bipDataSource" />
             <property name="configLocation" value="classpath:config/bip/mybatis-config.xml" />
             <property name="mapperLocations" value="classpath*:sql/bip/mybatis/mapper/**/*.xml" />
-        </bean>
+        </bean>-->
 
         <bean id="bipSqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
-            <constructor-arg index="0" ref="bipSqlSessionFactory" />
+            <constructor-arg index="0" ref="mysqlSqlSessionFactory" />
         </bean>
 
         <bean id="transactionManager"
               class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-            <property name="dataSource" ref="bipDataSource" />
+            <property name="dataSource" ref="mysqlDataSource" />
         </bean>
     </beans>
 </beans>

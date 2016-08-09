@@ -69,7 +69,9 @@
             s.date_types AS "menuSearchOption.date_types",
             s.calendar_type AS "menuSearchOption.calendar_type",
             s.last_update AS "menuSearchOption.last_update"
-        FROM   menu m, common_code c, menu_search_option s, (
+        FROM   menu m
+        JOIN   common_code c ON m.common_code_id = c.id
+        LEFT JOIN (
                 SELECT rm.menu_id, 'Y' as authority
                 FROM   com_role_menu rm
                 WHERE  rm.role_id = 0
@@ -84,11 +86,9 @@
                 WHERE  rm.role_id = ro.role_id
                 AND    ro.org_cd = p.org_cd
                 AND    p.login_id = #{loginId}
-            ) mm
-        WHERE m.common_code_id = c.id
-        AND   m.id = mm.menu_id(+)
-        AND   m.id = s.menu_id(+)
-        AND   c.name = #{commonCodeName}
+            ) mm ON m.id = mm.menu_id
+        LEFT JOIN menu_search_option s ON m.id = s.menu_id
+        WHERE c.name = #{commonCodeName}
         <if test="visibleYn != null">
             AND m.visible_yn = #{visibleYn}
         </if>
@@ -99,7 +99,9 @@
     </select>
     <select id="getTreeMenus" parameterType="Menu" resultType="MenuTree">
         SELECT <include refid="menuAuthorityColumns" />
-        FROM   menu m, common_code c, (
+        FROM   menu m
+        JOIN   common_code c ON m.common_code_id = c.id
+        LEFT JOIN (
                 SELECT rm.menu_id, 'Y' as authority
                 FROM   com_role_menu rm
                 WHERE  rm.role_id = 0
@@ -114,10 +116,8 @@
                 WHERE  rm.role_id = ro.role_id
                 AND    ro.org_cd = p.org_cd
                 AND    p.login_id = #{loginId}
-            ) mm
-        WHERE m.common_code_id = c.id
-        AND   m.id = mm.menu_id(+)
-        AND   c.name = #{commonCodeName}
+            ) mm ON m.id = mm.menu_id
+        WHERE c.name = #{commonCodeName}
         <if test="parentId != null">
             AND m.parent_id = #{parentId}
         </if>

@@ -6,9 +6,9 @@ function mainIndexCtrl($rootScope, $scope, $http, $sce, $location) {
 
     $scope.init = function(){
         setDefaultValue();
-        setMainPageNotice();
-        callPopupYList();
-        setLatestDss();
+        // setMainPageNotice();
+        // callPopupYList();
+        // setLatestDss();
     };
 
     function setDefaultValue(){

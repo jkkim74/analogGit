@@ -194,8 +194,9 @@ App.config(function($urlRouterProvider, $stateProvider, $httpProvider, $logProvi
     $rootScope.showMainPageNotice = false;
     try {
         var previousLocation = $location.url();
-        if (userSvc.isLogin()) {
-            var voyagerUser = accessSvc.getVoyagerCookie();
+        if (true/*userSvc.isLogin()*/) {
+            //var voyagerUser = accessSvc.getVoyagerCookie();
+            var voyagerUser = { id:"1", email:"test@sk.com", username:"test", role:"ROLE_USER" };
             if (!angular.isUndefined(voyagerUser) && voyagerUser != null) {
                 userSvc.setUser(voyagerUser);
                 if (userSvc.isLoginRefer()) {
