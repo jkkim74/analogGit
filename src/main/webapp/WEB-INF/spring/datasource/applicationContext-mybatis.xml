@@ -61,6 +61,23 @@
             <property name="sqlSessionFactoryBeanName" value="oracleSqlSessionFactory" />
         </bean>
 
+        <bean id="qcDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+            <property name="driverClassName" value="#{common['jdbc.pandora.querycache.driverClass']}"/>
+            <property name="url" value="#{common['jdbc.pandora.querycache.url']}"/>
+            <property name="username" value="#{common['jdbc.pandora.querycache.username']}"/>
+            <property name="password" value="#{common['jdbc.pandora.querycache.password']}"/>
+            <property name="initialSize" value="#{common['jdbc.pandora.querycache.initialSize']}"/>
+            <property name="maxActive" value="50"/>
+            <property name="maxIdle" value="15" />
+            <property name="minIdle" value="#{common['jdbc.pandora.querycache.initialSize']}" />
+            <property name="testOnBorrow" value="false" />
+            <property name="validationQuery" value="select 1 from dual" />
+            <property name="timeBetweenEvictionRunsMillis" value="10000" />
+            <property name="testWhileIdle" value="true" />
+            <property name="numTestsPerEvictionRun" value="3" />
+            <property name="minEvictableIdleTimeMillis" value="-1" />
+        </bean>
+
         <!--<bean id="ocbDataSource"
               class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
             <property name="driverClassName" value="#{common['jdbc.ocb.oracle.driverClass']}"/>

@@ -16,7 +16,7 @@
 		<org.aspectj-version>1.7.1</org.aspectj-version>
 		<logback-version>1.1.3</logback-version>
 		<org.slf4j-version>1.7.12</org.slf4j-version>
-        <org.spring-ldap-version>2.0.4.RELEASE</org.spring-ldap-version>
+		<org.spring-ldap-version>2.0.4.RELEASE</org.spring-ldap-version>
 		<jackson.version>2.6.3</jackson.version>
 		<lombok-version>1.16.6</lombok-version>
 		<findbugs-version>3.0.2</findbugs-version>
@@ -27,7 +27,7 @@
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
+			<artifactId>spring-context-support</artifactId>
 			<version>${org.springframework-version}</version>
 			<exclusions>
 				<!-- Exclude Commons Logging in favor of SLF4j -->
@@ -47,11 +47,6 @@
 			<artifactId>spring-jdbc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${org.springframework-version}</version>
-        </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-oxm</artifactId>
@@ -62,22 +57,23 @@
 			<artifactId>spring-test</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-        <dependency>
-            <groupId>org.springframework.ldap</groupId>
-            <artifactId>spring-ldap-core</artifactId>
-            <version>${org.spring-ldap-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.ldap</groupId>
-            <artifactId>spring-ldap-core-tiger</artifactId>
-            <version>${org.spring-ldap-version}</version>
-        </dependency>
-        <!-- validator -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>5.1.2.Final</version>
-        </dependency>
+		<dependency>
+			<groupId>org.springframework.ldap</groupId>
+			<artifactId>spring-ldap-core</artifactId>
+			<version>${org.spring-ldap-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ldap</groupId>
+			<artifactId>spring-ldap-core-tiger</artifactId>
+			<version>${org.spring-ldap-version}</version>
+		</dependency>
+
+		<!-- validator -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.1.2.Final</version>
+		</dependency>
 
 		<!-- Mybatis -->
 		<dependency>
@@ -91,46 +87,53 @@
 			<version>1.2.3</version>
 		</dependency>
 
-        <!-- MySQL -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.39</version>
-        </dependency>
+		<!-- MySQL -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.39</version>
+		</dependency>
 
-        <!-- Oracle -->
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.1.0.7.0</version>
-        </dependency>
+		<!-- Oracle -->
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.1.0.7.0</version>
+		</dependency>
 
-        <!-- Apache Commons -->
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.10</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.3.1</version>
-        </dependency>
+		<!-- QueryCache -->
+		<dependency>
+			<groupId>com.skplanet.querycache</groupId>
+			<artifactId>querycache-jdbc</artifactId>
+			<version>0.20.3</version>
+		</dependency>
+
+		<!-- Apache Commons -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.10</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.1</version>
+		</dependency>
 
 		<!-- AspectJ -->
 		<dependency>
@@ -140,16 +143,16 @@
 		</dependency>
 
 		<!-- Logging -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback-version}</version>
-        </dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${logback-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback-version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -162,44 +165,45 @@
 			<scope>runtime</scope>
 		</dependency>
 
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok-version}</version>
-            <scope>provided</scope>
-        </dependency>
+		<!-- Lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok-version}</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>3.0-alpha-1</version>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.1</version>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>2.2.1</version>
 			<scope>provided</scope>
 		</dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-        </dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
 
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-            <version>4.0</version>
-        </dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>4.0</version>
+		</dependency>
 
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hamcrest</groupId>
@@ -210,13 +214,14 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>1.9.5</version>
+			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <version>0.8.1</version>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>0.8.1</version>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- JSON Library -->
 		<dependency>
@@ -235,7 +240,7 @@
 			<version>${jackson.version}</version>
 		</dependency>
 
-        <!-- Google Library -->
+		<!-- Google Library -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -251,54 +256,49 @@
 			<artifactId>lambdaj</artifactId>
 			<version>2.3.3</version>
 		</dependency>
-        <!-- Excel -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>3.9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>3.9</version>
-        </dependency>
-        <!-- HTML Parsing -->
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.7.3</version>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.codehaus.jackson</groupId>-->
-            <!--<artifactId>jackson-mapper-asl</artifactId>-->
-            <!--<version>1.9.12</version>-->
-        <!--</dependency>-->
-        <!-- DateUtil -->
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.9</version>
-        </dependency>
-        <!-- fileUpload util -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.4.1</version><!--<version>4.1.3</version>4.2.4-->
-        </dependency>
+		<!-- Excel -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.9</version>
+		</dependency>
+		<!-- HTML Parsing -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.7.3</version>
+		</dependency>
+		<!-- DateUtil -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.9</version>
+		</dependency>
+		<!-- fileUpload util -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.4.1</version><!--<version>4.1.3</version>4.2.4 -->
+		</dependency>
 
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <version>1.7</version>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>1.7</version>
+		</dependency>
 
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4.7</version>
-        </dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
 
-        <!-- JIRA API -->
+		<!-- JIRA API -->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-json</artifactId>
@@ -326,9 +326,9 @@
 		</dependency>
 
 		<dependency>
-		  <groupId>com.atlassian.jira</groupId>
-		  <artifactId>jira-rest-java-client-api</artifactId>
-		  <version>2.0.0-m27</version>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-rest-java-client-api</artifactId>
+			<version>2.0.0-m27</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.httpcomponents</groupId>
@@ -337,23 +337,23 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-		  <groupId>com.atlassian.jira</groupId>
-		  <artifactId>jira-rest-java-client-core</artifactId>
-		  <version>2.0.0-m27</version>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-rest-java-client-core</artifactId>
+			<version>2.0.0-m27</version>
 		</dependency>
 
-        <!-- report engine -->
-        <dependency>
-            <groupId>net.sf.reportengine</groupId>
-            <artifactId>reportengine</artifactId>
-            <version>0.12.0</version>
-        </dependency>
-        <!-- SMS -->
-        <dependency>
-            <groupId>SKPBSS</groupId>
-            <artifactId>bss-rms-client</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+		<!-- report engine -->
+		<dependency>
+			<groupId>net.sf.reportengine</groupId>
+			<artifactId>reportengine</artifactId>
+			<version>0.12.0</version>
+		</dependency>
+		<!-- SMS -->
+		<dependency>
+			<groupId>SKPBSS</groupId>
+			<artifactId>bss-rms-client</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 		<!-- SCSL -->
 		<dependency>
 			<groupId>com.softcamp</groupId>
@@ -451,23 +451,11 @@
 			<artifactId>mstr-web-utils-xml</artifactId>
 			<version>7.3</version>
 		</dependency>
-
-		<!-- QueryCache -->
-		<dependency>
-			<groupId>org.apache.thrift</groupId>
-			<artifactId>libthrift</artifactId>
-			<version>0.9.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.skplanet.querycache</groupId>
-			<artifactId>querycache-jdbc</artifactId>
-			<version>0.20.3</version>
-		</dependency>
 	</dependencies>
 
-    <build>
+	<build>
 		<plugins>
-            <!-- org.apache.maven.plugins -->
+			<!-- org.apache.maven.plugins -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -497,7 +485,7 @@
 					<configLocation>skplanet_checks.xml</configLocation>
 				</configuration>
 			</plugin>
-            <!-- maven-resources-plugin -->
+			<!-- maven-resources-plugin -->
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.5</version>
@@ -520,45 +508,45 @@
 					</execution>
 				</executions>
 			</plugin>
-        </plugins>
+		</plugins>
 	</build>
 
-    <!-- 프로젝트의 artifact를 배포할 저장소 -->
-    <distributionManagement>
-        <repository>
-            <id>skp-releases</id>
-            <name>skp-releases</name>
-            <url>http://mvn.skplanet.com/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>skp-snapshots</id>
-            <name>skp-snapshots</name>
-            <url>http://mvn.skplanet.com/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
+	<!-- 프로젝트의 artifact를 배포할 저장소 -->
+	<distributionManagement>
+		<repository>
+			<id>skp-releases</id>
+			<name>skp-releases</name>
+			<url>http://mvn.skplanet.com/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>skp-snapshots</id>
+			<name>skp-snapshots</name>
+			<url>http://mvn.skplanet.com/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
-    <!-- dependency에 정의된 라이브러리를 다운로드할 저장소 -->
-    <repositories>
-        <repository>
-            <id>skp-public</id>
-            <name>skplanet public repository</name>
-            <url>http://mvn.skplanet.com/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>Sonatype-public</id>
-            <name>SnakeYAML repository</name>
-            <url>http://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>codelds</id>
-            <url>https://code.lds.org/nexus/content/groups/main-repo</url>
-        </repository>
+	<!-- dependency에 정의된 라이브러리를 다운로드할 저장소 -->
+	<repositories>
+		<repository>
+			<id>skp-public</id>
+			<name>skplanet public repository</name>
+			<url>http://mvn.skplanet.com/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>Sonatype-public</id>
+			<name>SnakeYAML repository</name>
+			<url>http://oss.sonatype.org/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>codelds</id>
+			<url>https://code.lds.org/nexus/content/groups/main-repo</url>
+		</repository>
 		<repository>
 			<id>atlassian-public</id>
 			<url>https://m2proxy.atlassian.com/repository/public</url>
@@ -587,19 +575,19 @@
 		</repository>
 	</repositories>
 
-    <!-- maven이 사용하는 plugin을 다운로드할 저장소 -->
-    <pluginRepositories>
-        <pluginRepository>
-            <id>skp-public</id>
-            <name>skp public repository</name>
-            <url>http://mvn.skplanet.com/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
+	<!-- maven이 사용하는 plugin을 다운로드할 저장소 -->
+	<pluginRepositories>
+		<pluginRepository>
+			<id>skp-public</id>
+			<name>skp public repository</name>
+			<url>http://mvn.skplanet.com/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
 		<pluginRepository>
 			<id>atlassian-new</id>
 			<url>http://repo.springsource.org/libs-release-remote</url>
@@ -611,9 +599,9 @@
 				<checksumPolicy>warn</checksumPolicy>
 			</snapshots>
 		</pluginRepository>
-    </pluginRepositories>
+	</pluginRepositories>
 
-    <!-- profiles -->
+	<!-- profiles -->
 	<profiles>
 		<profile>
 			<id>local</id>
