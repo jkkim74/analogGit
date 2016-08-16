@@ -5,7 +5,7 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.common.collect.Maps;
-import com.google.inject.Singleton;
+//import com.google.inject.Singleton;
 import com.microstrategy.web.objects.EnumWebPromptType;
 import com.microstrategy.web.objects.WebPrompt;
 import com.skplanet.bisportal.model.mstr.MstrRequest;
@@ -17,7 +17,7 @@ import com.skplanet.bisportal.model.mstr.MstrRequest;
  *
  */
 @Slf4j
-@Singleton
+//@Singleton
 public class PromptSelector {
 	private Map<Integer, PromptHandler> handlerMap;
 

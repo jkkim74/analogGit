@@ -16,7 +16,7 @@ import skp.bss.msg.rms.front.vo.ReceiveNumVo;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.inject.Singleton;
+//import com.google.inject.Singleton;
 import com.skplanet.bisportal.common.exception.RemoteAccessException;
 import com.skplanet.bisportal.common.utils.PropertiesUtil;
 
@@ -25,7 +25,7 @@ import com.skplanet.bisportal.common.utils.PropertiesUtil;
  *
  * @author HO-JIN, HA (mimul@wiseeco.com)
  */
-@Singleton
+//@Singleton
 @Slf4j
 public class SmsHelper {
 	private URL MSG_URL;

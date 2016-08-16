@@ -1,7 +1,7 @@
 package com.skplanet.bisportal.common.excel;
 
 import com.google.common.collect.Maps;
-import com.google.inject.Singleton;
+//import com.google.inject.Singleton;
 import com.skplanet.bisportal.common.consts.Constants;
 import com.skplanet.bisportal.common.model.ReportDateType;
 import com.skplanet.bisportal.common.model.SummaryReportRow;
@@ -17,7 +17,7 @@ import java.util.Map;
  * @author HoJin-Ha (mimul@wiseeco.com)
  *
  */
-@Singleton
+//@Singleton
 public class SummaryCellSelector {
 	private Map<String, CellHandler> handlerMap;
 

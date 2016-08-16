@@ -1,7 +1,7 @@
 package com.skplanet.bisportal.common.excel;
 
 import com.google.common.collect.Maps;
-import com.google.inject.Singleton;
+//import com.google.inject.Singleton;
 import com.skplanet.bisportal.model.ocb.BleNewTech;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -15,7 +15,7 @@ import java.util.Map;
  * @author HoJin-Ha (mimul@wiseeco.com)
  *
  */
-@Singleton
+//@Singleton
 public class BleCellSelector {
 	private Map<Integer, BleCellHandler> cellMap;
 

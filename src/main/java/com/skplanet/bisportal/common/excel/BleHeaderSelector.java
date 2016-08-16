@@ -3,7 +3,7 @@ package com.skplanet.bisportal.common.excel;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.google.inject.Singleton;
+//import com.google.inject.Singleton;
 import com.skplanet.bisportal.common.model.MultiHeader;
 
 /**
@@ -12,7 +12,7 @@ import com.skplanet.bisportal.common.model.MultiHeader;
  * @author HoJin-Ha (mimul@wiseeco.com)
  *
  */
-@Singleton
+//@Singleton
 public class BleHeaderSelector {
 	private Map<Integer, BleHeaderHandler> headerMap;
 

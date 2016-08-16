@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import com.google.common.collect.Maps;
-import com.google.inject.Singleton;
+//import com.google.inject.Singleton;
 import com.skplanet.bisportal.common.model.MultiHeader;
 
 /**
@@ -14,7 +14,7 @@ import com.skplanet.bisportal.common.model.MultiHeader;
  * @author HoJin-Ha (mimul@wiseeco.com)
  *
  */
-@Singleton
+//@Singleton
 public class BleMergeSelector {
 	private Map<Integer, BleMergeHandler> mergeMap;
 
