@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title> Voyager </title>
+    <title> 개인정보조회시스템 </title>
     <meta name="description" content="Voyager">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="/resources/images/favicon.ico"/>
