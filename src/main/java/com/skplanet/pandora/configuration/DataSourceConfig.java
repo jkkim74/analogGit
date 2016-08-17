@@ -48,7 +48,7 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(mysqlDataSource());
 		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:config/pandora/mybatis-config.xml"));
-		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:sql/mysql/*.xml"));
+		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:sql/mysql/**/*.xml"));
 		return sessionFactory.getObject();
 	}
 
@@ -77,7 +77,7 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(oracleDataSource());
 		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:config/pandora/mybatis-config.xml"));
-		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:sql/oracle/*.xml"));
+		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:sql/oracle/**/*.xml"));
 		return sessionFactory.getObject();
 	}
 
@@ -108,7 +108,7 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(qcDataSource());
 		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:config/pandora/mybatis-config.xml"));
-		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:sql/querycache/*.xml"));
+		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:sql/querycache/**/*.xml"));
 		return sessionFactory.getObject();
 	}
 
