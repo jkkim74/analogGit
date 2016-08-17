@@ -1,5 +1,6 @@
 package com.skplanet.pandora.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class TestController {
 	private QueryCacheRepository queryCacheRepository;
 
 	@RequestMapping(value = "/testQC", method = RequestMethod.GET)
-	public Map<String, Object> testQC(Map<String, Object> params, Model model) {
+	public List<Map<String, Object>> testQC(Map<String, Object> params, Model model) {
 		return queryCacheRepository.selectTest(params);
 	}
 

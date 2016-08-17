@@ -3,7 +3,7 @@
 <mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
 
     <select id="selectTest" parameterType="map" resultType="map">
-        select 1 as A from dual
+        select #{a} as A from dual
     </select>
 
 </mapper>

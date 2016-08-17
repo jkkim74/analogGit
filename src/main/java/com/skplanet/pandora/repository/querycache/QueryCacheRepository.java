@@ -1,5 +1,6 @@
 package com.skplanet.pandora.repository.querycache;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
@@ -7,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface QueryCacheRepository {
 
-	Map<String, Object> selectTest(Map<String, Object> params);
+	List<Map<String, Object>> selectTest(Map<String, Object> params);
 
 }
