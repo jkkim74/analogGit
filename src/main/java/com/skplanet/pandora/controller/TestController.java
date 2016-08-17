@@ -20,7 +20,7 @@ public class TestController {
 	private MysqlRepository mysqlRepository;
 
 	@RequestMapping(value = "/testMysql", method = RequestMethod.GET)
-	public Map<String, Object> testMysql(Map<String, Object> params, Model model) {
+	public Map<String, Object> testMysql(@RequestParam Map<String, Object> params, Model model) {
 		return mysqlRepository.selectTest(params);
 	}
 
@@ -28,7 +28,7 @@ public class TestController {
 	private OracleRepository oracleRepository;
 
 	@RequestMapping(value = "/testOracle", method = RequestMethod.GET)
-	public Map<String, Object> testOracle(Map<String, Object> params, Model model) {
+	public Map<String, Object> testOracle(@RequestParam Map<String, Object> params, Model model) {
 		return oracleRepository.selectTest(params);
 	}
 
@@ -36,7 +36,7 @@ public class TestController {
 	private QueryCacheRepository queryCacheRepository;
 
 	@RequestMapping(value = "/testQC", method = RequestMethod.GET)
-	public List<Map<String, Object>> testQC(Map<String, Object> params, Model model) {
+	public List<Map<String, Object>> testQC(@RequestParam Map<String, Object> params, Model model) {
 		return queryCacheRepository.selectTest(params);
 	}
 
