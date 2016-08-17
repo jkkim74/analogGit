@@ -1,4 +1,3 @@
-<%@ page contentType="text/html;charset=utf-8" session="false" trimDirectiveWhitespaces="true" %>
 <!DOCTYPE html>
 <html lang="ko" class="no-js" data-ng-app="App">
 <head>
