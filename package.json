@@ -1,0 +1,16 @@
+{
+  "devDependencies": {
+    "bower": "^1.7.9",
+    "gulp": "^3.9.1",
+    "gulp-inject": "^4.1.0",
+    "main-bower-files": "^2.13.1"
+  },
+  "engines": {
+    "node": ">=0.12"
+  },
+  "private": true,
+  "scripts": {
+    "postinstall": "bower install",
+    "prestart": "npm install"
+  }
+}
