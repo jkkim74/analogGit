@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.extern.slf4j.Slf4j;
+import com.skplanet.pandora.exception.EmptyFileException;
+import com.skplanet.pandora.model.ApiResponse;
 
 @RestController
-@Slf4j
-public class UploadController {
+public class ApiController {
 
 	public static final String UPLOADED_FILE_DIR = System.getProperty("user.home") + "/pandora-upload";
 
@@ -27,20 +27,22 @@ public class UploadController {
 	// filename).toString())
 
 	@RequestMapping(method = RequestMethod.POST, value = "/upload")
-	public void handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+	public ApiResponse handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
 		File directory = new File(UPLOADED_FILE_DIR);
 		if (!directory.exists()) {
 			directory.mkdir();
 		}
 
 		if (file.isEmpty()) {
-			log.info("File is empty");
-			return;
+			throw new EmptyFileException();
 		}
 
 		try (InputStream in = file.getInputStream()) {
 			Files.copy(in, Paths.get(UPLOADED_FILE_DIR, UUID.randomUUID() + "-" + file.getOriginalFilename()));
 		}
+
+		return ApiResponse.builder().type(ApiResponse.DEFAULT_TYPE).code(ApiResponse.DEFAULT_CODE)
+				.message("Upload Success").build();
 	}
 
 }
