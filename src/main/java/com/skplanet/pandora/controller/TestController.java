@@ -40,5 +40,10 @@ public class TestController {
 	public List<Map<String, Object>> testQC(@RequestParam Map<String, Object> params, Model model) {
 		return queryCacheRepository.selectTest(params);
 	}
+	
+	@RequestMapping(value = "/testError", method = RequestMethod.GET)
+	public void testError(@RequestParam Map<String, Object> params, Model model) {
+		throw new RuntimeException("custom error");
+	}
 
 }
