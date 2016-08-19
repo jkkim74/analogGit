@@ -1,6 +1,7 @@
 package com.skplanet.pandora.configuration;
 
 import javax.servlet.FilterRegistration;
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
@@ -25,6 +26,7 @@ public class AppInitializer implements WebApplicationInitializer {
 		dispatcher.setInitParameter("throwExceptionIfNoHandlerFound", "true");
 		dispatcher.setLoadOnStartup(1);
 		dispatcher.addMapping("/");
+		dispatcher.setMultipartConfig(new MultipartConfigElement(System.getProperty("java.io.tmpdir")));
 
 		FilterRegistration.Dynamic encodingFilter = servletContext.addFilter("encodingFilter",
 				new CharacterEncodingFilter("UTF-8", true));
