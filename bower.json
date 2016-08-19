@@ -15,6 +15,8 @@
     "angular-loading-bar": "^0.9.0",
     "components-font-awesome": "^4.6.3",
     "lodash": "^4.15.0",
-    "moment": "^2.14.1"
+    "moment": "^2.14.1",
+    "ng-file-upload": "^12.0.4",
+    "ng-file-upload-shim": "^12.0.4"
   }
 }

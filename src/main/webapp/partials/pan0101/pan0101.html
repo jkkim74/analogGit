@@ -1,3 +1,33 @@
-<div>
-    <p>PAN0101 {{hello}}</p>
+<div layout="column" layout-padding>
+    <div>
+        <h2>멤버 ID 일괄 전환</h2>
+        <hr>
+    </div>
+    <md-content layout="row" layout-align="space-between none">
+        <div flex="30">
+            <form name="form">
+                <md-input-container class="md-block">
+                    <label>입력데이터</label>
+                    <md-select ng-model="dataType">
+                        <md-option ng-repeat="option in selectOptions" value="{{option.value}}">
+                            {{option.displayName}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+
+                <md-button class="md-raised" ngf-select="select($file)" ng-model="file" name="file" ngf-pattern="'*/*'" ngf-accept="'*/*'"
+                    ngf-max-size="1GB">Select</md-button>
+                selected file: {{selectedFile.name}}
+                <div ngf-drop="select($file)" ng-model="file" class="drop-box" ngf-drag-over-class="'drop-box-dragover'">Drag & Drop Here</div>
+                <md-button type="submit" ng-click="submit()">Upload</md-button>
+            </form>
+
+        </div>
+        <div flex="50">
+            <div ui-grid="gridOptionsPreview"></div>
+        </div>
+    </md-content>
+    <div>
+        <div ui-grid="gridOptions" ui-grid-resize-columns></div>
+    </div>
 </div>

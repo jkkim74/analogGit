@@ -5,8 +5,13 @@ var App = angular.module('App', [
   'ngMessages',
   'ngSanitize',
   'ngMaterial',
+  'ngFileUpload',
   'ui.router',
   'ui.grid',
+  'ui.grid.resizeColumns',
+  'ui.grid.selection',
+  'ui.grid.exporter',
+  'ui.grid.infiniteScroll',
   'angular-loading-bar'
 ]);
 
