@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
+
+	<select databaseId="oracle" id="countTable" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM USER_TABLES WHERE TABLE_NAME = 'TMP_' || UPPER(#{pageId}) || '_' || UPPER(#{username})
+	</select>
+	<select id="countTable" parameterType="map" resultType="int">
+		SELECT 0 FROM DUAL
+	</select>
+
+	<update databaseId="oracle" id="createTable" parameterType="map">
+		CREATE GLOBAL TEMPORARY TABLE TMP_${pageId}_${username} (
+			ID NUMBER,
+			COLUMN1 VARCHAR2(4000)
+		) ON COMMIT PRESERVE ROWS
+	</update>
+	<update id="createTable" parameterType="map">
+        CREATE TABLE IF NOT EXISTS TMP_${pageId}_${username} (
+            ID NUMBER,
+            COLUMN1 VARCHAR2(4000)
+        )
+	</update>
+
+	<update id="truncateTable" parameterType="map">
+        TRUNCATE TABLE TMP_${pageId}_${username}
+	</update>
+
+	<insert databaseId="oracle" id="insertBulk" parameterType="map">
+		INSERT /*+ APPEND_VALUES */ ALL
+		<foreach collection="bulkList" item="item" index="index" separator=" ">
+			INTO TMP_${pageId}_${username} ( ID, COLUMN1 ) VALUES ( #{index}, #{item} )
+		</foreach>
+		SELECT * FROM DUAL
+	</insert>
+	<insert id="insertBulk" parameterType="map">
+		INSERT INTO TMP_${pageId}_${username} (ID, COLUMN1) VALUES 
+		<foreach collection="bulkList" item="item" index="index" separator=",">
+			 ( #{index}, #{item} )
+		</foreach>
+	</insert>
+
+</mapper>

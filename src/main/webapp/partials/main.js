@@ -11,8 +11,7 @@ var App = angular.module('App', [
   'ui.grid.resizeColumns',
   'ui.grid.selection',
   'ui.grid.exporter',
-  'ui.grid.infiniteScroll',
-  'angular-loading-bar'
+  'ui.grid.infiniteScroll'
 ]);
 
 App.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', function ($stateProvider, $urlRouterProvider, $mdThemingProvider) {
@@ -42,6 +41,9 @@ App.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', functi
     });
 
   // $mdThemingProvider.theme('default')
-  //   .dark();
+  //   .primaryPalette('grey')
+  //   .accentPalette('teal')
+  //   .warnPalette('red')
+  //   .backgroundPalette('grey');
 
 }]);

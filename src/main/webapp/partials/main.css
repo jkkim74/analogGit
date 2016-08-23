@@ -1,17 +1,55 @@
+a {
+    text-decoration: none !important;
+}
+a:link, a:visited {
+    color: black;
+}
+a:hover {
+    color: red;
+}
+
+.section-header {
+    height: 3.5rem;
+    border-bottom:1px solid #ddddde;
+    z-index: 5;
+}
+
 .section-footer {
-    height: 10rem;
-    background-color: lightgray;
+    height: 5rem;
+    background-color: white;
+    border-top:1px solid #ddddde;
+    color: #999;
+}
+
+.section-nav {
+    background-color: #2b2f3a;
+    color: white;
+    padding-left: 20px;
+}
+
+.section-content {
+    background-color: white;
+    margin: 1rem 1rem;
+    padding: 1rem 1rem;
+}
+
+.section-content-container {
+    background-color: #e5e9ec;
 }
 
 .drop-box {
     background: #F8F8F8;
     border: 5px dashed #DDD;
-    width: 200px;
-    height: 65px;
+    /*width: 200px;*/
+    height: 10rem;
     text-align: center;
-    padding-top: 25px;
+    padding: 25px 10px;
     margin: 10px;
 }
 .drop-box-dragover {
     border: 5px dashed blue;
+}
+
+.grid-div {
+    margin: 10px;
 }

@@ -1,5 +1,7 @@
 package com.skplanet.pandora.configuration;
 
+import javax.sql.DataSource;
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -10,9 +12,11 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -36,12 +40,17 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 	}
 
 	@Bean
-	public PlatformTransactionManager transactionManager() {
+	public PlatformTransactionManager mysqlTxManager() {
 		return new DataSourceTransactionManager(mysqlDataSource());
 	}
 
+	@Bean
+	public PlatformTransactionManager oracleTxManager() {
+		return new DataSourceTransactionManager(oracleDataSource());
+	}
+
 	@Bean(destroyMethod = "close")
-	public BasicDataSource mysqlDataSource() {
+	public DataSource mysqlDataSource() {
 		BasicDataSource datasource = getCommonBasicDataSource();
 		datasource.setDriverClassName(env.getProperty("jdbc.pandora.mysql.driverClass"));
 		datasource.setUrl(env.getProperty("jdbc.pandora.mysql.url"));
@@ -70,7 +79,7 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 	}
 
 	@Bean(destroyMethod = "close")
-	public BasicDataSource oracleDataSource() {
+	public DataSource oracleDataSource() {
 		BasicDataSource datasource = getCommonBasicDataSource();
 		datasource.setDriverClassName(env.getProperty("jdbc.pandora.oracle.driverClass"));
 		datasource.setUrl(env.getProperty("jdbc.pandora.oracle.url"));
@@ -140,6 +149,28 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 		datasource.setNumTestsPerEvictionRun(3);
 		datasource.setMinEvictableIdleTimeMillis(-1);
 		return datasource;
+	}
+
+}
+
+@Configuration
+@Profile("local")
+class LocalDataSourceConfig extends DataSourceConfig {
+
+	@Bean
+	@Override
+	public DataSource mysqlDataSource() {
+		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+		return builder.addScript("sql/init-db-mysql.sql").build();
+		// .addScript("sql/insert-data.sql")
+	}
+
+	@Bean
+	@Override
+	public DataSource oracleDataSource() {
+		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+		return builder.addScript("sql/init-db-oracle.sql").build();
+		// .addScript("sql/insert-data.sql")
 	}
 
 }

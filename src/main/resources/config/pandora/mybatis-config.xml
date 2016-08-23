@@ -156,4 +156,8 @@
         <typeAlias type="com.skplanet.bisportal.model.tmap.TmapDayKpi" alias="TmapDayKpi"/>
         <typeAlias type="com.skplanet.bisportal.model.tmap.TmapMonKpiStc" alias="TmapMonKpiStc"/>
     </typeAliases>
+
+	<databaseIdProvider type="DB_VENDOR">
+		<property name="Oracle" value="oracle" />
+	</databaseIdProvider>
 </configuration>
