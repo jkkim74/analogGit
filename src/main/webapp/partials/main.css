@@ -1,4 +1,4 @@
-a {
+/*a {
     text-decoration: none !important;
 }
 a:link, a:visited {
@@ -6,7 +6,7 @@ a:link, a:visited {
 }
 a:hover {
     color: red;
-}
+}*/
 
 .section-header {
     height: 3.5rem;
@@ -14,12 +14,12 @@ a:hover {
     z-index: 5;
 }
 
-.section-footer {
+/*.section-footer {
     height: 5rem;
     background-color: white;
     border-top:1px solid #ddddde;
     color: #999;
-}
+}*/
 
 .section-nav {
     background-color: #2b2f3a;

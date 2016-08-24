@@ -1,4 +1,4 @@
-<div class="section-header" layout="row" layout-align="none center" layout-padding md-whiteframe="3">
+<!--<div class="section-header" layout="row" layout-align="none center" layout-padding md-whiteframe="3">
     <h2><a ng-href="/">개인정보 조회 시스템</a></h2>
     <span flex></span>
     <a ui-sref="index.page({pageId: 'pan0101'})">멤버 ID 일괄 전환</a>
@@ -10,4 +10,42 @@
     <span flex></span>
     <span class="md-caption">홍길동 님</span>
     <a href="" title="로그아웃"><i class="fa fa-user-times fa-lg" aria-hidden="true"></i></a>
+</div>-->
+<div class="header fixed-top clearfix">
+    <div class="container">
+        <h1 class="navbar-brand brand">
+            <a ng-href="/">개인정보 조회 시스템</a>
+            <div class="sidebar-toggle-box visible-xs">
+                <div id="bg-control" class="fa fa-bars"></div>
+            </div>
+        </h1>
+        <div class="navbar-collapse collapse header-nav">
+            <ul class="nav navbar-nav navbar-left">
+                <li><a ui-sref="index.page({pageId: 'pan0101'})">멤버 ID 일괄 전환</a></li>
+                <li><a ui-sref="index.page({pageId: 'pan0102'})">고객 정보 및 장기 거래 실적 조회</a></li>
+                <li><a ui-sref="index.page({pageId: 'pan0103'})">배치 적립 파일 검증</a></li>
+                <li><a ui-sref="index.page({pageId: 'pan0104'})">시효 만료 포인트 사전 고지</a></li>
+                <li><a ui-sref="index.page({pageId: 'pan0105'})">거래 실적 및 유실적 고객 추출</a></li>
+                <li><a ui-sref="index.page({pageId: 'pan0106'})">회원 프로파일 분석</a></li>
+            </ul>
+            <div class="top-nav clearfix">
+                <ul class="nav pull-right top-menu util">
+                    <li class='dropdown'>
+                        <div class='user-name'><a class='dropdown-toggle' href="#"><strong> 홍길동 </strong> 님</a></div>
+                        <ul class='dropdown-menu'>
+                            <li ng-show="isAdmin();"><a href data-ng-click="goAdminMenu()"><i class="fa fa-cog"></i>&nbsp;&nbsp;&nbsp;Admin</a></li>
+                            <li><a href="/logout"><i class="fa fa-power-off"></i>&nbsp;&nbsp;&nbsp;Logout</a></li>
+                        </ul>
+                    </li>
+                    <li class='dropdown'>
+                        <div class='mypage'><a class='dropdown-toggle' href="#"><i class="fa fa-user fa-2"></i></a></div>
+                        <ul class='dropdown-menu'>
+                            <li ng-show="isAdmin();"><a href data-ng-click="goAdminMenu()"><i class="fa fa-cog"></i>&nbsp;&nbsp;&nbsp;Admin</a></li>
+                            <li><a href="/logout"><i class="fa fa-power-off"></i>&nbsp;&nbsp;&nbsp;Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>

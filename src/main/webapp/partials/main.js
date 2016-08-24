@@ -24,11 +24,17 @@ App.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
   $stateProvider
     .state('index', {
       url: '',
+      abstract: true,
       views: {
         '@': { templateUrl: 'partials/layout/layout.html' },
         'header@index': { templateUrl: 'partials/layout/header.html', },
         'footer@index': { templateUrl: 'partials/layout/footer.html', },
       },
+    })
+    .state('index.home', {
+      url: '/',
+      templateUrl: 'partials/pan0001/pan0001.html',
+      controller: 'Pan0001Ctrl'
     })
     .state('index.page', {
       url: '/page/:pageId',

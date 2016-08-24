@@ -3,6 +3,7 @@
 App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload", function ($scope, $q, $http, $stateParams, Upload) {
 
   $scope.username = 'test';
+  $scope.title = '멤버 ID 일괄 전환';
 
   $scope.selectOptions = [
     { displayName: 'OCB MBR_ID', value: 'ocb_mbr_id' },
