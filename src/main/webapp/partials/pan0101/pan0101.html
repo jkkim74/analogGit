@@ -1,35 +1,32 @@
-<div>
-    <ng-include src="'partials/layout/sidebar.html'"></ng-include>
-    <div class="content-wrap">
-        <div layout="row" class="section-content-container">
-            <div flex="15" class="section-nav">
-                <h3>멤버 ID 일괄 전환</h3>
+<div class="row">
+    <div class="col-md-2 section-sidebar" ng-include="'partials/layout/sidebar.html'"></div>
+    <div class="col-md-10">
+        <div class="section-content">
+            <div class="container-fluid">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>입력데이터</label>
+                        <select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
+                            ng-model="selectedOption"></select>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <form name="form">
+                        <label>업로드</label>
+                        <div ngf-select="upload($file)" ngf-drop="upload($file)" name="file" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'"
+                            ngf-max-size="1GB" class="drop-box" ngf-drag-over-class="'drop-box-dragover'">
+                            <i class="fa fa-upload fa-5x" aria-hidden="true"></i><br><br>파일 선택 또는 끌어놓기
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <div class="grid-div" ui-grid="gridOptionsPreview"></div>
+                </div>
             </div>
-            <div flex class="section-content" layout="column" md-whiteframe="15">
-                <div layout="row">
-                    <div flex="30">
-                        <form name="form">
-                            <md-input-container class="md-block">
-                                <label>입력데이터</label>
-                                <md-select ng-model="dataType" required>
-                                    <md-option ng-repeat="option in selectOptions" ng-selected="{{option.value == 'ocb_mbr_id'}}" value="{{option.value}}">{{option.displayName}}</md-option>
-                                </md-select>
-                            </md-input-container>
-
-                            <div ngf-select="upload($file)" ngf-drop="upload($file)" name="file" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'"
-                                ngf-max-size="1GB" class="drop-box" ngf-drag-over-class="'drop-box-dragover'">
-                                <i class="fa fa-upload fa-5x" aria-hidden="true"></i><br><br>파일 선택 또는 끌어놓기
-                            </div>
-                        </form>
-                    </div>
-                    <div flex>
-                        <div class="grid-div" ui-grid="gridOptionsPreview"></div>
-                    </div>
-                </div>
-                <div>
-                    <md-button class="md-raised md-primary">조회</md-button>
-                    <div class="grid-div" ui-grid="gridOptions" ui-grid-resize-columns></div>
-                </div>
+            <div>
+                <button type="button" class="btn btn-info">조회</button>
+                <div class="grid-div" ui-grid="gridOptions" ui-grid-resize-columns></div>
             </div>
         </div>
     </div>

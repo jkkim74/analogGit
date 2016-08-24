@@ -2,16 +2,16 @@
 
 App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload", function ($scope, $q, $http, $stateParams, Upload) {
 
-  $scope.username = 'test';
   $scope.title = '멤버 ID 일괄 전환';
+  $scope.username = 'test';
 
   $scope.selectOptions = [
-    { displayName: 'OCB MBR_ID', value: 'ocb_mbr_id' },
-    { displayName: 'okcashbag.com 로그인 ID', value: 'ocb_login_id' },
-    { displayName: 'CI', value: 'ci' },
-    { displayName: 'OCB 카드번호', value: 'ocb_card_number' },
-    { displayName: 'Syrup Wallet MEMBER_ID', value: 'syrup_wallet_member_id' },
-    { displayName: '11번가 MEM_NO', value: 'elevenst_mem_no' }
+    { label: 'OCB MBR_ID', value: 'ocb_mbr_id' },
+    { label: 'okcashbag.com 로그인 ID', value: 'ocb_login_id' },
+    { label: 'CI', value: 'ci' },
+    { label: 'OCB 카드번호', value: 'ocb_card_number' },
+    { label: 'Syrup Wallet MEMBER_ID', value: 'syrup_wallet_member_id' },
+    { label: '11번가 MEM_NO', value: 'elevenst_mem_no' }
   ];
 
   $scope.gridOptionsPreview = {
@@ -45,12 +45,13 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload"
   // upload on file select or drop
   $scope.upload = function (file) {
     if (!$scope.form.file.$valid || !file) {
+      console.log($scope.form.file.$valid);
       return;
     }
 
     Upload.upload({
       url: '/api/upload',
-      data: { file: file, username: $scope.username, pageId: $stateParams.pageId, dataType: $scope.dataType }
+      data: { file: file, username: $scope.username, pageId: $stateParams.pageId, dataType: $scope.selectedOption.value }
     }).then(function (resp) {
       console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
 
