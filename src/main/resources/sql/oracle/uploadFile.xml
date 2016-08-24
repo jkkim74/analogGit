@@ -11,13 +11,13 @@
 
 	<update databaseId="oracle" id="createTable" parameterType="map">
 		CREATE GLOBAL TEMPORARY TABLE TMP_${pageId}_${username} (
-			ID NUMBER,
+			NO NUMBER,
 			COLUMN1 VARCHAR2(4000)
 		) ON COMMIT PRESERVE ROWS
 	</update>
 	<update id="createTable" parameterType="map">
         CREATE TABLE IF NOT EXISTS TMP_${pageId}_${username} (
-            ID NUMBER,
+            NO NUMBER,
             COLUMN1 VARCHAR2(4000)
         )
 	</update>
@@ -29,15 +29,19 @@
 	<insert databaseId="oracle" id="insertBulk" parameterType="map">
 		INSERT /*+ APPEND_VALUES */ ALL
 		<foreach collection="bulkList" item="item" index="index" separator=" ">
-			INTO TMP_${pageId}_${username} ( ID, COLUMN1 ) VALUES ( #{index}, #{item} )
+			INTO TMP_${pageId}_${username} ( NO, COLUMN1 ) VALUES ( #{index}, #{item} )
 		</foreach>
 		SELECT * FROM DUAL
 	</insert>
 	<insert id="insertBulk" parameterType="map">
-		INSERT INTO TMP_${pageId}_${username} (ID, COLUMN1) VALUES 
+		INSERT INTO TMP_${pageId}_${username} ( NO, COLUMN1 ) VALUES 
 		<foreach collection="bulkList" item="item" index="index" separator=",">
 			 ( #{index}, #{item} )
 		</foreach>
 	</insert>
+
+    <select id="selectPreview" parameterType="map" resultType="AutoMappedMap">
+        SELECT * FROM TMP_${pageId}_${username}
+    </select>
 
 </mapper>

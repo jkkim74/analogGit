@@ -7,7 +7,7 @@
     </select>
 
     <select id="selectTmp" parameterType="map" resultType="map">
-        select * from TMP_${pageId}_${username}
+        SELECT * FROM TMP_${pageId}_${username}
     </select>
 
 

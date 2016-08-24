@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.pandora.exception.EmptyFileException;
 import com.skplanet.pandora.model.ApiResponse;
+import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 
@@ -101,8 +102,8 @@ public class ApiController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/upload")
-	public List<Map<String, Object>> getUploadedPreview(@RequestParam String username, @RequestParam String pageId) {
-		return oracleRepository.selectTmp(pageId, username);
+	public List<AutoMappedMap> getUploadedPreview(@RequestParam String username, @RequestParam String pageId) {
+		return oracleRepository.selectPreview(pageId, username);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/selectTmp")

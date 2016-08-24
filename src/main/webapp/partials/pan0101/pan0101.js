@@ -16,8 +16,8 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload"
   $scope.gridOptionsPreview = {
     data: [],
     columnDefs: [
-      { field: 'ID', displayName: 'No.', width: 100 },
-      { field: 'COLUMN1', displayName: 'Preview' }
+      { field: 'no', displayName: 'No.', width: 100 },
+      { field: 'column1', displayName: 'Preview' }
     ]
   };
 

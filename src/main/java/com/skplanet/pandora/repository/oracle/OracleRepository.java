@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.skplanet.pandora.model.AutoMappedMap;
+
 @Repository
 public interface OracleRepository {
 
@@ -17,7 +19,10 @@ public interface OracleRepository {
 
 	void truncateTable(@Param("pageId") String pageId, @Param("username") String username);
 
-	int insertBulk(@Param("pageId") String pageId, @Param("username") String username, @Param("bulkList") List<String> bulkList);
+	int insertBulk(@Param("pageId") String pageId, @Param("username") String username,
+			@Param("bulkList") List<String> bulkList);
+
+	List<AutoMappedMap> selectPreview(@Param("pageId") String pageId, @Param("username") String username);
 
 	List<Map<String, Object>> selectTmp(@Param("pageId") String pageId, @Param("username") String username);
 
