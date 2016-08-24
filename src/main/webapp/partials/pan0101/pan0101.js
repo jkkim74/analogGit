@@ -1,6 +1,6 @@
 'use strict';
 
-App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload", "$mdToast", function ($scope, $q, $http, $stateParams, Upload, $mdToast) {
+App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload", function ($scope, $q, $http, $stateParams, Upload) {
 
   $scope.username = 'test';
 
@@ -52,13 +52,6 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload"
       data: { file: file, username: $scope.username, pageId: $stateParams.pageId, dataType: $scope.dataType }
     }).then(function (resp) {
       console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-
-      $mdToast.show(
-        $mdToast.simple()
-          .textContent(file.name + ' 업로드 됨')
-          //.position('top right')
-          .hideDelay(4000)
-      );
 
       $scope.loadPreview();
 

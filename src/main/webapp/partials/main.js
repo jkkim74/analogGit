@@ -4,17 +4,20 @@ var App = angular.module('App', [
   'ngAnimate',
   'ngMessages',
   'ngSanitize',
-  'ngMaterial',
   'ngFileUpload',
+  'ui.bootstrap',
   'ui.router',
   'ui.grid',
   'ui.grid.resizeColumns',
   'ui.grid.selection',
   'ui.grid.exporter',
-  'ui.grid.infiniteScroll'
+  'ui.grid.infiniteScroll',
+  'ui.validate',
+  'angular-loading-bar',
+  'toastr'
 ]);
 
-App.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', function ($stateProvider, $urlRouterProvider, $mdThemingProvider) {
+App.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
   $urlRouterProvider.otherwise('/');
 
@@ -39,11 +42,5 @@ App.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', functi
         return ctrlName;
       }
     });
-
-  // $mdThemingProvider.theme('default')
-  //   .primaryPalette('grey')
-  //   .accentPalette('teal')
-  //   .warnPalette('red')
-  //   .backgroundPalette('grey');
 
 }]);
