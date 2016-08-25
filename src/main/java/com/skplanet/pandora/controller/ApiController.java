@@ -3,7 +3,6 @@ package com.skplanet.pandora.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,8 +10,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.io.IOUtils;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,6 +52,12 @@ public class ApiController {
 	@Autowired
 	private OracleRepository oracleRepository;
 
+	@Autowired
+	private JobLauncher jobLauncher;
+
+	@Autowired
+	private Job importUserJob;
+
 	@RequestMapping(method = RequestMethod.POST, value = "/upload")
 	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String username,
 			@RequestParam String pageId, @RequestParam String dataType) throws IOException {
@@ -55,22 +68,32 @@ public class ApiController {
 			throw new EmptyFileException();
 		}
 
-		// Path uploadPath = saveUploadFile(file);
+		Path uploadPath = saveUploadFile(file);
 
 		// mysqlRepository.updateUploadStatus(pageId, username,
 		// UploadStatus.RUNNING);
 
 		if (oracleRepository.countTable(pageId, username) > 0) {
-			oracleRepository.truncateTable(pageId, username);
 		} else {
 			oracleRepository.createTable(pageId, username);
 		}
+		oracleRepository.truncateTable(pageId, username);
 
 		// List<String> list = FileUtils.readLines(uploadPath.toFile(),
 		// StandardCharsets.UTF_8);
-		List<String> bulkList = IOUtils.readLines(file.getInputStream(), StandardCharsets.UTF_8);
+		//List<String> bulkList = IOUtils.readLines(file.getInputStream(), StandardCharsets.UTF_8);
+		//oracleRepository.insertBulk(pageId, username, bulkList);
 
-		oracleRepository.insertBulk(pageId, username, bulkList);
+		JobParameters jobParameters = new JobParametersBuilder().addString("pageId", pageId)
+				.addString("username", username).addString("filePath", uploadPath.toString()).toJobParameters();
+
+		try {
+			jobLauncher.run(importUserJob, jobParameters);
+		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
+				| JobParametersInvalidException e) {
+
+			e.printStackTrace();
+		}
 
 		// mysqlRepository.updateUploadStatus(pageId, username,
 		// UploadStatus.FINISH);
@@ -79,12 +102,6 @@ public class ApiController {
 
 		return ApiResponse.builder().type(ApiResponse.DEFAULT_TYPE).code(ApiResponse.DEFAULT_CODE)
 				.message("Uploaded " + file.getOriginalFilename()).build();
-	}
-
-	private void removeUploadFile(Path uploadPath) throws IOException {
-		if (!Files.deleteIfExists(uploadPath)) {
-			log.warn("Failed to delete the uploaded file after all processing... {}", uploadPath);
-		}
 	}
 
 	private Path saveUploadFile(MultipartFile file) throws IOException {
@@ -101,9 +118,20 @@ public class ApiController {
 		return uploadPath;
 	}
 
+	private void removeUploadFile(Path uploadPath) throws IOException {
+		if (!Files.deleteIfExists(uploadPath)) {
+			log.warn("Failed to delete the uploaded file after all processing... {}", uploadPath);
+		}
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/upload")
 	public List<AutoMappedMap> getUploadedPreview(@RequestParam String username, @RequestParam String pageId) {
 		return oracleRepository.selectPreview(pageId, username);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/memberInfo")
+	public List<AutoMappedMap> getUploadedPreview(@RequestParam Map<String, Object> params) {
+		return oracleRepository.selectMemberInfo(params);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/selectTmp")

@@ -4,7 +4,6 @@
 <configuration>
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true" />
-        <setting name="useColumnLabel" value="true"/>
     </settings>
     <typeAliases>
         <typeAlias type="com.skplanet.pandora.model.AutoMappedMap" alias="AutoMappedMap"/>

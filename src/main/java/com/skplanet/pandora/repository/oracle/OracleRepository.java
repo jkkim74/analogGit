@@ -24,6 +24,8 @@ public interface OracleRepository {
 
 	List<AutoMappedMap> selectPreview(@Param("pageId") String pageId, @Param("username") String username);
 
+	List<AutoMappedMap> selectMemberInfo(Map<String, Object> params);
+
 	List<Map<String, Object>> selectTmp(@Param("pageId") String pageId, @Param("username") String username);
 
 }

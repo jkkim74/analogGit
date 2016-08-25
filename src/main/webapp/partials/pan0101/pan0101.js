@@ -6,32 +6,32 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload"
   $scope.username = 'test';
 
   $scope.selectOptions = [
-    { label: 'OCB MBR_ID', value: 'ocb_mbr_id' },
-    { label: 'okcashbag.com 로그인 ID', value: 'ocb_login_id' },
-    { label: 'CI', value: 'ci' },
-    { label: 'OCB 카드번호', value: 'ocb_card_number' },
-    { label: 'Syrup Wallet MEMBER_ID', value: 'syrup_wallet_member_id' },
-    { label: '11번가 MEM_NO', value: 'elevenst_mem_no' }
+    { label: '회원ID', value: 'mbrId' },
+    { label: 'OCB닷컴 로그인ID', value: 'ocbcomLgnId' },
+    { label: 'CI번호', value: 'ciNo' },
+    { label: '카드번호', value: 'cardNo' },
+    { label: '시럽 스마트월렛 회원ID', value: 'sywMbrId' },
+    { label: '11번가 회원ID', value: 'evsMbrId' }
   ];
 
   $scope.gridOptionsPreview = {
     data: [],
     columnDefs: [
-      { field: 'no', displayName: 'No.', width: 100 },
-      { field: 'column1', displayName: 'Preview' }
+      { field: 'no', displayName: 'No.', width: 100, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
+      { field: 'column1', displayName: 'Uploaded Data Preview' }
     ]
   };
 
   $scope.gridOptions = {
     data: [],
     columnDefs: [
-      { field: 'firstName', displayName: 'OCB MBR_ID' },
-      { field: 'lastName', displayName: 'okcashbag.com 로그인 ID' },
-      { field: 'address', displayName: 'CI' },
-      { field: 'address', displayName: '한글성명' },
-      { field: 'address', displayName: 'OCB 카드번호' },
-      { field: 'address', displayName: 'Syrup Wallet MEMBER_ID' },
-      { field: 'address', displayName: '11번가 MEM_NO' }
+      { field: 'mbrId', displayName: '회원ID' },
+      { field: 'ocbcomLgnId', displayName: 'OCB닷컴 로그인ID' },
+      { field: 'ciNo', displayName: 'CI번호' },
+      { field: 'mbrKorNm', displayName: '한글성명' },
+      { field: 'cardNo', displayName: '카드번호' },
+      { field: 'sywMbrId', displayName: '시럽 스마트월렛 회원ID' },
+      { field: 'evsMbrId', displayName: '11번가 회원ID' }
     ]
   };
 
@@ -45,7 +45,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload"
   // upload on file select or drop
   $scope.upload = function (file) {
     if (!$scope.form.file.$valid || !file) {
-      console.log($scope.form.file.$valid);
+      console.log("Error: invalid file");
       return;
     }
 
@@ -53,7 +53,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload"
       url: '/api/upload',
       data: { file: file, username: $scope.username, pageId: $stateParams.pageId, dataType: $scope.selectedOption.value }
     }).then(function (resp) {
-      console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+      console.log('Success ' + resp.config.data.file.name + ' uploaded. Response: ' + resp.data);
 
       $scope.loadPreview();
 

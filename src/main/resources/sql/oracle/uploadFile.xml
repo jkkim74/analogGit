@@ -3,7 +3,7 @@
 <mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
 
 	<select databaseId="oracle" id="countTable" parameterType="map" resultType="int">
-		SELECT COUNT(*) FROM USER_TABLES WHERE TABLE_NAME = 'TMP_' || UPPER(#{pageId}) || '_' || UPPER(#{username})
+		SELECT COUNT(*) FROM USER_TABLES WHERE TABLE_NAME = 'TMP_' || #{pageId.toUpperCase()} || '_' || #{username.toUpperCase()}
 	</select>
 	<select id="countTable" parameterType="map" resultType="int">
 		SELECT 0 FROM DUAL
@@ -11,13 +11,11 @@
 
 	<update databaseId="oracle" id="createTable" parameterType="map">
 		CREATE GLOBAL TEMPORARY TABLE TMP_${pageId}_${username} (
-			NO NUMBER,
 			COLUMN1 VARCHAR2(4000)
 		) ON COMMIT PRESERVE ROWS
 	</update>
 	<update id="createTable" parameterType="map">
         CREATE TABLE IF NOT EXISTS TMP_${pageId}_${username} (
-            NO NUMBER,
             COLUMN1 VARCHAR2(4000)
         )
 	</update>
@@ -29,15 +27,19 @@
 	<insert databaseId="oracle" id="insertBulk" parameterType="map">
 		INSERT /*+ APPEND_VALUES */ ALL
 		<foreach collection="bulkList" item="item" index="index" separator=" ">
-			INTO TMP_${pageId}_${username} ( NO, COLUMN1 ) VALUES ( #{index}, #{item} )
+			INTO TMP_${pageId}_${username} ( COLUMN1 ) VALUES ( #{item} )
 		</foreach>
 		SELECT * FROM DUAL
 	</insert>
 	<insert id="insertBulk" parameterType="map">
-		INSERT INTO TMP_${pageId}_${username} ( NO, COLUMN1 ) VALUES 
+		INSERT INTO TMP_${pageId}_${username} ( COLUMN1 ) VALUES 
 		<foreach collection="bulkList" item="item" index="index" separator=",">
-			 ( #{index}, #{item} )
+			 ( #{item} )
 		</foreach>
+	</insert>
+	
+	<insert id="insertUploadedData" parameterType="map">
+	   INSERT INTO TMP_${pageId}_${username} ( COLUMN1 ) VALUES ( #{column1} ) 
 	</insert>
 
     <select id="selectPreview" parameterType="map" resultType="AutoMappedMap">
