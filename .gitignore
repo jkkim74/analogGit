@@ -12,6 +12,5 @@ node_modules/
 src/main/resources/rebel.xml
 temporary
 *.bak
-dist/
 .tmp
 npm-debug.log
