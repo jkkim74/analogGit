@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
+import com.skplanet.pandora.listener.JobCompletionNotificationListener;
 import com.skplanet.pandora.model.Preview;
 
 @Configuration
@@ -104,8 +105,13 @@ public class BatchConfig extends DefaultBatchConfigurer {
 	}
 
 	@Bean
+	public JobExecutionListener listener() {
+		return new JobCompletionNotificationListener();
+	}
+
+	@Bean
 	public Job importUserJob() {
-		return jobBuilderFactory.get("importUserJob").incrementer(new RunIdIncrementer()).listener(jobExecutionListener)
+		return jobBuilderFactory.get("importUserJob").incrementer(new RunIdIncrementer()).listener(listener())
 				.flow(step1()).end().build();
 	}
 
