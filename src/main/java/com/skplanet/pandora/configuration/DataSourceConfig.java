@@ -21,7 +21,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@PropertySource("classpath:/config/pandora/application-${spring.profiles.active:production}.properties")
+@PropertySource("classpath:/config/application-${spring.profiles.active:production}.properties")
 @EnableTransactionManagement(proxyTargetClass = true)
 public class DataSourceConfig implements EnvironmentAware, ApplicationContextAware {
 
@@ -65,8 +65,8 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 	public SqlSessionFactory mysqlSqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(mysqlDataSource());
-		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:config/pandora/mybatis-config.xml"));
-		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:sql/mysql/**/*.xml"));
+		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:/config/mybatis-config.xml"));
+		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:/sql/mysql/**/*.xml"));
 		return sessionFactory.getObject();
 	}
 
@@ -94,8 +94,8 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 	public SqlSessionFactory oracleSqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(oracleDataSource());
-		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:config/pandora/mybatis-config.xml"));
-		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:sql/oracle/**/*.xml"));
+		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:/config/mybatis-config.xml"));
+		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:/sql/oracle/**/*.xml"));
 		return sessionFactory.getObject();
 	}
 
@@ -125,8 +125,8 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 	public SqlSessionFactory qcSqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(qcDataSource());
-		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:config/pandora/mybatis-config.xml"));
-		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:sql/querycache/**/*.xml"));
+		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:/config/mybatis-config.xml"));
+		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:/sql/querycache/**/*.xml"));
 		return sessionFactory.getObject();
 	}
 

@@ -33,8 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UploadService {
 
-	public static final String UPLOADED_FILE_DIR = System.getProperty("user.home") + "/pandora-upload";
-
 	// @Autowired
 	// private ResourceLoader resourceLoader;
 	// resourceLoader.getResource("file:" + Paths.get(ROOT,
@@ -95,12 +93,12 @@ public class UploadService {
 	}
 
 	public Path saveUploadFile(MultipartFile file) {
-		File uploadDirectory = new File(UPLOADED_FILE_DIR);
+		File uploadDirectory = new File(Constant.UPLOADED_FILE_DIR);
 		if (!uploadDirectory.exists()) {
 			uploadDirectory.mkdir();
 		}
 
-		Path uploadPath = Paths.get(UPLOADED_FILE_DIR, UUID.randomUUID() + "-" + file.getOriginalFilename());
+		Path uploadPath = Paths.get(Constant.UPLOADED_FILE_DIR, UUID.randomUUID() + "-" + file.getOriginalFilename());
 
 		try (InputStream in = file.getInputStream()) {
 			Files.copy(in, uploadPath);
