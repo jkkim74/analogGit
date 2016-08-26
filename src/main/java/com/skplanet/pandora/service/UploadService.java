@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.pandora.exception.FileCopyException;
+import com.skplanet.pandora.exception.NotFinishedUploadException;
+import com.skplanet.pandora.model.Constant;
 import com.skplanet.pandora.model.UploadStatus;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
@@ -49,10 +51,14 @@ public class UploadService {
 	private JobLauncher jobLauncher;
 
 	@Autowired
-	private Job importUserJob;
+	private Job importJob;
 
 	@Transactional("mysqlTxManager")
 	public void markRunning(String pageId, String username) {
+		UploadStatus uploadStatus = mysqlRepository.selectUploadStatus(pageId, username);
+		if (uploadStatus == UploadStatus.RUNNING) {
+			throw new NotFinishedUploadException();
+		}
 		mysqlRepository.updateUploadStatus(pageId, username, UploadStatus.RUNNING);
 	}
 
@@ -78,11 +84,12 @@ public class UploadService {
 		// StandardCharsets.UTF_8);
 		// oracleRepository.insertBulk(pageId, username, bulkList);
 
-		JobParameters jobParameters = new JobParametersBuilder().addString("pageId", pageId)
-				.addString("username", username).addString("filePath", uploadPath.toString()).toJobParameters();
+		JobParameters jobParameters = new JobParametersBuilder().addString(Constant.PAGE_ID, pageId)
+				.addString(Constant.USERNAME, username).addString(Constant.FILE_PATH, uploadPath.toString())
+				.toJobParameters();
 
 		try {
-			jobLauncher.run(importUserJob, jobParameters);
+			jobLauncher.run(importJob, jobParameters);
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
 				| JobParametersInvalidException e) {
 			log.error("{}", e);

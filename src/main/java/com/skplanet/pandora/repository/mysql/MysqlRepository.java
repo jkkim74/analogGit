@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.skplanet.pandora.model.Constant;
 import com.skplanet.pandora.model.UploadStatus;
 
 @Repository
@@ -12,6 +13,9 @@ public interface MysqlRepository {
 
 	Map<String, Object> selectTest(Map<String, Object> params);
 
-	void updateUploadStatus(@Param("pageId") String pageId, @Param("username") String username, @Param("uploadStatus") UploadStatus uploadStatus);
+	UploadStatus selectUploadStatus(@Param(Constant.PAGE_ID) String pageId, @Param(Constant.USERNAME) String username);
+
+	void updateUploadStatus(@Param(Constant.PAGE_ID) String pageId, @Param(Constant.USERNAME) String username,
+			@Param("uploadStatus") UploadStatus uploadStatus);
 
 }
