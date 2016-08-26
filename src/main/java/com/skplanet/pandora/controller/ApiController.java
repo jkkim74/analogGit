@@ -19,7 +19,7 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -81,8 +81,9 @@ public class ApiController {
 
 		// List<String> list = FileUtils.readLines(uploadPath.toFile(),
 		// StandardCharsets.UTF_8);
-		//List<String> bulkList = IOUtils.readLines(file.getInputStream(), StandardCharsets.UTF_8);
-		//oracleRepository.insertBulk(pageId, username, bulkList);
+		// List<String> bulkList = IOUtils.readLines(file.getInputStream(),
+		// StandardCharsets.UTF_8);
+		// oracleRepository.insertBulk(pageId, username, bulkList);
 
 		JobParameters jobParameters = new JobParametersBuilder().addString("pageId", pageId)
 				.addString("username", username).addString("filePath", uploadPath.toString()).toJobParameters();
@@ -118,6 +119,7 @@ public class ApiController {
 		return uploadPath;
 	}
 
+	@Async
 	private void removeUploadFile(Path uploadPath) throws IOException {
 		if (!Files.deleteIfExists(uploadPath)) {
 			log.warn("Failed to delete the uploaded file after all processing... {}", uploadPath);

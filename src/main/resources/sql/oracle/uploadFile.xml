@@ -43,7 +43,7 @@
 	</insert>
 
     <select id="selectPreview" parameterType="map" resultType="AutoMappedMap">
-        SELECT * FROM TMP_${pageId}_${username}
+        SELECT * FROM TMP_${pageId}_${username} LIMIT 1000
     </select>
 
 </mapper>

@@ -53,7 +53,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload"
       url: '/api/upload',
       data: { file: file, username: $scope.username, pageId: $stateParams.pageId, dataType: $scope.selectedOption.value }
     }).then(function (resp) {
-      console.log('Success ' + resp.config.data.file.name + ' uploaded. Response: ' + resp.data);
+      console.log('Success ' + resp.config.data.file.name + ' uploaded.');
 
       $scope.loadPreview();
 

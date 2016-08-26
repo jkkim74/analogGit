@@ -11,7 +11,9 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
 import com.skplanet.pandora.model.Preview;
 
@@ -47,8 +50,16 @@ public class BatchConfig extends DefaultBatchConfigurer {
 
 	@Override
 	public void setDataSource(DataSource dataSource) {
-		// use memory job repository.
-		super.setDataSource(null);
+		// avoid No qualifying bean of type. use memory job repository.
+	}
+
+	@Override
+	protected JobLauncher createJobLauncher() throws Exception {
+		SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
+		jobLauncher.setJobRepository(getJobRepository());
+		jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
+		jobLauncher.afterPropertiesSet();
+		return jobLauncher;
 	}
 
 	@Bean
@@ -100,7 +111,7 @@ public class BatchConfig extends DefaultBatchConfigurer {
 
 	@Bean
 	public Step step1() {
-		return stepBuilderFactory.get("step1").<Preview, Preview> chunk(10000).reader(itemReader(null))
+		return stepBuilderFactory.get("step1").<Preview, Preview> chunk(1000).reader(itemReader(null))
 				.writer(itemWriter(null, null)).build();
 	}
 
