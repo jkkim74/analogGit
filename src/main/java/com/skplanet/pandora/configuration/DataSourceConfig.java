@@ -21,7 +21,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@PropertySource("classpath:/config/common.properties")
+@PropertySource("classpath:/config/pandora/application-${spring.profiles.active:production}.properties")
 @EnableTransactionManagement(proxyTargetClass = true)
 public class DataSourceConfig implements EnvironmentAware, ApplicationContextAware {
 
