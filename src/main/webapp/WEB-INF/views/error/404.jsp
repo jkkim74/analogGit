@@ -1,4 +1,3 @@
-<%@ page contentType="text/html;charset=utf-8" session="false" trimDirectiveWhitespaces="true" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
