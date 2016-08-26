@@ -20,6 +20,7 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,10 +60,10 @@ public class ApiController {
 	private Job importUserJob;
 
 	@RequestMapping(method = RequestMethod.POST, value = "/upload")
-	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String username,
-			@RequestParam String pageId, @RequestParam String dataType) throws IOException {
+	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String pageId,
+			@RequestParam String username, @RequestParam String dataType) throws IOException {
 
-		log.info("Uploading file... pageId={}, username={}, , dataType={}", username, pageId, dataType);
+		log.info("Uploading file... pageId={}, username={}, , dataType={}", pageId, username, dataType);
 
 		if (file.isEmpty()) {
 			throw new EmptyFileException();
@@ -79,6 +80,19 @@ public class ApiController {
 		}
 		oracleRepository.truncateTable(pageId, username);
 
+		bulkInsert(pageId, username, uploadPath);
+
+		// mysqlRepository.updateUploadStatus(pageId, username,
+		// UploadStatus.FINISH);
+
+		// removeUploadFile(uploadPath);
+
+		return ApiResponse.builder().type(ApiResponse.DEFAULT_TYPE).code(ApiResponse.DEFAULT_CODE)
+				.message("Uploaded " + file.getOriginalFilename()).build();
+	}
+
+	@Transactional("transactionManager")
+	private void bulkInsert(String pageId, String username, Path uploadPath) {
 		// List<String> list = FileUtils.readLines(uploadPath.toFile(),
 		// StandardCharsets.UTF_8);
 		// List<String> bulkList = IOUtils.readLines(file.getInputStream(),
@@ -95,14 +109,6 @@ public class ApiController {
 
 			e.printStackTrace();
 		}
-
-		// mysqlRepository.updateUploadStatus(pageId, username,
-		// UploadStatus.FINISH);
-
-		// removeUploadFile(uploadPath);
-
-		return ApiResponse.builder().type(ApiResponse.DEFAULT_TYPE).code(ApiResponse.DEFAULT_CODE)
-				.message("Uploaded " + file.getOriginalFilename()).build();
 	}
 
 	private Path saveUploadFile(MultipartFile file) throws IOException {
@@ -127,7 +133,7 @@ public class ApiController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/upload")
-	public List<AutoMappedMap> getUploadedPreview(@RequestParam String username, @RequestParam String pageId) {
+	public List<AutoMappedMap> getUploadedPreview(@RequestParam String pageId, @RequestParam String username) {
 		return oracleRepository.selectPreview(pageId, username);
 	}
 

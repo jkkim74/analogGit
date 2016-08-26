@@ -1,6 +1,6 @@
 'use strict';
 
-App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload", function ($scope, $q, $http, $stateParams, Upload) {
+App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", function ($scope, $q, $http, $timeout, $stateParams, Upload) {
 
   $scope.title = '멤버 ID 일괄 전환';
   $scope.username = 'test';
@@ -51,11 +51,13 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload"
 
     Upload.upload({
       url: '/api/upload',
-      data: { file: file, username: $scope.username, pageId: $stateParams.pageId, dataType: $scope.selectedOption.value }
+      data: { file: file, pageId: $stateParams.pageId, username: $scope.username, dataType: $scope.selectedOption.value }
     }).then(function (resp) {
       console.log('Success ' + resp.config.data.file.name + ' uploaded.');
 
-      $scope.loadPreview();
+      $timeout(function () {
+        $scope.loadPreview()
+      }, 1000);
 
     }, function (resp) {
       console.log('Error status: ' + resp.status);
@@ -67,7 +69,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$stateParams", "Upload"
 
   $scope.loadPreview = function () {
     var canceler = $q.defer();
-    $http.get('/api/upload', { params: { username: $scope.username, pageId: $stateParams.pageId }, timeout: canceler.promise })
+    $http.get('/api/upload', { params: { pageId: $stateParams.pageId, username: $scope.username }, timeout: canceler.promise })
       .success(function (data) {
         $scope.gridOptionsPreview.data = data;
       });
