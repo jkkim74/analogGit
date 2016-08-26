@@ -55,15 +55,15 @@ public class UploadService {
 	@Transactional("mysqlTxManager")
 	public void markRunning(String pageId, String username) {
 		UploadStatus uploadStatus = mysqlRepository.selectUploadStatus(pageId, username);
-		if (uploadStatus == UploadStatus.RUNNING) {
+		if (uploadStatus != null && uploadStatus == UploadStatus.RUNNING) {
 			throw new BizException("Not finished upload");
 		}
-		mysqlRepository.updateUploadStatus(pageId, username, UploadStatus.RUNNING);
+		mysqlRepository.upsertUploadStatus(pageId, username, UploadStatus.RUNNING);
 	}
 
 	@Transactional("mysqlTxManager")
 	public void markFinish(String pageId, String username) {
-		mysqlRepository.updateUploadStatus(pageId, username, UploadStatus.FINISH);
+		mysqlRepository.upsertUploadStatus(pageId, username, UploadStatus.FINISH);
 	}
 
 	@Transactional("oracleTxManager")
@@ -75,7 +75,6 @@ public class UploadService {
 		oracleRepository.truncateTable(pageId, username);
 	}
 
-	@Transactional("transactionManager")
 	public void bulkInsert(String pageId, String username, Path uploadPath) {
 		// List<String> list = FileUtils.readLines(uploadPath.toFile(),
 		// StandardCharsets.UTF_8);

@@ -15,7 +15,7 @@ public interface MysqlRepository {
 
 	UploadStatus selectUploadStatus(@Param(Constant.PAGE_ID) String pageId, @Param(Constant.USERNAME) String username);
 
-	void updateUploadStatus(@Param(Constant.PAGE_ID) String pageId, @Param(Constant.USERNAME) String username,
+	int upsertUploadStatus(@Param(Constant.PAGE_ID) String pageId, @Param(Constant.USERNAME) String username,
 			@Param("uploadStatus") UploadStatus uploadStatus);
 
 }
