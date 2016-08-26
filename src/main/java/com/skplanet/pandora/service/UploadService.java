@@ -21,9 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.skplanet.pandora.exception.FileCopyException;
-import com.skplanet.pandora.exception.NotFinishedUploadException;
-import com.skplanet.pandora.model.Constant;
+import com.skplanet.pandora.common.BizException;
+import com.skplanet.pandora.common.Constant;
 import com.skplanet.pandora.model.UploadStatus;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
@@ -57,7 +56,7 @@ public class UploadService {
 	public void markRunning(String pageId, String username) {
 		UploadStatus uploadStatus = mysqlRepository.selectUploadStatus(pageId, username);
 		if (uploadStatus == UploadStatus.RUNNING) {
-			throw new NotFinishedUploadException();
+			throw new BizException("Not finished upload");
 		}
 		mysqlRepository.updateUploadStatus(pageId, username, UploadStatus.RUNNING);
 	}
@@ -107,7 +106,7 @@ public class UploadService {
 		try (InputStream in = file.getInputStream()) {
 			Files.copy(in, uploadPath);
 		} catch (IOException e) {
-			throw new FileCopyException();
+			throw new BizException("Failed to copy the upload file");
 		}
 
 		return uploadPath;

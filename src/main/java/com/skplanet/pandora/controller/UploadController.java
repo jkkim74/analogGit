@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.skplanet.pandora.exception.EmptyFileException;
+import com.skplanet.pandora.common.BizException;
 import com.skplanet.pandora.model.ApiResponse;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
@@ -37,7 +37,7 @@ public class UploadController {
 		log.info("Uploading file... pageId={}, username={}, , dataType={}", pageId, username, dataType);
 
 		if (file.isEmpty()) {
-			throw new EmptyFileException();
+			throw new BizException("Empty file");
 		}
 
 		uploadService.markRunning(pageId, username);

@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.skplanet.pandora.model.Constant;
+import com.skplanet.pandora.common.Constant;
 import com.skplanet.pandora.model.UploadStatus;
 
 @Repository

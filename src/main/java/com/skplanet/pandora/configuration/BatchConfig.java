@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
-import com.skplanet.pandora.controller.listener.JobNotificationListener;
+import com.skplanet.pandora.listener.JobNotificationListener;
 import com.skplanet.pandora.model.Preview;
 
 @Configuration
