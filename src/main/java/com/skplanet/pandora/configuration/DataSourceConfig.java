@@ -1,8 +1,13 @@
 package com.skplanet.pandora.configuration;
 
+import java.io.IOException;
+import java.util.Properties;
+
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.ibatis.mapping.DatabaseIdProvider;
+import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -19,6 +24,8 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import com.skplanet.pandora.model.AutoMappedMap;
 
 @Configuration
 @PropertySource("classpath:/config/application-${spring.profiles.active:production}.properties")
@@ -44,11 +51,6 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 		return new DataSourceTransactionManager(mysqlDataSource());
 	}
 
-	@Bean
-	public PlatformTransactionManager oracleTxManager() {
-		return new DataSourceTransactionManager(oracleDataSource());
-	}
-
 	@Bean(destroyMethod = "close")
 	public DataSource mysqlDataSource() {
 		BasicDataSource datasource = getCommonBasicDataSource();
@@ -65,7 +67,8 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 	public SqlSessionFactory mysqlSqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(mysqlDataSource());
-		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:/config/mybatis-config.xml"));
+		sessionFactory.setConfiguration(mybatisConfiguration());
+		sessionFactory.setDatabaseIdProvider(mybatisDatabaseIdProvider());
 		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:/sql/mysql/**/*.xml"));
 		return sessionFactory.getObject();
 	}
@@ -76,6 +79,11 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 		configurer.setBasePackage("com.skplanet.pandora.repository.mysql");
 		configurer.setSqlSessionFactoryBeanName("mysqlSqlSessionFactory");
 		return configurer;
+	}
+
+	@Bean
+	public PlatformTransactionManager oracleTxManager() {
+		return new DataSourceTransactionManager(oracleDataSource());
 	}
 
 	@Bean(destroyMethod = "close")
@@ -94,7 +102,8 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 	public SqlSessionFactory oracleSqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(oracleDataSource());
-		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:/config/mybatis-config.xml"));
+		sessionFactory.setConfiguration(mybatisConfiguration());
+		sessionFactory.setDatabaseIdProvider(mybatisDatabaseIdProvider());
 		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:/sql/oracle/**/*.xml"));
 		return sessionFactory.getObject();
 	}
@@ -107,8 +116,13 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 		return configurer;
 	}
 
+//	@Bean
+//	public PlatformTransactionManager querycacheTxManager() {
+//		return new DataSourceTransactionManager(querycacheDataSource());
+//	}
+
 	@Bean(destroyMethod = "close")
-	public BasicDataSource qcDataSource() {
+	public BasicDataSource querycacheDataSource() {
 		BasicDataSource datasource = new BasicDataSource();
 		datasource.setDriverClassName(env.getProperty("jdbc.pandora.querycache.driverClass"));
 		datasource.setUrl(env.getProperty("jdbc.pandora.querycache.url"));
@@ -122,20 +136,45 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 	}
 
 	@Bean
-	public SqlSessionFactory qcSqlSessionFactory() throws Exception {
+	public SqlSessionFactory querycacheSqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-		sessionFactory.setDataSource(qcDataSource());
-		sessionFactory.setConfigLocation(applicationContext.getResource("classpath:/config/mybatis-config.xml"));
+		sessionFactory.setDataSource(querycacheDataSource());
+		sessionFactory.setConfiguration(mybatisConfiguration());
 		sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:/sql/querycache/**/*.xml"));
 		return sessionFactory.getObject();
 	}
 
 	@Bean
-	public MapperScannerConfigurer qcMapperScannerConfigurer() {
+	public MapperScannerConfigurer querycacheMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
 		configurer.setBasePackage("com.skplanet.pandora.repository.querycache");
-		configurer.setSqlSessionFactoryBeanName("qcSqlSessionFactory");
+		configurer.setSqlSessionFactoryBeanName("querycacheSqlSessionFactory");
 		return configurer;
+	}
+
+	@Bean
+	public org.apache.ibatis.session.Configuration mybatisConfiguration() {
+		org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
+		config.setMapUnderscoreToCamelCase(true);
+		config.getTypeAliasRegistry().registerAlias("AutoMappedMap", AutoMappedMap.class);
+		return config;
+	}
+
+	@Bean
+	public DatabaseIdProvider mybatisDatabaseIdProvider() throws IOException {
+		DatabaseIdProvider databaseIdProvider = new VendorDatabaseIdProvider();
+
+		Properties p = new Properties();
+		p.setProperty("SQL Server", "sqlserver");
+		p.setProperty("DB2", "db2");
+		p.setProperty("Oracle", "oracle");
+		p.setProperty("MySQL", "mysql");
+		p.setProperty("PostgreSQL", "postgresql");
+		p.setProperty("HSQL", "hsql");
+		p.setProperty("H2", "h2");
+
+		databaseIdProvider.setProperties(p);
+		return databaseIdProvider;
 	}
 
 	private BasicDataSource getCommonBasicDataSource() {
@@ -169,8 +208,7 @@ class LocalDataSourceConfig extends DataSourceConfig {
 	@Override
 	public DataSource oracleDataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		return builder.addScript("sql/init-db-oracle.sql").build();
-		// .addScript("sql/insert-data.sql")
+		return builder.addScripts("sql/init-db-oracle.sql", "sql/data-oracle.sql").build();
 	}
 
 }
