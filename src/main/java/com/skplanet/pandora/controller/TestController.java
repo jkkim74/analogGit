@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
@@ -21,7 +22,7 @@ public class TestController {
 	private MysqlRepository mysqlRepository;
 
 	@RequestMapping(value = "/testMysql", method = RequestMethod.GET)
-	public Map<String, Object> testMysql(@RequestParam Map<String, Object> params, Model model) {
+	public AutoMappedMap testMysql(@RequestParam Map<String, Object> params, Model model) {
 		return mysqlRepository.selectTest(params);
 	}
 
@@ -29,7 +30,7 @@ public class TestController {
 	private OracleRepository oracleRepository;
 
 	@RequestMapping(value = "/testOracle", method = RequestMethod.GET)
-	public Map<String, Object> testOracle(@RequestParam Map<String, Object> params, Model model) {
+	public AutoMappedMap testOracle(@RequestParam Map<String, Object> params, Model model) {
 		return oracleRepository.selectTest(params);
 	}
 
@@ -37,10 +38,10 @@ public class TestController {
 	private QueryCacheRepository queryCacheRepository;
 
 	@RequestMapping(value = "/testQC", method = RequestMethod.GET)
-	public List<Map<String, Object>> testQC(@RequestParam Map<String, Object> params, Model model) {
+	public List<AutoMappedMap> testQC(@RequestParam Map<String, Object> params, Model model) {
 		return queryCacheRepository.selectTest(params);
 	}
-	
+
 	@RequestMapping(value = "/testError", method = RequestMethod.GET)
 	public void testError(@RequestParam Map<String, Object> params, Model model) {
 		throw new RuntimeException("custom error");

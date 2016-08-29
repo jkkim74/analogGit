@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.skplanet.pandora.model.AutoMappedMap;
+
 @Repository
 public interface QueryCacheRepository {
 
-	List<Map<String, Object>> selectTest(Map<String, Object> params);
+	List<AutoMappedMap> selectTest(Map<String, Object> params);
 
 }

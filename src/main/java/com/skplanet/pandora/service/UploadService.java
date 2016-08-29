@@ -21,8 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.common.base.CaseFormat;
 import com.skplanet.pandora.common.BizException;
 import com.skplanet.pandora.common.Constant;
+import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.model.UploadStatus;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
@@ -51,17 +53,35 @@ public class UploadService {
 	private Job importJob;
 
 	@Transactional("mysqlTxManager")
-	public void markRunning(String pageId, String username) {
-		UploadStatus uploadStatus = mysqlRepository.selectUploadStatus(pageId, username);
-		if (uploadStatus != null && uploadStatus == UploadStatus.RUNNING) {
+	public void markRunning(String pageId, String username, String columnName) {
+		UploadProgress uploadProgress = mysqlRepository.selectUploadProgress(pageId, username);
+
+		if (uploadProgress != null && uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
 			throw new BizException("Not finished upload");
 		}
-		mysqlRepository.upsertUploadStatus(pageId, username, UploadStatus.RUNNING);
+
+		String underScoredColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
+
+		mysqlRepository.upsertUploadProgress(pageId, username, underScoredColumnName, UploadStatus.RUNNING);
 	}
 
 	@Transactional("mysqlTxManager")
 	public void markFinish(String pageId, String username) {
-		mysqlRepository.upsertUploadStatus(pageId, username, UploadStatus.FINISH);
+		mysqlRepository.upsertUploadProgress(pageId, username, null, UploadStatus.FINISH);
+	}
+
+	public UploadProgress getFinishedUploadProgress(String pageId, String username) {
+		UploadProgress uploadProgress = mysqlRepository.selectUploadProgress(pageId, username);
+
+		if (uploadProgress == null) {
+			throw new BizException("Not uploaded yet");
+		}
+
+		if (uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
+			throw new BizException("Not finished upload");
+		}
+
+		return uploadProgress;
 	}
 
 	@Transactional("oracleTxManager")

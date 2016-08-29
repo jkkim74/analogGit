@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.pandora.common.BizException;
 import com.skplanet.pandora.model.ApiResponse;
-import com.skplanet.pandora.model.AutoMappedMap;
+import com.skplanet.pandora.model.Preview;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.service.UploadService;
 
@@ -32,15 +32,15 @@ public class UploadController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String pageId,
-			@RequestParam String username, @RequestParam String dataType) throws IOException {
+			@RequestParam String username, @RequestParam String columnName) throws IOException {
 
-		log.info("Uploading file... pageId={}, username={}, , dataType={}", pageId, username, dataType);
+		log.info("Uploading file... pageId={}, username={}, columnName={}", pageId, username, columnName);
 
 		if (file.isEmpty()) {
 			throw new BizException("Empty file");
 		}
 
-		uploadService.markRunning(pageId, username);
+		uploadService.markRunning(pageId, username, columnName);
 
 		Path filePath = uploadService.saveUploadFile(file);
 
@@ -53,7 +53,7 @@ public class UploadController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public List<AutoMappedMap> getUploadedPreview(@RequestParam String pageId, @RequestParam String username) {
+	public List<Preview> getUploadedPreview(@RequestParam String pageId, @RequestParam String username) {
 		return oracleRepository.selectPreview(pageId, username);
 	}
 

@@ -2,37 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
 
-	<select id="selectMemberInfo" parameterType="map" resultType="AutoMappedMap">
-		select mbr_id
-		, ocbcom_lgn_id
-		, ci_no
-		, card_no
-		, syw_mbr_id
-		, evs_mbr_id
-		from mbrt_mbr_id_mst
-		<where>
-			<if test="mbrId != null and mbrId != ''">
-				and mbr_id = #{mbrId}
-			</if>
-			<if test="ocbcomLgnId != null and ocbcomLgnId != ''">
-				and ocbcom_lgn_id = #{ocbcomLgnId}
-			</if>
-			<if test="ciNo != null and ciNo != ''">
-				and ci_no = #{ciNo}
-			</if>
-			<if test="mbrKorNm != null and mbrKorNm != ''">
-				and mbr_kor_nm = #{mbrKorNm}
-			</if>
-			<if test="cardNo != null and cardNo != ''">
-				and card_no = #{cardNo}
-			</if>
-			<if test="sywMbrId != null and sywMbrId != ''">
-				and syw_mbr_id = #{sywMbrId}
-			</if>
-			<if test="evsMbrId != null and evsMbrId != ''">
-				and evs_mbr_id = #{evsMbrId}
-			</if>
-		</where>
+	<select id="selectMerged" parameterType="map" resultType="com.skplanet.pandora.model.Member">
+		SELECT MBR_ID
+			 , OCBCOM_LGN_ID
+			 , CI_NO
+			 , MBR_KOR_NM
+			 , CARD_NO
+			 , SYW_MBR_ID
+			 , EVS_MBR_ID
+		FROM MBRT_MBR_ID_MST
+		WHERE ${columnName} IN (SELECT COLUMN1 FROM TMP_${pageId}_${username})
 	</select>
 
 </mapper>

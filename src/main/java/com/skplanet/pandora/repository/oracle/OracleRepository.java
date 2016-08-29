@@ -8,11 +8,14 @@ import org.springframework.stereotype.Repository;
 
 import com.skplanet.pandora.common.Constant;
 import com.skplanet.pandora.model.AutoMappedMap;
+import com.skplanet.pandora.model.Member;
+import com.skplanet.pandora.model.Preview;
+import com.skplanet.pandora.model.UploadProgress;
 
 @Repository
 public interface OracleRepository {
 
-	Map<String, Object> selectTest(Map<String, Object> params);
+	AutoMappedMap selectTest(Map<String, Object> params);
 
 	int countTable(@Param(Constant.PAGE_ID) String pageId, @Param(Constant.USERNAME) String username);
 
@@ -23,12 +26,8 @@ public interface OracleRepository {
 	int insertBulk(@Param(Constant.PAGE_ID) String pageId, @Param(Constant.USERNAME) String username,
 			@Param("bulkList") List<String> bulkList);
 
-	List<AutoMappedMap> selectPreview(@Param(Constant.PAGE_ID) String pageId,
-			@Param(Constant.USERNAME) String username);
+	List<Preview> selectPreview(@Param(Constant.PAGE_ID) String pageId, @Param(Constant.USERNAME) String username);
 
-	List<AutoMappedMap> selectMemberInfo(Map<String, Object> params);
-
-	List<Map<String, Object>> selectTmp(@Param(Constant.PAGE_ID) String pageId,
-			@Param(Constant.USERNAME) String username);
+	List<Member> selectMerged(UploadProgress uploadProgress);
 
 }

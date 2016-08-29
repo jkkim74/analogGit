@@ -6,16 +6,19 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.skplanet.pandora.common.Constant;
+import com.skplanet.pandora.model.AutoMappedMap;
+import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.model.UploadStatus;
 
 @Repository
 public interface MysqlRepository {
 
-	Map<String, Object> selectTest(Map<String, Object> params);
+	AutoMappedMap selectTest(Map<String, Object> params);
 
-	UploadStatus selectUploadStatus(@Param(Constant.PAGE_ID) String pageId, @Param(Constant.USERNAME) String username);
+	UploadProgress selectUploadProgress(@Param(Constant.PAGE_ID) String pageId,
+			@Param(Constant.USERNAME) String username);
 
-	int upsertUploadStatus(@Param(Constant.PAGE_ID) String pageId, @Param(Constant.USERNAME) String username,
-			@Param("uploadStatus") UploadStatus uploadStatus);
+	int upsertUploadProgress(@Param(Constant.PAGE_ID) String pageId, @Param(Constant.USERNAME) String username,
+			@Param(Constant.COLUMN_NAME) String columnName, @Param(Constant.UPLOAD_STATUS) UploadStatus uploadStatus);
 
 }

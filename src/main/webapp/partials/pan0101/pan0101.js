@@ -51,7 +51,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
 
     Upload.upload({
       url: '/api/upload',
-      data: { file: file, pageId: $stateParams.pageId, username: $scope.username, dataType: $scope.selectedOption.value }
+      data: { file: file, pageId: $stateParams.pageId, username: $scope.username, columnName: $scope.selectedOption.value }
     }).then(function (resp) {
       console.log('Success ' + resp.config.data.file.name + ' uploaded.');
 
@@ -74,5 +74,14 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
         $scope.gridOptionsPreview.data = data;
       });
   };
+
+  $scope.loadMerged = function () {
+    var canceler = $q.defer();
+    $http.get('/api/merged', { params: { pageId: $stateParams.pageId, username: $scope.username }, timeout: canceler.promise })
+      .success(function (data) {
+        $scope.gridOptions.data = data;
+      });
+  };
+
 
 }]);
