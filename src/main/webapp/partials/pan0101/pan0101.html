@@ -26,7 +26,11 @@
             </div>
             <div>
                 <button type="button" class="btn btn-info" ng-click="loadMerged()">조회</button>
-                <div class="grid-div" ui-grid="gridOptions" ui-grid-resize-columns></div>
+                <div class="grid-div" ui-grid="gridOptions" ui-grid-pagination ui-grid-resize-columns></div>
+                <p class="pull-right"><strong>{{ gridApi.pagination.getPage() }}</strong> Page</p>
+                <button type="button" class="btn btn-success" ng-click="gridApi.pagination.previousPage()">이전</button>
+                <button type="button" class="btn btn-success" ng-click="gridApi.pagination.nextPage()">다음</button>
+                <button type="button" class="btn btn-success" ng-click="gridApi.pagination.seek(1)">처음으로</button>
             </div>
         </div>
     </div>

@@ -15,5 +15,6 @@ public class ApiResponse {
 	String message;
 	String developerMessage;
 	String requestUrl;
+	Object value;
 
 }

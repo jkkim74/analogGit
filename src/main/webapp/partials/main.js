@@ -11,7 +11,9 @@ var App = angular.module('App', [
   'ui.grid.resizeColumns',
   'ui.grid.selection',
   'ui.grid.exporter',
+  'ui.grid.pagination',
   'ui.grid.infiniteScroll',
+  'uiGridConstants',
   'ui.validate',
   'angular-loading-bar',
   'toastr'

@@ -15,7 +15,6 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
   ];
 
   $scope.gridOptionsPreview = {
-    data: [],
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 100, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'column1', displayName: 'Uploaded Data Preview' }
@@ -23,7 +22,10 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
   };
 
   $scope.gridOptions = {
-    data: [],
+    enablePaginationControls: false,
+    paginationPageSize: 250,
+    useExternalPagination: true,
+    useExternalSorting: true,
     columnDefs: [
       { field: 'mbrId', displayName: '회원ID' },
       { field: 'ocbcomLgnId', displayName: 'OCB닷컴 로그인ID' },
@@ -32,17 +34,18 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
       { field: 'cardNo', displayName: '카드번호' },
       { field: 'sywMbrId', displayName: '시럽 스마트월렛 회원ID' },
       { field: 'evsMbrId', displayName: '11번가 회원ID' }
-    ]
+    ],
+    onRegisterApi: function (gridApi) {
+      $scope.gridApi = gridApi;
+      // $scope.gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
+      //   $scope.loadMerged();
+      // });
+      gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
+        $scope.loadMerged();
+      });
+    }
   };
 
-  // upload later on form submit or something similar
-  // $scope.submit = function () {
-  //   if ($scope.form.file.$valid && $scope.file) {
-  //     $scope.upload($scope.file);
-  //   }
-  // };
-
-  // upload on file select or drop
   $scope.upload = function (file) {
     if (!$scope.form.file.$valid || !file) {
       console.log("Error: invalid file");
@@ -53,7 +56,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
       url: '/api/upload',
       data: { file: file, pageId: $stateParams.pageId, username: $scope.username, columnName: $scope.selectedOption.value }
     }).then(function (resp) {
-      console.log('Success ' + resp.config.data.file.name + ' uploaded.');
+      console.log('Success [' + resp.config.data.file.name + '] uploaded.');
 
       $timeout(function () {
         $scope.loadPreview()
@@ -69,7 +72,8 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
 
   $scope.loadPreview = function () {
     var canceler = $q.defer();
-    $http.get('/api/upload', { params: { pageId: $stateParams.pageId, username: $scope.username }, timeout: canceler.promise })
+    $http
+      .get('/api/upload', { params: { pageId: $stateParams.pageId, username: $scope.username }, timeout: canceler.promise })
       .success(function (data) {
         $scope.gridOptionsPreview.data = data;
       });
@@ -77,7 +81,16 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
 
   $scope.loadMerged = function () {
     var canceler = $q.defer();
-    $http.get('/api/merged', { params: { pageId: $stateParams.pageId, username: $scope.username }, timeout: canceler.promise })
+    $http
+      .get('/api/mergedMember', {
+        params: {
+          pageId: $stateParams.pageId,
+          username: $scope.username,
+          offset: ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptions.paginationPageSize,
+          limit: $scope.gridOptions.paginationPageSize
+        },
+        timeout: canceler.promise
+      })
       .success(function (data) {
         $scope.gridOptions.data = data;
       });

@@ -23,11 +23,12 @@ public class ApiController {
 	@Autowired
 	private UploadService uploadService;
 
-	@RequestMapping(method = RequestMethod.GET, value = "/merged")
-	public List<Member> getMergedMember(@RequestParam String pageId, @RequestParam String username) {
+	@RequestMapping(method = RequestMethod.GET, value = "/mergedMember")
+	public List<Member> getMergedMember(@RequestParam String pageId, @RequestParam String username,
+			@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "20") int limit) {
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
-		return oracleRepository.selectMerged(uploadProgress);
+		return oracleRepository.selectMergedMember(uploadProgress, offset, limit);
 	}
 
 }

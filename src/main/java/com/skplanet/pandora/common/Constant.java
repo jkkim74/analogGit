@@ -6,8 +6,6 @@ public class Constant {
 
 	public static final String PAGE_ID = "pageId";
 	public static final String USERNAME = "username";
-	public static final String COLUMN_NAME = "columnName";
-	public static final String UPLOAD_STATUS = "uploadStatus";
 	public static final String FILE_PATH = "filePath";
 
 }
