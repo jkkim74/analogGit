@@ -33,11 +33,11 @@ App.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
     })
     .state('index.home', {
       url: '/',
-      templateUrl: 'partials/pan0001/pan0001.html',
-      controller: 'Pan0001Ctrl'
+      templateUrl: 'partials/home/home.html',
+      controller: 'HomeCtrl'
     })
     .state('index.page', {
-      url: '/page/:pageId',
+      url: '/:pageId',
       templateUrl: function ($stateParams) {
         // 화면ID로 디렉터리, .html, .js 만들어서 하나의 페이지를 구성하는 구조.
         return 'partials/' + $stateParams.pageId + '/' + $stateParams.pageId + '.html';
