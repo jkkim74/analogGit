@@ -1,6 +1,6 @@
 'use strict';
 
-App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", function ($scope, $q, $http, $timeout, $stateParams, Upload) {
+App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", "uiGridConstants", function ($scope, $q, $http, $timeout, $stateParams, Upload, uiGridConstants) {
 
   $scope.title = '멤버 ID 일괄 전환';
   $scope.username = 'test';
@@ -60,7 +60,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
 
       $timeout(function () {
         $scope.loadPreview()
-      }, 1000);
+      }, 500);
 
     }, function (resp) {
       console.log('Error status: ' + resp.status);
