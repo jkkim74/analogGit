@@ -8,6 +8,7 @@ var App = angular.module('App', [
   'ui.bootstrap',
   'ui.router',
   'ui.grid',
+  'ui.grid.autoResize',
   'ui.grid.resizeColumns',
   'ui.grid.selection',
   'ui.grid.exporter',

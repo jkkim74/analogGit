@@ -15,6 +15,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
   ];
 
   $scope.gridOptionsPreview = {
+    enableSorting: false,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 100, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'column1', displayName: 'Uploaded Data Preview' }
@@ -23,7 +24,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
 
   $scope.gridOptions = {
     enablePaginationControls: false,
-    paginationPageSize: 250,
+    paginationPageSize: 50,
     useExternalPagination: true,
     useExternalSorting: true,
     columnDefs: [
