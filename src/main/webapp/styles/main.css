@@ -20,6 +20,10 @@ a:hover {
     padding-bottom: 2rem;
 }
 
+.section-body {
+    padding: 0 0;
+}
+
 .section-sidebar {
     background-color: #2b2f3a;
     color: white;
@@ -28,7 +32,7 @@ a:hover {
 
 .section-content {
     background-color: white;
-    margin: 15px 10px 15px 0px;
+    margin: 15px 0px;
     padding: 20px 10px;
 }
 
