@@ -18,7 +18,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
     enableSorting: false,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 100, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
-      { field: 'column1', displayName: 'Uploaded Data Preview' }
+      { field: 'column1', displayName: 'Uploaded Data' }
     ]
   };
 
@@ -48,7 +48,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
   };
 
   $scope.upload = function (file) {
-    if (!$scope.form.file.$valid || !file) {
+    if (!file) {
       console.log("Error: invalid file");
       return;
     }
@@ -57,8 +57,6 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
       url: '/api/upload',
       data: { file: file, pageId: $stateParams.pageId, username: $scope.username, columnName: $scope.selectedOption.value }
     }).then(function (resp) {
-      console.log('Success [' + resp.config.data.file.name + '] uploaded.');
-
       toastr.success(resp.config.data.file.name, '업로드 성공!');
 
       $timeout(function () {
@@ -98,6 +96,5 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
         $scope.gridOptions.data = data;
       });
   };
-
 
 }]);
