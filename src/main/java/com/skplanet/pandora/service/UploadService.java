@@ -86,8 +86,7 @@ public class UploadService {
 
 	@Transactional("oracleTxManager")
 	public void prepareTemporaryTable(String pageId, String username) {
-		if (oracleRepository.countTable(pageId, username) > 0) {
-		} else {
+		if (oracleRepository.countTable(pageId, username) <= 0) {
 			oracleRepository.createTable(pageId, username);
 		}
 		oracleRepository.truncateTable(pageId, username);

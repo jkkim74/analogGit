@@ -10,18 +10,25 @@
 	</select>
 
 	<update id="createTable" parameterType="map">
-		CREATE GLOBAL TEMPORARY TABLE TMP_${pageId}_${username} (
+		CREATE TABLE TMP_${pageId}_${username} (
 			COLUMN1 VARCHAR2(4000)
-		) ON COMMIT PRESERVE ROWS
+		)
+		SEGMENT CREATION IMMEDIATE
+		PCTFREE 10 PCTUSED 0 INITRANS 1 MAXTRANS 255
+		NOCOMPRESS LOGGING
+		STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+		PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+		BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+		TABLESPACE "INTG_DTBS_TDE"
 	</update>
 	<update id="createTable" parameterType="map" databaseId="hsql">
-        CREATE TABLE IF NOT EXISTS TMP_${pageId}_${username} (
-            COLUMN1 VARCHAR2(4000)
-        )
+		CREATE TABLE IF NOT EXISTS TMP_${pageId}_${username} (
+			COLUMN1 VARCHAR2(4000)
+		)
 	</update>
 
 	<update id="truncateTable" parameterType="map">
-        TRUNCATE TABLE TMP_${pageId}_${username}
+		TRUNCATE TABLE TMP_${pageId}_${username}
 	</update>
 
 	<insert id="insertBulk" parameterType="map">
@@ -39,16 +46,22 @@
 	</insert>
 	
 	<insert id="insertUploadedData" parameterType="map">
-	   INSERT INTO TMP_${pageId}_${username} ( COLUMN1 ) VALUES ( #{column1} ) 
+		INSERT INTO TMP_${pageId}_${username} ( COLUMN1 ) VALUES ( #{column1} ) 
 	</insert>
 
-    <select id="selectPreview" parameterType="map" resultType="AutoMappedMap">
-        SELECT * FROM TMP_${pageId}_${username}
-        OFFSET 0 ROWS FETCH NEXT 1000 ROWS ONLY
-    </select>
-    <select id="selectPreview" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
-        SELECT * FROM TMP_${pageId}_${username}
-        LIMIT 0, 1000
-    </select>
+	<select id="selectPreview" parameterType="map" resultType="AutoMappedMap">
+		SELECT *
+		FROM (
+			SELECT IN_SQ.*
+			     , ROWNUM AS RNUM
+			FROM ( SELECT * FROM TMP_${pageId}_${username} ) IN_SQ
+			WHERE  ROWNUM &lt;= 1000
+		)
+		WHERE RNUM &gt; 0
+	</select>
+	<select id="selectPreview" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
+		SELECT * FROM TMP_${pageId}_${username}
+		LIMIT 0, 1000
+	</select>
 
 </mapper>

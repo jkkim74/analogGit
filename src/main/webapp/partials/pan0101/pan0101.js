@@ -3,7 +3,7 @@
 App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", "uiGridConstants", function ($scope, $q, $http, $timeout, $stateParams, Upload, uiGridConstants) {
 
   $scope.title = '멤버 ID 일괄 전환';
-  $scope.username = 'test';
+  $scope.username = 'test2';
 
   $scope.selectOptions = [
     { label: '회원ID', value: 'mbrId' },
@@ -60,7 +60,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
 
       $timeout(function () {
         $scope.loadPreview()
-      }, 500);
+      }, 5000);
 
     }, function (resp) {
       console.log('Error status: ' + resp.status);
