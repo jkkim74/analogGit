@@ -1,6 +1,6 @@
 'use strict';
 
-App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", "uiGridConstants", function ($scope, $q, $http, $timeout, $stateParams, Upload, uiGridConstants) {
+App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", "uiGridConstants", "toastr", function ($scope, $q, $http, $timeout, $stateParams, Upload, uiGridConstants, toastr) {
 
   $scope.title = '멤버 ID 일괄 전환';
   $scope.username = 'test2';
@@ -58,9 +58,11 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
     }).then(function (resp) {
       console.log('Success [' + resp.config.data.file.name + '] uploaded.');
 
+      toastr.success(resp.config.data.file.name, '업로드 성공!');
+
       $timeout(function () {
         $scope.loadPreview()
-      }, 5000);
+      }, 2000);
 
     }, function (resp) {
       console.log('Error status: ' + resp.status);
