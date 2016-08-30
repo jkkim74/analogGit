@@ -1,5 +1,5 @@
 body {
-    background-color: #e5e9ec;
+    background-color: #2b2f3a;
     margin-top: 50px;
 }
 a {
@@ -25,11 +25,12 @@ a:hover {
 }
 
 .section-sidebar {
-    background-color: #2b2f3a;
     color: white;
-    height: 110rem;
 }
 
+.section-content-wrapper {
+    background-color: #e5e9ec;
+}
 .section-content {
     background-color: white;
     margin: 15px 0px;
@@ -53,7 +54,20 @@ a:hover {
     margin-bottom: 10px;
 }
 
+.upload-form {
+    margin-bottom: 50px;
+}
+
 .pts-form {
     margin-top: 50px;
     padding: 20px 20px;
+}
+
+.row.match-cols {
+    overflow: hidden; 
+}
+
+.row.match-cols [class*="col-"]{
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
 }
