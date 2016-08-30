@@ -22,9 +22,6 @@ public interface OracleRepository {
 
 	void truncateTable(@Param("pageId") String pageId, @Param("username") String username);
 
-	int insertBulk(@Param("pageId") String pageId, @Param("username") String username,
-			@Param("bulkList") List<String> bulkList);
-
 	List<Preview> selectPreview(@Param("pageId") String pageId, @Param("username") String username);
 
 	List<Member> selectMergedMember(@Param("uploadProgress") UploadProgress uploadProgress, @Param("offset") int offset,

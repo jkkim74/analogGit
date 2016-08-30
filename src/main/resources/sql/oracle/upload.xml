@@ -31,7 +31,7 @@
 		TRUNCATE TABLE TMP_${pageId}_${username}
 	</update>
 
-	<insert id="insertBulk" parameterType="map">
+	<!-- <insert id="insertBulk" parameterType="map">
 		INSERT /*+ APPEND_VALUES */ ALL
 		<foreach collection="bulkList" item="item" index="index" separator=" ">
 			INTO TMP_${pageId}_${username} ( COLUMN1 ) VALUES ( #{item} )
@@ -47,7 +47,7 @@
 	
 	<insert id="insertUploadedData" parameterType="map">
 		INSERT INTO TMP_${pageId}_${username} ( COLUMN1 ) VALUES ( #{column1} ) 
-	</insert>
+	</insert> -->
 
 	<select id="selectPreview" parameterType="map" resultType="AutoMappedMap">
 		SELECT *
