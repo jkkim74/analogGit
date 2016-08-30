@@ -33,7 +33,7 @@ a:hover {
 .section-content {
     background-color: white;
     margin: 15px 0px;
-    padding: 20px 10px;
+    padding: 20px 20px;
 }
 
 .drop-box {
@@ -51,4 +51,9 @@ a:hover {
 .grid-div {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.pts-form {
+    margin-top: 50px;
+    padding: 20px 20px;
 }
