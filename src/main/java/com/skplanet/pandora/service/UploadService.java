@@ -35,11 +35,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UploadService {
 
-	// @Autowired
-	// private ResourceLoader resourceLoader;
-	// resourceLoader.getResource("file:" + Paths.get(ROOT,
-	// filename).toString())
-
 	@Autowired
 	private MysqlRepository mysqlRepository;
 
@@ -93,12 +88,6 @@ public class UploadService {
 	}
 
 	public void bulkInsert(String pageId, String username, Path uploadPath) {
-		// List<String> list = FileUtils.readLines(uploadPath.toFile(),
-		// StandardCharsets.UTF_8);
-		// List<String> bulkList = IOUtils.readLines(file.getInputStream(),
-		// StandardCharsets.UTF_8);
-		// oracleRepository.insertBulk(pageId, username, bulkList);
-
 		JobParameters jobParameters = new JobParametersBuilder().addString(Constant.PAGE_ID, pageId)
 				.addString(Constant.USERNAME, username).addString(Constant.FILE_PATH, uploadPath.toString())
 				.toJobParameters();
