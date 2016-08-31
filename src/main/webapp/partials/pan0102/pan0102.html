@@ -1,7 +1,338 @@
 <div class="container-fluid section-body">
     <ng-include src="'partials/layout/sidebar.html'"></ng-include>
-    <div class="col-md-10 section-content-wrapper">
+    <div class="col-md-11 section-content-wrapper">
         <div class="section-content">
+            <div class="upload-form">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
+                            ng-model="selectedOption"></select>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control">
+                    </div>
+                    <button type="button" class="btn btn-info" ng-click="">조회</button>
+                </form>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>기본 정보</strong></div>
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th>회원구분</th>
+                            <th>회원상태</th>
+                            <th>회원ID</th>
+                            <th>CUST_ID</th>
+                            <th>CI번호</th>
+                            <th>포인트 소멸 여부</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>회원 원장</strong></div>
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th>한글성명</th>
+                            <th>법정생년월일</th>
+                            <th>성별</th>
+                            <th>OCB 최초 카드 본등록 일자</th>
+                            <th>휴대전화번호</th>
+                            <th>휴대전화번호 최종 유입 출처/일자</th>
+                            <th>자택전화번호</th>
+                            <th>자택전화번호 최종 유입 출처/일자</th>
+                            <th>직장전화번호</th>
+                            <th>직장전화번호 최종 유입 출처/일자</th>
+                            <th>자택주소</th>
+                            <th>자택주소 최종 유입 출처/일자</th>
+                            <th>직장주소</th>
+                            <th>직장주소 최종 유입 출처/일자</th>
+                            <th>이메일주소</th>
+                            <th>개인 정보 유효 기간 만료 예정일자</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>마케팅 동의 내역</strong></div>
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th>마케팅 동의 여부</th>
+                            <th>마케팅 최종 동의 유입 출처/일자</th>
+                            <th>교차 활용 동의 여부</th>
+                            <th>TM 수신 동의 여부</th>
+                            <th>EM 수신 동의 여부</th>
+                            <th>광고성 SMS 수신 동의 여부</th>
+                            <th>정보성 SMS 수신 동의 여부</th>
+                            <th>포인트 사용 적립 동의 여부</th>
+                            <th>혜택/모바일전단 푸쉬 동의 여부</th>
+                            <th>친구와 함께쓰기 푸쉬 동의 여부</th>
+                            <th>동전 푸쉬 동의 여부</th>
+                            <th>위치 정보 활용 동의 여부</th>
+                            <th>BLE 동의 여부</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>채널 가입 현황</strong></div>
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th>OCB앱 이용 여부</th>
+                            <th>OCB앱 최종 가입 일자</th>
+                            <th>OCB앱 최종 로그인 일자</th>
+                            <th>OCB닷컴 United ID</th>
+                            <th>OCB닷컴 로그인ID</th>
+                            <th>OCB닷컴 가입 일자</th>
+                            <th>OCB닷컴 최종 로그인 일자</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>거래 유형별 최종 서비스 이용 일자</strong></div>
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th>OCB 적립/사용/할인/현금환급</th>
+                            <th>OCB 카드 본등록</th>
+                            <th>상담실 문의</th>
+                            <th>상품 구매</th>
+                            <th>포인트 조회</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>마케팅 회원 원장</strong></div>
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th>한글성명</th>
+                            <th>휴대전화번호</th>
+                            <th>휴대전화번호 최종 유입 출처/일자</th>
+                            <th>자택전화번호</th>
+                            <th>자택전화번호 최종 유입 출처/일자</th>
+                            <th>직장전화번호</th>
+                            <th>직장전화번호 최종 유입 출처/일자</th>
+                            <th>자택주소</th>
+                            <th>자택주소 최종 유입 출처/일자</th>
+                            <th>직장주소</th>
+                            <th>직장주소 최종 유입 출처/일자</th>
+                            <th>이메일주소</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>마케팅 회원 원장 이력</strong></div>
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th>유입기관코드</th>
+                            <th>동의버전</th>
+                            <th>동의일자</th>
+                            <th>동의여부</th>
+                            <th>한글성명</th>
+                            <th>생년월일</th>
+                            <th>성별</th>
+                            <th>이메일주소</th>
+                            <th>휴대전화번호</th>
+                            <th>자택전화번호</th>
+                            <th>직장전화번호</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>3자 제공 동의 이력</strong></div>
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th>제공대상기관</th>
+                            <th>유입기관코드</th>
+                            <th>동의버전</th>
+                            <th>동의일자</th>
+                            <th>동의여부</th>
+                            <th>한글성명</th>
+                            <th>생년월일</th>
+                            <th>성별</th>
+                            <th>이메일주소</th>
+                            <th>휴대전화번호</th>
+                            <th>자택전화번호</th>
+                            <th>직장전화번호</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>보유 카드 목록</strong></div>
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th>카드코드 및 명칭</th>
+                            <th>카드상태</th>
+                            <th>카드번호</th>
+                            <th>카드발급일자</th>
+                            <th>카드본등록일자</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>거래 내역</strong></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading"><strong>이메일 발송 이력</strong></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading"><strong>앱 푸쉬 이력</strong></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
