@@ -35,7 +35,7 @@ App.controller('Pan0105Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
 
   $scope.gridOptions = {
     enablePaginationControls: false,
-    paginationPageSize: 50,
+    paginationPageSize: 100,
     useExternalPagination: true,
     useExternalSorting: true,
     columnDefs: [
