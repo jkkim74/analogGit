@@ -2,12 +2,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
 
-	<select id="selectMergedMember" parameterType="map" resultType="com.skplanet.pandora.model.Member">
+    <sql id="pagingHead">
 		SELECT *
 		FROM (
 			SELECT IN_SQ.*
 				 , ROWNUM AS RNUM
 			FROM (
+    </sql>
+    <sql id="pagingFoot">
+			) IN_SQ
+			WHERE  ROWNUM &lt;= #{offset + limit}
+		)
+		WHERE RNUM &gt; #{offset}
+    </sql>
+    <sql id="pagingFoot" databaseId="hsql">
+    	LIMIT #{offset}, #{limit}
+    </sql>
+
+	<select id="selectMergedMember" parameterType="map" resultType="com.skplanet.pandora.model.Member">
+		<include refid="pagingHead" />
+
+		<choose>
+			<when test="uploadProgress.columnName == 'OCBCOM_LGN_ID'">
+				SELECT A.MBR_ID
+					 , B.LGN_ID AS OCBCOM_LGN_ID
+					 , A.CI_NO
+					 , A.MBR_KOR_NM
+					 , A.CARD_NO
+					 , A.SYW_MBR_ID
+					 , A.EVS_MBR_ID
+				FROM   MBRT_MBR_ID_MST A
+				JOIN   MART_OCBCOM_MBR_MST B ON A.MBR_ID = B.MBR_ID
+				WHERE  B.LGN_ID IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
+			</when>
+			<when test="uploadProgress.columnName == 'CARD_NO'">
+				SELECT A.MBR_ID
+					 , A.OCBCOM_LGN_ID
+					 , A.CI_NO
+					 , A.MBR_KOR_NM
+					 , B.CARD_NO
+					 , A.SYW_MBR_ID
+					 , A.EVS_MBR_ID
+				FROM   MBRT_MBR_ID_MST A
+				JOIN   MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
+				WHERE  B.${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
+			</when>
+			<otherwise>
 				SELECT MBR_ID
 					 , OCBCOM_LGN_ID
 					 , CI_NO
@@ -15,12 +55,12 @@
 					 , CARD_NO
 					 , SYW_MBR_ID
 					 , EVS_MBR_ID
-				FROM MBRT_MBR_ID_MST
-				WHERE ${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
-			) IN_SQ
-			WHERE  ROWNUM &lt;= #{offset + limit}
-		)
-		WHERE RNUM &gt; #{offset}
+				FROM   MBRT_MBR_ID_MST
+				WHERE  ${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
+			</otherwise>
+		</choose>
+
+		<include refid="pagingFoot" />
 	</select>
 	<select id="selectMergedMember" parameterType="map" resultType="com.skplanet.pandora.model.Member" databaseId="hsql">
 		SELECT MBR_ID
@@ -32,7 +72,8 @@
 			 , EVS_MBR_ID
 		FROM MBRT_MBR_ID_MST
 		WHERE ${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
-		LIMIT #{offset}, #{limit}
+
+		<include refid="pagingFoot" />
 	</select>
 
 </mapper>
