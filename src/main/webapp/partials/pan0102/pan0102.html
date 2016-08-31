@@ -4,14 +4,9 @@
         <div class="section-content">
             <div class="upload-form">
                 <form class="form-inline">
-                    <div class="form-group">
-                        <select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
-                            ng-model="selectedOption"></select>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control">
-                    </div>
+                    <select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
+                        ng-model="selectedOption"></select>
+                    <input type="text" class="form-control">
                     <button type="button" class="btn btn-info" ng-click="">조회</button>
                 </form>
             </div>
@@ -93,19 +88,23 @@
                 <table class="table text-center">
                     <thead>
                         <tr>
-                            <th>마케팅 동의 여부</th>
-                            <th>마케팅 최종 동의 유입 출처/일자</th>
-                            <th>교차 활용 동의 여부</th>
-                            <th>TM 수신 동의 여부</th>
-                            <th>EM 수신 동의 여부</th>
-                            <th>광고성 SMS 수신 동의 여부</th>
-                            <th>정보성 SMS 수신 동의 여부</th>
+                            <th rowspan="2">마케팅 동의 여부</th>
+                            <th rowspan="2">마케팅 최종 동의 유입 출처/일자</th>
+                            <th rowspan="2">교차 활용 동의 여부</th>
+                            <th rowspan="2">TM 수신 동의 여부</th>
+                            <th rowspan="2">EM 수신 동의 여부</th>
+                            <th rowspan="2">광고성 SMS 수신 동의 여부</th>
+                            <th rowspan="2">정보성 SMS 수신 동의 여부</th>
+                            <th colspan="4">앱 푸쉬 동의 여부</th>
+
+                            <th rowspan="2">위치 정보 활용 동의 여부</th>
+                            <th rowspan="2">BLE 동의 여부</th>
+                        </tr>
+                        <tr>
                             <th>포인트 사용 적립 동의 여부</th>
                             <th>혜택/모바일전단 푸쉬 동의 여부</th>
                             <th>친구와 함께쓰기 푸쉬 동의 여부</th>
                             <th>동전 푸쉬 동의 여부</th>
-                            <th>위치 정보 활용 동의 여부</th>
-                            <th>BLE 동의 여부</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -317,18 +316,29 @@
             </div>
 
             <div class="panel panel-info">
-                <div class="panel-heading"><strong>거래 내역</strong></div>
+                <div class="panel-heading form-inline">
+                    <strong>거래 내역</strong>
+                    <select class="form-control input-sm" ng-model="transactionType">
+                        <option value="">전체</option>
+                        <option value="oil">주유</option>
+                        <option value="normal">일반</option>
+                    </select>
+                </div>
+                <div ui-grid="gridOptionsTransactionHistory"></div>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
                     <div class="panel panel-info">
                         <div class="panel-heading"><strong>이메일 발송 이력</strong></div>
+                        <div ui-grid="gridOptionsEmailSendHistory"></div>
                     </div>
                 </div>
+
                 <div class="col-md-6">
                     <div class="panel panel-info">
                         <div class="panel-heading"><strong>앱 푸쉬 이력</strong></div>
+                        <div ui-grid="gridOptionsAppPushHistory"></div>
                     </div>
                 </div>
             </div>

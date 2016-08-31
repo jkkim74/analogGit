@@ -22,6 +22,7 @@ th {
     background-color: whitesmoke;
     color: #2b2f3a;
     text-align: center;
+    vertical-align: middle !important;
 }
 
 .section-footer {
