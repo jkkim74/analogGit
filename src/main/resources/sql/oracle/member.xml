@@ -18,9 +18,9 @@
 				FROM MBRT_MBR_ID_MST
 				WHERE ${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 			) IN_SQ
-			WHERE  ROWNUM &lt;= ${offset + limit}
+			WHERE  ROWNUM &lt;= #{offset + limit}
 		)
-		WHERE RNUM &gt; ${offset}
+		WHERE RNUM &gt; #{offset}
 	</select>
 	<select id="selectMergedMember" parameterType="map" resultType="com.skplanet.pandora.model.Member" databaseId="hsql">
 		SELECT MBR_ID
@@ -32,7 +32,7 @@
 			 , EVS_MBR_ID
 		FROM MBRT_MBR_ID_MST
 		WHERE ${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
-		LIMIT ${offset}, ${limit}
+		LIMIT #{offset}, #{limit}
 	</select>
 
 </mapper>
