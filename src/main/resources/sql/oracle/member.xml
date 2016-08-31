@@ -11,7 +11,7 @@
     </sql>
     <sql id="pagingFoot">
 			) IN_SQ
-			WHERE  ROWNUM &lt;= #{offset + limit}
+			WHERE  ROWNUM &lt;= #{offset} + #{limit}
 		)
 		WHERE RNUM &gt; #{offset}
     </sql>
