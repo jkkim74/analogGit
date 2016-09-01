@@ -1,6 +1,6 @@
 'use strict';
 
-App.controller('Pan0105Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", "uiGridConstants", "toastr", function ($scope, $q, $http, $timeout, $stateParams, Upload, uiGridConstants, toastr) {
+App.controller('Pan0105Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", "uiGridConstants", "toastr", "apiService", function ($scope, $q, $http, $timeout, $stateParams, Upload, uiGridConstants, toastr, apiService) {
   $scope.title = "거래 실적 및 유실적 고객 추출";
   $scope.username = 'test2';
 
@@ -14,7 +14,7 @@ App.controller('Pan0105Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
     { label: 'TR', value: 'tr' },
     { label: '회원ID', value: 'mbrId' }
   ];
- 
+
   $scope.selectOptions3 = [
     { label: '접수일자', value: 'tr' },
     { label: '매출일자', value: 'mbrId' }
@@ -88,7 +88,7 @@ App.controller('Pan0105Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
       toastr.success(resp.config.data.file.name, '업로드 성공!');
 
       $timeout(function () {
-        $scope.loadPreview()
+        $scope.loadPreview();
       }, 2000);
 
     }, function (resp) {
@@ -100,33 +100,18 @@ App.controller('Pan0105Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
   };
 
   $scope.loadPreview = function () {
-    var canceler = $q.defer();
-    $http
-      .get('/api/upload', { params: { pageId: $stateParams.pageId, username: $scope.username }, timeout: canceler.promise })
-      .then(function (resp) {
-        $scope.gridOptionsPreview.data = resp.data;
-      }, function (resp) {
-        console.error(resp);
-      });
+    apiService.getUploadedPreview().then(function (data) {
+      $scope.gridOptionsPreview.data = data;
+    });
   };
 
   $scope.loadMerged = function () {
-    var canceler = $q.defer();
-    $http
-      .get('/api/mergedMember', {
-        params: {
-          pageId: $stateParams.pageId,
-          username: $scope.username,
-          offset: ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptions.paginationPageSize,
-          limit: $scope.gridOptions.paginationPageSize
-        },
-        timeout: canceler.promise
-      })
-      .then(function (resp) {
-        $scope.gridOptions.data = resp.data;
-      }, function (resp) {
-        console.error(resp);
-      });
+    var offset = ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptions.paginationPageSize;
+    var limit = $scope.gridOptions.paginationPageSize;
+
+    apiService.getMembers(offset, limit).then(function (data) {
+      $scope.gridOptions.data = data;
+    });
   };
 
 }]);

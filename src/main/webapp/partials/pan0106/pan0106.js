@@ -1,6 +1,6 @@
 'use strict';
 
-App.controller('Pan0106Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", "uiGridConstants", "toastr", function ($scope, $q, $http, $timeout, $stateParams, Upload, uiGridConstants, toastr) {
+App.controller('Pan0106Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", "uiGridConstants", "toastr", "apiService", function ($scope, $q, $http, $timeout, $stateParams, Upload, uiGridConstants, toastr, apiService) {
 
   $scope.title = "회원 프로파일 분석";
   $scope.username = 'test2';
@@ -59,7 +59,7 @@ App.controller('Pan0106Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
       toastr.success(resp.config.data.file.name, '업로드 성공!');
 
       $timeout(function () {
-        $scope.loadPreview()
+        $scope.loadPreview();
       }, 2000);
 
     }, function (resp) {
@@ -71,33 +71,18 @@ App.controller('Pan0106Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
   };
 
   $scope.loadPreview = function () {
-    var canceler = $q.defer();
-    $http
-      .get('/api/upload', { params: { pageId: $stateParams.pageId, username: $scope.username }, timeout: canceler.promise })
-      .then(function (resp) {
-        $scope.gridOptionsPreview.data = resp.data;
-      }, function (resp) {
-        console.error(resp);
-      });
+    apiService.getUploadedPreview().then(function (data) {
+      $scope.gridOptionsPreview.data = data;
+    });
   };
 
   $scope.loadMerged = function () {
-    var canceler = $q.defer();
-    $http
-      .get('/api/mergedMember', {
-        params: {
-          pageId: $stateParams.pageId,
-          username: $scope.username,
-          offset: ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptions.paginationPageSize,
-          limit: $scope.gridOptions.paginationPageSize
-        },
-        timeout: canceler.promise
-      })
-      .then(function (resp) {
-        $scope.gridOptions.data = resp.data;
-      }, function (resp) {
-        console.error(resp);
-      });
+    var offset = ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptions.paginationPageSize;
+    var limit = $scope.gridOptions.paginationPageSize;
+
+    apiService.getMembers(offset, limit).then(function (data) {
+      $scope.gridOptions.data = data;
+    });
   };
 
 }]);
