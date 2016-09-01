@@ -12,14 +12,12 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -29,7 +27,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.skplanet.pandora.model.AutoMappedMap;
 
 @Configuration
-@PropertySource("classpath:/config/application-${spring.profiles.active:production}.properties")
 @EnableTransactionManagement(proxyTargetClass = true)
 public class DataSourceConfig implements EnvironmentAware, ApplicationContextAware {
 
@@ -40,7 +37,6 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 		this.applicationContext = applicationContext;
 	}
 
-	@Autowired
 	protected Environment env;
 
 	@Override
