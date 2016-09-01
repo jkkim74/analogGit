@@ -3,8 +3,12 @@
 var gulp = require('gulp');
 var inject = require('gulp-inject');
 var sort = require('gulp-sort');
+var eslint = require('gulp-eslint');
+var csslint = require('gulp-csslint');
 var mainBowerFiles = require('main-bower-files');
 
+
+// Inject .js, .css to index.html
 gulp.task('inject', function () {
     var target = gulp.src('src/main/webapp/index.html');
     // It's not necessary to read the files (will speed up things), we're only after their paths: 
@@ -22,4 +26,18 @@ gulp.task('inject', function () {
         .pipe(gulp.dest('src/main/webapp'));
 });
 
-gulp.task('default', ['inject']);
+// Lint Javascript
+gulp.task('jslint', function () {
+    return gulp.src('src/main/webapp/partials/**/*.js')
+        .pipe(eslint())
+        .pipe(eslint.format());
+});
+
+// Lint CSS
+gulp.task('csslint', function () {
+    return gulp.src('src/main/webapp/partials/**/*.css')
+        .pipe(csslint())
+        .pipe(csslint.formatter());
+});
+
+gulp.task('default', ['jslint', 'csslint', 'inject']);

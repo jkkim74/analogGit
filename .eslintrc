@@ -1,16 +1,12 @@
 {
-    "rules": {
-        "linebreak-style": [
-            2,
-            "unix"
-        ],
-        "semi": [
-            2,
-            "always"
-        ]
-    },
     "env": {
-        "browser": true
+        "browser": true,
+        "jquery": true
     },
-    "extends": "eslint:recommended"
+    "extends": "eslint:recommended",
+    "globals": {
+        "angular": true,
+        "moment": true,
+        "App": true
+    }
 }
