@@ -83,7 +83,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
   };
 
   $scope.loadMerged = function () {
-    // var canceler = $q.defer();
+    var canceler = $q.defer();
     $http
       .get('/api/mergedMember', {
         params: {
@@ -92,7 +92,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
           offset: ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptions.paginationPageSize,
           limit: $scope.gridOptions.paginationPageSize
         },
-        timeout: 100000
+        timeout: canceler.promise
       })
       .then(function (resp) {
         $scope.gridOptions.data = resp.data;
