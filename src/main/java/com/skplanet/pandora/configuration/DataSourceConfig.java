@@ -12,6 +12,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
@@ -32,14 +33,15 @@ import com.skplanet.pandora.model.AutoMappedMap;
 @EnableTransactionManagement(proxyTargetClass = true)
 public class DataSourceConfig implements EnvironmentAware, ApplicationContextAware {
 
-	ApplicationContext applicationContext;
+	protected ApplicationContext applicationContext;
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
 
-	Environment env;
+	@Autowired
+	protected Environment env;
 
 	@Override
 	public void setEnvironment(Environment environment) {
@@ -116,13 +118,13 @@ public class DataSourceConfig implements EnvironmentAware, ApplicationContextAwa
 		return configurer;
 	}
 
-//	@Bean
-//	public PlatformTransactionManager querycacheTxManager() {
-//		return new DataSourceTransactionManager(querycacheDataSource());
-//	}
+	@Bean
+	public PlatformTransactionManager querycacheTxManager() {
+		return new DataSourceTransactionManager(querycacheDataSource());
+	}
 
 	@Bean(destroyMethod = "close")
-	public BasicDataSource querycacheDataSource() {
+	public DataSource querycacheDataSource() {
 		BasicDataSource datasource = new BasicDataSource();
 		datasource.setDriverClassName(env.getProperty("jdbc.pandora.querycache.driverClass"));
 		datasource.setUrl(env.getProperty("jdbc.pandora.querycache.url"));
@@ -199,16 +201,31 @@ class LocalDataSourceConfig extends DataSourceConfig {
 	@Bean
 	@Override
 	public DataSource mysqlDataSource() {
-		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		return builder.addScript("sql/init-db-mysql.sql").build();
-		// .addScript("sql/insert-data.sql")
+		if (env.getProperty("jdbc.pandora.embedded", Boolean.class)) {
+			EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+			return builder.addScript("sql/init-db-mysql.sql").build();
+			// .addScript("sql/insert-data.sql")
+		}
+		return super.mysqlDataSource();
 	}
 
 	@Bean
 	@Override
 	public DataSource oracleDataSource() {
-		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		return builder.addScripts("sql/init-db-oracle.sql", "sql/data-oracle.sql").build();
+		if (env.getProperty("jdbc.pandora.embedded", Boolean.class)) {
+			EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+			return builder.addScripts("sql/init-db-oracle.sql", "sql/data-oracle.sql").build();
+		}
+		return super.oracleDataSource();
+	}
+
+	@Bean
+	@Override
+	public DataSource querycacheDataSource() {
+		if (env.getProperty("jdbc.pandora.embedded", Boolean.class)) {
+			return new EmbeddedDatabaseBuilder().build();
+		}
+		return super.querycacheDataSource();
 	}
 
 }
