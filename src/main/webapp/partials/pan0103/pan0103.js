@@ -83,7 +83,7 @@ App.controller('Pan0103Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
     $http
       .get('/api/upload', { params: { pageId: $stateParams.pageId, username: $scope.username }, timeout: canceler.promise })
       .then(function (resp) {
-        $scope.gridOptionsPreview.data = resp;
+        $scope.gridOptionsPreview.data = resp.data;
       }, function (resp) {
         console.error(resp);
       });
@@ -102,7 +102,7 @@ App.controller('Pan0103Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
         timeout: canceler.promise
       })
       .then(function (resp) {
-        $scope.gridOptions.data = resp;
+        $scope.gridOptions.data = resp.data;
       }, function (resp) {
         console.error(resp);
       });
