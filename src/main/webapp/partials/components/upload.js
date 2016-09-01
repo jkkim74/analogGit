@@ -19,7 +19,7 @@ App.service('uploadService', ["$log", "$q", "$http", "$stateParams", "toastr", "
                 deferred.resolve();
             }, function (resp) {
                 $log.error(resp);
-                toastr.error(resp.statusText, resp.status);
+                toastr.error((resp.data && resp.data.message) || resp.statusText, (resp.data && resp.data.code) || resp.status);
                 deferred.reject(resp.data);
             }, function (event) {
                 var progressPercentage = parseInt(100.0 * event.loaded / event.total);

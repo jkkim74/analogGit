@@ -111,7 +111,7 @@ public class UploadService {
 		try (InputStream in = file.getInputStream()) {
 			Files.copy(in, uploadPath);
 		} catch (IOException e) {
-			throw new BizException("Failed to copy the upload file");
+			throw new BizException("Failed to copy the upload file", e);
 		}
 
 		return uploadPath;

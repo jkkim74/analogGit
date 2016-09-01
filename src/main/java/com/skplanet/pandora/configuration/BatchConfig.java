@@ -2,7 +2,6 @@ package com.skplanet.pandora.configuration;
 
 import javax.sql.DataSource;
 
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
@@ -35,19 +34,16 @@ import com.skplanet.pandora.model.Preview;
 public class BatchConfig extends DefaultBatchConfigurer {
 
 	@Autowired
-	JobBuilderFactory jobBuilderFactory;
+	protected JobBuilderFactory jobBuilderFactory;
 
 	@Autowired
-	StepBuilderFactory stepBuilderFactory;
+	protected StepBuilderFactory stepBuilderFactory;
 
 	@Autowired
-	JobExecutionListener jobExecutionListener;
+	protected JobExecutionListener jobExecutionListener;
 
 	@Autowired
-	DataSource oracleDataSource;
-
-	@Autowired
-	SqlSessionFactory oracleSqlSessionFactory;
+	protected DataSource oracleDataSource;
 
 	@Override
 	public void setDataSource(DataSource dataSource) {
@@ -89,11 +85,6 @@ public class BatchConfig extends DefaultBatchConfigurer {
 	@JobScope
 	public JdbcBatchItemWriter<Preview> itemWriter(@Value("#{jobParameters[pageId]}") String pageId,
 			@Value("#{jobParameters[username]}") String username) {
-
-		// MyBatisBatchItemWriter<Object> writer = new
-		// MyBatisBatchItemWriter<>();
-		// writer.setSqlSessionFactory(oracleSqlSessionFactory);
-		// writer.setStatementId("com.skplanet.pandora.repository.oracle.OracleRepository.insertUploadedData");
 
 		JdbcBatchItemWriter<Preview> writer = new JdbcBatchItemWriter<>();
 		writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Preview>());

@@ -13,5 +13,5 @@ public class BizException extends NestedRuntimeException {
 	public BizException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
-
+	
 }

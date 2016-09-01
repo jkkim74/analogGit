@@ -205,12 +205,6 @@
 			<version>1.7</version>
 		</dependency>
 
-		<dependency>
-			<groupId>cz.jirutka.spring</groupId>
-			<artifactId>spring-rest-exception-handler</artifactId>
-			<version>1.2.0</version>
-		</dependency>
-
 		<!-- SMS -->
 		<dependency>
 			<groupId>SKPBSS</groupId>

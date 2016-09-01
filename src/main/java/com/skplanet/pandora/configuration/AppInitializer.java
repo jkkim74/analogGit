@@ -23,7 +23,6 @@ public class AppInitializer implements WebApplicationInitializer {
 
 		ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher",
 				new DispatcherServlet(context));
-		dispatcher.setInitParameter("throwExceptionIfNoHandlerFound", "true");
 		dispatcher.setLoadOnStartup(1);
 		dispatcher.addMapping("/");
 		dispatcher.setMultipartConfig(new MultipartConfigElement(System.getProperty("java.io.tmpdir")));

@@ -14,7 +14,7 @@ App.service('apiService', ["$log", "$q", "$http", "$stateParams", "toastr", func
             deferred.resolve(resp.data);
         }, function (resp) {
             $log.error(resp);
-            toastr.error(resp.statusText, resp.status);
+            toastr.error((resp.data && resp.data.message) || resp.statusText, (resp.data && resp.data.code) || resp.status);
             deferred.reject(resp.data);
         });
 
@@ -35,7 +35,7 @@ App.service('apiService', ["$log", "$q", "$http", "$stateParams", "toastr", func
             deferred.resolve(resp.data);
         }, function (resp) {
             $log.error(resp);
-            toastr.error(resp.statusText, resp.status);
+            toastr.error((resp.data && resp.data.message) || resp.statusText, (resp.data && resp.data.code) || resp.status);
             deferred.reject(resp.data);
         });
 

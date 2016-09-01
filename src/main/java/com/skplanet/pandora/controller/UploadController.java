@@ -48,8 +48,7 @@ public class UploadController {
 
 		uploadService.bulkInsert(pageId, username, filePath);
 
-		return ApiResponse.builder().type(ApiResponse.DEFAULT_TYPE).code(ApiResponse.DEFAULT_CODE)
-				.message("Uploaded " + file.getOriginalFilename()).build();
+		return ApiResponse.builder().code(0).message("Uploaded " + file.getOriginalFilename()).build();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
