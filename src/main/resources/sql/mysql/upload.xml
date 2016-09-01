@@ -7,14 +7,13 @@
 			 , USERNAME
 			 , COLUMN_NAME
 			 , UPLOAD_STATUS
-		FROM
-		UPLOAD_PROGRESS
-		WHERE PAGE_ID = #{pageId} AND USERNAME = #{username}
+		FROM   UPLOAD_PROGRESS
+		WHERE  PAGE_ID = #{pageId} AND USERNAME = #{username}
 	</select>
 
 	<update id="upsertUploadProgress" parameterType="map">
-		INSERT INTO UPLOAD_PROGRESS (PAGE_ID, USERNAME, COLUMN_NAME, UPLOAD_STATUS)
-		VALUES (#{pageId}, #{username}, #{columnName}, #{uploadStatus})
+		INSERT INTO UPLOAD_PROGRESS ( PAGE_ID, USERNAME, COLUMN_NAME, UPLOAD_STATUS )
+		VALUES ( #{pageId}, #{username}, #{columnName}, #{uploadStatus} )
 		ON DUPLICATE KEY
 		<trim prefix="UPDATE" suffixOverrides=",">
 			<if test="columnName != null and columnName != ''">COLUMN_NAME = #{columnName},</if>
