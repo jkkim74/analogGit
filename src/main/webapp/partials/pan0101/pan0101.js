@@ -91,8 +91,8 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
           username: $scope.username,
           offset: ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptions.paginationPageSize,
           limit: $scope.gridOptions.paginationPageSize
-        }
-        // timeout: canceler.promise
+        },
+        timeout: 100000
       })
       .then(function (resp) {
         $scope.gridOptions.data = resp.data;
