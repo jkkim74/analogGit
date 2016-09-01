@@ -76,7 +76,6 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
     $http
       .get('/api/upload', { params: { pageId: $stateParams.pageId, username: $scope.username }, timeout: canceler.promise })
       .then(function (resp) {
-        console.log(resp);
         $scope.gridOptionsPreview.data = resp.data;
       }, function (resp) {
         console.error(resp);
@@ -84,7 +83,7 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
   };
 
   $scope.loadMerged = function () {
-    var canceler = $q.defer();
+    // var canceler = $q.defer();
     $http
       .get('/api/mergedMember', {
         params: {
@@ -92,8 +91,8 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
           username: $scope.username,
           offset: ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptions.paginationPageSize,
           limit: $scope.gridOptions.paginationPageSize
-        },
-        timeout: canceler.promise
+        }
+        // timeout: canceler.promise
       })
       .then(function (resp) {
         $scope.gridOptions.data = resp.data;
