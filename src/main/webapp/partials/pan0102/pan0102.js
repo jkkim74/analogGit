@@ -1,6 +1,6 @@
 'use strict';
 
-App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", "uiGridConstants", "toastr", function ($scope, $q, $http, $timeout, $stateParams, Upload, uiGridConstants, toastr) {
+App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", function ($scope, $q, $http, $timeout) {
 
   $scope.title = '고객 정보 및 장기 거래 실적 조회';
 

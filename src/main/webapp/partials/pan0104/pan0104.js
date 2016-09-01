@@ -1,6 +1,6 @@
 'use strict';
 
-App.controller('Pan0104Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", "uiGridConstants", "toastr", function ($scope, $q, $http, $timeout, $stateParams, Upload, uiGridConstants, toastr) {
+App.controller('Pan0104Ctrl', ["$scope", "$q", "$http", "$timeout", function ($scope, $q, $http, $timeout) {
 
   $scope.title = "시효 만료 포인트 사전 고지";
 

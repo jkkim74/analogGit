@@ -1,9 +1,8 @@
 'use strict';
 
-App.controller('Pan0103Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParams", "Upload", "uiGridConstants", "toastr", "apiService", function ($scope, $q, $http, $timeout, $stateParams, Upload, uiGridConstants, toastr, apiService) {
+App.controller('Pan0103Ctrl', ["$scope", "$q", "$http", "$timeout", "apiService", "uploadService", function ($scope, $q, $http, $timeout, apiService, uploadService) {
 
   $scope.title = "배치 적립 파일 검증";
-  $scope.username = 'test2';
 
   $scope.selectOptions = [
     { label: '카드번호', value: 'cardNo' }
@@ -53,28 +52,10 @@ App.controller('Pan0103Ctrl', ["$scope", "$q", "$http", "$timeout", "$stateParam
   };
 
   $scope.upload = function (file) {
-    if (!$scope.form.file.$valid || !file) {
-      console.log("Error: invalid file");
-      return;
-    }
-
-    Upload.upload({
-      url: '/api/upload',
-      data: { file: file, pageId: $stateParams.pageId, username: $scope.username, columnName: $scope.selectedOption.value }
-    }).then(function (resp) {
-      console.log('Success [' + resp.config.data.file.name + '] uploaded.');
-
-      toastr.success(resp.config.data.file.name, '업로드 성공!');
-
+    uploadService.upload(file, $scope.selectedOption.value).then(function () {
       $timeout(function () {
         $scope.loadPreview();
-      }, 2000);
-
-    }, function (resp) {
-      console.log('Error status: ' + resp.status);
-    }, function (event) {
-      var progressPercentage = parseInt(100.0 * event.loaded / event.total);
-      console.log('progress: ' + progressPercentage + '% ' + event.config.data.file.name);
+      }, 1500);
     });
   };
 
