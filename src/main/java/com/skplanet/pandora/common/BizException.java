@@ -8,7 +8,10 @@ public class BizException extends NestedRuntimeException {
 
 	public BizException(String msg) {
 		super(msg);
-		// TODO Auto-generated constructor stub
+	}
+
+	public BizException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 
 }
