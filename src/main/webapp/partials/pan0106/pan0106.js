@@ -52,7 +52,7 @@ App.controller('Pan0106Ctrl', ["$scope", "$q", "$http", "$timeout", "apiService"
   };
 
   $scope.loadPreview = function () {
-    apiService.getUploadedPreview().then(function (data) {
+    uploadService.getUploadedPreview().then(function (data) {
       $scope.gridOptionsPreview.data = data;
     });
   };

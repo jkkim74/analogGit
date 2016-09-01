@@ -34,4 +34,23 @@ App.service('uploadService', ["$log", "$q", "$http", "$stateParams", "toastr", "
         return deferred.promise;
     };
 
+    this.getUploadedPreview = function () {
+        var deferred = $q.defer();
+
+        $http.get('/api/upload', {
+            params: {
+                pageId: $stateParams.pageId,
+                username: 'test2'
+            }
+        }).then(function (resp) {
+            deferred.resolve(resp.data);
+        }, function (resp) {
+            $log.error(resp);
+            toastr.error((resp.data && resp.data.message) || resp.statusText, (resp.data && resp.data.code) || resp.status);
+            deferred.reject(resp.data);
+        });
+
+        return deferred.promise;
+    };
+
 }]);
