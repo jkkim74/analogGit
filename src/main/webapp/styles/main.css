@@ -13,7 +13,8 @@ a:hover {
     color: red;
 }*/
 
-tr {
+/* 가능한 ui-grid 사용 */
+/*tr {
    min-height: 36px;
    height: 36px;
 }
@@ -23,7 +24,7 @@ th {
     color: #2b2f3a;
     text-align: center;
     vertical-align: middle !important;
-}
+}*/
 
 .section-footer {
     background-color: white;
