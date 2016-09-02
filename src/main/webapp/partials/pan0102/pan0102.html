@@ -8,7 +8,7 @@
                     <select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
                         ng-model="selectedOption"></select>
                     <input type="text" class="form-control">
-                    <button type="button" class="btn btn-info" ng-click="">조회</button>
+                    <button type="button" class="btn btn-info" ng-click="searchAll(selectedOption)">조회</button>
                 </form>
             </div>
 
