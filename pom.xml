@@ -99,7 +99,7 @@
 			</exclusions>
 		</dependency>
 
-        <!-- HyperSQL -->
+		<!-- HyperSQL -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
@@ -343,4 +343,19 @@
 		</pluginRepository>
 	</pluginRepositories>
 
+	<!-- profiles -->
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<build.environment>dev</build.environment>
+			</properties>
+		</profile>
+		<profile>
+			<id>production</id>
+			<properties>
+				<build.environment>production</build.environment>
+			</properties>
+		</profile>
+	</profiles>
 </project>
