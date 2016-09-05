@@ -6,9 +6,18 @@ App.controller('Pan0104Ctrl', ["$scope", "$q", "$http", "$timeout", function ($s
 
   $scope.selectOptions = [];
 
-  var nextMonth = moment().add(1, 'months');
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth() + 1;
+  // move to next month
+  if (month == 12) {
+    year++;
+    month = 1;
+  } else {
+    month++;
+  }
 
-  for (var year = nextMonth.year(), month = nextMonth.month() + 1, i = 0; i < 7; i++ , month--) {
+  for (var i = 0; i < 7; i++ , month--) {
     if (month < 1) {
       year--;
       month = 12;
