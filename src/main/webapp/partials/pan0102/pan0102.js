@@ -32,7 +32,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 회원 원장
   $scope.gridOptionsMemberInfo = {
     enableColumnMenus: false,
-    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
     minRowsToShow: 1,
@@ -62,7 +61,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 마케팅 동의 내역
   $scope.gridOptionsAgreementInfo = {
     enableColumnMenus: false,
-    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
     minRowsToShow: 1,
@@ -90,7 +88,7 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
     enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
-    minRowsToShow: 1,
+    minRowsToShow: 3,
     columnDefs: [
       { field: 'ocbappYn', displayName: 'OCB앱 이용 여부', cellTooltip: true, headerTooltip: true },
       { field: 'ocbappFnlEntrDt', displayName: 'OCB앱 최종 가입 일자', cellTooltip: true, headerTooltip: true },
@@ -129,7 +127,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 마케팅 회원 원장
   $scope.gridOptionsMarketingMemberInfo = {
     enableColumnMenus: false,
-    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
     minRowsToShow: 1,
@@ -152,7 +149,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 마케팅 회원 원장 이력
   $scope.gridOptionsMarketingMemberInfoHistory = {
     enableColumnMenus: false,
-    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
     minRowsToShow: 3,
     columnDefs: [
@@ -174,7 +170,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 3자 제공 동의 이력
   $scope.gridOptions3rdPartyProvideHistory = {
     enableColumnMenus: false,
-    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
     minRowsToShow: 3,
     columnDefs: [
@@ -213,7 +208,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 거래 내역
   $scope.gridOptionsTransactionHistory = {
     enableColumnMenus: false,
-    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
     minRowsToShow: 3,
     columnDefs: [
@@ -248,9 +242,8 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 이메일 발송 이력
   $scope.gridOptionsEmailSendHistory = {
     enableColumnMenus: false,
-    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
-    minRowsToShow: 3,
+    minRowsToShow: 5,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'sndDt', displayName: '발송일자', cellTooltip: true, headerTooltip: true },
@@ -262,9 +255,8 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 앱 푸쉬 이력
   $scope.gridOptionsAppPushHistory = {
     enableColumnMenus: false,
-    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
-    minRowsToShow: 3,
+    minRowsToShow: 5,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'sndDttm', displayName: '발송일자', cellTooltip: true, headerTooltip: true },
