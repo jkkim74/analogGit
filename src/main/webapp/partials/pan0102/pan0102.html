@@ -14,47 +14,54 @@
 
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>기본 정보</strong></div>
-                <div ui-grid="gridOptionsBasicInfo"></div>
+                <div ui-grid="gridOptionsBasicInfo" ui-grid-resize-columns></div>
             </div>
 
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>회원 원장</strong></div>
-                <div ui-grid="gridOptionsMemberInfo"></div>
+                <div ui-grid="gridOptionsMemberInfo" ui-grid-resize-columns></div>
             </div>
 
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>마케팅 동의 내역</strong></div>
-                <div ui-grid="gridOptionsAgreementInfo"></div>
+                <div ui-grid="gridOptionsAgreementInfo" ui-grid-resize-columns></div>
             </div>
 
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>채널 가입 현황</strong></div>
-                <div ui-grid="gridOptionsJoinInfo"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div ui-grid="gridOptionsJoinInfoOcbapp" ui-grid-resize-columns></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div ui-grid="gridOptionsJoinInfoOcbcom" ui-grid-resize-columns></div>
+                    </div>
+                </div>
             </div>
 
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>거래 유형별 최종 서비스 이용 일자</strong></div>
-                <div ui-grid="gridOptionsLastestUsageInfo"></div>
+                <div ui-grid="gridOptionsLastestUsageInfo" ui-grid-resize-columns></div>
             </div>
 
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>마케팅 회원 원장</strong></div>
-                <div ui-grid="gridOptionsMarketingMemberInfo"></div>
+                <div ui-grid="gridOptionsMarketingMemberInfo" ui-grid-resize-columns></div>
             </div>
 
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>마케팅 회원 원장 이력</strong></div>
-                <div ui-grid="gridOptionsMarketingMemberInfoHistory"></div>
+                <div ui-grid="gridOptionsMarketingMemberInfoHistory" ui-grid-resize-columns></div>
             </div>
 
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>3자 제공 동의 이력</strong></div>
-                <div ui-grid="gridOptions3rdPartyProvideHistory"></div>
+                <div ui-grid="gridOptions3rdPartyProvideHistory" ui-grid-resize-columns></div>
             </div>
 
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>보유 카드 목록</strong></div>
-                <div ui-grid="gridOptionsCardList"></div>
+                <div ui-grid="gridOptionsCardList" ui-grid-resize-columns></div>
             </div>
 
             <div class="panel panel-info">
@@ -66,21 +73,21 @@
                         <option value="02">주유</option>
                     </select>
                 </div>
-                <div ui-grid="gridOptionsTransactionHistory"></div>
+                <div ui-grid="gridOptionsTransactionHistory" ui-grid-resize-columns></div>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
                     <div class="panel panel-info">
                         <div class="panel-heading"><strong>이메일 발송 이력</strong></div>
-                        <div ui-grid="gridOptionsEmailSendHistory"></div>
+                        <div ui-grid="gridOptionsEmailSendHistory" ui-grid-resize-columns></div>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="panel panel-info">
                         <div class="panel-heading"><strong>앱 푸쉬 이력</strong></div>
-                        <div ui-grid="gridOptionsAppPushHistory"></div>
+                        <div ui-grid="gridOptionsAppPushHistory" ui-grid-resize-columns></div>
                     </div>
                 </div>
             </div>

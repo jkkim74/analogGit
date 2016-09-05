@@ -16,7 +16,7 @@ App.service('apiService', ["$log", "$q", "$http", "$stateParams", "toastr", func
             deferred.resolve(resp.data);
         }, function (resp) {
             $log.error(resp);
-            toastr.error((resp.data && resp.data.message) || resp.statusText, (resp.data && resp.data.code) || resp.status);
+            toastr.error(resp.config.url, ((resp.data && resp.data.code) || resp.status) + ' ' + resp.statusText);
             deferred.reject(resp.data);
         });
 
@@ -33,7 +33,7 @@ App.service('apiService', ["$log", "$q", "$http", "$stateParams", "toastr", func
                 deferred.resolve(resp.data);
             }, function (resp) {
                 $log.error(resp);
-                toastr.error((resp.data && resp.data.message) || resp.statusText, (resp.data && resp.data.code) || resp.status);
+                toastr.error(resp.config.url, ((resp.data && resp.data.code) || resp.status) + ' ' + resp.statusText);
                 deferred.reject(resp.data);
             });
 
@@ -43,7 +43,8 @@ App.service('apiService', ["$log", "$q", "$http", "$stateParams", "toastr", func
 
     this.getMemberInfo = new ApiGet('memberInfo');
     this.getAgreementInfo = new ApiGet('agreementInfo');
-    this.getJoinInfo = new ApiGet('joinInfo');
+    this.getJoinInfoOcbapp = new ApiGet('joinInfoOcbapp');
+    this.getJoinInfoOcbcom = new ApiGet('joinInfoOcbcom');
     this.getLastestUsageInfo = new ApiGet('lastestUsageInfo');
     this.getMarketingMemberInfo = new ApiGet('marketingMemberInfo');
     this.getMarketingMemberInfoHistory = new ApiGet('marketingMemberInfoHistory');

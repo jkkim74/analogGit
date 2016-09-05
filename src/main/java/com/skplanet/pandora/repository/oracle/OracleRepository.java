@@ -27,4 +27,20 @@ public interface OracleRepository {
 	List<Member> selectMergedMember(@Param("uploadProgress") UploadProgress uploadProgress, @Param("offset") int offset,
 			@Param("limit") int limit);
 
+	String selectMbrId(Map<String, Object> params);
+
+	List<AutoMappedMap> selectMemberInfo(Map<String, Object> params);
+
+	List<AutoMappedMap> selectJoinInfo(Map<String, Object> params);
+
+	List<AutoMappedMap> selectLastestUsageInfo(Map<String, Object> params);
+
+	List<AutoMappedMap> selectMarketingMemberInfo(Map<String, Object> params);
+
+	List<AutoMappedMap> selectMarketingMemberInfoHistory(Map<String, Object> params);
+
+	List<AutoMappedMap> select3rdPartyProvideHistory(Map<String, Object> params);
+
+	List<AutoMappedMap> selectCardList(Map<String, Object> params);
+
 }
