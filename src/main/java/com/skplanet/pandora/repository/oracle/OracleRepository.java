@@ -24,7 +24,7 @@ public interface OracleRepository {
 
 	List<Preview> selectPreview(@Param("pageId") String pageId, @Param("username") String username);
 
-	List<Member> selectMergedMember(@Param("uploadProgress") UploadProgress uploadProgress, @Param("offset") int offset,
+	List<Member> selectMembers(@Param("uploadProgress") UploadProgress uploadProgress, @Param("offset") int offset,
 			@Param("limit") int limit);
 
 	String selectMbrId(Map<String, Object> params);

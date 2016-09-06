@@ -19,7 +19,7 @@
     	LIMIT #{offset}, #{limit}
     </sql>
 
-	<select id="selectMergedMember" parameterType="map" resultType="com.skplanet.pandora.model.Member">
+	<select id="selectMembers" parameterType="map" resultType="com.skplanet.pandora.model.Member">
 		<include refid="pagingHead" />
 
 		<choose>
@@ -62,7 +62,7 @@
 
 		<include refid="pagingFoot" />
 	</select>
-	<select id="selectMergedMember" parameterType="map" resultType="com.skplanet.pandora.model.Member" databaseId="hsql">
+	<select id="selectMembers" parameterType="map" resultType="com.skplanet.pandora.model.Member" databaseId="hsql">
 		SELECT MBR_ID
 			 , OCBCOM_LGN_ID
 			 , CI_NO

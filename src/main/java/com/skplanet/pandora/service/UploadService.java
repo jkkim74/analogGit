@@ -52,7 +52,7 @@ public class UploadService {
 		UploadProgress uploadProgress = mysqlRepository.selectUploadProgress(pageId, username);
 
 		if (uploadProgress != null && uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
-			throw new BizException("Not finished upload");
+			throw new BizException("업로드 중입니다");
 		}
 
 		String underScoredColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
@@ -69,11 +69,11 @@ public class UploadService {
 		UploadProgress uploadProgress = mysqlRepository.selectUploadProgress(pageId, username);
 
 		if (uploadProgress == null) {
-			throw new BizException("Not uploaded yet");
+			throw new BizException("업로드를 먼저 해주세요");
 		}
 
 		if (uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
-			throw new BizException("Not finished upload");
+			throw new BizException("업로드 중입니다");
 		}
 
 		return uploadProgress;

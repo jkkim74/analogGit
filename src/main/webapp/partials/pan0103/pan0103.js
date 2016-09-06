@@ -72,7 +72,7 @@ App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
     var offset = ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptions.paginationPageSize;
     var limit = $scope.gridOptions.paginationPageSize;
 
-    apiService.getMembers(offset, limit).then(function (data) {
+    apiService.getMembers({ offset: offset, limit: limit }).then(function (data) {
       $scope.gridOptions.data = data;
     });
   };

@@ -29,12 +29,12 @@ public class ApiController {
 	@Autowired
 	private UploadService uploadService;
 
-	@RequestMapping(method = RequestMethod.GET, value = "/mergedMember")
+	@RequestMapping(method = RequestMethod.GET, value = "/members")
 	public List<Member> getMergedMember(@RequestParam String pageId, @RequestParam String username,
 			@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "20") int limit) {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
-		return oracleRepository.selectMergedMember(uploadProgress, offset, limit);
+		return oracleRepository.selectMembers(uploadProgress, offset, limit);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/memberInfo")

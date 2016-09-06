@@ -37,7 +37,7 @@ public class UploadController {
 		log.info("Uploading file... pageId={}, username={}, columnName={}", pageId, username, columnName);
 
 		if (file.isEmpty()) {
-			throw new BizException("Empty file");
+			throw new BizException("빈 파일입니다");
 		}
 
 		uploadService.markRunning(pageId, username, columnName);

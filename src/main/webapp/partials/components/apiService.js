@@ -2,38 +2,17 @@
 
 App.service('apiService', ["$log", "$q", "$http", "$stateParams", "toastr", function ($log, $q, $http, $stateParams, toastr) {
 
-    this.getMembers = function (offset, limit) {
-        var deferred = $q.defer();
-
-        $http.get('/api/mergedMember', {
-            params: {
-                pageId: $stateParams.pageId,
-                username: 'test2',
-                offset: offset,
-                limit: limit
-            }
-        }).then(function (resp) {
-            deferred.resolve(resp.data);
-        }, function (resp) {
-            $log.error(resp);
-            toastr.error(resp.config.url, ((resp.data && resp.data.code) || resp.status) + ' ' + resp.statusText);
-            deferred.reject(resp.data);
-        });
-
-        return deferred.promise;
-    };
-
     function ApiGet(command) {
         return function (params) {
             var deferred = $q.defer();
 
             $http.get('/api/' + command, {
-                params: angular.extend(params, { pageId: $stateParams.pageId })
+                params: angular.extend(params, { pageId: $stateParams.pageId, username: 'test2' })
             }).then(function (resp) {
                 deferred.resolve(resp.data);
             }, function (resp) {
                 $log.error(resp);
-                toastr.error(resp.config.url, ((resp.data && resp.data.code) || resp.status) + ' ' + resp.statusText);
+                toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                 deferred.reject(resp.data);
             });
 
@@ -41,6 +20,7 @@ App.service('apiService', ["$log", "$q", "$http", "$stateParams", "toastr", func
         };
     }
 
+    this.getMembers = new ApiGet('members');
     this.getMemberInfo = new ApiGet('memberInfo');
     this.getAgreementInfo = new ApiGet('agreementInfo');
     this.getJoinInfoOcbapp = new ApiGet('joinInfoOcbapp');
