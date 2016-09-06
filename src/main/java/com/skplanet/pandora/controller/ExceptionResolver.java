@@ -7,18 +7,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.skplanet.pandora.common.BizException;
 import com.skplanet.pandora.model.ApiResponse;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestControllerAdvice
+@Slf4j
 public class ExceptionResolver {
 
 	@ExceptionHandler(Throwable.class)
 	@ResponseStatus
 	public ApiResponse handleException(Throwable t) {
+		log.error("", t);
 		return ApiResponse.builder().developerMessage(t.toString()).build();
 	}
 
 	@ExceptionHandler(BizException.class)
 	@ResponseStatus
 	public ApiResponse handleBizException(BizException ex) {
+		log.warn("", ex);
 		return ApiResponse.builder().code(900).message(ex.getMessage()).developerMessage(ex.toString()).build();
 	}
 
