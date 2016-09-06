@@ -13,7 +13,6 @@ import com.skplanet.pandora.model.ApiResponse;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.model.Member;
 import com.skplanet.pandora.model.UploadProgress;
-import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.pandora.service.UploadService;
@@ -21,9 +20,6 @@ import com.skplanet.pandora.service.UploadService;
 @RestController
 @RequestMapping("api")
 public class ApiController {
-
-	@Autowired
-	private MysqlRepository mysqlRepository;
 
 	@Autowired
 	private OracleRepository oracleRepository;
@@ -36,23 +32,12 @@ public class ApiController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/members")
 	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam String username,
-			@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "20") int limit,
-			@RequestParam(defaultValue = "false") boolean countOnly) {
+			@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "20") int limit) {
 
-		if (countOnly) {
-			UploadProgress uploadProgress = mysqlRepository.selectUploadProgress(pageId, username);
-
-			int count = uploadProgress == null ? 0 : oracleRepository.countMembers(uploadProgress);
-
-			return ApiResponse.builder().totalRecords(count).build();
-		} else {
-			UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
-
-			List<Member> list = oracleRepository.selectMembers(uploadProgress, offset, limit);
-			int count = oracleRepository.countMembers(uploadProgress);
-
-			return ApiResponse.builder().value(list).totalRecords(count).build();
-		}
+		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
+		List<Member> list = oracleRepository.selectMembers(uploadProgress, offset, limit);
+		int count = oracleRepository.countMembers(uploadProgress);
+		return ApiResponse.builder().value(list).totalRecords(count).build();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/memberInfo")
