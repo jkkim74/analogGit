@@ -4,10 +4,10 @@
 
     <select id="selectAgreementInfo" parameterType="map" resultType="AutoMappedMap">
         SELECT OCB_MKTNG_AGRMT_YN              --마케팅동의여부
-		     --, MKTNG_FNL_AGRMT_SRC_ORG_CD      --마케팅최종동의유입출처
-		     --, '' AS MKTNG_FNL_AGRMT_SRC_ORG_NM   --마케팅최종동의유입출처명
-		     --, MKTNG_FNL_AGRMT_DT              --마케팅최종동의유입일자
-		     --, CONCAT_WS(' / ', MKTNG_FNL_AGRMT_SRC_ORG_CD, MKTNG_FNL_AGRMT_DT) AS MKTNG_FNL_AGRMT
+		     , MKTNG_FNL_AGRMT_SRC_ORG_CD      --마케팅최종동의유입출처
+		     , '' AS MKTNG_FNL_AGRMT_SRC_ORG_NM   --마케팅최종동의유입출처명
+		     , MKTNG_FNL_AGRMT_DT              --마케팅최종동의유입일자
+		     , CONCAT_WS(' / ', MKTNG_FNL_AGRMT_SRC_ORG_CD, MKTNG_FNL_AGRMT_DT) AS MKTNG_FNL_AGRMT
 		     , ENTPR_MKTNG_AGRMT_YN            --교차활용동의여부
 		     , TM_RCV_AGRMT_YN                 --TM수신동의여부
 		     , EMAIL_RCV_AGRMT_YN              --EM수신동의여부
