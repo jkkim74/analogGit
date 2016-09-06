@@ -1,6 +1,6 @@
 'use strict';
 
-App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConstants", "apiService", function ($scope, $q, $http, $timeout, uiGridConstants, apiService) {
+App.controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService) {
 
   $scope.title = '고객 정보 및 장기 거래 실적 조회';
 
@@ -17,7 +17,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
     enableColumnMenus: false,
     enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
-    flatEntityAccess: true,
     minRowsToShow: 1,
     columnDefs: [
       { field: 'mbrType', displayName: '회원구분', cellTooltip: true, headerTooltip: true },
@@ -33,7 +32,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   $scope.gridOptionsMemberInfo = {
     enableColumnMenus: false,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
-    flatEntityAccess: true,
     minRowsToShow: 1,
     columnDefs: [
       { field: 'mbrKorNm', displayName: '한글성명', cellTooltip: true, headerTooltip: true },
@@ -62,7 +60,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   $scope.gridOptionsAgreementInfo = {
     enableColumnMenus: false,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
-    flatEntityAccess: true,
     minRowsToShow: 1,
     columnDefs: [
       { field: 'ocbMktngAgrmtYn', displayName: '마케팅 동의 여부', cellTooltip: true, headerTooltip: true },
@@ -87,7 +84,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
     enableColumnMenus: false,
     enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
-    flatEntityAccess: true,
     minRowsToShow: 3,
     columnDefs: [
       { field: 'ocbappYn', displayName: 'OCB앱 이용 여부', cellTooltip: true, headerTooltip: true },
@@ -98,7 +94,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   $scope.gridOptionsJoinInfoOcbcom = {
     enableColumnMenus: false,
     enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-    flatEntityAccess: true,
     minRowsToShow: 3,
     columnDefs: [
       { field: 'unitedId', displayName: 'OCB닷컴 United ID', cellTooltip: true, headerTooltip: true },
@@ -113,7 +108,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
     enableColumnMenus: false,
     enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
-    flatEntityAccess: true,
     minRowsToShow: 1,
     columnDefs: [
       { field: 'fnlErngDt', displayName: 'OCB 적립/사용/할인/현금환급', cellTooltip: true, headerTooltip: true },
@@ -128,7 +122,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   $scope.gridOptionsMarketingMemberInfo = {
     enableColumnMenus: false,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
-    flatEntityAccess: true,
     minRowsToShow: 1,
     columnDefs: [
       { field: 'mbrKorNm', displayName: '한글성명', cellTooltip: true, headerTooltip: true },
@@ -149,7 +142,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 마케팅 회원 원장 이력
   $scope.gridOptionsMarketingMemberInfoHistory = {
     enableColumnMenus: false,
-    flatEntityAccess: true,
     minRowsToShow: 5,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
@@ -170,7 +162,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 3자 제공 동의 이력
   $scope.gridOptionsThirdPartyProvideHistory = {
     enableColumnMenus: false,
-    flatEntityAccess: true,
     minRowsToShow: 5,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
@@ -193,7 +184,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   $scope.gridOptionsCardList = {
     enableColumnMenus: false,
     enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-    flatEntityAccess: true,
     minRowsToShow: 5,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
@@ -208,7 +198,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 거래 내역
   $scope.gridOptionsTransactionHistory = {
     enableColumnMenus: false,
-    flatEntityAccess: true,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'rcvDt', displayName: '접수일시', cellTooltip: true, headerTooltip: true },
@@ -241,7 +230,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 이메일 발송 이력
   $scope.gridOptionsEmailSendHistory = {
     enableColumnMenus: false,
-    flatEntityAccess: true,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'sndDt', displayName: '발송일자', cellTooltip: true, headerTooltip: true },
@@ -253,7 +241,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   // 앱 푸쉬 이력
   $scope.gridOptionsAppPushHistory = {
     enableColumnMenus: false,
-    flatEntityAccess: true,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'sndDttm', displayName: '발송일자', cellTooltip: true, headerTooltip: true },

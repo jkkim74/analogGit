@@ -1,15 +1,18 @@
 'use strict';
 
-App.controller('Pan0106Ctrl', ["$scope", "$q", "$http", "$timeout", "apiService", "uploadService", function ($scope, $q, $http, $timeout, apiService, uploadService) {
+App.controller('Pan0106Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService) {
 
-  $scope.title = "회원 프로파일 분석";
+  $scope.title = '회원 프로파일 분석';
 
   $scope.selectOptions = [
     { label: '회원ID', value: 'mbrId' }
   ];
 
   $scope.gridOptionsPreview = {
+    enableColumnMenus: false,
     enableSorting: false,
+    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+    minRowsToShow: 7,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 100, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'column1', displayName: 'Uploaded Data' }

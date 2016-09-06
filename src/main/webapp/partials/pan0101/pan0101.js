@@ -1,6 +1,6 @@
 'use strict';
 
-App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "apiService", "uploadService", function ($scope, $q, $http, $timeout, apiService, uploadService) {
+App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService) {
 
   $scope.title = '멤버 ID 일괄 전환';
 
@@ -14,7 +14,10 @@ App.controller('Pan0101Ctrl', ["$scope", "$q", "$http", "$timeout", "apiService"
   ];
 
   $scope.gridOptionsPreview = {
+    enableColumnMenus: false,
     enableSorting: false,
+    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+    minRowsToShow: 7,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 100, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'column1', displayName: 'Uploaded Data' }

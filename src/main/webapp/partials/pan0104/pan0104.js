@@ -1,8 +1,8 @@
 'use strict';
 
-App.controller('Pan0104Ctrl', ["$scope", "$q", "$http", "$timeout", function ($scope, $q, $http, $timeout) {
+App.controller('Pan0104Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', function ($scope, $q, $http, $timeout, uiGridConstants) {
 
-  $scope.title = "시효 만료 포인트 사전 고지";
+  $scope.title = '시효 만료 포인트 사전 고지';
 
   $scope.selectOptions = [];
 
@@ -26,7 +26,9 @@ App.controller('Pan0104Ctrl', ["$scope", "$q", "$http", "$timeout", function ($s
   }
 
   $scope.gridOptionsTransmission = {
+    enableColumnMenus: false,
     enableSorting: false,
+    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     columnDefs: [
       { field: 'column1', displayName: '회원구분' },
       { field: 'column1', displayName: '항목' },
@@ -40,7 +42,10 @@ App.controller('Pan0104Ctrl', ["$scope", "$q", "$http", "$timeout", function ($s
   };
 
   $scope.gridOptionsResult = {
+    enableColumnMenus: false,
     enableSorting: false,
+    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+    minRowsToShow: 7,
     columnDefs: [
       { field: 'column1', displayName: 'EC_USER_ID' },
       { field: 'column1', displayName: '회원ID' },
