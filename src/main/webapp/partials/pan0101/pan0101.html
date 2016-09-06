@@ -27,9 +27,11 @@
                 </div>
             </div>
             <div>
-                <button type="button" class="btn btn-info" ng-click="loadMerged()">조회</button>
-                <div class="grid-div" ui-grid="gridOptions" ui-grid-pagination ui-grid-resize-columns></div>
-                <p class="pull-right"><strong>{{ gridApi.pagination.getPage() }}</strong> Page</p>
+                <button type="button" class="btn btn-info" ng-click="loadMembers()">조회</button>
+                <div cg-busy="membersPromise">
+                    <div class="grid-div" ui-grid="gridOptionsMembers" ui-grid-pagination ui-grid-resize-columns></div>
+                </div>
+                <p class="pull-right" ng-show="gridOptionsMembers.data.length"><strong><span class="text-danger">{{ gridApi.pagination.getPage() }}</span> / {{ gridApi.pagination.getTotalPages() }} Page</strong></p>
                 <div class="btn-group btn-group-sm" role="group">
                     <button type="button" class="btn btn-success" ng-click="gridApi.pagination.previousPage()">이전</button>
                     <button type="button" class="btn btn-success" ng-click="gridApi.pagination.nextPage()">다음</button>

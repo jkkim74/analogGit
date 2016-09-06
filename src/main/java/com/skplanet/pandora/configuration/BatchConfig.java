@@ -27,7 +27,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
 import com.skplanet.pandora.listener.JobNotificationListener;
-import com.skplanet.pandora.model.Preview;
+import com.skplanet.pandora.model.UploadedPreview;
 
 @Configuration
 @EnableBatchProcessing
@@ -61,19 +61,19 @@ public class BatchConfig extends DefaultBatchConfigurer {
 
 	@Bean
 	@JobScope
-	public FlatFileItemReader<Preview> itemReader(@Value("#{jobParameters[filePath]}") String filePath) {
-		FlatFileItemReader<Preview> reader = new FlatFileItemReader<>();
+	public FlatFileItemReader<UploadedPreview> itemReader(@Value("#{jobParameters[filePath]}") String filePath) {
+		FlatFileItemReader<UploadedPreview> reader = new FlatFileItemReader<>();
 		reader.setResource(new FileSystemResource(filePath));
-		reader.setLineMapper(new DefaultLineMapper<Preview>() {
+		reader.setLineMapper(new DefaultLineMapper<UploadedPreview>() {
 			{
 				setLineTokenizer(new DelimitedLineTokenizer() {
 					{
 						setNames(new String[] { "column1" });
 					}
 				});
-				setFieldSetMapper(new BeanWrapperFieldSetMapper<Preview>() {
+				setFieldSetMapper(new BeanWrapperFieldSetMapper<UploadedPreview>() {
 					{
-						setTargetType(Preview.class);
+						setTargetType(UploadedPreview.class);
 					}
 				});
 			}
@@ -83,11 +83,11 @@ public class BatchConfig extends DefaultBatchConfigurer {
 
 	@Bean
 	@JobScope
-	public JdbcBatchItemWriter<Preview> itemWriter(@Value("#{jobParameters[pageId]}") String pageId,
+	public JdbcBatchItemWriter<UploadedPreview> itemWriter(@Value("#{jobParameters[pageId]}") String pageId,
 			@Value("#{jobParameters[username]}") String username) {
 
-		JdbcBatchItemWriter<Preview> writer = new JdbcBatchItemWriter<>();
-		writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Preview>());
+		JdbcBatchItemWriter<UploadedPreview> writer = new JdbcBatchItemWriter<>();
+		writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<UploadedPreview>());
 		writer.setSql("INSERT INTO TMP_" + pageId.toUpperCase() + "_" + username.toUpperCase()
 				+ "(column1) VALUES (:column1)");
 		writer.setDataSource(oracleDataSource);
@@ -108,7 +108,7 @@ public class BatchConfig extends DefaultBatchConfigurer {
 
 	@Bean
 	public Step step1() {
-		return stepBuilderFactory.get("step1").<Preview, Preview> chunk(1000).reader(itemReader(null))
+		return stepBuilderFactory.get("step1").<UploadedPreview, UploadedPreview> chunk(1000).reader(itemReader(null))
 				.writer(itemWriter(null, null)).build();
 	}
 

@@ -24,27 +24,26 @@ App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
     ]
   };
 
-  $scope.gridOptions = {
+  $scope.gridOptionsMembers = {
     enablePaginationControls: false,
     paginationPageSize: 100,
     useExternalPagination: true,
-    useExternalSorting: true,
     columnDefs: [
-      { field: 'mbrId', displayName: '회원ID' },
-      { field: 'ocbcomLgnId', displayName: 'OCB닷컴 로그인ID' },
-      { field: 'ciNo', displayName: 'CI번호' },
-      { field: 'mbrKorNm', displayName: '한글성명' },
-      { field: 'cardNo', displayName: '카드번호' },
-      { field: 'sywMbrId', displayName: '시럽 스마트월렛 회원ID' },
-      { field: 'evsMbrId', displayName: '11번가 회원ID' }
+      { field: 'mbrId', displayName: '회원ID', cellTooltip: true, headerTooltip: true },
+      { field: 'ocbcomLgnId', displayName: 'OCB닷컴 로그인ID', cellTooltip: true, headerTooltip: true },
+      { field: 'ciNo', displayName: 'CI번호', cellTooltip: true, headerTooltip: true },
+      { field: 'mbrKorNm', displayName: '한글성명', cellTooltip: true, headerTooltip: true },
+      { field: 'cardNo', displayName: '카드번호', cellTooltip: true, headerTooltip: true },
+      { field: 'sywMbrId', displayName: '시럽 스마트월렛 회원ID', cellTooltip: true, headerTooltip: true },
+      { field: 'evsMbrId', displayName: '11번가 회원ID', cellTooltip: true, headerTooltip: true }
     ],
     onRegisterApi: function (gridApi) {
       $scope.gridApi = gridApi;
       // $scope.gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-      //   $scope.loadMerged();
+      //   $scope.loadMembers();
       // });
       gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-        $scope.loadMerged();
+        $scope.loadMembers();
       });
     }
   };
@@ -52,23 +51,25 @@ App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
   $scope.upload = function (file) {
     uploadService.upload(file, $scope.selectedOption.value).then(function () {
       $timeout(function () {
-        $scope.loadPreview();
+        $scope.loadUploadedPreview();
       }, 1500);
     });
   };
 
-  $scope.loadPreview = function () {
+  $scope.loadUploadedPreview = function () {
     uploadService.getUploadedPreview().then(function (data) {
       $scope.gridOptionsPreview.data = data;
     });
   };
 
-  $scope.loadMerged = function () {
-    var offset = ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptions.paginationPageSize;
-    var limit = $scope.gridOptions.paginationPageSize;
+  $scope.loadMembers = function () {
+    var offset = ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptionsMembers.paginationPageSize;
+    var limit = $scope.gridOptionsMembers.paginationPageSize;
 
-    apiService.getMembers({ offset: offset, limit: limit }).then(function (data) {
-      $scope.gridOptions.data = data;
+    $scope.membersPromise = apiService.getMembers({ offset: offset, limit: limit });
+    $scope.membersPromise.then(function (data) {
+      $scope.gridOptionsMembers.data = data.value;
+      $scope.gridOptionsMembers.totalItems = data.totalRecords;
     });
   };
 

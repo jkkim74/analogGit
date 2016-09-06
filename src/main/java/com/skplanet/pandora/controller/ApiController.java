@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.skplanet.pandora.model.ApiResponse;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.model.Member;
 import com.skplanet.pandora.model.UploadProgress;
@@ -30,11 +31,13 @@ public class ApiController {
 	private UploadService uploadService;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/members")
-	public List<Member> getMergedMember(@RequestParam String pageId, @RequestParam String username,
+	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam String username,
 			@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "20") int limit) {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
-		return oracleRepository.selectMembers(uploadProgress, offset, limit);
+		List<Member> list = oracleRepository.selectMembers(uploadProgress, offset, limit);
+		int count = oracleRepository.countMembers(uploadProgress);
+		return ApiResponse.builder().value(list).totalRecords(count).build();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/memberInfo")

@@ -9,6 +9,7 @@
 				 , ROWNUM AS RNUM
 			FROM (
     </sql>
+
     <sql id="pagingFoot">
 			) IN_SQ
 			WHERE  ROWNUM &lt;= #{offset} + #{limit}
@@ -22,6 +23,17 @@
 	<select id="selectMembers" parameterType="map" resultType="com.skplanet.pandora.model.Member">
 		<include refid="pagingHead" />
 
+		<include refid="selectMembersInclude" />
+
+		<include refid="pagingFoot" />
+	</select>
+	<select id="selectMembers" parameterType="map" resultType="com.skplanet.pandora.model.Member" databaseId="hsql">
+		<include refid="selectMembersInclude" />
+
+		<include refid="pagingFoot" />
+	</select>
+	
+	<sql id="selectMembersInclude">
 		<choose>
 			<when test="uploadProgress.columnName == 'OCBCOM_LGN_ID'">
 				SELECT A.MBR_ID
@@ -59,10 +71,8 @@
 				WHERE  ${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 			</otherwise>
 		</choose>
-
-		<include refid="pagingFoot" />
-	</select>
-	<select id="selectMembers" parameterType="map" resultType="com.skplanet.pandora.model.Member" databaseId="hsql">
+	</sql>
+	<sql id="selectMembersInclude" databaseId="hsql">
 		SELECT MBR_ID
 			 , OCBCOM_LGN_ID
 			 , CI_NO
@@ -72,8 +82,12 @@
 			 , EVS_MBR_ID
 		FROM MBRT_MBR_ID_MST
 		WHERE ${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
-
-		<include refid="pagingFoot" />
+	</sql>
+	
+	<select id="countMembers" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM (
+			<include refid="selectMembersInclude" />
+		)
 	</select>
 
 </mapper>

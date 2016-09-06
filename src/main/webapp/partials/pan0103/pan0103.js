@@ -57,12 +57,12 @@ App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
   $scope.upload = function (file) {
     uploadService.upload(file, $scope.selectedOption.value).then(function () {
       $timeout(function () {
-        $scope.loadPreview();
+        $scope.loadUploadedPreview();
       }, 1500);
     });
   };
 
-  $scope.loadPreview = function () {
+  $scope.loadUploadedPreview = function () {
     uploadService.getUploadedPreview().then(function (data) {
       $scope.gridOptionsPreview.data = data;
     });

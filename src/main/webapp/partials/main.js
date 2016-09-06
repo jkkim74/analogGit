@@ -53,3 +53,7 @@ App.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
     });
 
 }]);
+
+App.value('cgBusyDefaults', {
+  message: 'Loading...',
+});

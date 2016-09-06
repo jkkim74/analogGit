@@ -11,5 +11,6 @@ public class ApiResponse {
 	String message;
 	String developerMessage;
 	Object value;
+	int totalRecords;
 
 }

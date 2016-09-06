@@ -3,6 +3,7 @@ package com.skplanet.pandora.controller;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.pandora.common.BizException;
 import com.skplanet.pandora.model.ApiResponse;
-import com.skplanet.pandora.model.Preview;
+import com.skplanet.pandora.model.UploadedPreview;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.service.UploadService;
 
@@ -52,8 +53,8 @@ public class UploadController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Preview> getUploadedPreview(@RequestParam String pageId, @RequestParam String username) {
-		return oracleRepository.selectPreview(pageId, username);
+	public List<UploadedPreview> getUploadedPreview(@RequestParam Map<String, Object> params) {
+		return oracleRepository.selectUploadedPreview(params);
 	}
 
 }
