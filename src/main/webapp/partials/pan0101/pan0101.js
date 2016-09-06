@@ -81,4 +81,7 @@ App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
     });
   };
 
+  // 이전 업로드가 진행중이라면 표시.
+  self.checkUploadProgress();
+
 }]);

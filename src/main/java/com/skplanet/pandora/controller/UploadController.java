@@ -60,17 +60,24 @@ public class UploadController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ApiResponse getUploadedPreview(@RequestParam String pageId, @RequestParam String username,
 			@RequestParam(defaultValue = "false") boolean countOnly) {
-		int count = oracleRepository.countUploadedPreview(pageId, username);
-
 		if (countOnly) {
+			// 업로드 진행상태 체크 용도
 			UploadProgress uploadProgress = mysqlRepository.selectUploadProgress(pageId, username);
-			if (uploadProgress != null && uploadProgress.getUploadStatus() == UploadStatus.FINISH) {
-				return ApiResponse.builder().code(910).message(UploadStatus.FINISH.toString()).totalRecords(count).build();
+
+			if (uploadProgress == null) {
+				return ApiResponse.builder().code(910).message("업로드를 먼저 해주세요").build();
+			}
+
+			int count = oracleRepository.countUploadedPreview(pageId, username);
+
+			if (uploadProgress.getUploadStatus() == UploadStatus.FINISH) {
+				return ApiResponse.builder().code(910).message(UploadStatus.FINISH.toString()).totalRecords(count)
+						.build();
 			}
 			return ApiResponse.builder().totalRecords(count).build();
 		} else {
 			List<AutoMappedMap> list = oracleRepository.selectUploadedPreview(pageId, username);
-			return ApiResponse.builder().value(list).totalRecords(count).build();
+			return ApiResponse.builder().value(list).build();
 		}
 	}
 

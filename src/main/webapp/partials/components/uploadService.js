@@ -68,6 +68,7 @@ App.service('uploadService', ['$log', '$q', '$http', '$stateParams', 'toastr', '
                 }
             }, function (resp) {
                 $interval.cancel(canceler);
+                $log.debug(resp);
                 deferred.reject();
             });
         }

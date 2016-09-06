@@ -26,13 +26,13 @@
                     <div cg-busy="uploadPromise">
                         <div ui-grid="gridOptionsPreview"></div>
                     </div>
-                    <p class="pull-right" ng-show="uploadedRecords"><strong class="text-danger">{{ uploadedRecords | number }}</strong> 건</p>
+                    <p class="text-right" ng-show="uploadedRecords"><strong class="text-danger">{{ uploadedRecords | number }}</strong> 건</p>
+                    <div>
+                        <uib-progressbar class="progress-striped active" max="uploadedRecords" value="uploadedRecords" ng-show="uploadedRecords">업로드 임시 테이블 적재 중</uib-progressbar>
+                    </div>
                 </div>
             </div>
             <div>
-                <div class="col-md-5 pull-right">
-                    <uib-progressbar class="progress-striped active" max="uploadedRecords" value="uploadedRecords" ng-show="uploadedRecords">업로드 임시 테이블 적재 중</uib-progressbar>
-                </div>
                 <button type="button" class="btn btn-info" ng-click="loadMembers()">조회</button>
                 <div cg-busy="membersPromise">
                     <div class="grid-div" ui-grid="gridOptionsMembers" ui-grid-pagination ui-grid-resize-columns></div>
