@@ -96,7 +96,7 @@ public class UploadService {
 			jobLauncher.run(importJob, jobParameters);
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
 				| JobParametersInvalidException e) {
-			log.error("{}", e);
+			log.error("", e);
 		}
 	}
 
@@ -123,7 +123,7 @@ public class UploadService {
 				log.warn("Failed to delete [{}] because it did not exist", filePath);
 			}
 		} catch (IOException e) {
-			log.error("{} : {}", e.toString(), filePath);
+			log.error("Failed to remove uploaded file", e);
 		}
 	}
 

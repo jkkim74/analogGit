@@ -10,7 +10,7 @@ App.service('uploadService', ['$log', '$q', '$http', '$stateParams', 'toastr', '
                 url: '/api/upload',
                 data: angular.extend(params, { pageId: $stateParams.pageId, username: 'test2' })
             }).then(function (resp) {
-                toastr.success(resp.config.data.file.name, '업로드 성공');
+                toastr.success(resp.config.data.file.name, resp.data.message);
                 deferred.resolve();
             }, function (resp) {
                 $log.error(resp);
@@ -37,7 +37,7 @@ App.service('uploadService', ['$log', '$q', '$http', '$stateParams', 'toastr', '
             $http.get('/api/upload', {
                 params: { pageId: $stateParams.pageId, username: 'test2' }
             }).then(function (resp) {
-                if (resp.data.length > 0) {
+                if (resp.data.value.length > 0) {
                     $interval.cancel(canceler);
                     deferred.resolve(resp.data);
                 }
@@ -46,6 +46,29 @@ App.service('uploadService', ['$log', '$q', '$http', '$stateParams', 'toastr', '
                 $log.error(resp);
                 toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                 deferred.reject(resp.data);
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    this.getUploadProgress = function () {
+        var deferred = $q.defer();
+        var canceler = $interval(uploadedPreview, 500);
+
+        function uploadedPreview() {
+            $http.get('/api/upload', {
+                params: { pageId: $stateParams.pageId, username: 'test2', countOnly: true }
+            }).then(function (resp) {
+                deferred.notify(resp.data);
+
+                if (resp.data.code == 910) {
+                    $interval.cancel(canceler);
+                    deferred.resolve();
+                }
+            }, function (resp) {
+                $interval.cancel(canceler);
+                deferred.reject();
             });
         }
 

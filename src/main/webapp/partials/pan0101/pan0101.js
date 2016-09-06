@@ -2,6 +2,7 @@
 
 App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService) {
 
+  var self = this;
   $scope.title = '멤버 ID 일괄 전환';
 
   $scope.selectOptions = [
@@ -49,11 +50,15 @@ App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
   };
 
   $scope.upload = function (file) {
+    $scope.uploadRecords = 0;
+
     $scope.uploadPromise = uploadService.upload({ file: file, columnName: $scope.selectedOption.value });
     $scope.uploadPromise.then(function () {
+      self.checkUploadProgress();
+
       return uploadService.getUploadedPreview();
     }).then(function (data) {
-      $scope.gridOptionsPreview.data = data;
+      $scope.gridOptionsPreview.data = data.value;
     });
   };
 
@@ -68,10 +73,12 @@ App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
     });
   };
 
-  var checkUploadProgress = function () {
-
+  self.checkUploadProgress = function () {
+    uploadService.getUploadProgress().finally(function (data) {
+      $scope.uploadedRecords = 0;
+    }, function (event) {
+      $scope.uploadedRecords = event.totalRecords;
+    });
   };
-
-  checkUploadProgress();
 
 }]);

@@ -31,24 +31,6 @@
 		TRUNCATE TABLE TMP_${pageId}_${username}
 	</update>
 
-	<!-- <insert id="insertBulk" parameterType="map">
-		INSERT /*+ APPEND_VALUES */ ALL
-		<foreach collection="bulkList" item="item" index="index" separator=" ">
-			INTO TMP_${pageId}_${username} ( COLUMN1 ) VALUES ( #{item} )
-		</foreach>
-		SELECT * FROM DUAL
-	</insert>
-	<insert id="insertBulk" parameterType="map" databaseId="hsql">
-		INSERT INTO TMP_${pageId}_${username} ( COLUMN1 ) VALUES 
-		<foreach collection="bulkList" item="item" index="index" separator=",">
-			 ( #{item} )
-		</foreach>
-	</insert>
-	
-	<insert id="insertUploadedData" parameterType="map">
-		INSERT INTO TMP_${pageId}_${username} ( COLUMN1 ) VALUES ( #{column1} ) 
-	</insert> -->
-
 	<select id="selectUploadedPreview" parameterType="map" resultType="AutoMappedMap">
 		SELECT *
 		FROM (
@@ -62,6 +44,10 @@
 	<select id="selectUploadedPreview" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
 		SELECT * FROM TMP_${pageId}_${username}
 		LIMIT 0, 100
+	</select>
+	
+	<select id="countUploadedPreview" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM TMP_${pageId}_${username}
 	</select>
 
 </mapper>
