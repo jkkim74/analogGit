@@ -48,7 +48,7 @@ App.service('apiService', ["$log", "$q", "$http", "$stateParams", "toastr", func
     this.getLastestUsageInfo = new ApiGet('lastestUsageInfo');
     this.getMarketingMemberInfo = new ApiGet('marketingMemberInfo');
     this.getMarketingMemberInfoHistory = new ApiGet('marketingMemberInfoHistory');
-    this.get3rdPartyProvideHistory = new ApiGet('3rdPartyProvideHistory');
+    this.getThirdPartyProvideHistory = new ApiGet('thirdPartyProvideHistory');
     this.getCardList = new ApiGet('cardList');
     this.getTransactionHistory = new ApiGet('transactionHistory');
     this.getEmailSendHistory = new ApiGet('emailSendHistory');

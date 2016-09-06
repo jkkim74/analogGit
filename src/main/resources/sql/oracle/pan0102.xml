@@ -139,7 +139,7 @@
 		ORDER BY A.AGRMT_DT, A.AGRMT_TM
     </select>
     
-    <select id="select3rdPartyProvideHistory" parameterType="map" resultType="AutoMappedMap">
+    <select id="selectThirdPartyProvideHistory" parameterType="map" resultType="AutoMappedMap">
 		SELECT '' AS DATA_DST_ORG_CD -- 제공대상기관
 		     , A.DATA_SRC_ORG_CD  --유입기관코드  
 		     , A.AGRMT_VER_CD     --동의버전      

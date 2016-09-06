@@ -92,10 +92,10 @@ public class ApiController {
 		return oracleRepository.selectMarketingMemberInfoHistory(params);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/3rdPartyProvideHistory")
-	public List<AutoMappedMap> get3rdPartyProvideHistory(@RequestParam Map<String, Object> params) {
+	@RequestMapping(method = RequestMethod.GET, value = "/thirdPartyProvideHistory")
+	public List<AutoMappedMap> getThirdPartyProvideHistory(@RequestParam Map<String, Object> params) {
 
-		return oracleRepository.select3rdPartyProvideHistory(params);
+		return oracleRepository.selectThirdPartyProvideHistory(params);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/cardList")

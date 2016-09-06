@@ -39,7 +39,7 @@ public interface OracleRepository {
 
 	List<AutoMappedMap> selectMarketingMemberInfoHistory(Map<String, Object> params);
 
-	List<AutoMappedMap> select3rdPartyProvideHistory(Map<String, Object> params);
+	List<AutoMappedMap> selectThirdPartyProvideHistory(Map<String, Object> params);
 
 	List<AutoMappedMap> selectCardList(Map<String, Object> params);
 

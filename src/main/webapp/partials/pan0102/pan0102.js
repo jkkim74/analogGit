@@ -150,7 +150,7 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   $scope.gridOptionsMarketingMemberInfoHistory = {
     enableColumnMenus: false,
     flatEntityAccess: true,
-    minRowsToShow: 3,
+    minRowsToShow: 5,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'dataSrcOrgCd', displayName: '유입기관코드', cellTooltip: true, headerTooltip: true },
@@ -168,10 +168,10 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   };
 
   // 3자 제공 동의 이력
-  $scope.gridOptions3rdPartyProvideHistory = {
+  $scope.gridOptionsThirdPartyProvideHistory = {
     enableColumnMenus: false,
     flatEntityAccess: true,
-    minRowsToShow: 3,
+    minRowsToShow: 5,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'dataDstOrgCd', displayName: '제공대상기관', cellTooltip: true, headerTooltip: true },
@@ -194,7 +194,7 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
     enableColumnMenus: false,
     enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
-    minRowsToShow: 3,
+    minRowsToShow: 5,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'cardDtlGrp', displayName: '카드코드 및 명칭', cellTooltip: true, headerTooltip: true },
@@ -209,7 +209,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   $scope.gridOptionsTransactionHistory = {
     enableColumnMenus: false,
     flatEntityAccess: true,
-    minRowsToShow: 3,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'rcvDt', displayName: '접수일시', cellTooltip: true, headerTooltip: true },
@@ -243,7 +242,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   $scope.gridOptionsEmailSendHistory = {
     enableColumnMenus: false,
     flatEntityAccess: true,
-    minRowsToShow: 5,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'sndDt', displayName: '발송일자', cellTooltip: true, headerTooltip: true },
@@ -256,7 +254,6 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   $scope.gridOptionsAppPushHistory = {
     enableColumnMenus: false,
     flatEntityAccess: true,
-    minRowsToShow: 5,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'sndDttm', displayName: '발송일자', cellTooltip: true, headerTooltip: true },
@@ -269,52 +266,64 @@ App.controller('Pan0102Ctrl', ["$scope", "$q", "$http", "$timeout", "uiGridConst
   $scope.searchAll = function (searchType, searchKeyword) {
     var params = { searchType: searchType, searchKeyword: searchKeyword };
 
-    apiService.getMemberInfo(params).then(function (data) {
+    $scope.memberInfoPromise = apiService.getMemberInfo(params);
+    $scope.memberInfoPromise.then(function (data) {
       $scope.gridOptionsBasicInfo.data = data;
       $scope.gridOptionsMemberInfo.data = data;
     });
 
-    apiService.getAgreementInfo(params).then(function (data) {
+    $scope.agreementInfoPromise = apiService.getAgreementInfo(params);
+    $scope.agreementInfoPromise.then(function (data) {
       $scope.gridOptionsAgreementInfo.data = data;
     });
 
-    apiService.getJoinInfoOcbapp(params).then(function (data) {
+    $scope.joinInfoOcbappPromise = apiService.getJoinInfoOcbapp(params);
+    $scope.joinInfoOcbappPromise.then(function (data) {
       $scope.gridOptionsJoinInfoOcbapp.data = data;
     });
 
-    apiService.getJoinInfoOcbcom(params).then(function (data) {
+    $scope.joinInfoOcbcomPromise = apiService.getJoinInfoOcbcom(params);
+    $scope.joinInfoOcbcomPromise.then(function (data) {
       $scope.gridOptionsJoinInfoOcbcom.data = data;
     });
 
-    apiService.getLastestUsageInfo(params).then(function (data) {
+    $scope.latestUsageInfoPromise = apiService.getLastestUsageInfo(params);
+    $scope.latestUsageInfoPromise.then(function (data) {
       $scope.gridOptionsLastestUsageInfo.data = data;
     });
 
-    // apiService.getMarketingMemberInfo(params).then(function (data) {
+    // $scope.marketingMemberInfoPromise = apiService.getMarketingMemberInfo(params);
+    // $scope.marketingMemberInfoPromise.then(function (data) {
     //   $scope.gridOptionsMarketingMemberInfo.data = data;
     // });
 
-    apiService.getMarketingMemberInfoHistory(params).then(function (data) {
+    $scope.memberInfoHistoryPromise = apiService.getMarketingMemberInfoHistory(params);
+    $scope.memberInfoHistoryPromise.then(function (data) {
       $scope.gridOptionsMarketingMemberInfoHistory.data = data;
     });
 
-    apiService.get3rdPartyProvideHistory(params).then(function (data) {
-      $scope.gridOptions3rdPartyProvideHistory.data = data;
+    $scope.thirdPartyProvideHistoryPromise = apiService.getThirdPartyProvideHistory(params);
+    $scope.thirdPartyProvideHistoryPromise.then(function (data) {
+      $scope.gridOptionsThirdPartyProvideHistory.data = data;
     });
 
-    apiService.getCardList(params).then(function (data) {
+    $scope.cardListPromise = apiService.getCardList(params);
+    $scope.cardListPromise.then(function (data) {
       $scope.gridOptionsCardList.data = data;
     });
 
-    apiService.getTransactionHistory(params).then(function (data) {
+    $scope.transactionHistoryPromise = apiService.getTransactionHistory(params);
+    $scope.transactionHistoryPromise.then(function (data) {
       $scope.gridOptionsTransactionHistory.data = data;
     });
 
-    apiService.getEmailSendHistory(params).then(function (data) {
+    $scope.emailSendHistoryPromise = apiService.getEmailSendHistory(params);
+    $scope.emailSendHistoryPromise.then(function (data) {
       $scope.gridOptionsEmailSendHistory.data = data;
     });
 
-    apiService.getAppPushHistory(params).then(function (data) {
+    $scope.appPushHistoryPromise = apiService.getAppPushHistory(params);
+    $scope.appPushHistoryPromise.then(function (data) {
       $scope.gridOptionsAppPushHistory.data = data;
     });
   };

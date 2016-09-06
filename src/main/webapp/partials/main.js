@@ -16,7 +16,8 @@ var App = angular.module('App', [
   'ui.grid.infiniteScroll',
   'ui.validate',
   'angular-loading-bar',
-  'toastr'
+  'toastr',
+  'cgBusy'
 ]);
 
 App.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
