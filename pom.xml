@@ -217,6 +217,14 @@
 			<artifactId>scsl</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<!-- PTS -->
+		<dependency>
+			<groupId>com.skplanet</groupId>
+			<artifactId>PtsApiClient</artifactId>
+			<version>1.5</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/PtsApiClient_1.5.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 	<build>

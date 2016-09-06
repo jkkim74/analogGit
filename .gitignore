@@ -6,7 +6,6 @@
 .DS_Store
 bin/
 classes/
-lib/
 target/
 node_modules/
 src/main/resources/rebel.xml
