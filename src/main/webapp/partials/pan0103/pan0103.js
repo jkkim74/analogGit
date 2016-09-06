@@ -55,7 +55,7 @@ App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
   };
 
   $scope.upload = function (file) {
-    uploadService.upload(file, $scope.selectedOption.value).then(function () {
+    uploadService.upload({ file: file, columnName: $scope.selectedOption.value }).then(function () {
       $timeout(function () {
         $scope.loadUploadedPreview();
       }, 1500);

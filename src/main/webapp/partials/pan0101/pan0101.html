@@ -23,7 +23,9 @@
                 </div>
                 <div class="col-md-6">
                     <label>업로드 미리보기</label>
-                    <div ui-grid="gridOptionsPreview"></div>
+                    <div cg-busy="uploadPromise">
+                        <div ui-grid="gridOptionsPreview"></div>
+                    </div>
                 </div>
             </div>
             <div>

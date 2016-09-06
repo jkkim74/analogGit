@@ -49,15 +49,10 @@ App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
   };
 
   $scope.upload = function (file) {
-    uploadService.upload(file, $scope.selectedOption.value).then(function () {
-      $timeout(function () {
-        $scope.loadUploadedPreview();
-      }, 1500);
-    });
-  };
-
-  $scope.loadUploadedPreview = function () {
-    uploadService.getUploadedPreview().then(function (data) {
+    $scope.uploadPromise = uploadService.upload({ file: file, columnName: $scope.selectedOption.value });
+    $scope.uploadPromise.then(function () {
+      return uploadService.getUploadedPreview();
+    }).then(function (data) {
       $scope.gridOptionsPreview.data = data;
     });
   };
@@ -72,5 +67,11 @@ App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
       $scope.gridOptionsMembers.totalItems = data.totalRecords;
     });
   };
+
+  var checkUploadProgress = function () {
+
+  };
+
+  checkUploadProgress();
 
 }]);
