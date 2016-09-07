@@ -1,6 +1,6 @@
 'use strict';
 
-App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService) {
+App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', 'blockUI', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService, blockUI) {
 
   var self = this;
   $scope.title = '멤버 ID 일괄 전환';
@@ -91,8 +91,9 @@ App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
 
 
   $scope.sendPts = function (ptsUsername, ptsMasking) {
-    apiService.sendPts({ ptsUsername: ptsUsername, ptsMasking: !!ptsMasking }).then(function () {
-
+    blockUI.start();
+    apiService.sendPts({ ptsUsername: ptsUsername, ptsMasking: !!ptsMasking }).finally(function () {
+      blockUI.stop();
     });
   };
 

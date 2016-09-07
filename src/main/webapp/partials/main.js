@@ -16,10 +16,11 @@ var App = angular.module('App', [
   'ui.grid.infiniteScroll',
   'ui.validate',
   'toastr',
-  'cgBusy'
+  'cgBusy',
+  'blockUI'
 ]);
 
-App.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+App.config(['$stateProvider', '$urlRouterProvider', 'blockUIConfig', function ($stateProvider, $urlRouterProvider, blockUIConfig) {
 
   $urlRouterProvider.otherwise('/');
 
@@ -50,6 +51,9 @@ App.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         return ctrlName;
       }
     });
+
+  blockUIConfig.message = 'Waiting...';
+  blockUIConfig.autoBlock = false;
 
 }]);
 

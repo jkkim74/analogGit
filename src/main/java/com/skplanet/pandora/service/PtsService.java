@@ -41,7 +41,7 @@ public class PtsService {
 
 	public String createCsvFile(String ptsUsername, UploadProgress uploadProgress) {
 		int offset = 0;
-		int limit = 100;
+		int limit = 1000;
 		List<AutoMappedMap> list = Collections.emptyList();
 		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR, getFilename(ptsUsername));
 
@@ -72,7 +72,7 @@ public class PtsService {
 				printer = null;
 			}
 		} catch (IOException e) {
-			throw new BizException("PTS 전송용 CSV 파일생성 실패", e);
+			throw new BizException("CSV 파일 생성 실패", e);
 		}
 
 		return filePath.toFile().getAbsolutePath();
