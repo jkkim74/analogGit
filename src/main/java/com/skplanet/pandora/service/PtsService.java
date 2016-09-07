@@ -42,7 +42,7 @@ public class PtsService {
 
 	public String createCsvFile(String ptsUsername, UploadProgress uploadProgress) {
 		int offset = 0;
-		int limit = 1000;
+		int limit = 10000;
 		List<AutoMappedMap> list = Collections.emptyList();
 		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR, getFilename(ptsUsername));
 
