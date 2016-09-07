@@ -20,6 +20,10 @@ var App = angular.module('App', [
   'blockUI'
 ]);
 
+App.value('cgBusyDefaults', {
+  message: 'Loading...',
+});
+
 App.config(['$stateProvider', '$urlRouterProvider', 'blockUIConfig', function ($stateProvider, $urlRouterProvider, blockUIConfig) {
 
   $urlRouterProvider.otherwise('/');
@@ -56,7 +60,3 @@ App.config(['$stateProvider', '$urlRouterProvider', 'blockUIConfig', function ($
   blockUIConfig.autoBlock = false;
 
 }]);
-
-App.value('cgBusyDefaults', {
-  message: 'Loading...',
-});
