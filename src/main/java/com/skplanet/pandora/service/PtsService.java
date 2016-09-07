@@ -2,6 +2,7 @@ package com.skplanet.pandora.service;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,8 +46,8 @@ public class PtsService {
 		List<AutoMappedMap> list = Collections.emptyList();
 		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR, getFilename(ptsUsername));
 
-		try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE,
-				StandardOpenOption.APPEND)) {
+		try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8,
+				StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
 
 			CSVPrinter printer = null;
 
