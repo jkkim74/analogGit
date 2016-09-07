@@ -1,7 +1,8 @@
 'use strict';
 
-App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService) {
+App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', 'blockUI', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService, blockUI) {
 
+  var self = this;
   $scope.title = '배치 적립 파일 검증';
 
   $scope.selectOptions = [
@@ -24,24 +25,23 @@ App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
     ]
   };
 
-  $scope.gridOptions = {
+  $scope.gridOptionsMembers = {
     enablePaginationControls: false,
     paginationPageSize: 100,
     useExternalPagination: true,
-    useExternalSorting: true,
     columnDefs: [
-      { field: 'mbrId', displayName: '회원ID' },
-      { field: 'cardNo', displayName: '카드번호' },
-      { field: 'ciNo', displayName: 'CI번호' },
-      { field: 'mbrKorNm', displayName: '성명' },
-      { field: 'mbrKorNm', displayName: '생년월일' },
-      { field: 'mbrKorNm', displayName: '성별' },
-      { field: 'ocbcomLgnId', displayName: 'OCB 카드 여부' },
-      { field: 'ocbcomLgnId', displayName: 'CI 일치 여부' },
-      { field: 'ocbcomLgnId', displayName: '성명 일치 여부' },
-      { field: 'ocbcomLgnId', displayName: '생년월일 일치 여부' },
-      { field: 'ocbcomLgnId', displayName: '성별 일치 여부' },
-      { field: 'ocbcomLgnId', displayName: '불일치 항목 포함 여부' }
+      { field: 'mbrId', displayName: '회원ID', cellTooltip: true, headerTooltip: true },
+      { field: 'cardNo', displayName: '카드번호', cellTooltip: true, headerTooltip: true },
+      { field: 'ciNo', displayName: 'CI번호', cellTooltip: true, headerTooltip: true },
+      { field: 'mbrKorNm', displayName: '성명', cellTooltip: true, headerTooltip: true },
+      { field: 'mbrKorNm', displayName: '생년월일', cellTooltip: true, headerTooltip: true },
+      { field: 'mbrKorNm', displayName: '성별', cellTooltip: true, headerTooltip: true },
+      { field: 'ocbcomLgnId', displayName: 'OCB 카드 여부', cellTooltip: true, headerTooltip: true },
+      { field: 'ocbcomLgnId', displayName: 'CI 일치 여부', cellTooltip: true, headerTooltip: true },
+      { field: 'ocbcomLgnId', displayName: '성명 일치 여부', cellTooltip: true, headerTooltip: true },
+      { field: 'ocbcomLgnId', displayName: '생년월일 일치 여부', cellTooltip: true, headerTooltip: true },
+      { field: 'ocbcomLgnId', displayName: '성별 일치 여부', cellTooltip: true, headerTooltip: true },
+      { field: 'ocbcomLgnId', displayName: '불일치 항목 포함 여부', cellTooltip: true, headerTooltip: true }
     ],
     onRegisterApi: function (gridApi) {
       $scope.gridApi = gridApi;
@@ -55,25 +55,50 @@ App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
   };
 
   $scope.upload = function (file) {
-    uploadService.upload({ file: file, columnName: $scope.selectedOption.value }).then(function () {
-      $timeout(function () {
-        $scope.loadUploadedPreview();
-      }, 1500);
+    $scope.uploadRecords = 0;
+    $scope.uploadProgressLoadingMessage = 'Uploading...';
+
+    $scope.uploadPromise = uploadService.upload({ file: file, columnName: $scope.selectedOption.value });
+    $scope.uploadPromise.then(function () {
+      self.checkUploadProgress();
+      $scope.uploadProgressLoadingMessage = 'Loading...';
+
+      return uploadService.getUploadedPreview();
+    }, null, function (progressPercentage) {
+      $scope.uploadProgressLoadingMessage = 'Uploading...' + progressPercentage + '%';
+    }).then(function (data) {
+      $scope.gridOptionsPreview.data = data.value;
     });
   };
 
-  $scope.loadUploadedPreview = function () {
-    uploadService.getUploadedPreview().then(function (data) {
-      $scope.gridOptionsPreview.data = data;
+  $scope.loadMembers = function () {
+    var offset = ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptionsMembers.paginationPageSize;
+    var limit = $scope.gridOptionsMembers.paginationPageSize;
+
+    $scope.membersPromise = apiService.getMembers({ offset: offset, limit: limit });
+    $scope.membersPromise.then(function (data) {
+      $scope.gridOptionsMembers.data = data.value;
+      $scope.gridOptionsMembers.totalItems = data.totalRecords;
     });
   };
 
-  $scope.loadMerged = function () {
-    var offset = ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptions.paginationPageSize;
-    var limit = $scope.gridOptions.paginationPageSize;
+  self.checkUploadProgress = function () {
+    uploadService.getUploadProgress().finally(function (data) {
+      $scope.uploadProgress = false;
+    }, function (totalRecords) {
+      $scope.uploadProgress = true;
+      $scope.uploadedRecords = totalRecords;
+    });
+  };
 
-    apiService.getMembers({ offset: offset, limit: limit }).then(function (data) {
-      $scope.gridOptions.data = data;
+  // 이전 업로드가 진행중이라면 표시.
+  // self.checkUploadProgress();
+
+
+  $scope.sendPts = function (ptsUsername, ptsMasking) {
+    blockUI.start();
+    apiService.sendPts({ ptsUsername: ptsUsername, ptsMasking: !!ptsMasking }).finally(function () {
+      blockUI.stop();
     });
   };
 
