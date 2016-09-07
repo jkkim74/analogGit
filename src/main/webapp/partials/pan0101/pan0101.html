@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div>
-                <button type="button" class="btn btn-info" ng-click="loadMembers()">조회</button>
+                <button type="button" class="btn btn-info" ng-click="loadMembers()" ng-disabled="!gridOptionsPreview.data.length">조회</button>
                 <div cg-busy="membersPromise">
                     <div class="grid-div" ui-grid="gridOptionsMembers" ui-grid-pagination ui-grid-resize-columns></div>
                 </div>
@@ -56,7 +56,7 @@
                     <div class="checkbox">
                         <label><strong>개인정보 마스킹 여부</strong> <input type="checkbox" ng-model="ptsMasking"></label>
                     </div>
-                    <button type="button" class="btn btn-danger" ng-disabled="!gridOptionsMembers.data.length" ng-click="sendPts(ptsUsername, ptsMasking)">PTS 전송</button>
+                    <button type="button" class="btn btn-danger" ng-click="sendPts(ptsUsername, ptsMasking)" ng-disabled="!gridOptionsMembers.data.length">PTS 전송</button>
                 </form>
             </div>
         </div>
