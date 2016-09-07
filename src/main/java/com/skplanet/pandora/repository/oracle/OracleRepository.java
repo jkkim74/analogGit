@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.skplanet.pandora.model.AutoMappedMap;
-import com.skplanet.pandora.model.Member;
 import com.skplanet.pandora.model.UploadProgress;
 
 @Repository
@@ -25,7 +24,7 @@ public interface OracleRepository {
 
 	int countUploadedPreview(@Param("pageId") String pageId, @Param("username") String username);
 
-	List<Member> selectMembers(@Param("uploadProgress") UploadProgress uploadProgress, @Param("offset") int offset,
+	List<AutoMappedMap> selectMembers(@Param("uploadProgress") UploadProgress uploadProgress, @Param("offset") int offset,
 			@Param("limit") int limit);
 
 	int countMembers(@Param("uploadProgress") UploadProgress uploadProgress);

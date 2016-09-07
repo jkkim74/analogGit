@@ -59,8 +59,8 @@ App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
       $scope.uploadProgressLoadingMessage = 'Loading...';
 
       return uploadService.getUploadedPreview();
-    }, null, function(progressPercentage) {
-      $scope.uploadProgressLoadingMessage = 'Uploading...'  + progressPercentage + '%';
+    }, null, function (progressPercentage) {
+      $scope.uploadProgressLoadingMessage = 'Uploading...' + progressPercentage + '%';
     }).then(function (data) {
       $scope.gridOptionsPreview.data = data.value;
     });
@@ -87,6 +87,13 @@ App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
   };
 
   // 이전 업로드가 진행중이라면 표시.
-  self.checkUploadProgress();
+  // self.checkUploadProgress();
+
+
+  $scope.sendPts = function (ptsUsername, ptsMasking) {
+    apiService.sendPts({ ptsUsername: ptsUsername, ptsMasking: !!ptsMasking }).then(function () {
+
+    });
+  };
 
 }]);

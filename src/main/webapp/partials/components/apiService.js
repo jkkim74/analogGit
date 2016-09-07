@@ -34,4 +34,32 @@ App.service('apiService', ["$log", "$q", "$http", "$stateParams", "toastr", func
     this.getEmailSendHistory = new ApiGet('emailSendHistory');
     this.getAppPushHistory = new ApiGet('appPushHistory');
 
+
+    function ApiPost(command) {
+        return function (params) {
+            var deferred = $q.defer();
+
+            $http.post('/api/' + command, angular.extend(params, { pageId: $stateParams.pageId, username: 'test2' }), {
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                transformRequest: function (obj) {
+                    var str = [];
+                    for (var p in obj)
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    return str.join("&");
+                }
+            }).then(function (resp) {
+                toastr.success((resp.data && resp.data.message) || resp.config.url);
+                deferred.resolve();
+            }, function (resp) {
+                $log.error(resp);
+                toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
+                deferred.reject();
+            });
+
+            return deferred.promise;
+        };
+    }
+
+    this.sendPts = new ApiPost('sendPts');
+
 }]);

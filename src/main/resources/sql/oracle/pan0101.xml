@@ -20,14 +20,14 @@
     	LIMIT #{offset}, #{limit}
     </sql>
 
-	<select id="selectMembers" parameterType="map" resultType="com.skplanet.pandora.model.Member">
+	<select id="selectMembers" parameterType="map" resultType="AutoMappedMap">
 		<include refid="pagingHead" />
 
 		<include refid="selectMembersInclude" />
 
 		<include refid="pagingFoot" />
 	</select>
-	<select id="selectMembers" parameterType="map" resultType="com.skplanet.pandora.model.Member" databaseId="hsql">
+	<select id="selectMembers" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
 		<include refid="selectMembersInclude" />
 
 		<include refid="pagingFoot" />

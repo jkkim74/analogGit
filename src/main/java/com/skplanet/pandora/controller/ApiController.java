@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.skplanet.pandora.model.ApiResponse;
 import com.skplanet.pandora.model.AutoMappedMap;
-import com.skplanet.pandora.model.Member;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
+import com.skplanet.pandora.service.PtsService;
 import com.skplanet.pandora.service.UploadService;
 
 @RestController
@@ -30,12 +30,15 @@ public class ApiController {
 	@Autowired
 	private UploadService uploadService;
 
+	@Autowired
+	private PtsService ptsService;
+
 	@RequestMapping(method = RequestMethod.GET, value = "/members")
 	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam String username,
 			@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "20") int limit) {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
-		List<Member> list = oracleRepository.selectMembers(uploadProgress, offset, limit);
+		List<AutoMappedMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit);
 		int count = oracleRepository.countMembers(uploadProgress);
 		return ApiResponse.builder().value(list).totalRecords(count).build();
 	}
@@ -126,6 +129,19 @@ public class ApiController {
 
 		String mbrId = oracleRepository.selectMbrId(params);
 		return querycacheRepository.selectAppPushHistory(mbrId);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/sendPts")
+	public ApiResponse sendPts(@RequestParam String ptsUsername, @RequestParam String ptsMasking,
+			@RequestParam String pageId, @RequestParam String username) {
+
+		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
+
+		String csvFile = ptsService.createCsvFile(ptsUsername, uploadProgress);
+
+		ptsService.send(csvFile);
+
+		return ApiResponse.builder().message("PTS 전송 성공").build();
 	}
 
 }

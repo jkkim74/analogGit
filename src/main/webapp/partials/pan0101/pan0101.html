@@ -51,12 +51,12 @@
                 <form class="form-inline">
                     <div class="form-group">
                         <label>PTS 계정</label>
-                        <input type="text" class="form-control" placeholder="" size="10">
+                        <input type="text" class="form-control" ng-model="ptsUsername" size="10">
                     </div>
                     <div class="checkbox">
-                        <label><strong>개인정보 마스킹 여부</strong> <input type="checkbox"></label>
+                        <label><strong>개인정보 마스킹 여부</strong> <input type="checkbox" ng-model="ptsMasking"></label>
                     </div>
-                    <button type="button" class="btn btn-danger" ng-disabled="!gridOptionsMembers.data.length">PTS 전송</button>
+                    <button type="button" class="btn btn-danger" ng-disabled="!gridOptionsMembers.data.length" ng-click="sendPts(ptsUsername, ptsMasking)">PTS 전송</button>
                 </form>
             </div>
         </div>
