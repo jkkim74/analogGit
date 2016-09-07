@@ -23,12 +23,15 @@
                 </div>
                 <div class="col-md-6">
                     <label>업로드 미리보기</label>
-                    <div cg-busy="uploadPromise">
+                    <div cg-busy="{promise:uploadPromise, message:uploadProgressLoadingMessage}">
                         <div ui-grid="gridOptionsPreview"></div>
                     </div>
-                    <p class="text-right" ng-show="uploadedRecords"><strong class="text-danger">{{ uploadedRecords | number }}</strong> 건</p>
+                    <br>
+                    <!--<p class="text-right" ng-show="uploadedRecords"><strong class="text-danger">{{ uploadedRecords | number }}</strong> 건</p>-->
                     <div>
-                        <uib-progressbar class="progress-striped active" max="uploadedRecords" value="uploadedRecords" ng-show="uploadedRecords">업로드 임시 테이블 적재 중</uib-progressbar>
+                        <uib-progressbar ng-show="!uploadProgress && uploadedRecords" animate="false" type="success">업로드 완료 <strong class="text-danger">{{ uploadedRecords | number }}</strong> 건</uib-progressbar>
+                        <uib-progressbar ng-show="!uploadProgress && !uploadedRecords" animate="false" type="warning">업로드 대기</uib-progressbar>
+                        <uib-progressbar ng-show="uploadProgress" class="progress-striped active">업로드 임시 테이블 적재 중 <strong class="">{{ uploadedRecords | number }}</strong> 건</uib-progressbar>
                     </div>
                 </div>
             </div>

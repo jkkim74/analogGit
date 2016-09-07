@@ -51,12 +51,16 @@ App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
 
   $scope.upload = function (file) {
     $scope.uploadRecords = 0;
+    $scope.uploadProgressLoadingMessage = 'Uploading...';
 
     $scope.uploadPromise = uploadService.upload({ file: file, columnName: $scope.selectedOption.value });
     $scope.uploadPromise.then(function () {
       self.checkUploadProgress();
+      $scope.uploadProgressLoadingMessage = 'Loading...';
 
       return uploadService.getUploadedPreview();
+    }, null, function(progressPercentage) {
+      $scope.uploadProgressLoadingMessage = 'Uploading...'  + progressPercentage + '%';
     }).then(function (data) {
       $scope.gridOptionsPreview.data = data.value;
     });
@@ -75,9 +79,10 @@ App.controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
 
   self.checkUploadProgress = function () {
     uploadService.getUploadProgress().finally(function (data) {
-      $scope.uploadedRecords = 0;
-    }, function (event) {
-      $scope.uploadedRecords = event.totalRecords;
+      $scope.uploadProgress = false;
+    }, function (totalRecords) {
+      $scope.uploadProgress = true;
+      $scope.uploadedRecords = totalRecords;
     });
   };
 

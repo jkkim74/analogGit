@@ -60,7 +60,7 @@ App.service('uploadService', ['$log', '$q', '$http', '$stateParams', 'toastr', '
             $http.get('/api/upload', {
                 params: { pageId: $stateParams.pageId, username: 'test2', countOnly: true }
             }).then(function (resp) {
-                deferred.notify(resp.data);
+                deferred.notify(resp.data.totalRecords);
 
                 if (resp.data.code == 910) {
                     $interval.cancel(canceler);
