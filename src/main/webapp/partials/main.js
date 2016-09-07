@@ -15,7 +15,6 @@ var App = angular.module('App', [
   'ui.grid.pagination',
   'ui.grid.infiniteScroll',
   'ui.validate',
-  'angular-loading-bar',
   'toastr',
   'cgBusy'
 ]);
