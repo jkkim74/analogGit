@@ -83,8 +83,15 @@ public class PtsService {
 		String ptsProperties = Resources.getResource("config/PTS.properties").getPath();
 
 		log.debug("PTS.properties location={}", ptsProperties);
+		
+		String theFilename = filename;
+		
+		// PTS API Client에서 '/'를 앞에 붙이므로 여기선 제거해준다.
+		if (theFilename.startsWith("/")) {
+			theFilename = theFilename.substring(1);
+		}
 
-		String[] command = { filename, ptsProperties };
+		String[] command = { theFilename, ptsProperties };
 
 		try {
 			ApiClient.main(command);
