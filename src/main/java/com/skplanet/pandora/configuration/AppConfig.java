@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 @ComponentScan(basePackages = "com.skplanet.pandora")
-@PropertySource("classpath:/config/application-${spring.profiles.active:production}.properties")
+@PropertySource("classpath:/config/application-${spring.profiles.active:staging}.properties")
 @EnableWebMvc
 public class AppConfig extends WebMvcConfigurerAdapter {
 

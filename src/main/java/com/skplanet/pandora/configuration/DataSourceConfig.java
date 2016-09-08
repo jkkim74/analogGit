@@ -197,31 +197,21 @@ class LocalDataSourceConfig extends DataSourceConfig {
 	@Bean
 	@Override
 	public DataSource mysqlDataSource() {
-		if (env.getProperty("jdbc.pandora.embedded", Boolean.class)) {
-			EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-			return builder.addScript("sql/init-db-mysql.sql").build();
-			// .addScript("sql/insert-data.sql")
-		}
-		return super.mysqlDataSource();
+		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+		return builder.addScript("sql/init-db-mysql.sql").build();
 	}
 
 	@Bean
 	@Override
 	public DataSource oracleDataSource() {
-		if (env.getProperty("jdbc.pandora.embedded", Boolean.class)) {
-			EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-			return builder.addScripts("sql/init-db-oracle.sql", "sql/data-oracle.sql").build();
-		}
-		return super.oracleDataSource();
+		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+		return builder.addScripts("sql/init-db-oracle.sql", "sql/data-oracle.sql").build();
 	}
 
 	@Bean
 	@Override
 	public DataSource querycacheDataSource() {
-		if (env.getProperty("jdbc.pandora.embedded", Boolean.class)) {
-			return new EmbeddedDatabaseBuilder().build();
-		}
-		return super.querycacheDataSource();
+		return new EmbeddedDatabaseBuilder().build();
 	}
 
 }
