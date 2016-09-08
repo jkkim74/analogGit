@@ -35,51 +35,51 @@
 
 	<select id="selectMemberInfo" parameterType="map" resultType="AutoMappedMap">
 		SELECT '' AS MBR_TYPE /* 회원구분 */
-		, '' AS MBR_STS_CD /* 회원상태 */
-		, A.MBR_ID /* MBR_ID */
-		, D.CUST_ID /* CUST_ID */
-		, C.CI_NO /* CI */
-		, D.PNT_EXTNCT_YN /* 포인트소멸여부 */
-		, A.MBR_KOR_NM /* 한글성명 */
-		, D.LEGL_BTHDT /* 법정생년월일 */
-		, D.LEGL_GNDR_FG_CD /* 법정성별 */
-		, D.FST_CARD_RREG_DT /* OCB최초 카드 본등록 일자 */
-		, A.CLPHN_NO /* 휴대전화번호 */
-		, B.CLPHN_NO_DT /* 휴대전화번호최종유입일자 */
-		, CASE WHEN E.MBR_ID IS NOT NULL THEN '1' ELSE '2' END AS CLPHN_NO_DUP_YN /* 휴대전화번호 중복여부 */
-		, A.HOME_TEL_NO /* 자택전화번호 */
-		, B.HOME_TEL_NO_DT /* 자택전화번호 최종유입일자 */
-		, A.JOBP_TEL_NO /* 직장전화번호 */
-		, B.JOBP_TEL_NO_DT /* 직장전화번호 최종유입일자 */
-		, A.HOME_BASIC_ADDR /* 자택기본주소 */
-		, B.HOME_BASIC_ADDR_DT /* 자택기본주소 최종유입일자 */
-		, A.HOME_DTL_ADDR /* 자택상세주소 */
-		, B.HOME_DTL_ADDR_DT /* 자택상세주소 최종유입일자 */
-		, A.HOME_BASIC_ADDR || ' ' || A.HOME_DTL_ADDR AS HOME_ADDR
-		, A.JOBP_BASIC_ADDR /* 직장기본주소 */
-		, B.JOBP_BASIC_ADDR_DT /* 직장기본주소 최종유입일자 */
-		, A.JOBP_DTL_ADDR /* 직장상세주소 */
-		, B.JOBP_DTL_ADDR_DT /* 직장상세주소 최종유입일자 */
-		, A.JOBP_BASIC_ADDR || ' ' || A.JOBP_DTL_ADDR AS JOBP_ADDR
-		, A.EMAIL_ADDR /* 이메일주소 */
-		, B.EMAIL_ADDR_DT /* 이메일주소 최종유입일자 */
-		, CASE WHEN F.MBR_ID IS NOT NULL THEN '1' ELSE '2' END AS EMAIL_ADDR_DUP_YN /* 이메일주소 중복 여부(미정) */
-		, D.DESTR_EXPCTN_DT /* 개인정보 유효기간 만료 예정 일자(미정) */
+			, '' AS MBR_STS_CD /* 회원상태 */
+			, A.MBR_ID /* MBR_ID */
+			, D.CUST_ID /* CUST_ID */
+			, C.CI_NO /* CI */
+			, D.PNT_EXTNCT_YN /* 포인트소멸여부 */
+			, A.MBR_KOR_NM /* 한글성명 */
+			, D.LEGL_BTHDT /* 법정생년월일 */
+			, D.LEGL_GNDR_FG_CD /* 법정성별 */
+			, D.FST_CARD_RREG_DT /* OCB최초 카드 본등록 일자 */
+			, A.CLPHN_NO /* 휴대전화번호 */
+			, B.CLPHN_NO_DT /* 휴대전화번호최종유입일자 */
+			, CASE WHEN E.MBR_ID IS NOT NULL THEN '1' ELSE '2' END AS CLPHN_NO_DUP_YN /* 휴대전화번호 중복여부 */
+			, A.HOME_TEL_NO /* 자택전화번호 */
+			, B.HOME_TEL_NO_DT /* 자택전화번호 최종유입일자 */
+			, A.JOBP_TEL_NO /* 직장전화번호 */
+			, B.JOBP_TEL_NO_DT /* 직장전화번호 최종유입일자 */
+			, A.HOME_BASIC_ADDR /* 자택기본주소 */
+			, B.HOME_BASIC_ADDR_DT /* 자택기본주소 최종유입일자 */
+			, A.HOME_DTL_ADDR /* 자택상세주소 */
+			, B.HOME_DTL_ADDR_DT /* 자택상세주소 최종유입일자 */
+			, A.HOME_BASIC_ADDR || ' ' || A.HOME_DTL_ADDR AS HOME_ADDR
+			, A.JOBP_BASIC_ADDR /* 직장기본주소 */
+			, B.JOBP_BASIC_ADDR_DT /* 직장기본주소 최종유입일자 */
+			, A.JOBP_DTL_ADDR /* 직장상세주소 */
+			, B.JOBP_DTL_ADDR_DT /* 직장상세주소 최종유입일자 */
+			, A.JOBP_BASIC_ADDR || ' ' || A.JOBP_DTL_ADDR AS JOBP_ADDR
+			, A.EMAIL_ADDR /* 이메일주소 */
+			, B.EMAIL_ADDR_DT /* 이메일주소 최종유입일자 */
+			, CASE WHEN F.MBR_ID IS NOT NULL THEN '1' ELSE '2' END AS EMAIL_ADDR_DUP_YN /* 이메일주소 중복 여부(미정) */
+			, D.DESTR_EXPCTN_DT /* 개인정보 유효기간 만료 예정 일자(미정) */
 		FROM DW_MBR_MST A
 		LEFT OUTER JOIN
 		(
-		SELECT MBR_ID
-		,MAX(DECODE(MBR_UPD_ITM_CD,'0121',UPD_DT)) CLPHN_NO_DT
-		,MAX(DECODE(MBR_UPD_ITM_CD,'0112',UPD_DT)) HOME_TEL_NO_DT
-		,MAX(DECODE(MBR_UPD_ITM_CD,'0119',UPD_DT)) JOBP_TEL_NO_DT
-		,MAX(DECODE(MBR_UPD_ITM_CD,'0114',UPD_DT)) HOME_BASIC_ADDR_DT
-		,MAX(DECODE(MBR_UPD_ITM_CD,'0115',UPD_DT)) HOME_DTL_ADDR_DT
-		,MAX(DECODE(MBR_UPD_ITM_CD,'0117',UPD_DT)) JOBP_BASIC_ADDR_DT
-		,MAX(DECODE(MBR_UPD_ITM_CD,'0118',UPD_DT)) JOBP_DTL_ADDR_DT
-		,MAX(DECODE(MBR_UPD_ITM_CD,'0124',UPD_DT)) EMAIL_ADDR_DT
-		FROM DW_MBR_UPD_HST
-		WHERE MBR_UPD_ITM_CD IN ('0121','0112','0119','0114','0115','0117','0118','0124')
-		GROUP BY MBR_ID
+			SELECT MBR_ID
+				, MAX(DECODE(MBR_UPD_ITM_CD,'0121',UPD_DT)) CLPHN_NO_DT
+				, MAX(DECODE(MBR_UPD_ITM_CD,'0112',UPD_DT)) HOME_TEL_NO_DT
+				, MAX(DECODE(MBR_UPD_ITM_CD,'0119',UPD_DT)) JOBP_TEL_NO_DT
+				, MAX(DECODE(MBR_UPD_ITM_CD,'0114',UPD_DT)) HOME_BASIC_ADDR_DT
+				, MAX(DECODE(MBR_UPD_ITM_CD,'0115',UPD_DT)) HOME_DTL_ADDR_DT
+				, MAX(DECODE(MBR_UPD_ITM_CD,'0117',UPD_DT)) JOBP_BASIC_ADDR_DT
+				, MAX(DECODE(MBR_UPD_ITM_CD,'0118',UPD_DT)) JOBP_DTL_ADDR_DT
+				, MAX(DECODE(MBR_UPD_ITM_CD,'0124',UPD_DT)) EMAIL_ADDR_DT
+			FROM DW_MBR_UPD_HST
+			WHERE MBR_UPD_ITM_CD IN ('0121','0112','0119','0114','0115','0117','0118','0124')
+			GROUP BY MBR_ID
 		) B ON A.MBR_ID = B.MBR_ID
 		LEFT OUTER JOIN DW_MBR_CI_INFO C ON A.MBRSHP_PGM_ID = C.MBRSHP_PGM_ID AND A.MBR_ID = C.MBR_ID
 		LEFT OUTER JOIN MART_MBR_INQ_INFO D ON A.MBR_ID = D.MBR_ID
@@ -91,22 +91,21 @@
 
 	<select id="selectJoinInfo" parameterType="map" resultType="AutoMappedMap">
 		SELECT UNITED_ID /* okcashbag.com United ID */
-		, LGN_ID /* okcashbag.com 로그인 ID 목록 */
-		, ENTR_DTTM /* okcashbag.com 로그인 ID 별 가입 일자 */
-		, FNL_LGN_DTTM /* okcashbag.com 로그인 ID 최종 로그인 일자 */
-		FROM
-		INTGUSER.MART_OCBCOM_MBR_MST A
+			, LGN_ID /* okcashbag.com 로그인 ID 목록 */
+			, ENTR_DTTM /* okcashbag.com 로그인 ID 별 가입 일자 */
+			, FNL_LGN_DTTM /* okcashbag.com 로그인 ID 최종 로그인 일자 */
+		FROM MART_OCBCOM_MBR_MST A
 
 		<include refid="whereMbrId" />
 	</select>
 
 	<select id="selectLastestUsageInfo" parameterType="map" resultType="AutoMappedMap">
 		SELECT FNL_ERNG_DT /* OCB 적립/사용/할인/현금환급 */
-		, FNL_CARD_RREG_DT /* OCB 카드 본등록 */
-		, FNL_CNSOF_ENQ_DT /* 상담실 문의 */
-		, FNL_PRD_PCHS_DT /* 상품 구매 */
-		, FNL_PNT_INQ_DT /* 포인트 조회 */
-		FROM INTGUSER.MART_MBR_INQ_INFO A
+			, FNL_CARD_RREG_DT /* OCB 카드 본등록 */
+			, FNL_CNSOF_ENQ_DT /* 상담실 문의 */
+			, FNL_PRD_PCHS_DT /* 상품 구매 */
+			, FNL_PNT_INQ_DT /* 포인트 조회 */
+		FROM MART_MBR_INQ_INFO A
 
 		<include refid="whereMbrId" />
 	</select>
@@ -117,18 +116,18 @@
 
 	<select id="selectMarketingMemberInfoHistory" parameterType="map" resultType="AutoMappedMap">
 		SELECT A.DATA_SRC_ORG_CD /* 유입기관코드 */
-		, A.AGRMT_VER_CD /* 동의버전 */
-		, A.AGRMT_DT /* 동의일자 */
-		, A.AGRMT_YN /* 동의여부 */
-		, B.MBR_KOR_NM /* 한글성명 */
-		, B.BTHDT /* 생년월일 */
-		, B.GNDR_FG_CD /* 성별 */
-		, B.EMAIL_ADDR /* 이메일주소 */
-		, B.CLPHN_NO /* 휴대전화번호 */
-		, B.HOME_TEL_NO /* 자택전화번호 */
-		, B.JOBP_TEL_NO /* 직장전화번호 */
+			, A.AGRMT_VER_CD /* 동의버전 */
+			, A.AGRMT_DT /* 동의일자 */
+			, A.AGRMT_YN /* 동의여부 */
+			, B.MBR_KOR_NM /* 한글성명 */
+			, B.BTHDT /* 생년월일 */
+			, B.GNDR_FG_CD /* 성별 */
+			, B.EMAIL_ADDR /* 이메일주소 */
+			, B.CLPHN_NO /* 휴대전화번호 */
+			, B.HOME_TEL_NO /* 자택전화번호 */
+			, B.JOBP_TEL_NO /* 직장전화번호 */
 		FROM DW_MKTNG_AGRMT_MGMT_HST A
-		JOIN INTGUSER.DW_MKTNG_AGRMT_HST B ON A.CUST_REG_DT = B.CUST_REG_DT AND A.REG_NO = B.REG_NO
+		JOIN DW_MKTNG_AGRMT_HST B ON A.CUST_REG_DT = B.CUST_REG_DT AND A.REG_NO = B.REG_NO
 
 		<include refid="whereMbrId" />
 
@@ -137,17 +136,17 @@
 
 	<select id="selectThirdPartyProvideHistory" parameterType="map" resultType="AutoMappedMap">
 		SELECT '' AS DATA_DST_ORG_CD /* 제공대상기관 */
-		, A.DATA_SRC_ORG_CD /* 유입기관코드 */
-		, A.AGRMT_VER_CD /* 동의버전 */
-		, A.AGRMT_DT /* 동의일자 */
-		, A.AGRMT_YN /* 동의여부 */
-		, B.MBR_KOR_NM /* 한글성명 */
-		, B.BTHDT /* 생년월일 */
-		, B.GNDR_FG_CD /* 성별 */
-		, B.EMAIL_ADDR /* 이메일주소 */
-		, B.CLPHN_NO /* 휴대전화번호 */
-		, B.HOME_TEL_NO /* 자택전화번호 */
-		, B.JOBP_TEL_NO /* 직장전화번호 */
+			, A.DATA_SRC_ORG_CD /* 유입기관코드 */
+			, A.AGRMT_VER_CD /* 동의버전 */
+			, A.AGRMT_DT /* 동의일자 */
+			, A.AGRMT_YN /* 동의여부 */
+			, B.MBR_KOR_NM /* 한글성명 */
+			, B.BTHDT /* 생년월일 */
+			, B.GNDR_FG_CD /* 성별 */
+			, B.EMAIL_ADDR /* 이메일주소 */
+			, B.CLPHN_NO /* 휴대전화번호 */
+			, B.HOME_TEL_NO /* 자택전화번호 */
+			, B.JOBP_TEL_NO /* 직장전화번호 */
 		FROM DW_THPT_MKTNG_AGRMT_MGMT_HST A
 		JOIN DW_THPT_MKTNG_AGRMT_HST B ON A.CUST_REG_DT = B.CUST_REG_DT AND A.REG_NO = B.REG_NO
 
@@ -158,13 +157,13 @@
 
 	<select id="selectCardList" parameterType="map" resultType="AutoMappedMap">
 		SELECT CARD_DTL_GRP_CD /* 카드코드 */
-		, '' AS CARD_DTL_GRP_NM /* 명칭 */
-		, CARD_DTL_GRP_CD AS CARD_DTL_GRP
-		, CARD_STS_CD /* 카드상태 */
-		, CARD_NO /* 카드번호 */
-		, ISS_DT /* 카드발급일자 */
-		, CARD_RREG_DT /* 카드등록일자 */
-		FROM INTGUSER.MART_CARD_MST A
+			, '' AS CARD_DTL_GRP_NM /* 명칭 */
+			, CARD_DTL_GRP_CD AS CARD_DTL_GRP
+			, CARD_STS_CD /* 카드상태 */
+			, CARD_NO /* 카드번호 */
+			, ISS_DT /* 카드발급일자 */
+			, CARD_RREG_DT /* 카드등록일자 */
+		FROM MART_CARD_MST A
 
 		<include refid="whereMbrId" />
 

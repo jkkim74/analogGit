@@ -4,30 +4,29 @@
 
 	<select id="selectAgreementInfo" parameterType="map" resultType="AutoMappedMap">
 		SELECT OCB_MKTNG_AGRMT_YN /* 마케팅동의여부 */
-		, MKTNG_FNL_AGRMT_SRC_ORG_CD /* 마케팅최종동의유입출처 */
-		, '' AS MKTNG_FNL_AGRMT_SRC_ORG_NM /* 마케팅최종동의유입출처명 */
-		, MKTNG_FNL_AGRMT_DT /* 마케팅최종동의유입일자 */
-		, CONCAT_WS(' / ', MKTNG_FNL_AGRMT_SRC_ORG_CD, MKTNG_FNL_AGRMT_DT) AS MKTNG_FNL_AGRMT
-		, ENTPR_MKTNG_AGRMT_YN /* 교차활용동의여부 */
-		, TM_RCV_AGRMT_YN /* TM수신동의여부 */
-		, EMAIL_RCV_AGRMT_YN /* EM수신동의여부 */
-		, ADVT_SMS_RCV_AGRMT_YN /* 광고성SMS수신동의여부 */
-		, IFRMT_SMS_RCV_AGRMT_YN /* 정보성SMS수신동의여부 */
-		, PUSH_RCV_AGRMT_YN /* App푸쉬동의여부 */
-		, PNT_USE_RSVNG_PUSH_AGRMT_YN /* 포인트사용적립푸쉬동의여부 */
-		, BNFT_MLF_PUSH_AGRMT_YN /* 혜택/모바일전단푸쉬동의여부 */
-		, TUSE_PUSH_AGRMT_YN /* 친구와함께쓰기푸쉬동의여부 */
-		, COIN_NOTI_PUSH_AGRMT_YN /*
-		동전푸쉬동의여부 */
-		, LOC_UTLZ_AGRMT_YN /* 위치정보활용동의여부 */
-		, BLTH_AGRMT_YN /* BLE동의여부 */
+			, MKTNG_FNL_AGRMT_SRC_ORG_CD /* 마케팅최종동의유입출처 */
+			, '' AS MKTNG_FNL_AGRMT_SRC_ORG_NM /* 마케팅최종동의유입출처명 */
+			, MKTNG_FNL_AGRMT_DT /* 마케팅최종동의유입일자 */
+			, CONCAT_WS(' / ', MKTNG_FNL_AGRMT_SRC_ORG_CD, MKTNG_FNL_AGRMT_DT) AS MKTNG_FNL_AGRMT
+			, ENTPR_MKTNG_AGRMT_YN /* 교차활용동의여부 */
+			, TM_RCV_AGRMT_YN /* TM수신동의여부 */
+			, EMAIL_RCV_AGRMT_YN /* EM수신동의여부 */
+			, ADVT_SMS_RCV_AGRMT_YN /* 광고성SMS수신동의여부 */
+			, IFRMT_SMS_RCV_AGRMT_YN /* 정보성SMS수신동의여부 */
+			, PUSH_RCV_AGRMT_YN /* App푸쉬동의여부 */
+			, PNT_USE_RSVNG_PUSH_AGRMT_YN /* 포인트사용적립푸쉬동의여부 */
+			, BNFT_MLF_PUSH_AGRMT_YN /* 혜택/모바일전단푸쉬동의여부 */
+			, TUSE_PUSH_AGRMT_YN /* 친구와함께쓰기푸쉬동의여부 */
+			, COIN_NOTI_PUSH_AGRMT_YN /* 동전푸쉬동의여부 */
+			, LOC_UTLZ_AGRMT_YN /* 위치정보활용동의여부 */
+			, BLTH_AGRMT_YN /* BLE동의여부 */
 		FROM OCB.MART_TOT_AGRMT_MGMT_MST
 		WHERE MBR_ID = #{mbrId}
 	</select>
 
 	<select id="selectJoinInfo" parameterType="map" resultType="AutoMappedMap">
 		SELECT MAX(SUBSTRING(A.REG_DTTM,1,8)) AS OCBAPP_FNL_ENTR_DT /* OCB app 최종 가입 일자 */
-		, MAX(SUBSTRING(B.LOG_DTTM,1,8)) As OCBAPP_FNL_LGN_DT /* OCB app 최종 로그인 일자 */
+			, MAX(SUBSTRING(B.LOG_DTTM,1,8)) As OCBAPP_FNL_LGN_DT /* OCB app 최종 로그인 일자 */
 		FROM OCB.DW_TCH_USR_INFO A
 		LEFT OUTER JOIN OCB.DW_USR_LGN_SESS_INFO B ON A.MBR_ID = B.MBR_ID
 		WHERE A.MBR_ID = #{mbrId}
@@ -35,76 +34,76 @@
 
 	<select id="selectTransactionHistory" parameterType="map" resultType="AutoMappedMap">
 		SELECT A.RCV_DT /* 접수일시 */
-		, A.RCV_SEQ /* 접수번호 */
-		, CONCAT(A.APPR_DT,' ',A.APPR_TM) AS APPR_DTTM /* 승인일시 */
-		, A.REP_APPR_NO /* 대표승인번호 */
-		, A.APPR_NO /* 승인번호 */
-		, CONCAT(A.SALE_DT,' ',A.SALE_TM) AS SALE_DTTM /* 매출일시 */
-		, A.MBR_ID /* 회원ID */
-		, A.CARD_DTL_GRP_CD /* 카드상세그룹코드 */
-		, '' AS CARD_DTL_GRP_NM /* 카드명 */
-		, A.CARD_DTL_GRP_CD AS CARD_DTL_GRP
-		, FUNCS.SECUAESDECRYPT(A.CARD_NO) AS CARD_NO /* 카드번호 */
-		, A.ALCMPN_CD /* 제휴사코드 */
-		, B.ALCMPN_NM /* 제휴사명 */
-		, CONCAT(' / ', A.ALCMPN_CD, B.ALCMPN_NM) AS ALCMPN
-		, A.MCNT_CD /* 가맹점코드 */
-		, C.MCNT_NM /* 가맹점명 */
-		, CONCAT(' / ', A.MCNT_CD, C.MCNT_NM) AS MCNT
-		, A.STLMT_MCNT_CD /* 정산가맹점코드 */
-		, D.MCNT_NM /* 정산가맹점명 */
-		, CONCAT(' / ', A.STLMT_MCNT_CD, D.MCNT_NM) AS STLMT_MCNT
-		, A.PNT_KND_CD /* 포인트종류코드 */
-		, '' AS PNT_KND_NM /* 포인트종류명 */
-		, A.PNT_KND_CD AS PNT_KND
-		, A.SLIP_CD /* 전표코드 */
-		, '' AS SLIP_NM /* 전표명 */
-		, A.SLIP_CD AS SLIP
-		, A.SALE_AMT /* 매출금액 */
-		, A.OCC_PNT + AVL_PNT AS PNT /* 포인트 */
-		, A.CS_MBR_CMMSN /* 제휴사연회비 */
-		, A.CMMSN /* 수수료 */
-		, A.PMNT_WAY_CD /* 지불수단코드 */
-		, '' AS PMNT_WAY_NM /* 지불수단명 */
-		, A.PMNT_WAY_CD AS PMNT_WAY
-		, A.ORG_CD /* 기관코드 */
-		, '' AS ORG_NM /* 기관코드명 */
-		, A.ORG_CD AS ORG
-		, A.OIL_PRDCT_SGRP_CD /* 유종코드 */
-		, '' AS OIL_PRDCT_SGRP_NM /* 유종명 */
-		, A.OIL_PRDCT_SGRP_CD AS OIL_PRDCT_SGRP
-		, CASE WHEN LENGTH(TRIM(A.STLMT_MCNT_CD)) &lt;&gt; 5 OR A.STLMT_MCNT_CD IN ('BOHUM','HOMEP','PINIX') THEN 0 ELSE SALE_QTY END AS SALE_QTY /* 주유량 */
-		, CPN_PRD_CD /* 쿠폰코드 */
-		, '' AS CPN_PRD_NM /* 쿠폰명 */
-		, CPN_PRD_CD AS CPN_PRD
-		, CASE WHEN LENGTH(TRIM(A.STLMT_MCNT_CD)) &lt;&gt; 5 OR A.STLMT_MCNT_CD IN ('BOHUM','HOMEP','PINIX') THEN '01' ELSE '02' END AS TRX_TYPE /* 01일경우 일반 02일경우 주유 */
+			, A.RCV_SEQ /* 접수번호 */
+			, CONCAT(A.APPR_DT,' ',A.APPR_TM) AS APPR_DTTM /* 승인일시 */
+			, A.REP_APPR_NO /* 대표승인번호 */
+			, A.APPR_NO /* 승인번호 */
+			, CONCAT(A.SALE_DT,' ',A.SALE_TM) AS SALE_DTTM /* 매출일시 */
+			, A.MBR_ID /* 회원ID */
+			, A.CARD_DTL_GRP_CD /* 카드상세그룹코드 */
+			, '' AS CARD_DTL_GRP_NM /* 카드명 */
+			, A.CARD_DTL_GRP_CD AS CARD_DTL_GRP
+			, FUNCS.SECUAESDECRYPT(A.CARD_NO) AS CARD_NO /* 카드번호 */
+			, A.ALCMPN_CD /* 제휴사코드 */
+			, B.ALCMPN_NM /* 제휴사명 */
+			, CONCAT(' / ', A.ALCMPN_CD, B.ALCMPN_NM) AS ALCMPN
+			, A.MCNT_CD /* 가맹점코드 */
+			, C.MCNT_NM /* 가맹점명 */
+			, CONCAT(' / ', A.MCNT_CD, C.MCNT_NM) AS MCNT
+			, A.STLMT_MCNT_CD /* 정산가맹점코드 */
+			, D.MCNT_NM /* 정산가맹점명 */
+			, CONCAT(' / ', A.STLMT_MCNT_CD, D.MCNT_NM) AS STLMT_MCNT
+			, A.PNT_KND_CD /* 포인트종류코드 */
+			, '' AS PNT_KND_NM /* 포인트종류명 */
+			, A.PNT_KND_CD AS PNT_KND
+			, A.SLIP_CD /* 전표코드 */
+			, '' AS SLIP_NM /* 전표명 */
+			, A.SLIP_CD AS SLIP
+			, A.SALE_AMT /* 매출금액 */
+			, A.OCC_PNT + AVL_PNT AS PNT /* 포인트 */
+			, A.CS_MBR_CMMSN /* 제휴사연회비 */
+			, A.CMMSN /* 수수료 */
+			, A.PMNT_WAY_CD /* 지불수단코드 */
+			, '' AS PMNT_WAY_NM /* 지불수단명 */
+			, A.PMNT_WAY_CD AS PMNT_WAY
+			, A.ORG_CD /* 기관코드 */
+			, '' AS ORG_NM /* 기관코드명 */
+			, A.ORG_CD AS ORG
+			, A.OIL_PRDCT_SGRP_CD /* 유종코드 */
+			, '' AS OIL_PRDCT_SGRP_NM /* 유종명 */
+			, A.OIL_PRDCT_SGRP_CD AS OIL_PRDCT_SGRP
+			, CASE WHEN LENGTH(TRIM(A.STLMT_MCNT_CD)) &lt;&gt; 5 OR A.STLMT_MCNT_CD IN ('BOHUM','HOMEP','PINIX') THEN 0 ELSE SALE_QTY END AS SALE_QTY /* 주유량 */
+			, CPN_PRD_CD /* 쿠폰코드 */
+			, '' AS CPN_PRD_NM /* 쿠폰명 */
+			, CPN_PRD_CD AS CPN_PRD
+			, CASE WHEN LENGTH(TRIM(A.STLMT_MCNT_CD)) &lt;&gt; 5 OR A.STLMT_MCNT_CD IN ('BOHUM','HOMEP','PINIX') THEN '01' ELSE '02' END AS TRX_TYPE /* 01일경우 일반 02일경우 주유 */
 		FROM (
-		SELECT RCV_DT ,RCV_SEQ ,APPR_DT ,APPR_TM ,REP_APPR_NO ,APPR_NO
-		,SALE_DT ,SALE_TM ,MBR_ID ,CARD_DTL_GRP_CD ,CARD_NO
-		,ALCMPN_CD ,MCNT_CD ,STLMT_MCNT_CD ,PNT_KND_CD
-		,SLIP_CD ,SALE_AMT ,OCC_PNT,AVL_PNT ,CS_MBR_CMMSN
-		,CMMSN ,PMNT_WAY_CD ,ORG_CD ,OIL_PRDCT_SGRP_CD ,SALE_QTY ,CPN_PRD_CD
-		FROM OCB.DW_SALE_CTNT
-		
-		UNION ALL
-		
-		SELECT RCV_DT ,RCV_SEQ ,APPR_DT ,APPR_TM ,REP_APPR_NO ,APPR_NO
-		,SALE_DT ,SALE_TM ,MBR_ID ,CARD_DTL_GRP_CD ,CARD_NO
-		,ALCMPN_CD ,MCNT_CD ,STLMT_MCNT_CD ,PNT_KND_CD
-		,SLIP_CD
-		,SALE_AMT
-		,OCC_PNT,AVL_PNT ,CS_MBR_CMMSN
-		,CMMSN ,PMNT_WAY_CD ,ORG_CD ,OIL_PRDCT_SGRP_CD ,SALE_QTY ,CPN_PRD_CD
-		FROM OCB.DW_MTH07_PREV_SALE_CTNT
-		
-		UNION ALL
-		
-		SELECT RCV_DT ,RCV_SEQ ,APPR_DT ,APPR_TM ,REP_APPR_NO ,APPR_NO
-		,SALE_DT ,SALE_TM ,MBR_ID ,CARD_DTL_GRP_CD ,CARD_NO
-		,ALCMPN_CD ,MCNT_CD ,STLMT_MCNT_CD ,PNT_KND_CD
-		,SLIP_CD ,SALE_AMT ,OCC_PNT,AVL_PNT ,CS_MBR_CMMSN
-		,CMMSN ,PMNT_WAY_CD ,ORG_CD ,OIL_PRDCT_SGRP_CD ,SALE_QTY ,CPN_PRD_CD
-		FROM OCB.DW_MTH37_PREV_SALE_CTNT
+			SELECT RCV_DT ,RCV_SEQ ,APPR_DT ,APPR_TM ,REP_APPR_NO ,APPR_NO
+				,SALE_DT ,SALE_TM ,MBR_ID ,CARD_DTL_GRP_CD ,CARD_NO
+				,ALCMPN_CD ,MCNT_CD ,STLMT_MCNT_CD ,PNT_KND_CD
+				,SLIP_CD ,SALE_AMT ,OCC_PNT,AVL_PNT ,CS_MBR_CMMSN
+				,CMMSN ,PMNT_WAY_CD ,ORG_CD ,OIL_PRDCT_SGRP_CD ,SALE_QTY ,CPN_PRD_CD
+			FROM OCB.DW_SALE_CTNT
+			
+			UNION ALL
+			
+			SELECT RCV_DT ,RCV_SEQ ,APPR_DT ,APPR_TM ,REP_APPR_NO ,APPR_NO
+				,SALE_DT ,SALE_TM ,MBR_ID ,CARD_DTL_GRP_CD ,CARD_NO
+				,ALCMPN_CD ,MCNT_CD ,STLMT_MCNT_CD ,PNT_KND_CD
+				,SLIP_CD
+				,SALE_AMT
+				,OCC_PNT,AVL_PNT ,CS_MBR_CMMSN
+				,CMMSN ,PMNT_WAY_CD ,ORG_CD ,OIL_PRDCT_SGRP_CD ,SALE_QTY ,CPN_PRD_CD
+			FROM OCB.DW_MTH07_PREV_SALE_CTNT
+			
+			UNION ALL
+			
+			SELECT RCV_DT ,RCV_SEQ ,APPR_DT ,APPR_TM ,REP_APPR_NO ,APPR_NO
+				,SALE_DT ,SALE_TM ,MBR_ID ,CARD_DTL_GRP_CD ,CARD_NO
+				,ALCMPN_CD ,MCNT_CD ,STLMT_MCNT_CD ,PNT_KND_CD
+				,SLIP_CD ,SALE_AMT ,OCC_PNT,AVL_PNT ,CS_MBR_CMMSN
+				,CMMSN ,PMNT_WAY_CD ,ORG_CD ,OIL_PRDCT_SGRP_CD ,SALE_QTY ,CPN_PRD_CD
+			FROM OCB.DW_MTH37_PREV_SALE_CTNT
 		) A
 		LEFT OUTER JOIN OCB.DW_ALCMPN_MST B ON A.ALCMPN_CD = B.ALCMPN_CD
 		LEFT OUTER JOIN OCB.DW_MCNT_MST C ON A.MCNT_CD = C.MCNT_CD
@@ -114,9 +113,9 @@
 
 	<select id="selectEmailSendHistory" parameterType="map" resultType="AutoMappedMap">
 		SELECT SND_DT
-		, EMAIL_TITL
-		, LCPT_EMAIL_SND_RSLT_CD
-		, LCPT_EMAIL_SND_RSLT_CD AS LCPT_EMAIL_SND_RSLT
+			, EMAIL_TITL
+			, LCPT_EMAIL_SND_RSLT_CD
+			, LCPT_EMAIL_SND_RSLT_CD AS LCPT_EMAIL_SND_RSLT
 		FROM OCB.DW_EMAIL_SND_RSLT_CTNT A
 		JOIN OCB.DW_EMAIL_SND_CTNT B ON A.SYS_SRC_CD = B.SYS_SRC_CD AND A.MSG_ID = B.MSG_ID	AND A.SUB_MSG_ID = B.SUB_MSG_ID	AND A.MSG_GRP_ID = B.MSG_GRP_ID
 		WHERE A.SRC_IDNTF2_ID = #{mbrId}
@@ -124,9 +123,9 @@
 
 	<select id="selectAppPushHistory" parameterType="map" resultType="AutoMappedMap">
 		SELECT SND_DTTM
-		, MSG_TITL
-		, PUSH_SND_RSLT_CD
-		, PUSH_SND_RSLT_CD AS PUSH_SND_RSLT
+			, MSG_TITL
+			, PUSH_SND_RSLT_CD
+			, PUSH_SND_RSLT_CD AS PUSH_SND_RSLT
 		FROM OCB.DW_PUSH_SND_LOG_CTNT
 		WHERE MBR_ID = #{mbrId}
 	</select>

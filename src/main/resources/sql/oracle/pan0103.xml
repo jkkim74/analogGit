@@ -6,90 +6,86 @@
 		<choose>
 			<when test="uploadProgress.columnName == 'CI_NO'">
 				SELECT A.MBR_ID /* MBR_ID */
-				, A.CARD_NO /* 카드번호 */
-				, A.CI_NO /* CI */
-				, A.MBR_KOR_NM /* 성명 */
-				, A.LEGL_BTHDT /* 생년월일 */
-				, A.LEGL_GNDR_FG_CD /* 성별 */
-				, MAX(CASE WHEN A.CARD_NO = B.CARD_NO THEN 'Y' ELSE 'N' END) AS CARD_NO_YN /* OCB카드여부 */
-				, MAX(CASE WHEN A.CI_NO = B.CI_NO THEN 'Y' ELSE 'N' END) AS CI_NO_YN /* CI일치여부 */
-				, MAX(CASE WHEN A.MBR_KOR_NM = B.MBR_KOR_NM THEN 'Y' ELSE 'N' END) AS MBR_KOR_NM_YN /* 성명일치여부 */
-				, MAX(CASE WHEN A.LEGL_BTHDT = B.LEGL_BTHDT THEN 'Y' ELSE 'N' END) AS LEGL_BTHDT_YN /* 생년월일 일치 여부 */
-				, MAX(CASE WHEN A.LEGL_GNDR_FG_CD = B.LEGL_GNDR_FG_CD THEN 'Y' ELSE 'N' END) AS LEGL_GNDR_FG_YN /* 성별일치여부 */
-				, CASE WHEN MAX(CASE WHEN A.CARD_NO = B.CARD_NO THEN 'Y' ELSE 'N' END) = 'N'
-				OR
-				MAX(CASE WHEN A.CI_NO = B.CI_NO THEN 'Y' ELSE 'N' END) = 'N'
-				OR MAX(CASE WHEN A.MBR_KOR_NM = B.MBR_KOR_NM THEN 'Y' ELSE 'N' END) = 'N'
-				OR MAX(CASE WHEN A.LEGL_BTHDT = B.LEGL_BTHDT THEN 'Y' ELSE 'N' END) = 'N'
-				OR MAX(CASE WHEN A.LEGL_GNDR_FG_CD = B.LEGL_GNDR_FG_CD THEN 'Y' ELSE 'N' END) = 'N' THEN 'Y' ELSE 'N' END AS ALL_YN /* 불일치항목포함여부 */
+					, A.CARD_NO /* 카드번호 */
+					, A.CI_NO /* CI */
+					, A.MBR_KOR_NM /* 성명 */
+					, A.LEGL_BTHDT /* 생년월일 */
+					, A.LEGL_GNDR_FG_CD /* 성별 */
+					, MAX(CASE WHEN A.CARD_NO = B.CARD_NO THEN 'Y' ELSE 'N' END) AS CARD_NO_YN /* OCB카드여부 */
+					, MAX(CASE WHEN A.CI_NO = B.CI_NO THEN 'Y' ELSE 'N' END) AS CI_NO_YN /* CI일치여부 */
+					, MAX(CASE WHEN A.MBR_KOR_NM = B.MBR_KOR_NM THEN 'Y' ELSE 'N' END) AS MBR_KOR_NM_YN /* 성명일치여부 */
+					, MAX(CASE WHEN A.LEGL_BTHDT = B.LEGL_BTHDT THEN 'Y' ELSE 'N' END) AS LEGL_BTHDT_YN /* 생년월일 일치 여부 */
+					, MAX(CASE WHEN A.LEGL_GNDR_FG_CD = B.LEGL_GNDR_FG_CD THEN 'Y' ELSE 'N' END) AS LEGL_GNDR_FG_YN /* 성별일치여부 */
+					, CASE WHEN MAX(CASE WHEN A.CARD_NO = B.CARD_NO THEN 'Y' ELSE 'N' END) = 'N'
+						OR MAX(CASE WHEN A.CI_NO = B.CI_NO THEN 'Y' ELSE 'N' END) = 'N'
+						OR MAX(CASE WHEN A.MBR_KOR_NM = B.MBR_KOR_NM THEN 'Y' ELSE 'N' END) = 'N'
+						OR MAX(CASE WHEN A.LEGL_BTHDT = B.LEGL_BTHDT THEN 'Y' ELSE 'N' END) = 'N'
+						OR MAX(CASE WHEN A.LEGL_GNDR_FG_CD = B.LEGL_GNDR_FG_CD THEN 'Y' ELSE 'N' END) = 'N' THEN 'Y' ELSE 'N' END AS ALL_YN /* 불일치항목포함여부 */
 				FROM (
-				SELECT COLUMN1 AS MBR_ID
-				, COLUMN2 AS CARD_NO
-				, COLUMN3 AS CI_NO
-				, COLUMN4 AS MBR_KOR_NM
-				, COLUMN5 AS LEGL_BTHDT
-				, COLUMN6 AS LEGL_GNDR_FG_CD
-				FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
+					SELECT COLUMN1 AS MBR_ID
+						, COLUMN2 AS CARD_NO
+						, COLUMN3 AS CI_NO
+						, COLUMN4 AS MBR_KOR_NM
+						, COLUMN5 AS LEGL_BTHDT
+						, COLUMN6 AS LEGL_GNDR_FG_CD
+					FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
 				) A
-				LEFT OUTER JOIN
-				MART_CARD_MST B ON A.CI_NO = B.CI_NO
+				LEFT OUTER JOIN MART_CARD_MST B ON A.CI_NO = B.CI_NO
 				GROUP BY A.MBR_ID, A.CARD_NO, A.CI_NO, A.MBR_KOR_NM, A.LEGL_BTHDT, A.LEGL_GNDR_FG_CD
 			</when>
 			<when test="uploadProgress.columnName == 'CARD_NO'">
 				SELECT A.MBR_ID /* MBR_ID */
-				, A.CARD_NO /* 카드번호 */
-				, A.CI_NO /* CI */
-				, A.MBR_KOR_NM /* 성명 */
-				, A.LEGL_BTHDT /* 생년월일 */
-				, A.LEGL_GNDR_FG_CD /* 성별 */
-				, CASE WHEN B.CARD_NO IS NULL THEN 'N' ELSE 'Y' END AS CARD_NO_YN /* OCB카드여부 */
-				, CASE WHEN A.CI_NO = B.CI_NO THEN 'Y' ELSE 'N' END AS CI_NO_YN /* CI일치여부 */
-				, CASE WHEN A.MBR_KOR_NM = B.MBR_KOR_NM THEN 'Y' ELSE 'N' END AS MBR_KOR_NM_YN /* 성명일치여부 */
-				, CASE WHEN A.LEGL_BTHDT = B.LEGL_BTHDT THEN 'Y' ELSE 'N' END AS LEGL_BTHDT_YN /* 생년월일 일치 여부 */
-				, CASE WHEN A.LEGL_GNDR_FG_CD = B.LEGL_GNDR_FG_CD THEN 'Y' ELSE 'N' END AS LEGL_GNDR_FG_YN /* 성별일치여부 */
-				, CASE WHEN A.CI_NO &lt;&gt; B.CI_NO OR A.MBR_KOR_NM &lt;&gt; B.MBR_KOR_NM
-				OR A.LEGL_BTHDT &lt;&gt; B.LEGL_BTHDT
-				OR A.LEGL_GNDR_FG_CD &lt;&gt; B.LEGL_GNDR_FG_CD THEN 'Y' ELSE 'N'END AS ALL_YN /* 불일치항목포함여부 */
+					, A.CARD_NO /* 카드번호 */
+					, A.CI_NO /* CI */
+					, A.MBR_KOR_NM /* 성명 */
+					, A.LEGL_BTHDT /* 생년월일 */
+					, A.LEGL_GNDR_FG_CD /* 성별 */
+					, CASE WHEN B.CARD_NO IS NULL THEN 'N' ELSE 'Y' END AS CARD_NO_YN /* OCB카드여부 */
+					, CASE WHEN A.CI_NO = B.CI_NO THEN 'Y' ELSE 'N' END AS CI_NO_YN /* CI일치여부 */
+					, CASE WHEN A.MBR_KOR_NM = B.MBR_KOR_NM THEN 'Y' ELSE 'N' END AS MBR_KOR_NM_YN /* 성명일치여부 */
+					, CASE WHEN A.LEGL_BTHDT = B.LEGL_BTHDT THEN 'Y' ELSE 'N' END AS LEGL_BTHDT_YN /* 생년월일 일치 여부 */
+					, CASE WHEN A.LEGL_GNDR_FG_CD = B.LEGL_GNDR_FG_CD THEN 'Y' ELSE 'N' END AS LEGL_GNDR_FG_YN /* 성별일치여부 */
+					, CASE WHEN A.CI_NO &lt;&gt; B.CI_NO OR A.MBR_KOR_NM &lt;&gt; B.MBR_KOR_NM
+						OR A.LEGL_BTHDT &lt;&gt; B.LEGL_BTHDT
+						OR A.LEGL_GNDR_FG_CD &lt;&gt; B.LEGL_GNDR_FG_CD THEN 'Y' ELSE 'N'END AS ALL_YN /* 불일치항목포함여부 */
 				FROM (
-				SELECT COLUMN1 AS MBR_ID
-				, COLUMN2 AS CARD_NO
-				, COLUMN3 AS CI_NO
-				, COLUMN4 AS MBR_KOR_NM
-				, COLUMN5 AS LEGL_BTHDT
-				, COLUMN6 AS LEGL_GNDR_FG_CD
-				FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
+					SELECT COLUMN1 AS MBR_ID
+						, COLUMN2 AS CARD_NO
+						, COLUMN3 AS CI_NO
+						, COLUMN4 AS MBR_KOR_NM
+						, COLUMN5 AS LEGL_BTHDT
+						, COLUMN6 AS LEGL_GNDR_FG_CD
+					FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.CARD_NO = B.CARD_NO
 			</when>
 			<otherwise>
 				SELECT A.MBR_ID /* MBR_ID */
-				, A.CARD_NO /* 카드번호 */
-				, A.CI_NO /* CI */
-				, A.MBR_KOR_NM /* 성명 */
-				, A.LEGL_BTHDT /* 생년월일 */
-				, A.LEGL_GNDR_FG_CD /* 성별 */
-				, MAX(CASE WHEN A.CARD_NO = B.CARD_NO THEN 'Y' ELSE 'N' END) AS CARD_NO_YN /* OCB카드여부 */
-				, MAX(CASE WHEN A.CI_NO = B.CI_NO THEN 'Y' ELSE 'N' END) AS CI_NO_YN /* CI일치여부 */
-				, MAX(CASE WHEN A.MBR_KOR_NM = B.MBR_KOR_NM THEN 'Y' ELSE 'N' END) AS MBR_KOR_NM_YN /* 성명일치여부 */
-				, MAX(CASE WHEN A.LEGL_BTHDT = B.LEGL_BTHDT THEN 'Y' ELSE 'N' END) AS LEGL_BTHDT_YN /* 생년월일 일치 여부 */
-				, MAX(CASE WHEN A.LEGL_GNDR_FG_CD = B.LEGL_GNDR_FG_CD THEN 'Y' ELSE 'N' END) AS LEGL_GNDR_FG_YN /* 성별일치여부 */
-				, CASE WHEN MAX(CASE WHEN A.CARD_NO = B.CARD_NO THEN 'Y' ELSE 'N' END) = 'N'
-				OR MAX(CASE
-				WHEN A.CI_NO = B.CI_NO THEN 'Y' ELSE 'N' END) = 'N'
-				OR MAX(CASE WHEN A.MBR_KOR_NM = B.MBR_KOR_NM THEN 'Y' ELSE 'N' END) = 'N'
-				OR MAX(CASE WHEN A.LEGL_BTHDT = B.LEGL_BTHDT THEN 'Y' ELSE 'N' END) = 'N'
-				OR MAX(CASE WHEN A.LEGL_GNDR_FG_CD = B.LEGL_GNDR_FG_CD THEN 'Y' ELSE 'N' END) = 'N' THEN 'Y' ELSE 'N' END AS ALL_YN /* 불일치항목포함여부 */
+					, A.CARD_NO /* 카드번호 */
+					, A.CI_NO /* CI */
+					, A.MBR_KOR_NM /* 성명 */
+					, A.LEGL_BTHDT /* 생년월일 */
+					, A.LEGL_GNDR_FG_CD /* 성별 */
+					, MAX(CASE WHEN A.CARD_NO = B.CARD_NO THEN 'Y' ELSE 'N' END) AS CARD_NO_YN /* OCB카드여부 */
+					, MAX(CASE WHEN A.CI_NO = B.CI_NO THEN 'Y' ELSE 'N' END) AS CI_NO_YN /* CI일치여부 */
+					, MAX(CASE WHEN A.MBR_KOR_NM = B.MBR_KOR_NM THEN 'Y' ELSE 'N' END) AS MBR_KOR_NM_YN /* 성명일치여부 */
+					, MAX(CASE WHEN A.LEGL_BTHDT = B.LEGL_BTHDT THEN 'Y' ELSE 'N' END) AS LEGL_BTHDT_YN /* 생년월일 일치 여부 */
+					, MAX(CASE WHEN A.LEGL_GNDR_FG_CD = B.LEGL_GNDR_FG_CD THEN 'Y' ELSE 'N' END) AS LEGL_GNDR_FG_YN /* 성별일치여부 */
+					, CASE WHEN MAX(CASE WHEN A.CARD_NO = B.CARD_NO THEN 'Y' ELSE 'N' END) = 'N'
+						OR MAX(CASE WHEN A.CI_NO = B.CI_NO THEN 'Y' ELSE 'N' END) = 'N'
+						OR MAX(CASE WHEN A.MBR_KOR_NM = B.MBR_KOR_NM THEN 'Y' ELSE 'N' END) = 'N'
+						OR MAX(CASE WHEN A.LEGL_BTHDT = B.LEGL_BTHDT THEN 'Y' ELSE 'N' END) = 'N'
+						OR MAX(CASE WHEN A.LEGL_GNDR_FG_CD = B.LEGL_GNDR_FG_CD THEN 'Y' ELSE 'N' END) = 'N' THEN 'Y' ELSE 'N' END AS ALL_YN /* 불일치항목포함여부 */
 				FROM (
-				SELECT COLUMN1 AS MBR_ID
-				, COLUMN2 AS CARD_NO
-				, COLUMN3 AS CI_NO
-				, COLUMN4 AS MBR_KOR_NM
-				, COLUMN5 AS LEGL_BTHDT
-				, COLUMN6 AS LEGL_GNDR_FG_CD
-				FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
+					SELECT COLUMN1 AS MBR_ID
+						, COLUMN2 AS CARD_NO
+						, COLUMN3 AS CI_NO
+						, COLUMN4 AS MBR_KOR_NM
+						, COLUMN5 AS LEGL_BTHDT
+						, COLUMN6 AS LEGL_GNDR_FG_CD
+					FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
 				) A
-				LEFT OUTER JOIN
-				MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
+				LEFT OUTER JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
 				GROUP BY A.MBR_ID, A.CARD_NO, A.CI_NO, A.MBR_KOR_NM, A.LEGL_BTHDT, A.LEGL_GNDR_FG_CD
 			</otherwise>
 		</choose>

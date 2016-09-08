@@ -13,17 +13,17 @@
 		<choose>
 			<when test="pageId != null and pageId == 'pan0103'">
 				CREATE TABLE TMP_${pageId}_${username} (
-				COLUMN1 VARCHAR2(4000),
-				COLUMN2 VARCHAR2(4000),
-				COLUMN3 VARCHAR2(4000),
-				COLUMN4 VARCHAR2(4000),
-				COLUMN5 VARCHAR2(4000),
-				COLUMN6 VARCHAR2(4000)
+					COLUMN1 VARCHAR2(4000),
+					COLUMN2 VARCHAR2(4000),
+					COLUMN3 VARCHAR2(4000),
+					COLUMN4 VARCHAR2(4000),
+					COLUMN5 VARCHAR2(4000),
+					COLUMN6 VARCHAR2(4000)
 				)
 			</when>
 			<otherwise>
 				CREATE TABLE TMP_${pageId}_${username} (
-				COLUMN1 VARCHAR2(4000)
+					COLUMN1 VARCHAR2(4000)
 				)
 			</otherwise>
 		</choose>
@@ -40,17 +40,17 @@
 		<choose>
 			<when test="pageId != null and pageId == 'pan0103'">
 				CREATE TABLE IF NOT EXISTS TMP_${pageId}_${username} (
-				COLUMN1 VARCHAR2(4000),
-				COLUMN2 VARCHAR2(4000),
-				COLUMN3 VARCHAR2(4000),
-				COLUMN4 VARCHAR2(4000),
-				COLUMN5 VARCHAR2(4000),
-				COLUMN6 VARCHAR2(4000)
+					COLUMN1 VARCHAR2(4000),
+					COLUMN2 VARCHAR2(4000),
+					COLUMN3 VARCHAR2(4000),
+					COLUMN4 VARCHAR2(4000),
+					COLUMN5 VARCHAR2(4000),
+					COLUMN6 VARCHAR2(4000)
 				)
 			</when>
 			<otherwise>
 				CREATE TABLE IF NOT EXISTS TMP_${pageId}_${username} (
-				COLUMN1 VARCHAR2(4000)
+					COLUMN1 VARCHAR2(4000)
 				)
 			</otherwise>
 		</choose>
@@ -63,16 +63,14 @@
 	<select id="selectUploadedPreview" parameterType="map" resultType="AutoMappedMap">
 		SELECT *
 		FROM (
-		SELECT IN_SQ.*
-		, ROWNUM AS RNUM
-		FROM ( SELECT * FROM TMP_${pageId}_${username} ) IN_SQ
-		WHERE ROWNUM &lt;= 100
+			SELECT IN_SQ.*, ROWNUM AS RNUM
+			FROM ( SELECT * FROM TMP_${pageId}_${username} ) IN_SQ
+			WHERE ROWNUM &lt;= 100
 		)
 		WHERE RNUM &gt; 0
 	</select>
 	<select id="selectUploadedPreview" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
-		SELECT * FROM TMP_${pageId}_${username}
-		LIMIT 0, 100
+		SELECT * FROM TMP_${pageId}_${username} LIMIT 0, 100
 	</select>
 
 	<select id="countUploadedPreview" parameterType="map" resultType="int">

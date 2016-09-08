@@ -4,9 +4,9 @@
 
 	<select id="selectUploadProgress" parameterType="map" resultType="com.skplanet.pandora.model.UploadProgress">
 		SELECT PAGE_ID
-		, USERNAME
-		, COLUMN_NAME
-		, UPLOAD_STATUS
+			, USERNAME
+			, COLUMN_NAME
+			, UPLOAD_STATUS
 		FROM UPLOAD_PROGRESS
 		WHERE PAGE_ID = #{pageId} AND USERNAME = #{username}
 	</select>
