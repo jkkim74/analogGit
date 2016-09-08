@@ -23,17 +23,27 @@
 	<select id="selectMembers" parameterType="map" resultType="AutoMappedMap">
 		<include refid="pagingHead" />
 
-		<include refid="selectMembersInclude" />
+		<if test="uploadProgress.pageId == 'pan0101'">
+			<include refid="selectMembers_pan0101" />
+		</if>
+		<if test="uploadProgress.pageId == 'pan0103'">
+			<include refid="selectMembers_pan0103" />
+		</if>
 
 		<include refid="pagingFoot" />
 	</select>
 	<select id="selectMembers" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
-		<include refid="selectMembersInclude" />
+		<if test="uploadProgress.pageId == 'pan0101'">
+			<include refid="selectMembers_pan0101" />
+		</if>
+		<if test="uploadProgress.pageId == 'pan0103'">
+			<include refid="selectMembers_pan0103" />
+		</if>
 
 		<include refid="pagingFoot" />
 	</select>
 	
-	<sql id="selectMembersInclude">
+	<sql id="selectMembers_pan0101">
 		<choose>
 			<when test="uploadProgress.columnName == 'OCBCOM_LGN_ID'">
 				SELECT A.MBR_ID
@@ -72,21 +82,15 @@
 			</otherwise>
 		</choose>
 	</sql>
-	<sql id="selectMembersInclude" databaseId="hsql">
-		SELECT MBR_ID
-			 , OCBCOM_LGN_ID
-			 , CI_NO
-			 , MBR_KOR_NM
-			 , CARD_NO
-			 , SYW_MBR_ID
-			 , EVS_MBR_ID
-		FROM MBRT_MBR_ID_MST
-		WHERE ${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
-	</sql>
 	
 	<select id="countMembers" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM (
-			<include refid="selectMembersInclude" />
+			<if test="uploadProgress.pageId == 'pan0101'">
+				<include refid="selectMembers_pan0101" />
+			</if>
+			<if test="uploadProgress.pageId == 'pan0103'">
+				<include refid="selectMembers_pan0103" />
+			</if>
 		)
 	</select>
 

@@ -36,14 +36,14 @@ App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
       { field: 'cardNo', displayName: '카드번호', cellTooltip: true, headerTooltip: true },
       { field: 'ciNo', displayName: 'CI번호', cellTooltip: true, headerTooltip: true },
       { field: 'mbrKorNm', displayName: '성명', cellTooltip: true, headerTooltip: true },
-      { field: 'mbrKorNm', displayName: '생년월일', cellTooltip: true, headerTooltip: true },
-      { field: 'mbrKorNm', displayName: '성별', cellTooltip: true, headerTooltip: true },
-      { field: 'ocbcomLgnId', displayName: 'OCB 카드 여부', cellTooltip: true, headerTooltip: true },
-      { field: 'ocbcomLgnId', displayName: 'CI 일치 여부', cellTooltip: true, headerTooltip: true },
-      { field: 'ocbcomLgnId', displayName: '성명 일치 여부', cellTooltip: true, headerTooltip: true },
-      { field: 'ocbcomLgnId', displayName: '생년월일 일치 여부', cellTooltip: true, headerTooltip: true },
-      { field: 'ocbcomLgnId', displayName: '성별 일치 여부', cellTooltip: true, headerTooltip: true },
-      { field: 'ocbcomLgnId', displayName: '불일치 항목 포함 여부', cellTooltip: true, headerTooltip: true }
+      { field: 'leglBthdt', displayName: '생년월일', cellTooltip: true, headerTooltip: true },
+      { field: 'leglGndrFgCd', displayName: '성별', cellTooltip: true, headerTooltip: true },
+      { field: 'cardNoYn', displayName: 'OCB 카드 여부', cellTooltip: true, headerTooltip: true },
+      { field: 'ciNoYn', displayName: 'CI 일치 여부', cellTooltip: true, headerTooltip: true },
+      { field: 'mbrKorNmYn', displayName: '성명 일치 여부', cellTooltip: true, headerTooltip: true },
+      { field: 'leglBthdtYn', displayName: '생년월일 일치 여부', cellTooltip: true, headerTooltip: true },
+      { field: 'leglGndrFgYn', displayName: '성별 일치 여부', cellTooltip: true, headerTooltip: true },
+      { field: 'allYn', displayName: '불일치 항목 포함 여부', cellTooltip: true, headerTooltip: true }
     ],
     onRegisterApi: function (gridApi) {
       $scope.gridApi = gridApi;
