@@ -32,8 +32,7 @@
 				FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
 				) A
 				LEFT OUTER JOIN
-				INTGUSER.MART_CARD_MST B
-				ON A.CI_NO = B.CI_NO
+				MART_CARD_MST B ON A.CI_NO = B.CI_NO
 				GROUP BY A.MBR_ID, A.CARD_NO, A.CI_NO, A.MBR_KOR_NM, A.LEGL_BTHDT, A.LEGL_GNDR_FG_CD
 			</when>
 			<when test="uploadProgress.columnName == 'CARD_NO'">
@@ -60,9 +59,7 @@
 				, COLUMN6 AS LEGL_GNDR_FG_CD
 				FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
 				) A
-				LEFT OUTER JOIN
-				INTGUSER.MART_CARD_MST B
-				ON A.CARD_NO = B.CARD_NO
+				LEFT OUTER JOIN MART_CARD_MST B ON A.CARD_NO = B.CARD_NO
 			</when>
 			<otherwise>
 				SELECT A.MBR_ID /* MBR_ID */
@@ -92,8 +89,7 @@
 				FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
 				) A
 				LEFT OUTER JOIN
-				INTGUSER.MART_CARD_MST B
-				ON A.MBR_ID = B.MBR_ID
+				MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
 				GROUP BY A.MBR_ID, A.CARD_NO, A.CI_NO, A.MBR_KOR_NM, A.LEGL_BTHDT, A.LEGL_GNDR_FG_CD
 			</otherwise>
 		</choose>
