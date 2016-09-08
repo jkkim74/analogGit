@@ -98,7 +98,7 @@ public class BatchConfig extends DefaultBatchConfigurer {
 		};
 		writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<UploadedPreview>());
 
-		StringBuilder sql = new StringBuilder("INSERT INTO TMP_");
+		StringBuilder sql = new StringBuilder("INSERT /*+ APPEND_VALUES */ INTO TMP_");
 		sql.append(pageId.toUpperCase()).append('_').append(username.toUpperCase());
 		sql.append('(');
 
