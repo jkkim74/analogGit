@@ -4,15 +4,16 @@
 
 	<select id="selectUploadProgress" parameterType="map" resultType="com.skplanet.pandora.model.UploadProgress">
 		SELECT PAGE_ID
-			 , USERNAME
-			 , COLUMN_NAME
-			 , UPLOAD_STATUS
-		FROM   UPLOAD_PROGRESS
-		WHERE  PAGE_ID = #{pageId} AND USERNAME = #{username}
+		, USERNAME
+		, COLUMN_NAME
+		, UPLOAD_STATUS
+		FROM UPLOAD_PROGRESS
+		WHERE PAGE_ID = #{pageId} AND USERNAME = #{username}
 	</select>
 
 	<update id="upsertUploadProgress" parameterType="map">
-		INSERT INTO UPLOAD_PROGRESS ( PAGE_ID, USERNAME, COLUMN_NAME, UPLOAD_STATUS )
+		INSERT
+		INTO UPLOAD_PROGRESS ( PAGE_ID, USERNAME, COLUMN_NAME, UPLOAD_STATUS )
 		VALUES ( #{pageId}, #{username}, #{columnName}, #{uploadStatus} )
 		ON DUPLICATE KEY
 		<trim prefix="UPDATE" suffixOverrides=",">
