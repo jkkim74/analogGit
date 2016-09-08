@@ -62,7 +62,7 @@ public class ApiController {
 		String mbrId = oracleRepository.selectMbrId(params);
 		List<AutoMappedMap> result = querycacheRepository.selectJoinInfo(mbrId);
 
-		if (result.isEmpty()) {
+		if (result == null || result.isEmpty()) {
 			AutoMappedMap m = new AutoMappedMap();
 			m.put("ocbapp_Yn", "N");
 			result.add(m);
