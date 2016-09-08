@@ -57,7 +57,7 @@ public class PtsService {
 				// csv 첫줄에 헤더추가
 				if (printer == null && !list.isEmpty()) {
 					List<?> keyList = list.get(0).keyList();
-					printer = CSVFormat.DEFAULT.withHeader(keyList.toArray(new String[] {})).print(writer);
+					printer = CSVFormat.DEFAULT.withHeader(keyList.toArray(new String[0])).print(writer);
 				}
 
 				for (AutoMappedMap m : list) {

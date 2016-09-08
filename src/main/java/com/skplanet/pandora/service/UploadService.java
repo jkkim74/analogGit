@@ -88,9 +88,14 @@ public class UploadService {
 	}
 
 	public void bulkInsert(String pageId, String username, Path uploadPath) {
+		long numberOfColumns = 1;
+		if ("pan0103".equalsIgnoreCase(pageId)){
+			numberOfColumns = 6;
+		}
+		
 		JobParameters jobParameters = new JobParametersBuilder().addString(Constant.PAGE_ID, pageId)
 				.addString(Constant.USERNAME, username).addString(Constant.FILE_PATH, uploadPath.toString())
-				.toJobParameters();
+				.addLong("numberOfColumns", numberOfColumns).toJobParameters();
 
 		try {
 			jobLauncher.run(importJob, jobParameters);

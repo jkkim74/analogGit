@@ -1,1 +1,64 @@
-<ng-include src="'partials/pan0101/pan0101.html'"></ng-include>
+<div class="container-fluid section-body">
+    <ng-include src="'partials/layout/sidebar.html'"></ng-include>
+    <div class="col-md-11 section-content-wrapper">
+        <div class="section-content">
+            <div class="row upload-form">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>입력데이터</label>
+                                <select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
+                                    ng-model="selectedOption"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>업로드</label>
+                        <div ngf-select="upload($file)" ngf-drop="upload($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'" ngf-max-size="1GB"
+                            class="drop-box" ngf-drag-over-class="'drop-box-dragover'">
+                            <i class="fa fa-upload fa-5x" aria-hidden="true"></i><br><br>파일 선택 또는 끌어놓기
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>업로드 미리보기</label>
+                    <div cg-busy="{promise:uploadPromise, message:uploadProgressLoadingMessage}">
+                        <div ui-grid="gridOptionsPreview"></div>
+                    </div>
+                    <br>
+                    <!--<p class="text-right" ng-show="uploadedRecords"><strong class="text-danger">{{ uploadedRecords | number }}</strong> 건</p>-->
+                    <div>
+                        <uib-progressbar ng-show="!uploadProgress && uploadedRecords" animate="false" type="success">업로드 완료 <strong class="text-danger">{{ uploadedRecords | number }}</strong> 건</uib-progressbar>
+                        <uib-progressbar ng-show="!uploadProgress && !uploadedRecords" animate="false" type="warning">업로드 대기</uib-progressbar>
+                        <uib-progressbar ng-show="uploadProgress" class="progress-striped active">업로드 임시 테이블 적재 중 <strong class="">{{ uploadedRecords | number }}</strong> 건</uib-progressbar>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button type="button" class="btn btn-info" ng-click="loadMembers()" ng-disabled="!gridOptionsPreview.data.length">조회</button>
+                <div cg-busy="membersPromise">
+                    <div class="grid-div" ui-grid="gridOptionsMembers" ui-grid-pagination ui-grid-resize-columns></div>
+                </div>
+                <p class="pull-right" ng-show="gridOptionsMembers.data.length"><strong><span class="text-danger">{{ gridApi.pagination.getPage() }}</span> / {{ gridApi.pagination.getTotalPages() }} Page</strong></p>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-primary" ng-click="gridApi.pagination.previousPage()" ng-disabled="!gridOptionsMembers.data.length">이전</button>
+                    <button type="button" class="btn btn-primary" ng-click="gridApi.pagination.nextPage()" ng-disabled="!gridOptionsMembers.data.length">다음</button>
+                    <button type="button" class="btn btn-primary" ng-click="gridApi.pagination.seek(1)" ng-disabled="!gridOptionsMembers.data.length">처음으로</button>
+                </div>
+            </div>
+            <div class="text-right bg-danger pts-form">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label>PTS 계정</label>
+                        <input type="text" class="form-control" ng-model="ptsUsername" size="10">
+                    </div>
+                    <div class="checkbox">
+                        <label><strong>개인정보 마스킹 여부</strong> <input type="checkbox" ng-model="ptsMasking"></label>
+                    </div>
+                    <button type="button" class="btn btn-danger" ng-click="sendPts(ptsUsername, ptsMasking)" ng-disabled="!gridOptionsMembers.data.length">PTS 전송</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

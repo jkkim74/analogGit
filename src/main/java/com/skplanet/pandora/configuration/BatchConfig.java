@@ -1,5 +1,7 @@
 package com.skplanet.pandora.configuration;
 
+import java.util.ArrayList;
+
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
@@ -61,35 +63,64 @@ public class BatchConfig extends DefaultBatchConfigurer {
 
 	@Bean
 	@JobScope
-	public FlatFileItemReader<UploadedPreview> itemReader(@Value("#{jobParameters[filePath]}") String filePath) {
+	public FlatFileItemReader<UploadedPreview> itemReader(@Value("#{jobParameters[filePath]}") String filePath,
+			@Value("#{jobParameters[numberOfColumns]}") final Long numberOfColumns) {
+
 		FlatFileItemReader<UploadedPreview> reader = new FlatFileItemReader<>();
 		reader.setResource(new FileSystemResource(filePath));
-		reader.setLineMapper(new DefaultLineMapper<UploadedPreview>() {
-			{
-				setLineTokenizer(new DelimitedLineTokenizer() {
-					{
-						setNames(new String[] { "column1" });
-					}
-				});
-				setFieldSetMapper(new BeanWrapperFieldSetMapper<UploadedPreview>() {
-					{
-						setTargetType(UploadedPreview.class);
-					}
-				});
-			}
-		});
+
+		DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
+		ArrayList<String> names = new ArrayList<>();
+		for (int i = 0; i < numberOfColumns; i++) {
+			names.add("column" + (i + 1));
+		}
+		lineTokenizer.setNames(names.toArray(new String[0]));
+
+		BeanWrapperFieldSetMapper<UploadedPreview> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
+		fieldSetMapper.setTargetType(UploadedPreview.class);
+
+		DefaultLineMapper<UploadedPreview> lineMapper = new DefaultLineMapper<>();
+		lineMapper.setLineTokenizer(lineTokenizer);
+		lineMapper.setFieldSetMapper(fieldSetMapper);
+
+		reader.setLineMapper(lineMapper);
+
 		return reader;
 	}
 
 	@Bean
 	@JobScope
 	public JdbcBatchItemWriter<UploadedPreview> itemWriter(@Value("#{jobParameters[pageId]}") String pageId,
-			@Value("#{jobParameters[username]}") String username) {
+			@Value("#{jobParameters[username]}") String username,
+			@Value("#{jobParameters[numberOfColumns]}") Long numberOfColumns) {
 
-		JdbcBatchItemWriter<UploadedPreview> writer = new JdbcBatchItemWriter<>();
+		JdbcBatchItemWriter<UploadedPreview> writer = new JdbcBatchItemWriter<UploadedPreview>() {
+		};
 		writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<UploadedPreview>());
-		writer.setSql("INSERT INTO TMP_" + pageId.toUpperCase() + "_" + username.toUpperCase()
-				+ "(column1) VALUES (:column1)");
+
+		StringBuilder sql = new StringBuilder("INSERT INTO TMP_");
+		sql.append(pageId.toUpperCase()).append('_').append(username.toUpperCase());
+		sql.append('(');
+
+		for (int i = 0; i < numberOfColumns; i++) {
+			if (i != 0) {
+				sql.append(',');
+			}
+			sql.append("column").append(i + 1);
+		}
+
+		sql.append(") VALUES (");
+
+		for (int i = 0; i < numberOfColumns; i++) {
+			if (i != 0) {
+				sql.append(',');
+			}
+			sql.append(":column").append(i + 1);
+		}
+
+		sql.append(')');
+
+		writer.setSql(sql.toString());
 		writer.setDataSource(oracleDataSource);
 
 		return writer;
@@ -108,8 +139,8 @@ public class BatchConfig extends DefaultBatchConfigurer {
 
 	@Bean
 	public Step step1() {
-		return stepBuilderFactory.get("step1").<UploadedPreview, UploadedPreview> chunk(1000).reader(itemReader(null))
-				.writer(itemWriter(null, null)).build();
+		return stepBuilderFactory.get("step1").<UploadedPreview, UploadedPreview> chunk(1000)
+				.reader(itemReader(null, null)).writer(itemWriter(null, null, null)).build();
 	}
 
 }
