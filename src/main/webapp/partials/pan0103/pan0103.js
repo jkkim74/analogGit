@@ -6,7 +6,9 @@ App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
   $scope.title = '배치 적립 파일 검증';
 
   $scope.selectOptions = [
-    { label: '카드번호', value: 'cardNo' }
+    { label: '회원ID', value: 'mbrId' },
+    { label: '카드번호', value: 'cardNo' },
+    { label: 'CI번호', value: 'ciNo' }
   ];
 
   $scope.gridOptionsPreview = {
