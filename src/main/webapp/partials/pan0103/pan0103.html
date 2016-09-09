@@ -46,7 +46,7 @@
                     <button type="button" class="btn btn-primary" ng-click="gridApi.pagination.seek(1)" ng-disabled="!gridOptionsMembers.data.length">처음으로</button>
                 </div>
             </div>
-            <div class="text-right bg-danger pts-form">
+            <div class="text-right bg-danger pts-form" cg-busy="{promise:sendPtsPromise, message:'Sending...'}">
                 <form class="form-inline">
                     <div class="form-group">
                         <label>PTS 계정</label>
