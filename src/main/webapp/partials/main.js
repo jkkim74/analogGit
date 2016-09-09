@@ -17,14 +17,15 @@ var App = angular.module('App', [
   'ui.validate',
   'toastr',
   'cgBusy',
-  'blockUI'
+  'blockUI',
+  'anim-in-out'
 ]);
 
 App.value('cgBusyDefaults', {
   message: 'Loading...',
 });
 
-App.config(['$stateProvider', '$urlRouterProvider', 'blockUIConfig', function ($stateProvider, $urlRouterProvider, blockUIConfig) {
+App.config(['$stateProvider', '$urlRouterProvider', '$provide', 'blockUIConfig', function ($stateProvider, $urlRouterProvider, $provide, blockUIConfig ) {
 
   $urlRouterProvider.otherwise('/');
 
@@ -55,6 +56,12 @@ App.config(['$stateProvider', '$urlRouterProvider', 'blockUIConfig', function ($
         return ctrlName;
       }
     });
+
+  $provide.decorator('$uiViewScroll', function ($delegate) {
+    return function (uiViewElement) {
+      window.scrollTo(0, 0);
+    };
+  });
 
   blockUIConfig.message = 'Waiting...';
   blockUIConfig.autoBlock = false;
