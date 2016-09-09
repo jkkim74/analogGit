@@ -1,6 +1,6 @@
 'use strict';
 
-App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', 'blockUI', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService, blockUI) {
+App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService) {
 
   var self = this;
   $scope.title = '배치 적립 파일 검증';
@@ -99,9 +99,9 @@ App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
 
 
   $scope.sendPts = function (ptsUsername, ptsMasking) {
-    blockUI.start();
-    apiService.sendPts({ ptsUsername: ptsUsername, ptsMasking: !!ptsMasking }).finally(function () {
-      blockUI.stop();
+    $scope.sendPtsPromise = apiService.sendPts({ ptsUsername: ptsUsername, ptsMasking: !!ptsMasking });
+    $scope.sendPtsPromise.finally(function () {
+
     });
   };
 
