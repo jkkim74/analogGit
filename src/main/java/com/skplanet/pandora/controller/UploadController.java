@@ -1,9 +1,9 @@
 package com.skplanet.pandora.controller;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
+import org.springframework.batch.core.JobParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,13 +46,9 @@ public class UploadController {
 			throw new BizException("빈 파일입니다");
 		}
 
-		uploadService.markRunning(pageId, username, columnName);
-
-		Path filePath = uploadService.saveUploadFile(file);
-
-		uploadService.prepareTemporaryTable(pageId, username);
-
-		uploadService.bulkInsert(pageId, username, filePath);
+		JobParameters jobParameters = uploadService.readyToImport(file, pageId, username, columnName);
+		
+		uploadService.beginImport(jobParameters);
 
 		return ApiResponse.builder().message("업로드 성공").build();
 	}

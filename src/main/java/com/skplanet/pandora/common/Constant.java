@@ -7,5 +7,8 @@ public class Constant {
 	public static final String PAGE_ID = "pageId";
 	public static final String USERNAME = "username";
 	public static final String FILE_PATH = "filePath";
+	public static final String NUMBER_OF_COLUMNS = "numberOfColumns";
+
+	public static final String PAN0103 = "pan0103";
 
 }

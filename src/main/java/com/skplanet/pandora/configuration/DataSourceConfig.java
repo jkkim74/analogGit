@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.skplanet.pandora.model.AutoMappedMap;
 
 @Configuration
-@EnableTransactionManagement(proxyTargetClass = true)
+@EnableTransactionManagement
 public class DataSourceConfig implements EnvironmentAware, ApplicationContextAware {
 
 	protected ApplicationContext applicationContext;
