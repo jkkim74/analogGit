@@ -4,6 +4,7 @@ App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
 
   var self = this;
   $scope.title = '배치 적립 파일 검증';
+  $scope.enablePreview = true;
 
   $scope.selectOptions = [
     { label: '회원ID', value: 'mbrId' },
@@ -15,7 +16,7 @@ App.controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
     enableColumnMenus: false,
     enableSorting: false,
     enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-    minRowsToShow: 7,
+    minRowsToShow: 9,
     columnDefs: [
       { field: 'no', displayName: 'No.', width: 100, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'column1', displayName: '회원ID' },
