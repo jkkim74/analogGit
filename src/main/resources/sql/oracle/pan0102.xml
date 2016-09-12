@@ -34,37 +34,36 @@
 	</sql>
 
 	<select id="selectMemberInfo" parameterType="map" resultType="AutoMappedMap">
-		SELECT '' AS MBR_TYPE /* 회원구분 */
-			, '' AS MBR_STS_CD /* 회원상태 */
+		SELECT (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'MBR_FG_CD' AND DTL_CD = A.MBR_FG_CD) AS MBR_FG_CD /* 회원구분 */
+			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'MBR_STS_CD' AND DTL_CD = A.MBR_STS_CD) AS MBR_STS_CD /* 회원상태 */
 			, A.MBR_ID /* MBR_ID */
-			, D.CUST_ID /* CUST_ID */
 			, C.CI_NO /* CI */
 			, D.PNT_EXTNCT_YN /* 포인트소멸여부 */
 			, A.MBR_KOR_NM /* 한글성명 */
-			, D.LEGL_BTHDT /* 법정생년월일 */
+			, TO_CHAR(TO_DATE(D.LEGL_BTHDT, 'YYYYMMDD'), 'YYYY-MM-DD') AS LEGL_BTHDT /* 법정생년월일 */
 			, D.LEGL_GNDR_FG_CD /* 법정성별 */
-			, D.FST_CARD_RREG_DT /* OCB최초 카드 본등록 일자 */
+			, TO_CHAR(TO_DATE(D.FST_CARD_RREG_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS FST_CARD_RREG_DT /* OCB최초 카드 본등록 일자 */
 			, A.CLPHN_NO /* 휴대전화번호 */
-			, B.CLPHN_NO_DT /* 휴대전화번호최종유입일자 */
+			, TO_CHAR(TO_DATE(B.CLPHN_NO_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS CLPHN_NO_DT /* 휴대전화번호최종유입일자 */
 			, CASE WHEN E.MBR_ID IS NOT NULL THEN '1' ELSE '2' END AS CLPHN_NO_DUP_YN /* 휴대전화번호 중복여부 */
 			, A.HOME_TEL_NO /* 자택전화번호 */
-			, B.HOME_TEL_NO_DT /* 자택전화번호 최종유입일자 */
+			, TO_CHAR(TO_DATE(B.HOME_TEL_NO_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS HOME_TEL_NO_DT /* 자택전화번호 최종유입일자 */
 			, A.JOBP_TEL_NO /* 직장전화번호 */
-			, B.JOBP_TEL_NO_DT /* 직장전화번호 최종유입일자 */
+			, TO_CHAR(TO_DATE(B.JOBP_TEL_NO_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS JOBP_TEL_NO_DT /* 직장전화번호 최종유입일자 */
 			, A.HOME_BASIC_ADDR /* 자택기본주소 */
-			, B.HOME_BASIC_ADDR_DT /* 자택기본주소 최종유입일자 */
+			, TO_CHAR(TO_DATE(B.HOME_BASIC_ADDR_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS HOME_BASIC_ADDR_DT /* 자택기본주소 최종유입일자 */
 			, A.HOME_DTL_ADDR /* 자택상세주소 */
-			, B.HOME_DTL_ADDR_DT /* 자택상세주소 최종유입일자 */
+			, TO_CHAR(TO_DATE(B.HOME_DTL_ADDR_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS HOME_DTL_ADDR_DT /* 자택상세주소 최종유입일자 */
 			, A.HOME_BASIC_ADDR || ' ' || A.HOME_DTL_ADDR AS HOME_ADDR
 			, A.JOBP_BASIC_ADDR /* 직장기본주소 */
-			, B.JOBP_BASIC_ADDR_DT /* 직장기본주소 최종유입일자 */
+			, TO_CHAR(TO_DATE(B.JOBP_BASIC_ADDR_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS JOBP_BASIC_ADDR_DT /* 직장기본주소 최종유입일자 */
 			, A.JOBP_DTL_ADDR /* 직장상세주소 */
-			, B.JOBP_DTL_ADDR_DT /* 직장상세주소 최종유입일자 */
+			, TO_CHAR(TO_DATE(B.JOBP_DTL_ADDR_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS JOBP_DTL_ADDR_DT /* 직장상세주소 최종유입일자 */
 			, A.JOBP_BASIC_ADDR || ' ' || A.JOBP_DTL_ADDR AS JOBP_ADDR
 			, A.EMAIL_ADDR /* 이메일주소 */
-			, B.EMAIL_ADDR_DT /* 이메일주소 최종유입일자 */
-			, CASE WHEN F.MBR_ID IS NOT NULL THEN '1' ELSE '2' END AS EMAIL_ADDR_DUP_YN /* 이메일주소 중복 여부(미정) */
-			, D.DESTR_EXPCTN_DT /* 개인정보 유효기간 만료 예정 일자(미정) */
+			, TO_CHAR(TO_DATE(B.EMAIL_ADDR_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS EMAIL_ADDR_DT /* 이메일주소 최종유입일자 */
+			, CASE WHEN F.MBR_ID IS NOT NULL THEN '1' ELSE '2' END AS EMAIL_ADDR_DUP_YN /* 이메일주소 중복 여부 */
+			, TO_CHAR(TO_DATE(D.DESTR_EXPCTN_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS DESTR_EXPCTN_DT /* 개인정보 유효기간 만료 예정 일자 */
 		FROM DW_MBR_MST A
 		LEFT OUTER JOIN
 		(
@@ -92,35 +91,78 @@
 	<select id="selectJoinInfo" parameterType="map" resultType="AutoMappedMap">
 		SELECT UNITED_ID /* okcashbag.com United ID */
 			, LGN_ID /* okcashbag.com 로그인 ID 목록 */
-			, ENTR_DTTM /* okcashbag.com 로그인 ID 별 가입 일자 */
-			, FNL_LGN_DTTM /* okcashbag.com 로그인 ID 최종 로그인 일자 */
+			, TO_CHAR(TO_DATE(ENTR_DTTM, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS ENTR_DTTM /* okcashbag.com 로그인 ID 별 가입 일자 */
+			, TO_CHAR(TO_DATE(FNL_LGN_DTTM, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS FNL_LGN_DTTM /* okcashbag.com 로그인 ID 최종 로그인 일자 */
 		FROM MART_OCBCOM_MBR_MST A
 
 		<include refid="whereMbrId" />
 	</select>
 
 	<select id="selectLastestUsageInfo" parameterType="map" resultType="AutoMappedMap">
-		SELECT FNL_ERNG_DT /* OCB 적립/사용/할인/현금환급 */
-			, FNL_CARD_RREG_DT /* OCB 카드 본등록 */
-			, FNL_CNSOF_ENQ_DT /* 상담실 문의 */
-			, FNL_PRD_PCHS_DT /* 상품 구매 */
-			, FNL_PNT_INQ_DT /* 포인트 조회 */
+		SELECT TO_CHAR(TO_DATE(FNL_ERNG_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS FNL_ERNG_DT /* OCB 적립/사용/할인/현금환급 */
+			, TO_CHAR(TO_DATE(FNL_CARD_RREG_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS FNL_CARD_RREG_DT /* OCB 카드 본등록 */
+			, TO_CHAR(TO_DATE(FNL_CNSOF_ENQ_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS FNL_CNSOF_ENQ_DT /* 상담실 문의 */
+			, TO_CHAR(TO_DATE(FNL_PRD_PCHS_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS FNL_PRD_PCHS_DT /* 상품 구매 */
+			, TO_CHAR(TO_DATE(FNL_PNT_INQ_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS FNL_PNT_INQ_DT /* 포인트 조회 */
 		FROM MART_MBR_INQ_INFO A
 
 		<include refid="whereMbrId" />
 	</select>
 
 	<select id="selectMarketingMemberInfo" parameterType="map" resultType="AutoMappedMap">
-		select #{a} as A from dual
+		SELECT A.MBR_KOR_NM /* 한글성명 */
+			, A.CLPHN_NO /* 휴대전화번호 */
+			, A.CLPHN_NO_FNL_SRC_ORG_CD /* 휴대전화번호 최종 유입 출처 코드 */
+			, A.CLPHN_NO_FNL_INFL_DT /* 휴대전화번호 최종 유입 일자 */
+			, A.CLPHN_NO_FNL_SRC_ORG_CD
+				|| ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.CLPHN_NO_FNL_SRC_ORG_CD)
+				|| ' / ' || TO_CHAR(TO_DATE(A.CLPHN_NO_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS CLPHN_NO_FNL_INFL
+			, CASE WHEN B.MBR_ID IS NOT NULL THEN '1' ELSE '2' END AS CLPHN_NO_DUP_YN /* 휴대전화번호 중복 여부 */
+			, A.HOME_TEL_NO /* 자택전화번호 */
+			, A.HOME_TEL_NO_FNL_SRC_ORG_CD /* 자택전화번호 최종 유입 출처 코드 */
+			, A.HOME_TEL_NO_FNL_INFL_DT /* 자택전화번호 최종 유입 출처일자 */
+			, A.HOME_TEL_NO_FNL_SRC_ORG_CD
+				|| ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.HOME_TEL_NO_FNL_SRC_ORG_CD)
+				|| ' / ' || TO_CHAR(TO_DATE(A.HOME_TEL_NO_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS HOME_TEL_NO_FNL_INFL
+			, A.JOBP_TEL_NO /* 직장전화번호 */
+			, A.JOBP_TEL_NO_FNL_SRC_ORG_CD /* 직장전화번호 최종 유입 출처코드 */
+			, A.JOBP_TEL_NO_FNL_INFL_DT /* 직장전화번호 최종 유입일자 */
+			, A.JOBP_TEL_NO_FNL_SRC_ORG_CD
+				|| ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.JOBP_TEL_NO_FNL_SRC_ORG_CD)
+				|| ' / ' || TO_CHAR(TO_DATE(A.JOBP_TEL_NO_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS JOBP_TEL_NO_FNL_INFL
+			, A.HOME_ZIPCD || ' ' || HOME_BASIC_ADDR || ' ' || HOME_DTL_ADDR AS HOME_ADDR /* 자택주소 */
+			, A.HOME_ADDR_FNL_SRC_ORG_CD /* 자택주소 최종 유입 출처 코드 */
+			, A.HOME_ADDR_FNL_INFL_DT /* 자택주소 최종유입일자 */
+			, A.HOME_ADDR_FNL_SRC_ORG_CD
+				|| ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.HOME_ADDR_FNL_SRC_ORG_CD)
+				|| ' / ' || TO_CHAR(TO_DATE(A.HOME_ADDR_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS HOME_ADDR_FNL_INFL 
+			, A.JOBP_ZIPCD || ' ' || JOBP_BASIC_ADDR || ' ' || JOBP_DTL_ADDR AS JOBP_ADDR /* 직장주소 */
+			, A.JOBP_ADDR_FNL_SRC_ORG_CD /* 직장주소 최종 유입 출처 코드 */
+			, A.JOBP_ADDR_FNL_INFL_DT /* 직장주소 최종유입일자 */
+			, A.JOBP_ADDR_FNL_SRC_ORG_CD
+				|| ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.JOBP_ADDR_FNL_SRC_ORG_CD)
+				|| ' / ' || TO_CHAR(TO_DATE(A.JOBP_ADDR_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS JOBP_ADDR_FNL_INFL 
+			, A.EMAIL_ADDR /* 이메일주소 */
+			, A.EMAIL_ADDR_FNL_SRC_ORG_CD /* 이메일주소 최종 유입 출처 코드*/
+			, A.EMAIL_ADDR_FNL_INFL_DT /* 이메일주소 최종 유입일자 */
+			, A.EMAIL_ADDR_FNL_SRC_ORG_CD
+				|| ' / ' || (SELECT DTL_CD NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.EMAIL_ADDR_FNL_SRC_ORG_CD)
+				|| ' / ' || TO_CHAR(TO_DATE(A.EMAIL_ADDR_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS EMAIL_ADDR_FNL_INFL
+			, CASE WHEN C.MBR_ID IS NOT NULL THEN '1' ELSE '2' END AS EMAIL_ADDR_DUP_YN /* 이메일주소 중복 여부 */
+		FROM MART_MKTNG_MBR_MST A
+		LEFT OUTER JOIN MART_MKTNG_CLPHN_NO_DUP_INFO B ON A.MBR_ID = B.MBR_ID
+		LEFT OUTER JOIN MART_MKTNG_EMAIL_ADDR_DUP_INFO C ON A.MBR_ID = C.MBR_ID
+		
+		<include refid="whereMbrId" /> 
 	</select>
 
 	<select id="selectMarketingMemberInfoHistory" parameterType="map" resultType="AutoMappedMap">
 		SELECT A.DATA_SRC_ORG_CD /* 유입기관코드 */
 			, A.AGRMT_VER_CD /* 동의버전 */
-			, A.AGRMT_DT /* 동의일자 */
+			, TO_CHAR(TO_DATE(A.AGRMT_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS AGRMT_DT /* 동의일자 */
 			, A.AGRMT_YN /* 동의여부 */
 			, B.MBR_KOR_NM /* 한글성명 */
-			, B.BTHDT /* 생년월일 */
+			, TO_CHAR(TO_DATE(B.BTHDT, 'YYYYMMDD'), 'YYYY-MM-DD') AS BTHDT /* 생년월일 */
 			, B.GNDR_FG_CD /* 성별 */
 			, B.EMAIL_ADDR /* 이메일주소 */
 			, B.CLPHN_NO /* 휴대전화번호 */
@@ -138,10 +180,10 @@
 		SELECT '' AS DATA_DST_ORG_CD /* 제공대상기관 */
 			, A.DATA_SRC_ORG_CD /* 유입기관코드 */
 			, A.AGRMT_VER_CD /* 동의버전 */
-			, A.AGRMT_DT /* 동의일자 */
+			, TO_CHAR(TO_DATE(A.AGRMT_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS AGRMT_DT /* 동의일자 */
 			, A.AGRMT_YN /* 동의여부 */
 			, B.MBR_KOR_NM /* 한글성명 */
-			, B.BTHDT /* 생년월일 */
+			, TO_CHAR(TO_DATE(B.BTHDT, 'YYYYMMDD'), 'YYYY-MM-DD') AS BTHDT /* 생년월일 */
 			, B.GNDR_FG_CD /* 성별 */
 			, B.EMAIL_ADDR /* 이메일주소 */
 			, B.CLPHN_NO /* 휴대전화번호 */
@@ -157,12 +199,11 @@
 
 	<select id="selectCardList" parameterType="map" resultType="AutoMappedMap">
 		SELECT CARD_DTL_GRP_CD /* 카드코드 */
-			, '' AS CARD_DTL_GRP_NM /* 명칭 */
-			, CARD_DTL_GRP_CD AS CARD_DTL_GRP
+			, CARD_DTL_GRP_CD || ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_DTL_GRP_CD' AND DTL_CD = A.CARD_DTL_GRP_CD) AS CARD_DTL_GRP
 			, CARD_STS_CD /* 카드상태 */
 			, CARD_NO /* 카드번호 */
-			, ISS_DT /* 카드발급일자 */
-			, CARD_RREG_DT /* 카드등록일자 */
+			, TO_CHAR(TO_DATE(ISS_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS ISS_DT /* 카드발급일자 */
+			, TO_CHAR(TO_DATE(CARD_RREG_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS CARD_RREG_DT /* 카드등록일자 */
 		FROM MART_CARD_MST A
 
 		<include refid="whereMbrId" />
