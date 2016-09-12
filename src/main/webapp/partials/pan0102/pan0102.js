@@ -249,7 +249,7 @@ App.controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'sndDt', displayName: '발송일자', width:100, cellTooltip: true, headerTooltip: true },
       { field: 'emailTitl', displayName: '이메일 제목', cellTooltip: true, headerTooltip: true },
-      { field: 'lcptEmailSndRsltCd', displayName: '이메일 발송 결과', cellTooltip: true, headerTooltip: true }
+      { field: 'lcptEmailSndRslt', displayName: '이메일 발송 결과', cellTooltip: true, headerTooltip: true }
     ]
   };
 

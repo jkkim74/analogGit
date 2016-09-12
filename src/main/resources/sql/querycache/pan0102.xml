@@ -34,47 +34,47 @@
 	</select>
 
 	<select id="selectTransactionHistory" parameterType="map" resultType="AutoMappedMap">
-		SELECT A.RCV_DT -- 접수일시
-			, A.RCV_SEQ -- 접수번호
+		SELECT A.RCV_DT AS RCV_DT -- 접수일시
+			, A.RCV_SEQ AS RCV_SEQ-- 접수번호
 			, CONCAT(A.APPR_DT,' ',A.APPR_TM) AS APPR_DTTM -- 승인일시
-			, A.REP_APPR_NO -- 대표승인번호
-			, A.APPR_NO -- 승인번호
+			, A.REP_APPR_NO AS REP_APPR_NO -- 대표승인번호
+			, A.APPR_NO AS APPR_NO -- 승인번호
 			, CONCAT(A.SALE_DT,' ',A.SALE_TM) AS SALE_DTTM -- 매출일시
-			, A.MBR_ID -- 회원ID
-			, A.CARD_DTL_GRP_CD -- 카드상세그룹코드
+			, A.MBR_ID AS MBR_ID-- 회원ID
+			, A.CARD_DTL_GRP_CD AS CARD_DTL_GRP_CD-- 카드상세그룹코드
 			, E.DTL_CD_NM AS CARD_DTL_GRP_NM -- 카드명
 			, CONCAT(' / ', A.CARD_DTL_GRP_CD, E.DTL_CD_NM) AS CARD_DTL_GRP
 			, FUNCS.SECUAESDECRYPT(A.CARD_NO) AS CARD_NO -- 카드번호
-			, A.ALCMPN_CD -- 제휴사코드
-			, B.ALCMPN_NM -- 제휴사명
+			, A.ALCMPN_CD AS ALCMPN_CD -- 제휴사코드
+			, B.ALCMPN_NM AS ALCMPN_NM -- 제휴사명
 			, CONCAT(' / ', A.ALCMPN_CD, B.ALCMPN_NM) AS ALCMPN
-			, A.MCNT_CD -- 가맹점코드
-			, C.MCNT_NM -- 가맹점명
+			, A.MCNT_CD AS MCNT_CD -- 가맹점코드
+			, C.MCNT_NM AS MCNT_NM -- 가맹점명
 			, CONCAT(' / ', A.MCNT_CD, C.MCNT_NM) AS MCNT
-			, A.STLMT_MCNT_CD -- 정산가맹점코드
-			, D.MCNT_NM -- 정산가맹점명
+			, A.STLMT_MCNT_CD AS STLMT_MCNT_CD -- 정산가맹점코드
+			, D.MCNT_NM AS MCNT_NM -- 정산가맹점명
 			, CONCAT(' / ', A.STLMT_MCNT_CD, D.MCNT_NM) AS STLMT_MCNT
-			, A.PNT_KND_CD -- 포인트종류코드
+			, A.PNT_KND_CD AS PNT_KND_CD -- 포인트종류코드
 			, F.DTL_CD_NM AS PNT_KND_NM -- 포인트종류명
 			, CONCAT(' / ', A.PNT_KND_CD, F.DTL_CD_NM) AS PNT_KND
-			, A.SLIP_CD -- 전표코드
+			, A.SLIP_CD AS SLIP_CD -- 전표코드
 			, G.DTL_CD_NM AS SLIP_NM -- 전표명
 			, CONCAT(' / ', A.SLIP_CD, G.DTL_CD_NM) AS SLIP
-			, A.SALE_AMT -- 매출금액
+			, A.SALE_AMT AS SALE_AMT -- 매출금액
 			, A.OCC_PNT + AVL_PNT AS PNT -- 포인트
-			, A.CS_MBR_CMMSN -- 제휴사연회비
-			, A.CMMSN -- 수수료
-			, A.PMNT_WAY_CD -- 지불수단코드
+			, A.CS_MBR_CMMSN AS CS_MBR_CMMSN -- 제휴사연회비
+			, A.CMMSN AS CMMSN -- 수수료
+			, A.PMNT_WAY_CD AS PMNT_WAY_CD -- 지불수단코드
 			, H.DTL_CD_NM AS PMNT_WAY_NM -- 지불수단명
 			, CONCAT(' / ', A.PMNT_WAY_CD, H.DTL_CD_NM) AS PMNT_WAY
-			, A.ORG_CD -- 기관코드
+			, A.ORG_CD AS ORG_CD -- 기관코드
 			, I.DTL_CD_NM AS ORG_NM -- 기관코드명
 			, CONCAT(' / ', A.ORG_CD, I.DTL_CD_NM) AS ORG
-			, A.OIL_PRDCT_SGRP_CD -- 유종코드
+			, A.OIL_PRDCT_SGRP_CD AS OIL_PRDCT_SGRP_CD -- 유종코드
 			, J.DTL_CD_NM AS OIL_PRDCT_SGRP_NM -- 유종명
 			, CONCAT(' / ', A.OIL_PRDCT_SGRP_CD, J.DTL_CD_NM) AS OIL_PRDCT_SGRP
 			, CASE WHEN LENGTH(TRIM(A.STLMT_MCNT_CD)) &lt;&gt; 5 OR A.STLMT_MCNT_CD IN ('BOHUM','HOMEP','PINIX') THEN 0 ELSE SALE_QTY END AS SALE_QTY -- 주유량
-			, A.CPN_PRD_CD -- 쿠폰코드
+			, A.CPN_PRD_CD AS CPN_PRD_CD -- 쿠폰코드
 			, K.PRD_NM AS CPN_PRD_NM -- 쿠폰명
 			, CONCAT(' / ', A.CPN_PRD_CD, K.PRD_NM) AS CPN_PRD
 			, CASE WHEN LENGTH(TRIM(A.STLMT_MCNT_CD)) &lt;&gt; 5 OR A.STLMT_MCNT_CD IN ('BOHUM','HOMEP','PINIX') THEN '01' ELSE '02' END AS TRX_TYPE -- 01일경우 일반 02일경우 주유
