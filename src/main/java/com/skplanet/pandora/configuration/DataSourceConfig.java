@@ -14,7 +14,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@Profile({ "prod", "stg", "dev" })
 @EnableTransactionManagement
 public class DataSourceConfig {
 
@@ -55,7 +54,7 @@ public class DataSourceConfig {
 }
 
 @Configuration
-@Profile("default")
+@Profile("local")
 class LocalDataSourceConfig extends DataSourceConfig {
 
 	@Bean
