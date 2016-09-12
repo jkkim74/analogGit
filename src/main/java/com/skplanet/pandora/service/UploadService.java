@@ -50,7 +50,7 @@ public class UploadService {
 	@Autowired
 	private Job importJob;
 
-	@Transactional(transactionManager = "mysqlTxManager")
+	@Transactional("mysqlTxManager")
 	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
 		Path filePath = saveUploadFile(file);
 

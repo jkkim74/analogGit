@@ -10,12 +10,13 @@ import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 
 import com.google.common.io.Resources;
@@ -36,7 +37,8 @@ public class PtsService {
 	private OracleRepository oracleRepository;
 
 	private String getFilename(String ptsUsername) {
-		String nowDt = DateFormatUtils.format(new Date(), "yyyyMMdd");
+		DateFormatter df = new DateFormatter("yyyyMMdd");
+		String nowDt = df.print(new Date(), Locale.getDefault());
 		return "P140802BKhub_" + ptsUsername + "_" + nowDt + "_" + UUID.randomUUID() + ".csv";
 	}
 
@@ -83,9 +85,9 @@ public class PtsService {
 		String ptsProperties = Resources.getResource("config/PTS.properties").getPath();
 
 		log.debug("PTS.properties location={}", ptsProperties);
-		
+
 		String theFilename = filename;
-		
+
 		// PTS API Client에서 '/'를 앞에 붙이므로 여기선 제거해준다.
 		if (theFilename.startsWith("/")) {
 			theFilename = theFilename.substring(1);
