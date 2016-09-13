@@ -17,8 +17,11 @@ import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.pandora.service.PtsService;
 import com.skplanet.pandora.service.UploadService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("api")
+@Slf4j
 public class ApiController {
 
 	@Autowired
@@ -67,7 +70,9 @@ public class ApiController {
 			m.put("ocbapp_Yn", "N");
 			result.add(m);
 		} else {
+			log.info("{}", result);
 			AutoMappedMap m = result.get(0);
+			
 			m.put("ocbapp_Yn", "Y");
 		}
 
