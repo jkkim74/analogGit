@@ -33,6 +33,8 @@ App.service('apiService', ["$log", "$q", "$http", "$stateParams", "toastr", func
     this.getTransactionHistory = new ApiGet('transactionHistory');
     this.getEmailSendHistory = new ApiGet('emailSendHistory');
     this.getAppPushHistory = new ApiGet('appPushHistory');
+    this.getClphnNoDup = new ApiGet('clphnNoDup');
+    this.getEmailAddrDup = new ApiGet('emailAddrDup');
 
 
     function ApiPost(command) {

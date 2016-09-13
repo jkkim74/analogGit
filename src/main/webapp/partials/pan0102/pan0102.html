@@ -117,3 +117,33 @@
         </div>
     </div>
 </div>
+
+<script type="text/ng-template" id="clphnNoDupModal.html">
+    <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" ng-click="$ctrl.close()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">중복 휴대전화번호 보유자</h4>
+    </div>
+    <div class="modal-body">
+        <div cg-busy="$ctrl.clphnNoDupPromise">
+            <div ui-grid="$ctrl.gridOptionsClphnNoDup"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" type="button" ng-click="$ctrl.close()">Close</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="emailAddrDupModal.html">
+    <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" ng-click="$ctrl.close()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">중복 이메일주소 보유자</h4>
+    </div>
+    <div class="modal-body">
+        <div cg-busy="$ctrl.emailAddrDupPromise">
+            <div ui-grid="$ctrl.gridOptionsEmailAddrDup"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" type="button" ng-click="$ctrl.close()">Close</button>
+    </div>
+</script>

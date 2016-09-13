@@ -131,6 +131,16 @@ public class ApiController {
 		return querycacheRepository.selectAppPushHistory(mbrId);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/clphnNoDup")
+	public List<AutoMappedMap> getClphnNoDup(@RequestParam Map<String, Object> params) {
+		return oracleRepository.selectClphnNoDup(params);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/emailAddrDup")
+	public List<AutoMappedMap> getEmailAddrDup(@RequestParam Map<String, Object> params) {
+		return oracleRepository.selectEmailAddrDup(params);
+	}
+
 	@RequestMapping(method = RequestMethod.POST, value = "/sendPts")
 	public ApiResponse sendPts(@RequestParam String ptsUsername, @RequestParam String ptsMasking,
 			@RequestParam String pageId, @RequestParam String username) {

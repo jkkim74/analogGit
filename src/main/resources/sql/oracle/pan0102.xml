@@ -110,44 +110,51 @@
 	</select>
 
 	<select id="selectMarketingMemberInfo" parameterType="map" resultType="AutoMappedMap">
-		SELECT A.MBR_KOR_NM /* 한글성명 */
+		SELECT A.MBR_ID
+			, A.MBR_KOR_NM /* 한글성명 */
 			, A.CLPHN_NO /* 휴대전화번호 */
 			, A.CLPHN_NO_FNL_SRC_ORG_CD /* 휴대전화번호 최종 유입 출처 코드 */
 			, A.CLPHN_NO_FNL_INFL_DT /* 휴대전화번호 최종 유입 일자 */
 			, A.CLPHN_NO_FNL_SRC_ORG_CD
 				|| ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.CLPHN_NO_FNL_SRC_ORG_CD)
-				|| ' / ' || TO_CHAR(TO_DATE(A.CLPHN_NO_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS CLPHN_NO_FNL_INFL
+				|| ' / ' || TO_CHAR(TO_DATE(A.CLPHN_NO_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD')
+				AS CLPHN_NO_FNL_INFL
 			, CASE WHEN B.MBR_ID IS NOT NULL THEN '1' ELSE '2' END AS CLPHN_NO_DUP_YN /* 휴대전화번호 중복 여부 */
 			, A.HOME_TEL_NO /* 자택전화번호 */
 			, A.HOME_TEL_NO_FNL_SRC_ORG_CD /* 자택전화번호 최종 유입 출처 코드 */
 			, A.HOME_TEL_NO_FNL_INFL_DT /* 자택전화번호 최종 유입 출처일자 */
 			, A.HOME_TEL_NO_FNL_SRC_ORG_CD
 				|| ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.HOME_TEL_NO_FNL_SRC_ORG_CD)
-				|| ' / ' || TO_CHAR(TO_DATE(A.HOME_TEL_NO_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS HOME_TEL_NO_FNL_INFL
+				|| ' / ' || TO_CHAR(TO_DATE(A.HOME_TEL_NO_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD')
+				AS HOME_TEL_NO_FNL_INFL
 			, A.JOBP_TEL_NO /* 직장전화번호 */
 			, A.JOBP_TEL_NO_FNL_SRC_ORG_CD /* 직장전화번호 최종 유입 출처코드 */
 			, A.JOBP_TEL_NO_FNL_INFL_DT /* 직장전화번호 최종 유입일자 */
 			, A.JOBP_TEL_NO_FNL_SRC_ORG_CD
 				|| ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.JOBP_TEL_NO_FNL_SRC_ORG_CD)
-				|| ' / ' || TO_CHAR(TO_DATE(A.JOBP_TEL_NO_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS JOBP_TEL_NO_FNL_INFL
+				|| ' / ' || TO_CHAR(TO_DATE(A.JOBP_TEL_NO_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD')
+				AS JOBP_TEL_NO_FNL_INFL
 			, A.HOME_ZIPCD || ' ' || HOME_BASIC_ADDR || ' ' || HOME_DTL_ADDR AS HOME_ADDR /* 자택주소 */
 			, A.HOME_ADDR_FNL_SRC_ORG_CD /* 자택주소 최종 유입 출처 코드 */
 			, A.HOME_ADDR_FNL_INFL_DT /* 자택주소 최종유입일자 */
 			, A.HOME_ADDR_FNL_SRC_ORG_CD
 				|| ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.HOME_ADDR_FNL_SRC_ORG_CD)
-				|| ' / ' || TO_CHAR(TO_DATE(A.HOME_ADDR_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS HOME_ADDR_FNL_INFL 
+				|| ' / ' || TO_CHAR(TO_DATE(A.HOME_ADDR_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD')
+				AS HOME_ADDR_FNL_INFL 
 			, A.JOBP_ZIPCD || ' ' || JOBP_BASIC_ADDR || ' ' || JOBP_DTL_ADDR AS JOBP_ADDR /* 직장주소 */
 			, A.JOBP_ADDR_FNL_SRC_ORG_CD /* 직장주소 최종 유입 출처 코드 */
 			, A.JOBP_ADDR_FNL_INFL_DT /* 직장주소 최종유입일자 */
 			, A.JOBP_ADDR_FNL_SRC_ORG_CD
 				|| ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.JOBP_ADDR_FNL_SRC_ORG_CD)
-				|| ' / ' || TO_CHAR(TO_DATE(A.JOBP_ADDR_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS JOBP_ADDR_FNL_INFL 
+				|| ' / ' || TO_CHAR(TO_DATE(A.JOBP_ADDR_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD')
+				AS JOBP_ADDR_FNL_INFL 
 			, A.EMAIL_ADDR /* 이메일주소 */
 			, A.EMAIL_ADDR_FNL_SRC_ORG_CD /* 이메일주소 최종 유입 출처 코드*/
 			, A.EMAIL_ADDR_FNL_INFL_DT /* 이메일주소 최종 유입일자 */
 			, A.EMAIL_ADDR_FNL_SRC_ORG_CD
 				|| ' / ' || (SELECT DTL_CD NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.EMAIL_ADDR_FNL_SRC_ORG_CD)
-				|| ' / ' || TO_CHAR(TO_DATE(A.EMAIL_ADDR_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS EMAIL_ADDR_FNL_INFL
+				|| ' / ' || TO_CHAR(TO_DATE(A.EMAIL_ADDR_FNL_INFL_DT, 'YYYYMMDD'), 'YYYY-MM-DD')
+				AS EMAIL_ADDR_FNL_INFL
 			, CASE WHEN C.MBR_ID IS NOT NULL THEN '1' ELSE '2' END AS EMAIL_ADDR_DUP_YN /* 이메일주소 중복 여부 */
 		FROM MART_MKTNG_MBR_MST A
 		LEFT OUTER JOIN MART_MKTNG_CLPHN_NO_DUP_INFO B ON A.MBR_ID = B.MBR_ID
@@ -209,6 +216,18 @@
 		<include refid="whereMbrId" />
 
 		ORDER BY CARD_RREG_DT
+	</select>
+
+	<select id="selectClphnNoDup" parameterType="map" resultType="AutoMappedMap">
+		SELECT MBR_ID
+		FROM MART_CLPHN_NO_DUP_INFO
+		WHERE CLPHN_NO = (SELECT CLPHN_NO FROM MART_CLPHN_NO_DUP_INFO WHERE MBR_ID = #{mbrId})
+	</select>
+
+	<select id="selectEmailAddrDup" parameterType="map" resultType="AutoMappedMap">
+		SELECT MBR_ID
+		FROM MART_EMAIL_ADDR_DUP_INFO
+		WHERE EMAIL_ADDR = (SELECT EMAIL_ADDR FROM MART_EMAIL_ADDR_DUP_INFO WHERE MBR_ID = #{mbrId})
 	</select>
 
 </mapper>

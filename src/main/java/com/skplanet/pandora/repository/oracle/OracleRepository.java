@@ -43,4 +43,8 @@ public interface OracleRepository {
 
 	List<AutoMappedMap> selectCardList(Map<String, Object> params);
 
+	List<AutoMappedMap> selectClphnNoDup(Map<String, Object> params);
+
+	List<AutoMappedMap> selectEmailAddrDup(Map<String, Object> params);
+
 }
