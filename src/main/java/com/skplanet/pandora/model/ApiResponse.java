@@ -7,10 +7,10 @@ import lombok.Value;
 @Builder
 public class ApiResponse {
 
-	int code;
-	String message;
-	String developerMessage;
-	Object value;
-	int totalRecords;
+	private int code;
+	private String message;
+	private String developerMessage;
+	private Object value;
+	private int totalRecords;
 
 }

@@ -118,6 +118,7 @@ App.controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
   $scope.gridOptionsLastestUsageInfo = {
     enableColumnMenus: false,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
+    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
     minRowsToShow: 1,
     columnDefs: [
@@ -132,7 +133,6 @@ App.controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
   // 마케팅 회원 원장
   $scope.gridOptionsMarketingMemberInfo = {
     enableColumnMenus: false,
-    enableHorizontalScrollbar: uiGridConstants.scrollbars.ALWAYS,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
     minRowsToShow: 1,
@@ -240,7 +240,7 @@ App.controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
       { field: 'stlmtMcnt', displayName: '정산가맹점', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'pntKnd', displayName: '포인트종류', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'slip', displayName: '전표', width: 100, cellTooltip: true, headerTooltip: true },
-      { field: 'saleAmt', displayName: '매출금액', width: 100, cellTooltip: true, headerTooltip: true },
+      { field: 'saleAmt', displayName: '매출금액', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
       { field: 'pnt', displayName: '포인트', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'csMbrCmmsn', displayName: '제휴사연회비', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'cmmsn', displayName: '수수료', width: 100, cellTooltip: true, headerTooltip: true },
@@ -250,7 +250,27 @@ App.controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
       { field: 'saleQty', displayName: '주유량', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'cpnPrd', displayName: '쿠폰', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'trxType', displayName: '거래종류', width: 100, cellTooltip: true, headerTooltip: true }
-    ]
+    ],
+    onRegisterApi: function (gridApi) {
+      gridApi.grid.registerRowsProcessor($scope.singleFilter, 200);
+      $scope.transactionHistoryGridApi = gridApi;
+    }
+  };
+
+  $scope.singleFilter = function (renderableRows) {
+    var matcher = new RegExp($scope.filterValue);
+    renderableRows.forEach(function (row) {
+      var match = false;
+      ['name', 'company', 'email'].forEach(function (field) {
+        if (row.entity[field].match(matcher)) {
+          match = true;
+        }
+      });
+      if (!match) {
+        row.visible = false;
+      }
+    });
+    return renderableRows;
   };
 
   // 이메일 발송 이력
@@ -261,7 +281,7 @@ App.controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'sndDt', displayName: '발송일자', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'emailTitl', displayName: '이메일 제목', cellTooltip: true, headerTooltip: true },
-      { field: 'lcptEmailSndRslt', displayName: '이메일 발송 결과', cellTooltip: true, headerTooltip: true }
+      { field: 'lcptEmailSndRslt', displayName: '이메일 발송 결과', width: 100, cellTooltip: true, headerTooltip: true }
     ]
   };
 
@@ -273,7 +293,7 @@ App.controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
       { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
       { field: 'sndDttm', displayName: '발송일자', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'msgTitl', displayName: '푸쉬 제목', cellTooltip: true, headerTooltip: true },
-      { field: 'pushSndRslt', displayName: '푸쉬 결과', cellTooltip: true, headerTooltip: true }
+      { field: 'pushSndRslt', displayName: '푸쉬 결과', width: 100, cellTooltip: true, headerTooltip: true }
     ]
   };
 
