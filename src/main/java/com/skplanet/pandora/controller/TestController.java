@@ -60,7 +60,7 @@ public class TestController {
 	public void testMail(@RequestParam Map<String, Object> params) {
 		Map<String, Object> model = new HashMap<>();
 		model.put("msg", new Date());
-		mailService.send((String) params.get("from"), (String) params.get("to"), "TEST", "mail/pan0104.vm", model);
+		mailService.send((String) params.get("from"), (String) params.get("to"), "TEST", "/templates/mail/pan0104.vm", model);
 	}
 
 }
