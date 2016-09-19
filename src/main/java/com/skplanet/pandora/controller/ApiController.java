@@ -153,7 +153,7 @@ public class ApiController {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
-		ptsService.process(ptsUsername, uploadProgress);
+		ptsService.send(ptsUsername, uploadProgress);
 
 		return ApiResponse.builder().message("PTS 전송 성공").build();
 	}

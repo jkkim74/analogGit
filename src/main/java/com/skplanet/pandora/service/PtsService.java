@@ -36,10 +36,10 @@ public class PtsService {
 	@Autowired
 	private OracleRepository oracleRepository;
 
-	public void process(String ptsUsername, UploadProgress uploadProgress) {
+	public void send(String ptsUsername, UploadProgress uploadProgress) {
 		String csvFile = createCsvFile(ptsUsername, uploadProgress);
 
-		sendToPts(csvFile);
+		process(csvFile);
 	}
 
 	private String createCsvFile(String ptsUsername, UploadProgress uploadProgress) {
@@ -83,7 +83,7 @@ public class PtsService {
 		return "P140802BKhub_" + ptsUsername + "_" + nowDt + "_" + UUID.randomUUID() + ".csv";
 	}
 
-	private void sendToPts(String filename) {
+	private void process(String filename) {
 		String ptsProperties = Resources.getResource("config/PTS.properties").getPath();
 
 		log.debug("PTS.properties location={}", ptsProperties);

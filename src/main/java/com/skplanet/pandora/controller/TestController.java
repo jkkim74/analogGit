@@ -18,6 +18,7 @@ import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.pandora.service.MailService;
+import com.skplanet.pandora.service.SmsService;
 
 @RestController
 public class TestController {
@@ -60,7 +61,17 @@ public class TestController {
 	public void testMail(@RequestParam Map<String, Object> params) {
 		Map<String, Object> model = new HashMap<>();
 		model.put("msg", new Date());
-		mailService.send((String) params.get("from"), (String) params.get("to"), "TEST", "/templates/mail/pan0104.vm", model);
+		mailService.send((String) params.get("to"), "TEST", "pan0104.vm", model);
+	}
+
+	@Autowired
+	private SmsService smsService;
+
+	@GetMapping("/testSms")
+	public void testSms(@RequestParam Map<String, Object> params) {
+		Map<String, Object> model = new HashMap<>();
+		model.put("msg", new Date());
+		smsService.send(new String[] { (String) params.get("to") }, "pan0104.vm", model);
 	}
 
 }
