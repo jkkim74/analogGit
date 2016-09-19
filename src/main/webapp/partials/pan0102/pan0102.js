@@ -15,7 +15,7 @@ App.controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
   // 기본 정보
   $scope.gridOptionsBasicInfo = {
     enableColumnMenus: false,
-    // enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
     enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
     flatEntityAccess: true,
     minRowsToShow: 1,
@@ -23,7 +23,6 @@ App.controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
       { field: 'mbrFgCd', displayName: '회원구분', cellTooltip: true, headerTooltip: true },
       { field: 'mbrStsCd', displayName: '회원상태', cellTooltip: true, headerTooltip: true },
       { field: 'mbrId', displayName: '회원ID', cellTooltip: true, headerTooltip: true },
-      { field: 'custId', displayName: 'CUST_ID', cellTooltip: true, headerTooltip: true },
       { field: 'ciNo', displayName: 'CI번호', width: 800, cellTooltip: true, headerTooltip: true },
       { field: 'pntExtnctYn', displayName: '포인트 소멸 여부', cellTooltip: true, headerTooltip: true }
     ]
@@ -250,28 +249,28 @@ App.controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
       { field: 'saleQty', displayName: '주유량', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'cpnPrd', displayName: '쿠폰', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'trxType', displayName: '거래종류', width: 100, cellTooltip: true, headerTooltip: true }
-    ],
-    onRegisterApi: function (gridApi) {
-      gridApi.grid.registerRowsProcessor($scope.singleFilter, 200);
-      $scope.transactionHistoryGridApi = gridApi;
-    }
+    ]
+    // onRegisterApi: function (gridApi) {
+    //   gridApi.grid.registerRowsProcessor($scope.singleFilter, 200);
+    //   $scope.transactionHistoryGridApi = gridApi;
+    // }
   };
 
-  $scope.singleFilter = function (renderableRows) {
-    var matcher = new RegExp($scope.filterValue);
-    renderableRows.forEach(function (row) {
-      var match = false;
-      ['name', 'company', 'email'].forEach(function (field) {
-        if (row.entity[field].match(matcher)) {
-          match = true;
-        }
-      });
-      if (!match) {
-        row.visible = false;
-      }
-    });
-    return renderableRows;
-  };
+  // $scope.singleFilter = function (renderableRows) {
+  //   var matcher = new RegExp($scope.filterValue);
+  //   renderableRows.forEach(function (row) {
+  //     var match = false;
+  //     ['name', 'company', 'email'].forEach(function (field) {
+  //       if (row.entity[field].match(matcher)) {
+  //         match = true;
+  //       }
+  //     });
+  //     if (!match) {
+  //       row.visible = false;
+  //     }
+  //   });
+  //   return renderableRows;
+  // };
 
   // 이메일 발송 이력
   $scope.gridOptionsEmailSendHistory = {
