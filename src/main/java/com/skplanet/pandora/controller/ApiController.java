@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,7 +37,7 @@ public class ApiController {
 	@Autowired
 	private PtsService ptsService;
 
-	@RequestMapping(method = RequestMethod.GET, value = "/members")
+	@GetMapping("/members")
 	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam String username,
 			@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "20") int limit) {
 
@@ -46,20 +47,20 @@ public class ApiController {
 		return ApiResponse.builder().value(list).totalRecords(count).build();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/memberInfo")
+	@GetMapping("/memberInfo")
 	public List<AutoMappedMap> getMemberInfo(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectMemberInfo(params);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/agreementInfo")
+	@GetMapping("/agreementInfo")
 	public List<AutoMappedMap> getAgreementInfo(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
 		return querycacheRepository.selectAgreementInfo(mbrId);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/joinInfoOcbapp")
+	@GetMapping("/joinInfoOcbapp")
 	public List<AutoMappedMap> getJoinInfoOcbapp(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
@@ -72,81 +73,81 @@ public class ApiController {
 		} else {
 			log.info("{}", result);
 			AutoMappedMap m = result.get(0);
-			
+
 			m.put("ocbapp_Yn", "Y");
 		}
 
 		return result;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/joinInfoOcbcom")
+	@GetMapping("/joinInfoOcbcom")
 	public List<AutoMappedMap> getJoinInfoOcbcom(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectJoinInfo(params);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/lastestUsageInfo")
+	@GetMapping("/lastestUsageInfo")
 	public List<AutoMappedMap> getLastestUsageInfo(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectLastestUsageInfo(params);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/marketingMemberInfo")
+	@GetMapping("/marketingMemberInfo")
 	public List<AutoMappedMap> getMarketingMemberInfo(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectMarketingMemberInfo(params);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/marketingMemberInfoHistory")
+	@GetMapping("/marketingMemberInfoHistory")
 	public List<AutoMappedMap> getMarketingMemberInfoHistory(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectMarketingMemberInfoHistory(params);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/thirdPartyProvideHistory")
+	@GetMapping("/thirdPartyProvideHistory")
 	public List<AutoMappedMap> getThirdPartyProvideHistory(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectThirdPartyProvideHistory(params);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/cardList")
+	@GetMapping("/cardList")
 	public List<AutoMappedMap> getCardList(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectCardList(params);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/transactionHistory")
+	@GetMapping("/transactionHistory")
 	public List<AutoMappedMap> getTransactionHistory(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
 		return querycacheRepository.selectTransactionHistory(mbrId);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/emailSendHistory")
+	@GetMapping("/emailSendHistory")
 	public List<AutoMappedMap> getEmailSendHistory(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
 		return querycacheRepository.selectEmailSendHistory(mbrId);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/appPushHistory")
+	@GetMapping("/appPushHistory")
 	public List<AutoMappedMap> getAppPushHistory(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
 		return querycacheRepository.selectAppPushHistory(mbrId);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/clphnNoDup")
+	@GetMapping("/clphnNoDup")
 	public List<AutoMappedMap> getClphnNoDup(@RequestParam Map<String, Object> params) {
 		return oracleRepository.selectClphnNoDup(params);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/emailAddrDup")
+	@GetMapping("/emailAddrDup")
 	public List<AutoMappedMap> getEmailAddrDup(@RequestParam Map<String, Object> params) {
 		return oracleRepository.selectEmailAddrDup(params);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/sendPts")
+	@PostMapping("/sendPts")
 	public ApiResponse sendPts(@RequestParam String ptsUsername, @RequestParam String ptsMasking,
 			@RequestParam String pageId, @RequestParam String username) {
 

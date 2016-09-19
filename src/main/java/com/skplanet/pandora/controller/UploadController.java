@@ -5,8 +5,9 @@ import java.util.List;
 
 import org.springframework.batch.core.JobParameters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +37,7 @@ public class UploadController {
 	@Autowired
 	private UploadService uploadService;
 
-	@RequestMapping(method = RequestMethod.POST)
+	@PostMapping
 	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String pageId,
 			@RequestParam String username, @RequestParam String columnName) throws IOException {
 
@@ -47,13 +48,13 @@ public class UploadController {
 		}
 
 		JobParameters jobParameters = uploadService.readyToImport(file, pageId, username, columnName);
-		
+
 		uploadService.beginImport(jobParameters);
 
 		return ApiResponse.builder().message("업로드 성공").build();
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	public ApiResponse getUploadedPreview(@RequestParam String pageId, @RequestParam String username,
 			@RequestParam(defaultValue = "false") boolean countOnly) {
 		if (countOnly) {
