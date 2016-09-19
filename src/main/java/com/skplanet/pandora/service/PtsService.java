@@ -36,15 +36,15 @@ public class PtsService {
 	@Autowired
 	private OracleRepository oracleRepository;
 
-	private String getFilename(String ptsUsername) {
-		DateFormatter df = new DateFormatter("yyyyMMdd");
-		String nowDt = df.print(new Date(), Locale.getDefault());
-		return "P140802BKhub_" + ptsUsername + "_" + nowDt + "_" + UUID.randomUUID() + ".csv";
+	public void process(String ptsUsername, UploadProgress uploadProgress) {
+		String csvFile = createCsvFile(ptsUsername, uploadProgress);
+
+		sendToPts(csvFile);
 	}
 
-	public String createCsvFile(String ptsUsername, UploadProgress uploadProgress) {
+	private String createCsvFile(String ptsUsername, UploadProgress uploadProgress) {
 		int offset = 0;
-		int limit = 10000;
+		int limit = 10000; // 1만건씩 DB에서 읽어서 CSV파일에 쓰기
 		List<AutoMappedMap> list = Collections.emptyList();
 		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR, getFilename(ptsUsername));
 
@@ -70,10 +70,6 @@ public class PtsService {
 				offset += limit;
 			} while (!list.isEmpty());
 
-			if (printer != null) {
-				printer.close();
-				printer = null;
-			}
 		} catch (IOException e) {
 			throw new BizException("CSV 파일 생성 실패", e);
 		}
@@ -81,7 +77,13 @@ public class PtsService {
 		return filePath.toFile().getAbsolutePath();
 	}
 
-	public void send(String filename) {
+	private String getFilename(String ptsUsername) {
+		DateFormatter df = new DateFormatter("yyyyMMdd");
+		String nowDt = df.print(new Date(), Locale.getDefault());
+		return "P140802BKhub_" + ptsUsername + "_" + nowDt + "_" + UUID.randomUUID() + ".csv";
+	}
+
+	private void sendToPts(String filename) {
 		String ptsProperties = Resources.getResource("config/PTS.properties").getPath();
 
 		log.debug("PTS.properties location={}", ptsProperties);

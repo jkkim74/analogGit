@@ -152,9 +152,7 @@ public class ApiController {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
-		String csvFile = ptsService.createCsvFile(ptsUsername, uploadProgress);
-
-		ptsService.send(csvFile);
+		ptsService.process(ptsUsername, uploadProgress);
 
 		return ApiResponse.builder().message("PTS 전송 성공").build();
 	}
