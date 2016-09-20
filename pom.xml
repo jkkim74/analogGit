@@ -88,7 +88,7 @@
 		<dependency>
 			<groupId>com.skplanet.querycache</groupId>
 			<artifactId>querycache-jdbc</artifactId>
-			<version>0.25.0</version>
+			<version>0.26.1</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -138,7 +138,7 @@
 		<dependency>
 			<groupId>SKPBSS</groupId>
 			<artifactId>bss-rms-client</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
