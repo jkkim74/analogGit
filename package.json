@@ -15,5 +15,8 @@
   "scripts": {
     "postinstall": "bower install",
     "prestart": "npm install"
+  },
+  "dependencies": {
+    "gulp-angular-filesort": "^1.1.1"
   }
 }

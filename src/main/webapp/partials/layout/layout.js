@@ -1,7 +1,8 @@
 'use strict';
 
-App.controller('FooterCtrl', ['$scope', function ($scope) {
+angular.module('App')
+    .controller('FooterCtrl', ['$scope', function ($scope) {
 
-    $scope.year = new Date().getFullYear();
+        $scope.year = new Date().getFullYear();
 
-}]);
+    }]);
