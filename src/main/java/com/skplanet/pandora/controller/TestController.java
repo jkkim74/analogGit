@@ -82,29 +82,13 @@ public class TestController {
 	public Map<String, Object> testClientIp() {
 		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest();
-		
-		String ip = req.getHeader("X-Forwarded-For");
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = req.getHeader("Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = req.getHeader("WL-Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = req.getHeader("HTTP_CLIENT_IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = req.getHeader("HTTP_X_FORWARDED_FOR");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = req.getRemoteAddr();
-		}
-
-		// 여러 프록시를 경유했을 경우 콤마로 여러 IP가 누적됨. 맨 왼쪽 IP가 end-user's IP.
-		ip = ip.split(",")[0];
 
 		Map<String, Object> map = new HashMap<>();
-		map.put("clientIp", ip);
+		map.put("X-Forwarded-For", req.getHeader("X-Forwarded-For"));
+		map.put("Proxy-Client-IP", req.getHeader("Proxy-Client-IP"));
+		map.put("WL-Proxy-Client-IP", req.getHeader("WL-Proxy-Client-IP"));
+		map.put("HTTP_CLIENT_IP", req.getHeader("HTTP_CLIENT_IP"));
+		map.put("HTTP_X_FORWARDED_FOR", req.getHeader("HTTP_X_FORWARDED_FOR"));
 		map.put("getRemoteAddr()", req.getRemoteAddr());
 
 		return map;
