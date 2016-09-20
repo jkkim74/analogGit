@@ -240,37 +240,40 @@ App.controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConst
       { field: 'pntKnd', displayName: '포인트종류', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'slip', displayName: '전표', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'saleAmt', displayName: '매출금액', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
-      { field: 'pnt', displayName: '포인트', width: 100, cellTooltip: true, headerTooltip: true },
-      { field: 'csMbrCmmsn', displayName: '제휴사연회비', width: 100, cellTooltip: true, headerTooltip: true },
-      { field: 'cmmsn', displayName: '수수료', width: 100, cellTooltip: true, headerTooltip: true },
+      { field: 'pnt', displayName: '포인트', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
+      { field: 'csMbrCmmsn', displayName: '제휴사연회비', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
+      { field: 'cmmsn', displayName: '수수료', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
       { field: 'pmntWay', displayName: '지불수단', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'org', displayName: '기관', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'oilPrdctSgrp', displayName: '유종', width: 100, cellTooltip: true, headerTooltip: true },
-      { field: 'saleQty', displayName: '주유량', width: 100, cellTooltip: true, headerTooltip: true },
+      { field: 'saleQty', displayName: '주유량', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
       { field: 'cpnPrd', displayName: '쿠폰', width: 100, cellTooltip: true, headerTooltip: true },
       { field: 'trxType', displayName: '거래종류', width: 100, cellTooltip: true, headerTooltip: true }
-    ]
-    // onRegisterApi: function (gridApi) {
-    //   gridApi.grid.registerRowsProcessor($scope.singleFilter, 200);
-    //   $scope.transactionHistoryGridApi = gridApi;
-    // }
+    ],
+    onRegisterApi: function (gridApi) {
+      gridApi.grid.registerRowsProcessor($scope.singleFilter, 200);
+      $scope.transactionHistoryGridApi = gridApi;
+    }
   };
 
-  // $scope.singleFilter = function (renderableRows) {
-  //   var matcher = new RegExp($scope.filterValue);
-  //   renderableRows.forEach(function (row) {
-  //     var match = false;
-  //     ['name', 'company', 'email'].forEach(function (field) {
-  //       if (row.entity[field].match(matcher)) {
-  //         match = true;
-  //       }
-  //     });
-  //     if (!match) {
-  //       row.visible = false;
-  //     }
-  //   });
-  //   return renderableRows;
-  // };
+  $scope.singleFilter = function (renderableRows) {
+    if ($scope.trxType !== '') {
+      var matcher = new RegExp($scope.trxType);
+
+      renderableRows.forEach(function (row) {
+        ['trxType'].forEach(function (field) {
+          if (!row.entity[field].match(matcher)) {
+            row.visible = false;
+          }
+        });
+      });
+    }
+    return renderableRows;
+  };
+
+  $scope.changeTrxType = function () {
+    $scope.transactionHistoryGridApi.grid.refresh();
+  };
 
   // 이메일 발송 이력
   $scope.gridOptionsEmailSendHistory = {

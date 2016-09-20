@@ -40,8 +40,8 @@
 			, A.REP_APPR_NO AS REP_APPR_NO -- 대표승인번호
 			, A.APPR_NO AS APPR_NO -- 승인번호
 			, FROM_UNIXTIME(UNIX_TIMESTAMP(CONCAT(A.SALE_DT,A.SALE_TM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS SALE_DTTM -- 매출일시
-			, A.MBR_ID AS MBR_ID-- 회원ID
-			, A.CARD_DTL_GRP_CD AS CARD_DTL_GRP_CD-- 카드상세그룹코드
+			, A.MBR_ID AS MBR_ID -- 회원ID
+			, A.CARD_DTL_GRP_CD AS CARD_DTL_GRP_CD -- 카드상세그룹코드
 			, E.DTL_CD_NM AS CARD_DTL_GRP_NM -- 카드명
 			, CONCAT_WS(' / ', A.CARD_DTL_GRP_CD, E.DTL_CD_NM) AS CARD_DTL_GRP
 			, FUNCS.SECUAESDECRYPT(A.CARD_NO) AS CARD_NO -- 카드번호
@@ -117,6 +117,34 @@
 		LEFT OUTER JOIN (SELECT DTL_CD, DTL_CD_NM FROM OCB.DW_OCB_INTG_CD WHERE DOMN_ID = 'CAR_OIL_PRDCT_SGRP_CD') J ON A.OIL_PRDCT_SGRP_CD = J.DTL_CD
 		LEFT OUTER JOIN OCB.DW_CPN_PRD_MST K ON A.CPN_PRD_CD = K.CPN_PRD_CD
 		WHERE A.MBR_ID = #{mbrId}
+	</select>
+	<select id="selectTransactionHistory" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
+		SELECT RCV_DT -- 접수일시
+			, RCV_SEQ-- 접수번호
+			, APPR_DTTM -- 승인일시
+			, REP_APPR_NO -- 대표승인번호
+			, APPR_NO -- 승인번호
+			, SALE_DTTM -- 매출일시
+			, MBR_ID -- 회원ID
+			, CARD_DTL_GRP
+			, CARD_NO -- 카드번호
+			, ALCMPN
+			, MCNT
+			, STLMT_MCNT
+			, PNT_KND
+			, SLIP
+			, SALE_AMT -- 매출금액
+			, PNT -- 포인트
+			, CS_MBR_CMMSN -- 제휴사연회비
+			, CMMSN -- 수수료
+			, PMNT_WAY
+			, ORG
+			, OIL_PRDCT_SGRP
+			, SALE_QTY -- 주유량
+			, CPN_PRD
+			, TRX_TYPE -- 01일경우 일반 02일경우 주유
+		FROM MOCK_TB_SEL_TRX_HIST
+		WHERE MBR_ID = #{mbrId}
 	</select>
 
 	<select id="selectEmailSendHistory" parameterType="map" resultType="AutoMappedMap">

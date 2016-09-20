@@ -83,7 +83,7 @@
             <div class="panel panel-info">
                 <div class="panel-heading form-inline">
                     <strong>거래 내역</strong>
-                    <select class="form-control input-sm" ng-model="transactionType">
+                    <select class="form-control input-sm" ng-model="trxType" ng-change="changeTrxType()">
                         <option value="">전체</option>
                         <option value="01">일반</option>
                         <option value="02">주유</option>
