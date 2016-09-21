@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default navbar-fixed-top" ng-controller="HeaderCtrl">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse" aria-expanded="false">
@@ -19,10 +19,12 @@
                 <li ui-sref-active="active"><a ui-sref="index.page({pageId: 'pan0105'})">거래 실적 및 유실적 고객 추출</a></li>
                 <li ui-sref-active="active"><a ui-sref="index.page({pageId: 'pan0106'})">회원 프로파일 분석</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="" uib-tooltip="로그아웃" tooltip-placement="bottom-right"><i class="fa fa-user-times fa-lg" aria-hidden="true"></i></a></li>
-            </ul>
-            <p class="navbar-text navbar-right"><strong>홍길동</strong> 님</p>
+            <div ng-if="isLogin()">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" ng-click="logout()" uib-tooltip="로그아웃" tooltip-placement="bottom-right"><i class="fa fa-user-times fa-lg" aria-hidden="true"></i></a></li>
+                </ul>
+                <p class="navbar-text navbar-right"><strong>{{username}}</strong> 님</p>
+            </div>
         </div>
     </div>
 </nav>

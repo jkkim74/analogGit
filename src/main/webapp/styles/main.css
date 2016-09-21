@@ -13,7 +13,7 @@ a {
     border-top:1px solid #ddddde;
     color: #999;
     height: 8vh;
-    padding-top: 20px;
+    padding-top: 1.5vh;
 }
 
 .section-body {
@@ -32,6 +32,11 @@ a {
     background-color: white;
     margin: 15px 0px;
     padding: 20px 20px;
+}
+
+.section-login {
+    padding-top: 40vh;
+    width: 60vw;
 }
 
 .drop-box {

@@ -1,14 +1,15 @@
 'use strict';
 
 angular.module('App')
-    .service('apiService', ["$log", "$q", "$http", "$stateParams", "toastr", function ($log, $q, $http, $stateParams, toastr) {
+    .service('apiService', ['$log', '$q', '$http', '$stateParams', 'toastr', 'authService', function ($log, $q, $http, $stateParams, toastr, authService) {
 
         function ApiGet(command) {
             return function (params) {
                 var deferred = $q.defer();
 
                 $http.get('/api/' + command, {
-                    params: angular.extend(params, { pageId: $stateParams.pageId, username: 'test2' })
+                    params: angular.extend(params, { pageId: $stateParams.pageId }),
+                    headers: { 'Authorization': 'Bearer ' + authService.getAccessToken() }
                 }).then(function (resp) {
                     deferred.resolve(resp.data);
                 }, function (resp) {
@@ -25,13 +26,16 @@ angular.module('App')
             return function (params) {
                 var deferred = $q.defer();
 
-                $http.post('/api/' + command, angular.extend(params, { pageId: $stateParams.pageId, username: 'test2' }), {
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                $http.post('/api/' + command, angular.extend(params, { pageId: $stateParams.pageId }), {
+                    headers: {
+                        'Authorization': 'Bearer ' + authService.getAccessToken(),
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
                     transformRequest: function (obj) {
                         var str = [];
                         for (var p in obj)
-                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                        return str.join("&");
+                            str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+                        return str.join('&');
                     }
                 }).then(function (resp) {
                     toastr.success((resp.data && resp.data.message) || resp.config.url);

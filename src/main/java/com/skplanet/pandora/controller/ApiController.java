@@ -38,8 +38,10 @@ public class ApiController {
 	private PtsService ptsService;
 
 	@GetMapping("/members")
-	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam String username,
-			@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "20") int limit) {
+	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam(defaultValue = "0") int offset,
+			@RequestParam(defaultValue = "20") int limit) {
+
+		String username = AuthController.getUserInfo().getUsername();
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 		List<AutoMappedMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit);
@@ -149,7 +151,9 @@ public class ApiController {
 
 	@PostMapping("/sendPts")
 	public ApiResponse sendPts(@RequestParam String ptsUsername, @RequestParam String ptsMasking,
-			@RequestParam String pageId, @RequestParam String username) {
+			@RequestParam String pageId) {
+
+		String username = AuthController.getUserInfo().getUsername();
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 

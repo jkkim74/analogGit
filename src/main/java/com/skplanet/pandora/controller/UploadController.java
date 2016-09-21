@@ -39,7 +39,9 @@ public class UploadController {
 
 	@PostMapping
 	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String pageId,
-			@RequestParam String username, @RequestParam String columnName) throws IOException {
+			@RequestParam String columnName) throws IOException {
+
+		String username = AuthController.getUserInfo().getUsername();
 
 		log.info("Uploading file... pageId={}, username={}, columnName={}", pageId, username, columnName);
 
@@ -55,8 +57,11 @@ public class UploadController {
 	}
 
 	@GetMapping
-	public ApiResponse getUploadedPreview(@RequestParam String pageId, @RequestParam String username,
+	public ApiResponse getUploadedPreview(@RequestParam String pageId,
 			@RequestParam(defaultValue = "false") boolean countOnly) {
+
+		String username = AuthController.getUserInfo().getUsername();
+
 		if (countOnly) {
 			// 업로드 진행상태 체크 용도
 			UploadProgress uploadProgress = mysqlRepository.selectUploadProgress(pageId, username);

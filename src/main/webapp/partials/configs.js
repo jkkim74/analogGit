@@ -33,12 +33,14 @@ angular.module('App')
                 }
             });
 
+        // 화면 전환 시 스크롤 초기화
         $provide.decorator('$uiViewScroll', function ($delegate) {
             return function (uiViewElement) {
                 window.scrollTo(0, 0);
             };
         });
 
+        // 전체 화면 블록킹 용
         blockUIConfig.message = 'Waiting...';
         blockUIConfig.autoBlock = false;
 
@@ -52,7 +54,7 @@ angular.module('App')
                     needAuth = false;
                 }
 
-                if (needAuth && !authService.authenticated()) {
+                if (needAuth && !authService.isAuthenticated()) {
                     $state.transitionTo('index.home');
                     event.preventDefault();
                 }

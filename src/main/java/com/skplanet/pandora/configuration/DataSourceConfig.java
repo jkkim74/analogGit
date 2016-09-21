@@ -37,6 +37,7 @@ public class DataSourceConfig {
 	}
 
 	@Bean
+	@Primary
 	public PlatformTransactionManager mysqlTxManager() {
 		return new DataSourceTransactionManager(mysqlDataSource());
 	}

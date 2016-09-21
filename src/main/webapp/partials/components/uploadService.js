@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .service('uploadService', ['$log', '$q', '$http', '$stateParams', 'toastr', 'Upload', '$interval', function ($log, $q, $http, $stateParams, toastr, Upload, $interval) {
+    .service('uploadService', ['$log', '$q', '$http', '$stateParams', 'toastr', 'Upload', '$interval', 'authService', function ($log, $q, $http, $stateParams, toastr, Upload, $interval, authService) {
 
         this.upload = function (params) {
             var deferred = $q.defer();
@@ -9,7 +9,8 @@ angular.module('App')
             if (angular.isDefined(params.file)) {
                 Upload.upload({
                     url: '/api/upload',
-                    data: angular.extend(params, { pageId: $stateParams.pageId, username: 'test2' })
+                    data: angular.extend(params, { pageId: $stateParams.pageId }),
+                    headers: { 'Authorization': 'Bearer ' + authService.getAccessToken() }
                 }).then(function (resp) {
                     toastr.success(resp.config.data.file.name, resp.data.message);
                     deferred.resolve();
@@ -36,7 +37,8 @@ angular.module('App')
 
             function uploadedPreview() {
                 $http.get('/api/upload', {
-                    params: { pageId: $stateParams.pageId, username: 'test2' }
+                    params: { pageId: $stateParams.pageId },
+                    headers: { 'Authorization': 'Bearer ' + authService.getAccessToken() }
                 }).then(function (resp) {
                     if (resp.data.value.length > 0) {
                         $interval.cancel(canceler);
@@ -59,7 +61,8 @@ angular.module('App')
 
             function uploadedPreview() {
                 $http.get('/api/upload', {
-                    params: { pageId: $stateParams.pageId, username: 'test2', countOnly: true }
+                    params: { pageId: $stateParams.pageId, countOnly: true },
+                    headers: { 'Authorization': 'Bearer ' + authService.getAccessToken() }
                 }).then(function (resp) {
                     deferred.notify(resp.data.totalRecords);
 
