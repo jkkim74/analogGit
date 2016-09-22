@@ -14,10 +14,17 @@ import skp.bss.msg.rms.front.HttpMessageApi;
 @Configuration
 public class SmsConfig {
 
-	@Bean
-	public HttpMessageApi smsApi(@Value("${sms.url}") String url, @Value("${sms.serviceId}") String serviceId,
-			@Value("${sms.appKey}") String appKey) throws MalformedURLException, URISyntaxException {
+	@Value("${sms.url}")
+	private String url;
 
+	@Value("${sms.serviceId}")
+	private String serviceId;
+
+	@Value("${sms.appKey}")
+	private String appKey;
+
+	@Bean
+	public HttpMessageApi smsApi() throws MalformedURLException, URISyntaxException {
 		HttpMessageApi smsApi = new HttpMessageApi();
 		smsApi.setConnectionManager(new HttpConnectionManager(new URL(url), serviceId, appKey));
 		return smsApi;

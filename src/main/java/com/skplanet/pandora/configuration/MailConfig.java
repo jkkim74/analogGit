@@ -11,12 +11,32 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @Configuration
 public class MailConfig {
 
+	@Value("${mail.host}")
+	private String host;
+
+	@Value("${mail.port}")
+	private int port;
+
+	@Value("${mail.username:}")
+	private String username;
+
+	@Value("${mail.password:}")
+	private String password;
+
+	@Value("${mail.smtp.ehlo:true}")
+	private String smtpEhlo;
+
+	@Value("${mail.smtp.auth:false}")
+	private String smtpAuth;
+
+	@Value("${mail.smtp.starttls.enable:false}")
+	private String smtpStartTlsEnable;
+
+	@Value("${mail.debug:false}")
+	private String debug;
+
 	@Bean
-	public JavaMailSender mailSender(@Value("${mail.host}") String host, @Value("${mail.port}") int port,
-			@Value("${mail.username:}") String username, @Value("${mail.password:}") String password,
-			@Value("${mail.smtp.ehlo:true}") String smtpEhlo, @Value("${mail.smtp.auth:false}") String smtpAuth,
-			@Value("${mail.smtp.starttls.enable:false}") String smtpStartTlsEnable,
-			@Value("${mail.debug:false}") String debug) {
+	public JavaMailSender mailSender() {
 
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setHost(host);
