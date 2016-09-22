@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.ldap.authentication.UserDetailsServiceLdapAuthoritiesPopulator;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
-import com.skplanet.pandora.security.CombinedAuthenticationProvider;
+import com.skplanet.pandora.security.PreCheckAuthenticationProvider;
 
 @Configuration
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth, UserDetailsService userDetailsService,
-			CombinedAuthenticationProvider combinedAuthenticationProvider) throws Exception {
+			PreCheckAuthenticationProvider combinedAuthenticationProvider) throws Exception {
 
 		auth.authenticationProvider(combinedAuthenticationProvider);
 

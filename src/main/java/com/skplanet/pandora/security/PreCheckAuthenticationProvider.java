@@ -11,7 +11,7 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CombinedAuthenticationProvider implements AuthenticationProvider {
+public class PreCheckAuthenticationProvider implements AuthenticationProvider {
 
 	@Autowired
 	private JdbcUserDetailsManager jdbcUserDetailsManager;
