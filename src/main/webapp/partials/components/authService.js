@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .service('authService', ['$log', '$q', '$http', '$timeout', 'toastr', function ($log, $q, $http, $timeout, toastr) {
+    .service('authService', ['$log', '$q', '$http', '$timeout', '$state', 'toastr', function ($log, $q, $http, $timeout, $state, toastr) {
 
         var self = this;
 
@@ -31,15 +31,19 @@ angular.module('App')
                 }
             ).then(function (resp) {
                 sessionStorage.setItem('access_token', resp.data.access_token);
-
                 return $http.get('/auth/me', { headers: { 'Authorization': 'Bearer ' + resp.data.access_token } });
             }).then(function (resp) {
                 sessionStorage.setItem('user_info', JSON.stringify(resp.data));
-
+                $state.reload();
                 deferred.resolve();
             }).catch(function (resp) {
                 $log.error(resp);
-                toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
+                if (resp.status == 401) {
+                    toastr.error('등록된 사용자가 아닙니다', '로그인 실패');
+                } else {
+                    toastr.error('로그인 정보가 틀렸습니다', '로그인 실패');
+                }
+
                 deferred.reject();
             });
 
@@ -47,16 +51,9 @@ angular.module('App')
         };
 
         this.logout = function () {
-            var deferred = $q.defer();
-
-            $timeout(function () {
-                sessionStorage.removeItem('access_token');
-                sessionStorage.removeItem('user_info');
-
-                deferred.resolve();
-            }, 0);
-
-            return deferred.promise;
+            sessionStorage.removeItem('access_token');
+            sessionStorage.removeItem('user_info');
+            $state.reload();
         };
 
         this.isAuthenticated = function () {
@@ -77,7 +74,7 @@ angular.module('App')
                 } else {
                     deferred.reject();
                 }
-            }, 400);
+            }, 0);
 
             return deferred.promise;
         };

@@ -19,9 +19,9 @@
                 <li ui-sref-active="active"><a ui-sref="index.page({pageId: 'pan0105'})">거래 실적 및 유실적 고객 추출</a></li>
                 <li ui-sref-active="active"><a ui-sref="index.page({pageId: 'pan0106'})">회원 프로파일 분석</a></li>
             </ul>
-            <div ng-if="authService.isAuthenticated()">
+            <div ng-if="isAuthenticated">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#" ng-click="authService.logout()" uib-tooltip="로그아웃" tooltip-placement="bottom-right"><i class="fa fa-user-times fa-lg" aria-hidden="true"></i></a></li>
+                    <li><a href="#" ng-click="logout()" uib-tooltip="로그아웃" tooltip-placement="bottom-right"><i class="fa fa-user-times fa-lg" aria-hidden="true"></i></a></li>
                 </ul>
                 <p class="navbar-text navbar-right"><strong>{{username}}</strong> 님</p>
             </div>

@@ -3,7 +3,11 @@
 angular.module('App')
     .controller('HeaderCtrl', ['$scope', 'authService', function ($scope, authService) {
 
-        $scope.authService = authService;
+        $scope.isAuthenticated = authService.isAuthenticated();
+
+        $scope.logout = function () {
+            authService.logout();
+        };
 
         authService.getUsername().then(function (username) {
             $scope.username = username;
