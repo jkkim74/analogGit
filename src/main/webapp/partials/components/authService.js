@@ -3,6 +3,8 @@
 angular.module('App')
     .service('authService', ['$log', '$q', '$http', '$timeout', 'toastr', function ($log, $q, $http, $timeout, toastr) {
 
+        var self = this;
+
         this.authenticate = function (username, password) {
             var deferred = $q.defer();
 
@@ -30,17 +32,15 @@ angular.module('App')
             ).then(function (resp) {
                 sessionStorage.setItem('access_token', resp.data.access_token);
 
-                return $http.get('/auth/me', {
-                    headers: { 'Authorization': 'Bearer ' + resp.data.access_token }
-                });
-            }, function (resp) {
-                $log.error(resp);
-                toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
-                deferred.reject();
+                return $http.get('/auth/me', { headers: { 'Authorization': 'Bearer ' + resp.data.access_token } });
             }).then(function (resp) {
                 sessionStorage.setItem('user_info', JSON.stringify(resp.data));
 
                 deferred.resolve();
+            }).catch(function (resp) {
+                $log.error(resp);
+                toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
+                deferred.reject();
             });
 
             return deferred.promise;
@@ -71,8 +71,12 @@ angular.module('App')
             var deferred = $q.defer();
 
             $timeout(function () {
-                var userInfo = JSON.parse(sessionStorage.getItem('user_info'));
-                deferred.resolve(userInfo.username);
+                if (self.isAuthenticated()) {
+                    var userInfo = JSON.parse(sessionStorage.getItem('user_info'));
+                    deferred.resolve(userInfo.username);
+                } else {
+                    deferred.reject();
+                }
             }, 0);
 
             return deferred.promise;
