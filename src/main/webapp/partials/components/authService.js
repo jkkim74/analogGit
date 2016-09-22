@@ -1,11 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .service('authService', ['$log', '$q', '$http', '$stateParams', 'toastr', function ($log, $q, $http, $stateParams, toastr) {
-
-        this.isAuthenticated = function () {
-            return sessionStorage.getItem('access_token') != null;
-        };
+    .service('authService', ['$log', '$q', '$http', '$timeout', 'toastr', function ($log, $q, $http, $timeout, toastr) {
 
         this.authenticate = function (username, password) {
             var deferred = $q.defer();
@@ -51,7 +47,20 @@ angular.module('App')
         };
 
         this.logout = function () {
-            sessionStorage.removeItem('access_token');
+            var deferred = $q.defer();
+
+            $timeout(function () {
+                sessionStorage.removeItem('access_token');
+                sessionStorage.removeItem('user_info');
+
+                deferred.resolve();
+            }, 0);
+
+            return deferred.promise;
+        };
+
+        this.isAuthenticated = function () {
+            return sessionStorage.getItem('access_token') != null;
         };
 
         this.getAccessToken = function () {
@@ -59,8 +68,14 @@ angular.module('App')
         };
 
         this.getUsername = function () {
-            var userInfo = JSON.parse(sessionStorage.getItem('user_info'));
-            return userInfo.username;
+            var deferred = $q.defer();
+
+            $timeout(function () {
+                var userInfo = JSON.parse(sessionStorage.getItem('user_info'));
+                deferred.resolve(userInfo.username);
+            }, 0);
+
+            return deferred.promise;
         };
 
     }]);

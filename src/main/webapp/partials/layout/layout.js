@@ -3,15 +3,11 @@
 angular.module('App')
     .controller('HeaderCtrl', ['$scope', 'authService', function ($scope, authService) {
 
-        $scope.isLogin = function () {
-            return authService.isAuthenticated();
-        };
+        $scope.authService = authService;
 
-        $scope.logout = function () {
-            authService.logout();
-        };
-
-        $scope.username = authService.getUsername();
+        authService.getUsername().then(function (username) {
+            $scope.username = username;
+        });
 
     }])
     .controller('FooterCtrl', ['$scope', function ($scope) {

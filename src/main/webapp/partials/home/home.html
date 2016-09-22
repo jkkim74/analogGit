@@ -1,8 +1,8 @@
 <div class="container-fluid section-body">
     <div class="section-content-wrapper">
         <div class="section-login center-block">
-            <div ng-if="isLogout()">
-                <form ng-submit="login(username, password)" name="loginForm">
+            <div ng-if="!authService.isAuthenticated()">
+                <form ng-submit="authService.authenticate(username, password)" name="loginForm">
                     <div class="col-md-5">
                         <div class="input-group input-group-lg">
                             <span class="input-group-addon">아이디</span>
