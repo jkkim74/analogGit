@@ -79,4 +79,20 @@ angular.module('App')
             return deferred.promise;
         };
 
+        this.isAdmin = function () {
+            if (!self.isAuthenticated()) {
+                return false;
+            }
+
+            var userInfo = JSON.parse(sessionStorage.getItem('user_info'));
+            var hasAdmin = false;
+
+            userInfo.authorities.forEach((obj) => {
+                if (obj.authority === 'ROLE_ADMIN')
+                    hasAdmin = true;
+            });
+
+            return hasAdmin;
+        };
+
     }]);

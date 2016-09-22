@@ -41,6 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configureGlobal(AuthenticationManagerBuilder auth, UserDetailsService userDetailsService,
 			PreCheckAuthenticationProvider combinedAuthenticationProvider) throws Exception {
 
+		auth.inMemoryAuthentication().withUser("user").password("test1234!").roles("USER", "ADMIN");
+
 		auth.authenticationProvider(combinedAuthenticationProvider);
 
 		auth.ldapAuthentication().userSearchFilter("(&(objectClass=*)(CN={0}))").userSearchBase(ldapBaseDn)

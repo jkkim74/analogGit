@@ -5,6 +5,8 @@ angular.module('App')
 
         $scope.isAuthenticated = authService.isAuthenticated();
 
+        $scope.isAdmin = authService.isAdmin();
+
         $scope.authenticate = function (username, password) {
             authService.authenticate(username, password);
         };

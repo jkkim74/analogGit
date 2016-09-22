@@ -20,6 +20,15 @@
                     </div>
                 </form>
             </div>
+
+            <div ng-if="isAuthenticated && isAdmin" class="text-center">
+                <div class="col-md-6">
+                    <button ui-sref="index.page({pageId: 'pan0002'})" type="button" class="btn btn-warning btn-lg">사용자등록 관리 바로가기</button>
+                </div>
+                <div class="col-md-6">
+                    <button ui-sref="index.page({pageId: 'pan0003'})" type="button" class="btn btn-warning btn-lg">사용자권한 관리 바로가기</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
