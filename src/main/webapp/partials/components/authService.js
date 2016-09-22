@@ -77,7 +77,7 @@ angular.module('App')
                 } else {
                     deferred.reject();
                 }
-            }, 0);
+            }, 400);
 
             return deferred.promise;
         };
