@@ -2,6 +2,7 @@ package com.skplanet.pandora.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -25,6 +26,8 @@ public class PreCheckAuthenticationProvider implements AuthenticationProvider {
 		UserDetails userDetails = jdbcUserDetailsManager.loadUserByUsername(authentication.getName());
 		if (userDetails == null) {
 			throw new UsernameNotFoundException("등록된 사용자가 아닙니다.");
+		} else if (!userDetails.isEnabled()) {
+			throw new DisabledException("사용 정지된 사용자입니다.");
 		}
 		return null;
 	}

@@ -2,6 +2,24 @@
     <ng-include src="'partials/layout/sidebar.html'"></ng-include>
     <div class="col-md-11 section-content-wrapper">
         <div class="section-content">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Pnet ID" ng-model="addUser" required>
+                        <span class="input-group-btn"><button type="button" class="btn btn-primary" >사용자 등록</button></span>
+                    </div>
+                </div>
+
+                <div class="col-md-9">
+                    <ul class="list-inline">
+                        <li><button type="button" class="btn btn-info">선택초기화</button></li>
+                        <li><button type="button" class="btn btn-danger">사용종료지정</button></li>
+                    </ul>
+                    <div>
+                        <div ui-grid="gridOptionsUserList" ui-grid-selection></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
