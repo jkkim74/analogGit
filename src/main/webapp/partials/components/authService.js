@@ -38,9 +38,9 @@ angular.module('App')
             }).catch(function (resp) {
                 $log.error(resp);
                 if (resp.status == 401) {
-                    toastr.error('등록된 사용자가 아닙니다', '로그인 실패');
+                    toastr.error('관리자에게 문의해주세요', '등록되지 않은 사용자');
                 } else {
-                    toastr.error('로그인 정보가 틀렸습니다', '로그인 실패');
+                    toastr.error('로그인 정보를 확인해주세요', '로그인 실패');
                 }
 
                 deferred.reject();
@@ -102,7 +102,7 @@ angular.module('App')
             var userInfo = JSON.parse(sessionStorage.getItem('user_info'));
             var hasAdmin = false;
 
-            userInfo.authorities.forEach((obj) => {
+            userInfo.authorities.forEach(function (obj) {
                 if (obj.authority === 'ROLE_ADMIN')
                     hasAdmin = true;
             });

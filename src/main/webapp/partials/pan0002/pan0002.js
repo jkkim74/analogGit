@@ -17,8 +17,8 @@ angular.module('App')
                 { field: 'fullname', displayName: '이름' },
                 { field: 'emailAddr', displayName: '이메일주소' },
                 { field: 'isAdmin', displayName: '관리자여부', width: 100 },
-                { field: 'column1', displayName: '사용시작일자' },
-                { field: 'column1', displayName: '사용종료일자' }
+                { field: 'beginDt', displayName: '사용시작일자' },
+                { field: 'endDt', displayName: '사용종료일자' }
             ]
         };
 
