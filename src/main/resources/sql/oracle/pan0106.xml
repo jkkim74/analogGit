@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
+
+	<sql id="selectMembers_pan0106">
+		SELECT A.MBR_ID /* 회원ID */
+			, A.UNITED_ID /* UNITEDID */
+			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'GNDR_FG_CD' AND DTL_CD = A.GNDR_FG_CD) AS GNDR /* 성별 */
+			, A.AGE /* 연령 */
+			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'HJD_LGRP_CD' AND DTL_CD = A.HOME_HJD_LGRP_CD) AS HOME_HJD_LGRP /* 자택행정동대그룹명 */
+			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'HJD_MGRP_CD' AND DTL_CD = A.HOME_HJD_MGRP_CD) AS HOME_HJD_MGRP /* 자택행정동중그룹명 */
+			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'HJD_LGRP_CD' AND DTL_CD = A.JOBP_HJD_LGRP_CD) AS JOBP_HJD_LGRP /* 직장행정동대그룹명 */
+			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'HJD_MGRP_CD' AND DTL_CD = A.JOBP_HJD_MGRP_CD) AS JOBP_HJD_MGRP /* 직장행정동중그룹명 */
+			, A.MRRG_YN /* 결혼여부 */
+			, A.OCB_MKTNG_AGRMT_YN /* OK캐쉬백마케팅동의여부 */
+			, A.EMAIL_RCV_AGRMT_YN /* 이메일수신동의여부 */
+			, A.ADVT_SMS_RCV_AGRMT_YN /* 광고성SMS수신동의여부 */
+			, A.IFRMT_SMS_RCV_AGRMT_YN /* 정보성SMS수신동의여부 */
+			, A.PUSH_RCV_AGRMT_YN /* 푸시수신동의여부 */
+			, A.BNFT_MLF_PUSH_AGRMT_YN /* 혜택모바일전단푸시동의여부 */
+			, A.PNT_USE_RSVNG_PUSH_AGRMT_YN /* 포인트사용적립푸시동의여부 */
+			, A.TUSE_PUSH_AGRMT_YN /* 함께쓰기푸시동의여부 */
+			, A.COIN_NOTI_PUSH_AGRMT_YN /* 코인알림푸시동의여부 */
+			, A.LOC_UTLZ_AGRMT_YN /* 위치활용동의여부 */
+			, A.MLF_SHP_AGRMT_YN /* 모바일전단매장동의여부 */
+			, A.MLF_TRDAREA_AGRMT_YN /* 모바일전단상권동의여부 */
+			, A.OCBCOM_JOIN_YN /* OCB닷컴가입여부 */
+			, A.OCB_APP_JOIN_YN /* OK캐쉬백앱가입여부 */
+			, A.OCB_PLUS_JOIN_YN /* OK캐쉬백플러스가입여부 */
+			, A.SEG629_CD /* 629세그먼트코드 */
+			, A.TRFC_SEG_CD /* 트래픽세그먼트코드 */
+			, TO_CHAR(TO_DATE(A.OCBCOM_MTH07_FNL_LGN_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS OCBCOM_MTH07_FNL_LGN_DT /* OCB닷컴07개월최종로그인일자 */
+			, TO_CHAR(TO_DATE(A.OCB_APP_MTH07_FNL_USE_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS OCB_APP_MTH07_FNL_USE_DT /* OCBAPP07개월최종사용일자 */
+			, TO_CHAR(TO_DATE(A.APP_ATDC_MTH07_FNL_USE_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS APP_ATDC_MTH07_FNL_USE_DT /* 앱출석07개월최종사용일자 */
+			, TO_CHAR(TO_DATE(A.RLET_MTH07_FNL_USE_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS RLET_MTH07_FNL_USE_DT /* 룰렛07개월최종사용일자 */
+			, TO_CHAR(TO_DATE(A.GAME_MTH07_FNL_USE_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS GAME_MTH07_FNL_USE_DT /* 게임07개월최종사용일자 */
+			, TO_CHAR(TO_DATE(A.OCB_PLUS_MTH07_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS OCB_PLUS_MTH07_FNL_YACHV_DT /* OK캐쉬백플러스07개월최종유실적일자 */
+			, TO_CHAR(TO_DATE(A.LCKR_MTH07_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS LCKR_MTH07_FNL_YACHV_DT /* 라커07개월최종유실적일자 */
+			, TO_CHAR(TO_DATE(A.MZM_MTH07_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS MZM_MTH07_FNL_YACHV_DT /* 미리줌07개월최종유실적일자 */
+			, TO_CHAR(TO_DATE(A.AZM_MTH07_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS AZM_MTH07_FNL_YACHV_DT /* 더줌07개월최종유실적일자 */
+			, TO_CHAR(TO_DATE(A.PRD_LFL_MTH07_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS PRD_LFL_MTH07_FNL_YACHV_DT /* 상품전단07개월최종유실적일자 */
+			, A.MBL_CARD_POSS_YN /* 모바일카드보유여부 */
+			, A.SKP_CARD_POSS_YN /* SKP카드보유여부 */
+			, A.CRDT_CARD_POSS_YN /* 신용카드보유여부 */
+			, A.CHKCRD_POSS_YN /* 체크카드보유여부 */
+			, A.CMNCN_CARD_POSS_YN /* 통신카드보유여부 */
+			, A.ENCLEAN_BNS_CARD_POSS_YN /* 엔크린보너스카드보유여부 */
+			, A.FREI_WLFR_CARD_POSS_YN /* 화물복지카드보유여부 */
+			, A.RFL_EXCS_CARD_POSS_YN /* 주유전용카드보유여부 */
+			, TO_CHAR(TO_DATE(A.RFL_MTH07_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS RFL_MTH07_FNL_YACHV_DT /* 주유07개월최종유실적일자 */
+			, TO_CHAR(TO_DATE(A.CMNCN_MTH07_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS CMNCN_MTH07_FNL_YACHV_DT /* 통신07개월최종유실적일자 */
+			, TO_CHAR(TO_DATE(A.FNC_MTH07_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS FNC_MTH07_FNL_YACHV_DT /* 금융07개월최종유실적일자 */
+			, TO_CHAR(TO_DATE(A.ETC_MTH07_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS ETC_MTH07_FNL_YACHV_DT /* 기타07개월최종유실적일자 */
+			, TO_CHAR(TO_DATE(A.ONLN_MTH07_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS ONLN_MTH07_FNL_YACHV_DT /* 온라인07개월최종유실적일자 */
+			, TO_CHAR(TO_DATE(A.ONLN_MTH07_CPN_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS ONLN_MTH07_CPN_FNL_YACHV_DT /* 온라인쿠폰07개월최종유실적일자 */
+			, A.AVL_PNT /* 가용포인트 */
+		FROM MART_MBR_TGTNG_MST A
+		WHERE A.${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
+	</sql>
+
+</mapper>

@@ -3,6 +3,7 @@
 angular.module('App')
     .controller('Pan0106Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService) {
 
+        var self = this;
         $scope.title = '회원 프로파일 분석';
 
         $scope.selectOptions = [
@@ -20,53 +21,119 @@ angular.module('App')
             ]
         };
 
-        $scope.gridOptions = {
+        $scope.gridOptionsMembers = {
             enablePaginationControls: false,
             paginationPageSize: 100,
             useExternalPagination: true,
-            useExternalSorting: true,
             columnDefs: [
-                { field: 'mbrId', displayName: '회원ID' },
-                { field: 'ocbcomLgnId', displayName: 'OCB 회원 여부' },
-                { field: 'ocbcomLgnId', displayName: '마케팅 동의 여부' },
-                { field: 'ocbcomLgnId', displayName: '캠페인 블랙리스트 포함 여부' },
-                { field: 'mbrKorNm', displayName: '성별' },
-                { field: 'mbrKorNm', displayName: '연령' },
-                { field: 'ocbcomLgnId', displayName: '거주지역' },
-                { field: 'ocbcomLgnId', displayName: '직장지역' },
-                { field: 'ocbcomLgnId', displayName: '기미혼 여부' }
+                { field: 'mbrId', displayName: '회원ID', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'unitedId', displayName: 'OCB닷컴 United ID', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'gndr', displayName: '성별', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'age', displayName: '연령', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'homeHjdLgrp', displayName: '자택 행정동 대그룹명', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'homeHjdMgrp', displayName: '자택 행정동 중그룹명', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'jobpHjdLgrp', displayName: '직장 행정동 대그룹명', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'jobpHjdMgrp', displayName: '직장 행정동 중그룹명', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'mrrgYn', displayName: '결혼 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'ocbMktngAgrmtYn', displayName: '마케팅 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'emailRcvAgrmtYn', displayName: '이메일 수신 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'advtSmsRcvAgrmtYn', displayName: '광고성 SMS 수신 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'ifrmtSmsRcvAgrmtYn', displayName: '정보성 SMS 수신 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'pushRcvAgrmtYn', displayName: '앱 푸시 수신 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'bnftMlfPushAgrmtYn', displayName: '혜택/모바일전단 푸시 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'pntUseRsvngPushAgrmtYn', displayName: '포인트사용적립 푸시 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'tusePushAgrmtYn', displayName: '친구와 함께쓰기 푸시 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'coinNotiPushAgrmtYn', displayName: '코인알림 푸시 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'locUtlzAgrmtYn', displayName: '위치활용 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'mlfShpAgrmtYn', displayName: '모바일전단매장 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'mlfTrdareaAgrmtYn', displayName: '모바일전단상권 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'ocbcomJoinYn', displayName: 'OCB닷컴 가입 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'ocbAppJoinYn', displayName: 'OCB앱 가입 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'ocbPlusJoinYn', displayName: 'OCB플러스 가입 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'seg629Cd', displayName: '629세그먼트코드', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'trfcSegCd', displayName: '트래픽세그먼트코드', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'ocbcomMth07FnlLgnDt', displayName: 'OCB닷컴 최종 로그인 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'ocbAppMth07FnlUseDt', displayName: 'OCB앱 최종 사용 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'appAtdcMth07FnlUseDt', displayName: '앱출석 최종 사용 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'rletMth07FnlUseDt', displayName: '룰렛 최종 사용 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'gameMth07FnlUseDt', displayName: '게임 최종 사용 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'ocbPlusMth07FnlYachvDt', displayName: 'OCB플러스 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'lckrMth07FnlYachvDt', displayName: '라커0 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'mzmMth07FnlYachvDt', displayName: '미리줌 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'azmMth07FnlYachvDt', displayName: '더줌 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'prdLflMth07FnlYachvDt', displayName: '상품전단 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'mblCardPossYn', displayName: '모바일카드 보유 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'skpCardPossYn', displayName: 'SKP카드 보유 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'crdtCardPossYn', displayName: '신용카드 보유 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'chkcrdPossYn', displayName: '체크카드 보유 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'cmncnCardPossYn', displayName: '통신카드 보유 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'encleanBnsCardPossYn', displayName: '엔크린보너스카드 보유 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'freiWlfrCardPossYn', displayName: '화물복지카드 보유 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'rflExcsCardPossYn', displayName: '주유전용카드 보유 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'rflMth07FnlYachvDt', displayName: '주유 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'cmncnMth07FnlYachvDt', displayName: '통신 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'fncMth07FnlYachvDt', displayName: '금융 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'etcMth07FnlYachvDt', displayName: '기타 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'onlnMth07FnlYachvDt', displayName: '온라인 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'onlnMth07CpnFnlYachvDt', displayName: '온라인쿠폰 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'avlPnt', displayName: '가용포인트', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' }
             ],
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
                 // $scope.gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-                //   $scope.loadMerged();
+                //   $scope.loadMembers();
                 // });
                 gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-                    $scope.loadMerged();
+                    $scope.loadMembers();
                 });
             }
         };
 
         $scope.upload = function (file) {
-            uploadService.upload({ file: file, columnName: $scope.selectedOption.value }).then(function () {
-                $timeout(function () {
-                    $scope.loadUploadedPreview();
-                }, 1500);
+            $scope.uploadRecords = 0;
+            $scope.uploadProgressLoadingMessage = 'Uploading...';
+
+            $scope.uploadPromise = uploadService.upload({ file: file, columnName: $scope.selectedOption.value });
+            $scope.uploadPromise.then(function () {
+                self.checkUploadProgress();
+                $scope.uploadProgressLoadingMessage = 'Loading...';
+
+                return uploadService.getUploadedPreview();
+            }, null, function (progressPercentage) {
+                $scope.uploadProgressLoadingMessage = 'Uploading...' + progressPercentage + '%';
+            }).then(function (data) {
+                $scope.gridOptionsPreview.data = data.value;
             });
         };
 
-        $scope.loadUploadedPreview = function () {
-            uploadService.getUploadedPreview().then(function (data) {
-                $scope.gridOptionsPreview.data = data;
+        $scope.loadMembers = function () {
+            var offset = ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptionsMembers.paginationPageSize;
+            var limit = $scope.gridOptionsMembers.paginationPageSize;
+
+            $scope.membersPromise = apiService.getMembers({ offset: offset, limit: limit });
+            $scope.membersPromise.then(function (data) {
+                $scope.gridOptionsMembers.data = data.value;
+                $scope.gridOptionsMembers.totalItems = data.totalRecords;
             });
         };
 
-        $scope.loadMerged = function () {
-            var offset = ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptions.paginationPageSize;
-            var limit = $scope.gridOptions.paginationPageSize;
+        self.checkUploadProgress = function () {
+            uploadService.getUploadProgress().finally(function (data) {
+                $scope.uploadProgress = false;
+            }, function (totalRecords) {
+                $scope.uploadProgress = true;
+                $scope.uploadedRecords = totalRecords;
+            });
+        };
 
-            apiService.getMembers({ offset: offset, limit: limit }).then(function (data) {
-                $scope.gridOptions.data = data;
+        // 이전 업로드가 진행중이라면 표시.
+        // self.checkUploadProgress();
+
+
+        $scope.sendPts = function (ptsUsername, ptsMasking) {
+            $scope.sendPtsPromise = apiService.sendPts({ ptsUsername: ptsUsername, ptsMasking: !!ptsMasking });
+            $scope.sendPtsPromise.finally(function () {
+
             });
         };
 

@@ -75,15 +75,15 @@ angular.module('App')
                 { field: 'mktngFnlAgrmt', displayName: '마케팅 최종 동의 유입 출처/일자', width: 150, cellTooltip: true, headerTooltip: true },
                 { field: 'entprMktngAgrmtYn', displayName: '교차 활용 동의 여부', cellTooltip: true, headerTooltip: true },
                 { field: 'tmRcvAgrmtYn', displayName: 'TM 수신 동의 여부', cellTooltip: true, headerTooltip: true },
-                { field: 'emailRcvAgrmtYn', displayName: 'EM 수신 동의 여부', cellTooltip: true, headerTooltip: true },
+                { field: 'emailRcvAgrmtYn', displayName: '이메일 수신 동의 여부', cellTooltip: true, headerTooltip: true },
                 { field: 'advtSmsRcvAgrmtYn', displayName: '광고성 SMS 수신 동의 여부', cellTooltip: true, headerTooltip: true },
                 { field: 'ifrmtSmsRcvAgrmtYn', displayName: '정보성 SMS 수신 동의 여부', cellTooltip: true, headerTooltip: true },
-                { field: 'pushRcvAgrmtYn', displayName: '앱 푸쉬 동의 여부', cellTooltip: true, headerTooltip: true },
+                { field: 'pushRcvAgrmtYn', displayName: '앱 푸시 동의 여부', cellTooltip: true, headerTooltip: true },
                 { field: 'pntUseRsvngPushAgrmtYn', displayName: '포인트 사용적립 동의 여부', cellTooltip: true, headerTooltip: true },
-                { field: 'bnftMlfPushAgrmtYn', displayName: '혜택/모바일전단 푸쉬 동의 여부', cellTooltip: true, headerTooltip: true },
-                { field: 'tusePushAgrmtYn', displayName: '친구와 함께쓰기 푸쉬 동의 여부', cellTooltip: true, headerTooltip: true },
-                { field: 'coinNotiPushAgrmtYn', displayName: '동전 푸쉬 동의 여부', cellTooltip: true, headerTooltip: true },
-                { field: 'locUtlzAgrmtYn', displayName: '위치 정보 활용 동의 여부', cellTooltip: true, headerTooltip: true },
+                { field: 'bnftMlfPushAgrmtYn', displayName: '혜택/모바일전단 푸시 동의 여부', cellTooltip: true, headerTooltip: true },
+                { field: 'tusePushAgrmtYn', displayName: '친구와 함께쓰기 푸시 동의 여부', cellTooltip: true, headerTooltip: true },
+                { field: 'coinNotiPushAgrmtYn', displayName: '코인알림 푸시 동의 여부', cellTooltip: true, headerTooltip: true },
+                { field: 'locUtlzAgrmtYn', displayName: '위치활용 동의 여부', cellTooltip: true, headerTooltip: true },
                 { field: 'blthAgrmtYn', displayName: 'BLE 동의 여부', cellTooltip: true, headerTooltip: true }
             ]
         };
@@ -96,7 +96,7 @@ angular.module('App')
             flatEntityAccess: true,
             minRowsToShow: 3,
             columnDefs: [
-                { field: 'ocbappYn', displayName: 'OCB앱 이용 여부', cellTooltip: true, headerTooltip: true },
+                { field: 'ocbAppJoinYn', displayName: 'OCB앱 가입 여부', cellTooltip: true, headerTooltip: true },
                 { field: 'ocbappFnlEntrDt', displayName: 'OCB앱 최종 가입 일자', cellTooltip: true, headerTooltip: true },
                 { field: 'ocbappFnlLgnDt', displayName: 'OCB앱 최종 로그인 일자', cellTooltip: true, headerTooltip: true },
             ]
@@ -288,15 +288,15 @@ angular.module('App')
             ]
         };
 
-        // 앱 푸쉬 이력
+        // 앱 푸시 이력
         $scope.gridOptionsAppPushHistory = {
             enableColumnMenus: false,
             flatEntityAccess: true,
             columnDefs: [
                 { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
                 { field: 'sndDttm', displayName: '발송일자', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'msgTitl', displayName: '푸쉬 제목', cellTooltip: true, headerTooltip: true },
-                { field: 'pushSndRslt', displayName: '푸쉬 결과', width: 100, cellTooltip: true, headerTooltip: true }
+                { field: 'msgTitl', displayName: '푸시 제목', cellTooltip: true, headerTooltip: true },
+                { field: 'pushSndRslt', displayName: '푸시 결과', width: 100, cellTooltip: true, headerTooltip: true }
             ]
         };
 

@@ -70,13 +70,13 @@ public class ApiController {
 
 		if (result == null || result.size() <= 0) {
 			AutoMappedMap m = new AutoMappedMap();
-			m.put("ocbapp_Yn", "N");
+			m.put("OCB_APP_JOIN_YN", "N");
 			result.add(m);
 		} else {
 			log.info("{}", result);
 			AutoMappedMap m = result.get(0);
 
-			m.put("ocbapp_Yn", "Y");
+			m.put("OCB_APP_JOIN_YN", "Y");
 		}
 
 		return result;

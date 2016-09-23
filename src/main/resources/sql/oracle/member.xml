@@ -28,6 +28,9 @@
 		<if test="uploadProgress.pageId == 'pan0103'">
 			<include refid="selectMembers_pan0103" />
 		</if>
+		<if test="uploadProgress.pageId == 'pan0106'">
+			<include refid="selectMembers_pan0106" />
+		</if>
 
 		<include refid="pagingFoot" />
 	</select>
@@ -37,6 +40,9 @@
 		</if>
 		<if test="uploadProgress.pageId == 'pan0103'">
 			<include refid="selectMembers_pan0103" />
+		</if>
+		<if test="uploadProgress.pageId == 'pan0106'">
+			<include refid="selectMembers_pan0106" />
 		</if>
 
 		<include refid="pagingFoot" />
@@ -49,6 +55,9 @@
 		</if>
 		<if test="uploadProgress.pageId == 'pan0103'">
 			<include refid="selectMembers_pan0103" />
+		</if>
+		<if test="uploadProgress.pageId == 'pan0106'">
+			<include refid="selectMembers_pan0106" />
 		</if>
 		)
 	</select>
