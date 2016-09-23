@@ -31,9 +31,8 @@ angular.module('App')
                 }
             ).then(function (resp) {
                 sessionStorage.setItem('access_token', resp.data.access_token);
-                return $http.get('/auth/me', { headers: { 'Authorization': 'Bearer ' + resp.data.access_token } });
-            }).then(function (resp) {
-                sessionStorage.setItem('user_info', JSON.stringify(resp.data));
+                return self.userInfo();
+            }).then(function () {
                 $state.reload();
                 deferred.resolve();
             }).catch(function (resp) {
@@ -62,6 +61,22 @@ angular.module('App')
 
         this.getAccessToken = function () {
             return sessionStorage.getItem('access_token');
+        };
+
+        this.userInfo = function () {
+            var deferred = $q.defer();
+
+            $http.get('/auth/me', {
+                headers: { 'Authorization': 'Bearer ' + self.getAccessToken() }
+            }).then(function (resp) {
+                sessionStorage.setItem('user_info', JSON.stringify(resp.data));
+                deferred.resolve(resp);
+            }, function (resp) {
+                self.logout();
+                deferred.reject(resp);
+            });
+
+            return deferred.promise;
         };
 
         this.getUsername = function () {

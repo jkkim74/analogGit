@@ -12,10 +12,14 @@ angular.module('App')
                     headers: { 'Authorization': 'Bearer ' + authService.getAccessToken() }
                 }).then(function (resp) {
                     deferred.resolve(resp.data);
-                }, function (resp) {
+                }).catch(function (resp) {
                     $log.error(resp);
                     toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     deferred.reject(resp.data);
+
+                    if (resp.status === 401) {
+                        authService.logout();
+                    }
                 });
 
                 return deferred.promise;
@@ -40,10 +44,14 @@ angular.module('App')
                 }).then(function (resp) {
                     toastr.success((resp.data && resp.data.message) || resp.config.url);
                     deferred.resolve();
-                }, function (resp) {
+                }).catch(function (resp) {
                     $log.error(resp);
                     toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     deferred.reject();
+
+                    if (resp.status === 401) {
+                        authService.logout();
+                    }
                 });
 
                 return deferred.promise;

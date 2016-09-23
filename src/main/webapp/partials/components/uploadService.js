@@ -6,7 +6,7 @@ angular.module('App')
         this.upload = function (params) {
             var deferred = $q.defer();
 
-            if (angular.isDefined(params.file)) {
+            if (params.file) {
                 Upload.upload({
                     url: '/api/upload',
                     data: angular.extend(params, { pageId: $stateParams.pageId }),
@@ -18,6 +18,10 @@ angular.module('App')
                     $log.error(resp);
                     toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     deferred.reject(resp.data);
+
+                    if (resp.status === 401) {
+                        authService.logout();
+                    }
                 }, function (event) {
                     var progressPercentage = parseInt(100.0 * event.loaded / event.total);
                     $log.debug('progress: ' + progressPercentage + '% ' + event.config.data.file.name);
@@ -44,11 +48,15 @@ angular.module('App')
                         $interval.cancel(canceler);
                         deferred.resolve(resp.data);
                     }
-                }, function (resp) {
+                }).catch(function (resp) {
                     $interval.cancel(canceler);
                     $log.error(resp);
                     toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     deferred.reject(resp.data);
+
+                    if (resp.status === 401) {
+                        authService.logout();
+                    }
                 });
             }
 
@@ -70,10 +78,14 @@ angular.module('App')
                         $interval.cancel(canceler);
                         deferred.resolve();
                     }
-                }, function (resp) {
+                }).catch(function (resp) {
                     $interval.cancel(canceler);
                     $log.debug(resp);
                     deferred.reject();
+
+                    if (resp.status === 401) {
+                        authService.logout();
+                    }
                 });
             }
 
