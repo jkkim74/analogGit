@@ -19,6 +19,7 @@ public class ExceptionResolver {
 	@ResponseStatus
 	public ApiResponse handleException(Throwable t) {
 		log.error("", t);
+		t.printStackTrace();
 		return ApiResponse.builder().developerMessage(t.toString()).build();
 	}
 
