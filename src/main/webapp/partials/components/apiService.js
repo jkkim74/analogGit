@@ -14,12 +14,15 @@ angular.module('App')
                     deferred.resolve(resp.data);
                 }).catch(function (resp) {
                     $log.error(resp);
-                    toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
-                    deferred.reject(resp.data);
 
                     if (resp.status === 401) {
+                        toastr.error('로그인이 필요합니다');
                         authService.logout();
+                    } else {
+                        toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }
+
+                    deferred.reject(resp.data);
                 });
 
                 return deferred.promise;
@@ -46,12 +49,15 @@ angular.module('App')
                     deferred.resolve();
                 }).catch(function (resp) {
                     $log.error(resp);
-                    toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
-                    deferred.reject();
 
                     if (resp.status === 401) {
+                        toastr.error('로그인이 필요합니다');
                         authService.logout();
+                    } else {
+                        toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }
+
+                    deferred.reject();
                 });
 
                 return deferred.promise;

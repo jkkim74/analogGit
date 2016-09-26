@@ -16,12 +16,15 @@ angular.module('App')
                     deferred.resolve();
                 }, function (resp) {
                     $log.error(resp);
-                    toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
-                    deferred.reject(resp.data);
 
                     if (resp.status === 401) {
+                        toastr.error('로그인이 필요합니다');
                         authService.logout();
+                    } else {
+                        toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }
+
+                    deferred.reject(resp.data);
                 }, function (event) {
                     var progressPercentage = parseInt(100.0 * event.loaded / event.total);
                     $log.debug('progress: ' + progressPercentage + '% ' + event.config.data.file.name);
@@ -51,12 +54,15 @@ angular.module('App')
                 }).catch(function (resp) {
                     $interval.cancel(canceler);
                     $log.error(resp);
-                    toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
-                    deferred.reject(resp.data);
 
                     if (resp.status === 401) {
+                        toastr.error('로그인이 필요합니다');
                         authService.logout();
+                    } else {
+                        toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }
+
+                    deferred.reject(resp.data);
                 });
             }
 
@@ -81,11 +87,15 @@ angular.module('App')
                 }).catch(function (resp) {
                     $interval.cancel(canceler);
                     $log.debug(resp);
-                    deferred.reject();
 
                     if (resp.status === 401) {
+                        toastr.error('로그인이 필요합니다');
                         authService.logout();
+                    } else {
+                        toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }
+
+                    deferred.reject();
                 });
             }
 
