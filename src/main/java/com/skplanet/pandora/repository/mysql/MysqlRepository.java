@@ -22,7 +22,7 @@ public interface MysqlRepository {
 
 	int upsertSubmissionResult(@Param("submissionType") SubmissionType submissionType);
 
-	List<AutoMappedMap> selectUsers();
+	List<String> selectUsers();
 
 	int upsertUserInfo(UserInfo user);
 

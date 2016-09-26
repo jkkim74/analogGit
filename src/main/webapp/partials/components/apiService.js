@@ -75,5 +75,7 @@ angular.module('App')
         this.getClphnNoDup = new ApiGet('clphnNoDup');
         this.getEmailAddrDup = new ApiGet('emailAddrDup');
         this.sendPts = new ApiPost('sendPts');
+        this.createUser = new ApiPost('users');
+        this.getUsers = new ApiGet('users');
 
     }]);

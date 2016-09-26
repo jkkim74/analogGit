@@ -2,14 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.pandora.repository.mysql.MysqlRepository">
 
-	<select id="selectUsers" parameterType="map" resultType="AutoMappedMap">
-		SELECT USERNAME
-			, ENABLED
-			, FULLNAME
-			, EMAIL_ADDR
-			, BEGIN_DT
-			, END_DT
-		FROM USERS
+	<select id="selectUsers" parameterType="map" resultType="string">
+		SELECT USERNAME FROM USERS
 	</select>
 
 </mapper>

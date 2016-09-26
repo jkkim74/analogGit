@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('App')
-    .controller('Pan0002Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService) {
+    .controller('Pan0002Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService) {
+
+        var self = this;
 
         $scope.title = '사용자 등록 관리';
 
@@ -13,13 +15,31 @@ angular.module('App')
             minRowsToShow: 20,
             columnDefs: [
                 { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
-                { field: 'username', displayName: 'Pnet ID' },
-                { field: 'fullname', displayName: '이름' },
-                { field: 'emailAddr', displayName: '이메일주소' },
-                { field: 'isAdmin', displayName: '관리자여부', width: 100 },
+                { field: 'username', displayName: 'Pnet ID', width: 100 },
+                { field: 'fullname', displayName: '이름', width: 100 },
+                { field: 'emailAddr', displayName: '이메일주소', width: 200 },
+                // { field: 'isAdmin', displayName: '관리자여부', width: 100 },
                 { field: 'beginDt', displayName: '사용시작일자' },
                 { field: 'endDt', displayName: '사용종료일자' }
-            ]
+            ],
+            onRegisterApi: function (gridApi) {
+                $scope.gridApi = gridApi;
+            }
         };
+
+        $scope.createUser = function (username) {
+            apiService.createUser({ username: username.toUpperCase() }).then(function () {
+                self.loadUsers();
+            });
+        };
+
+
+        self.loadUsers = function () {
+            $scope.usersPromise = apiService.getUsers({});
+            $scope.usersPromise.then(function (data) {
+                $scope.gridOptionsUserList.data = data;
+            });
+        };
+        self.loadUsers();
 
     }]);

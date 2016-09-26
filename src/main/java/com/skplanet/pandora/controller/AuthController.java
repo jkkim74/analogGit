@@ -1,5 +1,6 @@
 package com.skplanet.pandora.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.skplanet.pandora.model.ApiResponse;
+import com.skplanet.pandora.model.UserInfo;
 import com.skplanet.pandora.service.UserService;
 
 @RestController
@@ -31,13 +34,14 @@ public class AuthController {
 
 	@PostMapping("/api/users")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createUser(@RequestParam Map<String, Object> params) {
+	public ApiResponse createUser(@RequestParam Map<String, Object> params) {
 		userService.createUser((String) params.get("username"));
+		return ApiResponse.builder().message("사용자 등록 성공").build();
 	}
 
 	@GetMapping("/api/users")
-	public void getUsers() {
-
+	public List<UserInfo> getUsers() {
+		return userService.getUsers();
 	}
 
 }
