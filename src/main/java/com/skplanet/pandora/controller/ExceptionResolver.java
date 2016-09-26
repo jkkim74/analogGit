@@ -1,5 +1,7 @@
 package com.skplanet.pandora.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -18,6 +20,13 @@ public class ExceptionResolver {
 	public ApiResponse handleException(Throwable t) {
 		log.error("", t);
 		return ApiResponse.builder().developerMessage(t.toString()).build();
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public ApiResponse handleAccessDeniedException(AccessDeniedException ex) {
+		log.info("", ex);
+		return ApiResponse.builder().developerMessage(ex.toString()).build();
 	}
 
 	@ExceptionHandler(BizException.class)

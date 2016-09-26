@@ -2,6 +2,8 @@ package com.skplanet.pandora.controller;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,6 +49,8 @@ public class AuthController {
 	}
 
 	@PostMapping("/api/users")
+	@RolesAllowed("ROLE_ADMIN")
+	@Transactional("mysqlTxManager")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ApiResponse createUser(@RequestParam String username) {
 		userService.createUser(username);
@@ -54,16 +58,19 @@ public class AuthController {
 	}
 
 	@GetMapping("/api/users")
+	@RolesAllowed("ROLE_ADMIN")
 	public List<UserInfo> getUsers() {
 		return userService.getUsers();
 	}
 
 	@GetMapping("/api/usersAccess")
+	@RolesAllowed("ROLE_ADMIN")
 	public List<AutoMappedMap> getAccess() {
 		return mysqlRepository.selectAccess(null);
 	}
 
 	@PostMapping("/api/saveAccess")
+	@RolesAllowed("ROLE_ADMIN")
 	@Transactional("mysqlTxManager")
 	public ApiResponse saveAccess(@RequestParam String username, @RequestParam String pageList) {
 		mysqlRepository.deleteAccess(username);

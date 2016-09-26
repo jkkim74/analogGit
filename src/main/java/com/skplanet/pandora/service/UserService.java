@@ -17,7 +17,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.skplanet.pandora.common.BizException;
 import com.skplanet.pandora.common.Constant;
@@ -49,7 +48,6 @@ public class UserService {
 		defaultAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 
-	@Transactional("mysqlTxManager")
 	public void createUser(final String username) {
 		if (userDetailsManager.userExists(username)) {
 			throw new BizException("이미 존재하는 사용자입니다");
@@ -92,7 +90,6 @@ public class UserService {
 		return userInfoList;
 	}
 
-	@Transactional("mysqlTxManager")
 	public void enableUser(String username, boolean enable) {
 		// mysqlRepository.updateUser(enable);
 	}

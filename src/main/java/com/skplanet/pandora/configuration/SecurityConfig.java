@@ -12,6 +12,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.ldap.authentication.UserDetailsServiceLdapAuthoritiesPopulator;
@@ -23,6 +24,7 @@ import com.skplanet.pandora.security.CustomUserDetailsContextMapper;
 
 @Configuration
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -46,8 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			CustomUserDetailsContextMapper userDetailsContextMapper,
 			CustomAuthenticationProvider authenticationProvider) throws Exception {
 
-		// auth.inMemoryAuthentication().withUser("user").password("test1234!").roles("USER",
-		// "ADMIN");
+		// auth.inMemoryAuthentication().withUser("user").password("test1234!").roles("USER");
 
 		auth.authenticationProvider(authenticationProvider);
 

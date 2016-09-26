@@ -30,6 +30,8 @@ CREATE TABLE PAGE_ACCESS (
 CREATE UNIQUE INDEX IX_PAGE_USERNAME ON PAGE_ACCESS (USERNAME,PAGE_ID);
 
 insert into users(username, password, enabled) values('user', '', 1);
+insert into authorities(username, authority) values('user', 'ROLE_USER');
+insert into authorities(username, authority) values('user', 'ROLE_ADMIN');
 insert into page_access(username, page_id) values('user', 'PAN0101');
 insert into page_access(username, page_id) values('user', 'PAN0002');
 insert into page_access(username, page_id) values('user', 'PAN0003');
