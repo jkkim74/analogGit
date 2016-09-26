@@ -110,4 +110,14 @@ angular.module('App')
             return hasAdmin;
         };
 
+        this.isAllowedPage = function (pageId) {
+            if (!self.isAuthenticated()) {
+                return false;
+            }
+
+            var userInfo = JSON.parse(sessionStorage.getItem('user_info'));
+
+            return userInfo && userInfo.pageList.indexOf(pageId.toUpperCase()) !== -1;
+        };
+
     }]);

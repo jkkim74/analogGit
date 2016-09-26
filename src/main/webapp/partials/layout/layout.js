@@ -5,6 +5,10 @@ angular.module('App')
 
         $scope.isAuthenticated = authService.isAuthenticated();
 
+        $scope.isAllowedPage = function (pageId) {
+            return authService.isAllowedPage(pageId);
+        }
+
         $scope.logout = function () {
             authService.logout();
         };

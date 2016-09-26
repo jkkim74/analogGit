@@ -6,4 +6,26 @@
 		SELECT USERNAME FROM USERS
 	</select>
 
+	<select id="selectAccess" parameterType="map" resultType="AutoMappedMap">
+		SELECT A.USERNAME, IFNULL(GROUP_CONCAT(B.PAGE_ID), '') AS PAGE_LIST
+		FROM USERS A
+		LEFT OUTER JOIN PAGE_ACCESS B ON A.USERNAME = B.USERNAME
+		GROUP BY A.USERNAME
+		<if test="username != null and username != ''">
+		HAVING A.USERNAME = #{username}
+		</if>
+	</select>
+
+	<insert id="insertAccess" parameterType="map">
+		INSERT INTO PAGE_ACCESS (USERNAME, PAGE_ID)
+		VALUES
+		<foreach item="pageId" collection="pageList.split(',')" separator=",">
+			( #{username}, UPPER(#{pageId}) )
+		</foreach>
+	</insert>
+
+	<delete id="deleteAccess" parameterType="map">
+		DELETE FROM PAGE_ACCESS WHERE USERNAME = #{username} AND PAGE_ID NOT IN ('PAN0002', 'PAN0003')
+	</delete>
+
 </mapper>

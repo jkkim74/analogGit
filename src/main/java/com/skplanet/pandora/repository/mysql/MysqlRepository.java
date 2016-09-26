@@ -26,4 +26,10 @@ public interface MysqlRepository {
 
 	int upsertUserInfo(UserInfo user);
 
+	List<AutoMappedMap> selectAccess(@Param("username") String username);
+
+	void insertAccess(@Param("username") String username, @Param("pageList") String pageList);
+
+	void deleteAccess(@Param("username") String username);
+
 }

@@ -3,9 +3,27 @@
     <div class="col-md-11 section-content-wrapper">
         <div class="section-content">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-2">
+                    <div cg-busy="accessPromise">
+                        <div ui-grid="gridOptionsAccessList" ui-grid-selection ui-grid-resize-columns></div>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="btn-group">
+                        <label class="btn btn-default" ng-model="checkPageId.PAN0101" uib-btn-checkbox>멤버 ID 일괄 전환</label>
+                        <label class="btn btn-default" ng-model="checkPageId.PAN0102" uib-btn-checkbox>고객 정보 및 장기 거래 실적 조회</label>
+                        <label class="btn btn-default" ng-model="checkPageId.PAN0103" uib-btn-checkbox>배치 적립 파일 검증</label>
+                        <label class="btn btn-default" ng-model="checkPageId.PAN0104" uib-btn-checkbox>시효 만료 포인트 사전 고지</label>
+                        <label class="btn btn-default" ng-model="checkPageId.PAN0105" uib-btn-checkbox>거래 실적 및 유실적 고객 추출</label>
+                        <label class="btn btn-default" ng-model="checkPageId.PAN0106" uib-btn-checkbox>회원 프로파일 분석</label>
+                    </div>
+                    <br>
+                    <p>
+                        <small>선택된 화면</small>
+                        <span class="label label-info" ng-repeat="checkResult in checkResults">{{checkResult}}</span>
+                    </p>
                     <div>
-                        <div ui-grid="gridOptionsUserList" ui-grid-selection></div>
+                        <button type="button" class="btn btn-danger" ng-click="saveAccess()" ng-disabled="gridApi.selection.getSelectedCount() <= 0">저장</button>
                     </div>
                 </div>
             </div>

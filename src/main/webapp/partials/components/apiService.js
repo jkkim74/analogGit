@@ -8,7 +8,7 @@ angular.module('App')
                 var deferred = $q.defer();
 
                 $http.get('/api/' + command, {
-                    params: angular.extend(params, { pageId: $stateParams.pageId }),
+                    params: angular.extend({ pageId: $stateParams.pageId }, params),
                     headers: { 'Authorization': 'Bearer ' + authService.getAccessToken() }
                 }).then(function (resp) {
                     deferred.resolve(resp.data);
@@ -33,7 +33,7 @@ angular.module('App')
             return function (params) {
                 var deferred = $q.defer();
 
-                $http.post('/api/' + command, angular.extend(params, { pageId: $stateParams.pageId }), {
+                $http.post('/api/' + command, angular.extend({ pageId: $stateParams.pageId }, params), {
                     headers: {
                         'Authorization': 'Bearer ' + authService.getAccessToken(),
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -83,5 +83,7 @@ angular.module('App')
         this.sendPts = new ApiPost('sendPts');
         this.createUser = new ApiPost('users');
         this.getUsers = new ApiGet('users');
+        this.getUsersAccess = new ApiGet('usersAccess');
+        this.saveAccess = new ApiPost('saveAccess');
 
     }]);

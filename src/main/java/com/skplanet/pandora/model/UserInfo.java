@@ -8,26 +8,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @JsonInclude(Include.NON_NULL)
 public class UserInfo implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
 	private String username;
+	private String password = "";
 	private boolean enabled;
 	private String fullname;
 	private String emailAddr;
 	private String beginDt;
 	private String endDt;
 	private Collection<? extends GrantedAuthority> authorities;
-
-	public UserInfo(String username, Collection<? extends GrantedAuthority> authorities) {
-		this.username = username;
-		this.authorities = authorities;
-	}
+	private String pageList;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -36,7 +35,7 @@ public class UserInfo implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return "";
+		return password;
 	}
 
 	@Override

@@ -18,7 +18,8 @@ public class CustomUserDetailsContextMapper implements UserDetailsContextMapper 
 	public UserDetails mapUserFromContext(DirContextOperations ctx, String username,
 			Collection<? extends GrantedAuthority> authorities) {
 
-		UserInfo userInfo = new UserInfo(username.toUpperCase(), authorities);
+		UserInfo userInfo = UserInfo.builder().username(username.toUpperCase()).authorities(authorities).password("")
+				.build();
 
 		userInfo.setFullname(ctx.getStringAttribute("exADKoreanName"));
 

@@ -58,6 +58,11 @@ angular.module('App')
                     $state.transitionTo('index.home');
                     event.preventDefault();
                 }
+
+                if (needAuth && toState.name === 'index.page' && !authService.isAllowedPage(toParams.pageId)) {
+                    $state.transitionTo('index.home');
+                    event.preventDefault();
+                }
             });
 
     }]);

@@ -21,12 +21,12 @@
                 </form>
             </div>
 
-            <div ng-if="isAuthenticated && isAdmin" class="text-center">
+            <div ng-if="isAuthenticated" class="text-center">
                 <div class="col-md-6">
-                    <button ui-sref="index.page({pageId: 'pan0002'})" type="button" class="btn btn-default btn-lg">사용자 등록 관리 바로가기</button>
+                    <button ng-show="isAllowedPage('pan0002')" ui-sref="index.page({pageId: 'pan0002'})" type="button" class="btn btn-default btn-lg">사용자 등록 관리 바로가기</button>
                 </div>
                 <div class="col-md-6">
-                    <button ui-sref="index.page({pageId: 'pan0003'})" type="button" class="btn btn-default btn-lg">화면 권한 관리 바로가기</button>
+                    <button ng-show="isAllowedPage('pan0003')" ui-sref="index.page({pageId: 'pan0003'})" type="button" class="btn btn-default btn-lg">화면 권한 관리 바로가기</button>
                 </div>
             </div>
         </div>
