@@ -28,6 +28,9 @@
 		<if test="uploadProgress.pageId == 'pan0103'">
 			<include refid="selectMembers_pan0103" />
 		</if>
+		<if test="uploadProgress.pageId == 'pan0105'">
+			<include refid="selectMembers_pan0105" />
+		</if>
 		<if test="uploadProgress.pageId == 'pan0106'">
 			<include refid="selectMembers_pan0106" />
 		</if>
@@ -40,6 +43,9 @@
 		</if>
 		<if test="uploadProgress.pageId == 'pan0103'">
 			<include refid="selectMembers_pan0103" />
+		</if>
+		<if test="uploadProgress.pageId == 'pan0105'">
+			<include refid="selectMembers_pan0105" />
 		</if>
 		<if test="uploadProgress.pageId == 'pan0106'">
 			<include refid="selectMembers_pan0106" />
@@ -55,6 +61,9 @@
 		</if>
 		<if test="uploadProgress.pageId == 'pan0103'">
 			<include refid="selectMembers_pan0103" />
+		</if>
+		<if test="uploadProgress.pageId == 'pan0105'">
+			<include refid="selectMembers_pan0105" />
 		</if>
 		<if test="uploadProgress.pageId == 'pan0106'">
 			<include refid="selectMembers_pan0106" />

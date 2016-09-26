@@ -167,6 +167,20 @@
 			<version>1.9.13</version>
 		</dependency>
 		
+		<!-- FTP -->
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.5</version>
+		</dependency>
+
+		<!-- SSH -->
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.31</version>
+		</dependency>
+		
 		<!-- PTS -->
 		<dependency>
 			<groupId>com.skplanet</groupId>

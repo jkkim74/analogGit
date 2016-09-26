@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
+
+	<sql id="selectMembers_pan0105">
+		<choose>
+			<when test="uploadProgress.columnName == 'TR'">
+				SELECT A.RCV_DT
+					, A.RCV_SEQ
+					, A.APPR_DTTM
+					, A.REP_APPR_NO
+					, A.APPR_NO
+					, A.SALE_DTTM
+					, A.MBR_ID
+					, A.CARD_DTL_GRP_CD
+					, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_DTL_GRP_CD' AND DTL_CD = A.CARD_DTL_GRP_CD )
+					, A.CARD_NO
+					, A.ALCMPN_CD
+					, A.ALCMPN_NM
+					, A.MCNT_CD
+					, A.MCNT_NM
+					, A.STLMT_MCNT_CD
+					, A.STLMT_MCNT_NM
+					, A.PNT_KND_CD
+					, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'PNT_KND_CD' AND DTL_CD = A.PNT_KND_CD )
+					, A.SLIP_CD
+					, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'SLIP_CD' AND DTL_CD = A.SLIP_CD )
+					, A.SALE_AMT
+					, A.PNT
+					, A.CS_MBR_CMMSN
+					, A.CMMSN
+					, A.PMNT_WAY_CD
+					, A.ORG_CD
+					, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD' AND DTL_CD = A.ORG_CD )
+					, A.OIL_PRDCT_SGRP_CD
+					, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CAR_OIL_PRDCT_SGRP_CD' AND DTL_CD = A.OIL_PRDCT_SGRP_CD)
+					, A.SALE_QTY
+					, A.CPN_PRD_CD
+					, A.CPN_PRD_NM
+					, B.MBR_KOR_NM
+					, A.CI_NO
+				FROM WEB_2_5_1001111_UPLOAD A
+				LEFT OUTER JOIN DW_MBR_MST B ON A.MBR_ID = B.MBR_ID AND B.MBRSHP_PGM_ID = 'A'
+			</when>
+			<otherwise>
+				SELECT MBR_ID
+				FROM WEB_2_5_1001111_UPLOAD A
+				GROUP BY MBR_ID
+			</otherwise>
+		</choose>
+	</sql>
+
+</mapper>
