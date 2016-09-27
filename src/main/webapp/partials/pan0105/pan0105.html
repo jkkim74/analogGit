@@ -13,13 +13,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>업로드</label>
-                        <div ngf-select="upload($file)" ngf-drop="upload($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'" ngf-max-size="1GB"
-                            class="drop-box" ngf-drag-over-class="'drop-box-dragover'" cg-busy="{promise:uploadPromise, message:uploadProgressLoadingMessage}">
-                            <i class="fa fa-upload fa-5x" aria-hidden="true"></i><br><br>파일 선택 또는 끌어놓기
-                        </div>
-                    </div>
 
                     <div class="row">
                         <div class="col-md-6">
@@ -59,6 +52,14 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>업로드</label>
+                        <div ngf-select="upload($file)" ngf-drop="upload($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'" ngf-max-size="1GB"
+                            class="drop-box" ngf-drag-over-class="'drop-box-dragover'" cg-busy="{promise:uploadPromise, message:uploadProgressLoadingMessage}">
+                            <i class="fa fa-upload fa-5x" aria-hidden="true"></i><br><br>파일 선택 또는 끌어놓기
                         </div>
                     </div>
                 </div>
