@@ -1,16 +1,15 @@
 package com.skplanet.pandora.service;
 
-import java.io.InputStream;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UIKeyboardInteractive;
 import com.jcraft.jsch.UserInfo;
+import com.skplanet.pandora.common.BizException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,53 +38,24 @@ public class SshService {
 
 		log.info("execute ssh command: {}", command);
 
-		JSch jsch = new JSch();
+		JSch sshClient = new JSch();
+		ChannelExec execChannel = null;
 
 		try {
-			Session session = jsch.getSession(sshUsername, sshHost, sshPort);
-
-			UserInfo ui = new MyUI(sshPassword);
-			session.setUserInfo(ui);
+			Session session = sshClient.getSession(sshUsername, sshHost, sshPort);
+			session.setPassword(sshPassword);
 			session.connect();
 
-			Channel channel = session.openChannel("exec");
-			((ChannelExec) channel).setCommand(command);
-
-			channel.setInputStream(null);
-
-			((ChannelExec) channel).setErrStream(System.err);
-
-			InputStream in = channel.getInputStream();
-
-			channel.connect();
-
-			byte[] tmp = new byte[1024];
-			while (true) {
-				while (in.available() > 0) {
-					int i = in.read(tmp, 0, 1024);
-					if (i < 0)
-						break;
-					System.out.println(new String(tmp, 0, i));
-				}
-
-				if (channel.isClosed()) {
-					if (in.available() > 0)
-						continue;
-					System.out.println("exit_status: " + channel.getExitStatus());
-					break;
-				}
-
-				try {
-					Thread.sleep(1000);
-				} catch (Exception e) {
-				}
+			execChannel = (ChannelExec) session.openChannel("exec");
+			execChannel.connect();
+			execChannel.setCommand(command);
+			execChannel.start();
+		} catch (JSchException e) {
+			throw new BizException("Failed to execute SSH", e);
+		} finally {
+			if (execChannel != null) {
+				execChannel.disconnect();
 			}
-
-			channel.disconnect();
-			session.disconnect();
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
