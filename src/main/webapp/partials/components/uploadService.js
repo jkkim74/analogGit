@@ -9,7 +9,7 @@ angular.module('App')
             if (params.file) {
                 Upload.upload({
                     url: '/api/upload',
-                    data: angular.extend(params, { pageId: $stateParams.pageId }),
+                    data: angular.extend({ pageId: $stateParams.pageId }, params),
                     headers: { 'Authorization': 'Bearer ' + authService.getAccessToken() }
                 }).then(function (resp) {
                     toastr.success(resp.config.data.file.name, resp.data.message);
