@@ -13,7 +13,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" cg-busy="{promise:uploadPromise, message:uploadProgressLoadingMessage}">
                         <label>업로드</label>
                         <div ngf-select="upload($file)" ngf-drop="upload($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'" ngf-max-size="1GB"
                             class="drop-box" ngf-drag-over-class="'drop-box-dragover'">
