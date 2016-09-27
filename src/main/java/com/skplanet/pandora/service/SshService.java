@@ -18,28 +18,32 @@ import lombok.extern.slf4j.Slf4j;
 public class SshService {
 
 	@Value("${ssh.host}")
-	private String host;
+	private String sshHost;
 
 	@Value("${ssh.port}")
-	private int port;
+	private int sshPort;
 
 	@Value("${ssh.username}")
-	private String username;
+	private String sshUsername;
 
 	@Value("${ssh.password}")
-	private String password;
+	private String sshPassword;
 
-	public void execute(String username, String fromDt, String toDt, String filename) {
+	public void execute(String username, String inputDataType, String periodType, String periodFrom, String periodTo,
+			String filename) {
 		JSch jsch = new JSch();
 
 		try {
-			Session session = jsch.getSession(username, host, port);
+			Session session = jsch.getSession(sshUsername, sshHost, sshPort);
 
-			UserInfo ui = new MyUI(password);
+			UserInfo ui = new MyUI(sshPassword);
 			session.setUserInfo(ui);
 			session.connect();
 
-			String command = "sh /app/home/bi_ocb/WEB/web_2_5.sh " + username + " mbr_id rcv_dt " + fromDt + " " + toDt + " 1 " + filename;
+			StringBuilder builder = new StringBuilder("sh /app/home/bi_ocb/WEB/web_2_5.sh ");
+			String command = builder.append(username).append(' ').append(inputDataType).append(' ').append(periodType)
+					.append(' ').append(periodFrom).append(' ').append(periodTo).append(" 1 ").append(filename)
+					.toString();
 
 			Channel channel = session.openChannel("exec");
 			((ChannelExec) channel).setCommand(command);

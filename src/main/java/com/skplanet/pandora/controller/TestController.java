@@ -54,7 +54,7 @@ public class TestController {
 	@Transactional("mysqlTxManager")
 	@GetMapping("/testError")
 	public void testError(@RequestParam Map<String, Object> params, Model model) {
-		mysqlRepository.upsertUploadProgress("pan0101", "test", "MY_COL", UploadStatus.RUNNING);
+		mysqlRepository.upsertUploadProgress("pan0101", "test", "MY_COL", "", UploadStatus.RUNNING);
 		throw new RuntimeException("custom error");
 	}
 

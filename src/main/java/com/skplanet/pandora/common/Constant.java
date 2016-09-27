@@ -9,7 +9,8 @@ public class Constant {
 	public static final String FILE_PATH = "filePath";
 	public static final String NUMBER_OF_COLUMNS = "numberOfColumns";
 
-	public static final String PAN0103 = "pan0103";
+	public static final String PAN0103 = "PAN0103";
+	public static final String PAN0105 = "PAN0105";
 
 	public static final String LDAP_USER_SEARCH_FILTER = "(&(objectClass=*)(CN={0}))";
 

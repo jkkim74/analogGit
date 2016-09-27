@@ -85,5 +85,6 @@ angular.module('App')
         this.getUsers = new ApiGet('users');
         this.getUsersAccess = new ApiGet('usersAccess');
         this.saveAccess = new ApiPost('saveAccess');
+        this.extractMemberInfo = new ApiPost('extractMemberInfo');
 
     }]);

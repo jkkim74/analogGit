@@ -18,7 +18,8 @@ public interface MysqlRepository {
 	UploadProgress selectUploadProgress(@Param("pageId") String pageId, @Param("username") String username);
 
 	int upsertUploadProgress(@Param("pageId") String pageId, @Param("username") String username,
-			@Param("columnName") String columnName, @Param("uploadStatus") UploadStatus uploadStatus);
+			@Param("columnName") String columnName, @Param("filename") String filename,
+			@Param("uploadStatus") UploadStatus uploadStatus);
 
 	int upsertSubmissionResult(@Param("submissionType") SubmissionType submissionType);
 

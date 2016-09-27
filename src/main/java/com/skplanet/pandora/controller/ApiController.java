@@ -16,6 +16,7 @@ import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.pandora.service.PtsService;
+import com.skplanet.pandora.service.SshService;
 import com.skplanet.pandora.service.UploadService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,9 @@ public class ApiController {
 
 	@Autowired
 	private PtsService ptsService;
+
+	@Autowired
+	private SshService sshService;
 
 	@GetMapping("/members")
 	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam(defaultValue = "0") int offset,
@@ -160,6 +164,20 @@ public class ApiController {
 		ptsService.send(ptsUsername, uploadProgress);
 
 		return ApiResponse.builder().message("PTS 전송 성공").build();
+	}
+
+	@PostMapping("/extractMemberInfo")
+	public ApiResponse extractMemberInfo(@RequestParam String pageId, @RequestParam String inputDataType,
+			@RequestParam String periodType, @RequestParam String periodFrom, @RequestParam String periodTo) {
+
+		String username = AuthController.getUserInfo().getUsername();
+
+		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
+
+		sshService.execute(username, inputDataType, periodType, periodFrom, periodTo,
+				uploadProgress.getFilename());
+
+		return ApiResponse.builder().message("추출 완료").build();
 	}
 
 }

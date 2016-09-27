@@ -2,6 +2,7 @@ package com.skplanet.pandora.service;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -19,6 +22,7 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -50,6 +54,18 @@ public class UploadService {
 	@Autowired
 	private Job importJob;
 
+	@Value("${ftp.host}")
+	private String host;
+
+	@Value("${ftp.port}")
+	private int port;
+
+	@Value("${ftp.username}")
+	private String username;
+
+	@Value("${ftp.password}")
+	private String password;
+
 	@Transactional("mysqlTxManager")
 	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
 		Path filePath = saveUploadFile(file);
@@ -62,7 +78,7 @@ public class UploadService {
 				.addString(Constant.USERNAME, username).addString(Constant.FILE_PATH, filePath.toString())
 				.addLong(Constant.NUMBER_OF_COLUMNS, numberOfColumns).toJobParameters();
 
-		markRunning(pageId, username, columnName);
+		markRunning(pageId, username, columnName, filePath.getFileName().toString());
 
 		return jobParameters;
 	}
@@ -81,7 +97,7 @@ public class UploadService {
 		removeUploadedFile(parameters.getString(Constant.FILE_PATH));
 	}
 
-	private void markRunning(String pageId, String username, String columnName) {
+	private void markRunning(String pageId, String username, String columnName, String filename) {
 		UploadProgress uploadProgress = mysqlRepository.selectUploadProgress(pageId, username);
 
 		if (uploadProgress != null && uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
@@ -90,11 +106,11 @@ public class UploadService {
 
 		String underScoredColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
 
-		mysqlRepository.upsertUploadProgress(pageId, username, underScoredColumnName, UploadStatus.RUNNING);
+		mysqlRepository.upsertUploadProgress(pageId, username, underScoredColumnName, filename, UploadStatus.RUNNING);
 	}
 
 	private void markFinish(String pageId, String username) {
-		mysqlRepository.upsertUploadProgress(pageId, username, null, UploadStatus.FINISH);
+		mysqlRepository.upsertUploadProgress(pageId, username, null, null, UploadStatus.FINISH);
 	}
 
 	private void prepareTemporaryTable(String pageId, String username) {
@@ -147,8 +163,12 @@ public class UploadService {
 	}
 
 	private void removeUploadedFile(String filePath) {
+		removeUploadedFile(Paths.get(filePath));
+	}
+
+	private void removeUploadedFile(Path filePath) {
 		try {
-			if (!Files.deleteIfExists(new File(filePath).toPath())) {
+			if (!Files.deleteIfExists(filePath)) {
 				log.warn("Failed to delete [{}] because it did not exist", filePath);
 			}
 		} catch (IOException e) {
@@ -168,6 +188,51 @@ public class UploadService {
 		}
 
 		return uploadProgress;
+	}
+
+	public void forwardToFtpServer(MultipartFile file, String pageId, String username, String columnName) {
+		Path filePath = saveUploadFile(file);
+
+		markRunning(pageId, username, columnName, filePath.getFileName().toString());
+
+		forwardUsingFtp(filePath);
+
+		markFinish(pageId, username);
+
+		removeUploadedFile(filePath);
+	}
+
+	private void forwardUsingFtp(Path filePath) {
+		FTPClient ftpClient = new FTPClient();
+
+		try {
+			ftpClient.connect(host, port);
+			ftpClient.login(username, password);
+			ftpClient.enterLocalPassiveMode();
+			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+
+			String remotePath = "web/" + filePath.getFileName().toString();
+
+			try (InputStream localIn = new FileInputStream(filePath.toFile())) {
+				log.info("Start uploading file");
+				boolean done = ftpClient.storeFile(remotePath, localIn);
+				if (done) {
+					log.info("The file is uploaded successfully.");
+				}
+			}
+
+		} catch (IOException e) {
+			throw new BizException("Failed to forward using FTP", e);
+		} finally {
+			try {
+				if (ftpClient.isConnected()) {
+					ftpClient.logout();
+					ftpClient.disconnect();
+				}
+			} catch (IOException e) {
+				throw new IllegalStateException(e);
+			}
+		}
 	}
 
 }

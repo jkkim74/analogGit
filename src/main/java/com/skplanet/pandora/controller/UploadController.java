@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.pandora.common.BizException;
+import com.skplanet.pandora.common.Constant;
 import com.skplanet.pandora.model.ApiResponse;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.model.UploadProgress;
@@ -49,9 +50,13 @@ public class UploadController {
 			throw new BizException("빈 파일입니다");
 		}
 
-		JobParameters jobParameters = uploadService.readyToImport(file, pageId, username, columnName);
+		if (Constant.PAN0105.equalsIgnoreCase(pageId)) {
+			uploadService.forwardToFtpServer(file, pageId, username, columnName);
+		} else {
+			JobParameters jobParameters = uploadService.readyToImport(file, pageId, username, columnName);
 
-		uploadService.beginImport(jobParameters);
+			uploadService.beginImport(jobParameters);
+		}
 
 		return ApiResponse.builder().message("업로드 성공").build();
 	}
