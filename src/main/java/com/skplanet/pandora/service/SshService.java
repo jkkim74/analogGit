@@ -33,6 +33,12 @@ public class SshService {
 	public void execute(String username, String inputDataType, String periodType, String periodFrom, String periodTo,
 			String filename) {
 
+		StringBuilder builder = new StringBuilder("sh /app/home/bi_ocb/WEB/web_2_5.sh ");
+		String command = builder.append(username).append(' ').append(inputDataType).append(' ').append(periodType)
+				.append(' ').append(periodFrom).append(' ').append(periodTo).append(" 1 ").append(filename).toString();
+
+		log.info("execute ssh command: {}", command);
+
 		JSch jsch = new JSch();
 
 		try {
@@ -41,13 +47,6 @@ public class SshService {
 			UserInfo ui = new MyUI(sshPassword);
 			session.setUserInfo(ui);
 			session.connect();
-
-			StringBuilder builder = new StringBuilder("sh /app/home/bi_ocb/WEB/web_2_5.sh ");
-			String command = builder.append(username).append(' ').append(inputDataType).append(' ').append(periodType)
-					.append(' ').append(periodFrom).append(' ').append(periodTo).append(" 1 ").append(filename)
-					.toString();
-
-			log.info("execute ssh command: {}", command);
 
 			Channel channel = session.openChannel("exec");
 			((ChannelExec) channel).setCommand(command);
