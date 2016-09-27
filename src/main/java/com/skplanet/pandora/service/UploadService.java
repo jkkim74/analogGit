@@ -193,6 +193,10 @@ public class UploadService {
 	public void forwardToFtpServer(MultipartFile file, String pageId, String username, String columnName) {
 		Path filePath = saveUploadFile(file);
 
+		prepareTemporaryTable(pageId, username);
+
+		getNumberOfColumnsAndValidate(pageId, filePath);
+
 		markRunning(pageId, username, columnName, filePath.getFileName().toString());
 
 		forwardUsingFtp(filePath);
