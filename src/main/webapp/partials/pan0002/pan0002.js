@@ -35,7 +35,7 @@ angular.module('App')
 
 
         self.loadUsers = function () {
-            $scope.usersPromise = apiService.getUsers({});
+            $scope.usersPromise = apiService.getUsers();
             $scope.usersPromise.then(function (data) {
                 $scope.gridOptionsUserList.data = data;
             });

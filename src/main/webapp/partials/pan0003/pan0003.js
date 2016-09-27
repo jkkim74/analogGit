@@ -38,7 +38,7 @@ angular.module('App')
         };
 
         self.loadUsersAccess = function () {
-            $scope.accessPromise = apiService.getUsersAccess({});
+            $scope.accessPromise = apiService.getUsersAccess();
             $scope.accessPromise.then(function (data) {
                 $scope.gridOptionsAccessList.data = data;
             });
