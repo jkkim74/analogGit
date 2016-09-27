@@ -98,7 +98,7 @@ angular.module('App')
             }).then(function (data) {
                 $scope.gridOptionsPreview.data = data.value;
 
-                self.extractMemberInfo();
+                $scope.extractMemberInfo();
             });
         };
 
@@ -133,7 +133,7 @@ angular.module('App')
             });
         };
 
-        self.extractMemberInfo = function () {
+        $scope.extractMemberInfo = function () {
             var params = {
                 inputDataType: $scope.selectedOption.value,
                 periodType: $scope.selectedOption3.value,
