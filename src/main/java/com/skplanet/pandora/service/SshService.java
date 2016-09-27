@@ -54,7 +54,6 @@ public class SshService {
 
 			execChannel.setInputStream(null);
 			execChannel.setErrStream(System.err);
-			// execChannel.connect();
 
 			try (InputStream in = execChannel.getInputStream()) {
 
