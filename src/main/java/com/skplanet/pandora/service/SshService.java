@@ -15,6 +15,7 @@ import com.jcraft.jsch.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class SshService {
 
 	@Value("${ssh.host}")
@@ -31,6 +32,7 @@ public class SshService {
 
 	public void execute(String username, String inputDataType, String periodType, String periodFrom, String periodTo,
 			String filename) {
+
 		JSch jsch = new JSch();
 
 		try {
@@ -44,6 +46,8 @@ public class SshService {
 			String command = builder.append(username).append(' ').append(inputDataType).append(' ').append(periodType)
 					.append(' ').append(periodFrom).append(' ').append(periodTo).append(" 1 ").append(filename)
 					.toString();
+
+			log.info("execute ssh command: {}", command);
 
 			Channel channel = session.openChannel("exec");
 			((ChannelExec) channel).setCommand(command);
