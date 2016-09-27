@@ -73,11 +73,12 @@ angular.module('App')
         };
 
         $scope.upload = function (file) {
-            $scope.uploadRecords = 0;
             $scope.uploadProgressLoadingMessage = 'Uploading...';
 
-            $scope.uploadPromise = uploadService.upload({ file: file, columnName: $scope.selectedOption2.value });
-            $scope.uploadPromise.then(function () {
+            var deferred = $q.defer();
+            $scope.uploadPromise = deferred.promise;
+
+            uploadService.upload({ file: file, columnName: $scope.selectedOption2.value }).then(function () {
                 $scope.uploadProgressLoadingMessage = 'Extracting...';
 
                 return apiService.extractMemberInfo({
@@ -88,6 +89,9 @@ angular.module('App')
                 });
             }).then(function () {
                 $scope.extracted = true;
+                deferred.resolve();
+            }).catch(function () {
+                deferred.reject();
             });
         };
 
