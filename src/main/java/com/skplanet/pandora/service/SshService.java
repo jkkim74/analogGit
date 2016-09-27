@@ -1,15 +1,14 @@
 package com.skplanet.pandora.service;
 
+import java.io.InputStream;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import com.jcraft.jsch.UIKeyboardInteractive;
 import com.jcraft.jsch.UserInfo;
-import com.skplanet.pandora.common.BizException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,15 +42,47 @@ public class SshService {
 
 		try {
 			Session session = sshClient.getSession(sshUsername, sshHost, sshPort);
-			session.setPassword(sshPassword);
+
+			UserInfo ui = new MyUI(sshPassword);
+			session.setUserInfo(ui);
 			session.connect();
 
 			execChannel = (ChannelExec) session.openChannel("exec");
 			execChannel.connect();
 			execChannel.setCommand(command);
-			execChannel.start();
-		} catch (JSchException e) {
-			throw new BizException("Failed to execute SSH", e);
+			// execChannel.start();
+
+			execChannel.setInputStream(null);
+			execChannel.setErrStream(System.err);
+			// execChannel.connect();
+
+			try (InputStream in = execChannel.getInputStream()) {
+
+				byte[] tmp = new byte[1024];
+				while (true) {
+					while (in.available() > 0) {
+						int i = in.read(tmp, 0, 1024);
+						if (i < 0)
+							break;
+						System.out.println(new String(tmp, 0, i));
+					}
+
+					if (execChannel.isClosed()) {
+						if (in.available() > 0)
+							continue;
+						System.out.println("exit_status: " + execChannel.getExitStatus());
+						break;
+					}
+
+					try {
+						Thread.sleep(1000);
+					} catch (Exception e) {
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			if (execChannel != null) {
 				execChannel.disconnect();
@@ -59,19 +90,12 @@ public class SshService {
 		}
 	}
 
-	@Slf4j
-	private static class MyUI implements UserInfo, UIKeyboardInteractive {
+	private static class MyUI implements UserInfo {
 
 		private String password;
 
 		public MyUI(String password) {
 			this.password = password;
-		}
-
-		@Override
-		public String[] promptKeyboardInteractive(String arg0, String arg1, String arg2, String[] arg3,
-				boolean[] arg4) {
-			return null;
 		}
 
 		@Override
@@ -101,7 +125,7 @@ public class SshService {
 
 		@Override
 		public void showMessage(String arg0) {
-			log.info(arg0);
+			System.out.println(arg0);
 		}
 
 	}
