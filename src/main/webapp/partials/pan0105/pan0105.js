@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Pan0105Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService) {
+    .controller('Pan0105Ctrl', ['$scope', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'apiService', 'uploadService', function ($scope, $q, $http, $timeout, $filter, uiGridConstants, apiService, uploadService) {
 
         var self = this;
         $scope.title = '거래 실적 및 유실적 고객 추출';
@@ -83,8 +83,8 @@ angular.module('App')
                 return apiService.extractMemberInfo({
                     inputDataType: $scope.selectedOption.value,
                     periodType: $scope.selectedOption3.value,
-                    periodFrom: $scope.periodFrom,
-                    periodTo: $scope.periodTo
+                    periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
+                    periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd')
                 });
             }).then(function () {
                 $scope.extracted = true;
