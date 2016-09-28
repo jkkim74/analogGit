@@ -26,58 +26,58 @@
 	</select>
 
 	<select id="selectJoinInfo" parameterType="map" resultType="AutoMappedMap">
-		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(MAX(A.REG_DTTM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS OCBAPP_FNL_ENTR_DT -- OCB app 최종 가입 일자
-			, FROM_UNIXTIME(UNIX_TIMESTAMP(MAX(B.LOG_DTTM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') As OCBAPP_FNL_LGN_DT -- OCB app 최종 로그인 일자
+		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(MAX(A.REG_DTTM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS OCBAPP_FNL_ENTR_DT 
+			, FROM_UNIXTIME(UNIX_TIMESTAMP(MAX(B.LOG_DTTM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') As OCBAPP_FNL_LGN_DT 
 		FROM OCB.DW_TCH_USR_INFO A
 		LEFT OUTER JOIN OCB.DW_USR_LGN_SESS_INFO B ON A.MBR_ID = B.MBR_ID
 		WHERE A.MBR_ID = #{mbrId}
 	</select>
 
 	<select id="selectTransactionHistory" parameterType="map" resultType="AutoMappedMap">
-		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(A.RCV_DT, 'yyyyMMdd'), 'yyyy-MM-dd') AS RCV_DT -- 접수일시
-			, A.RCV_SEQ AS RCV_SEQ-- 접수번호
-			, FROM_UNIXTIME(UNIX_TIMESTAMP(CONCAT(A.APPR_DT,A.APPR_TM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS APPR_DTTM -- 승인일시
-			, A.REP_APPR_NO AS REP_APPR_NO -- 대표승인번호
-			, A.APPR_NO AS APPR_NO -- 승인번호
-			, FROM_UNIXTIME(UNIX_TIMESTAMP(CONCAT(A.SALE_DT,A.SALE_TM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS SALE_DTTM -- 매출일시
-			, A.MBR_ID AS MBR_ID -- 회원ID
-			, A.CARD_DTL_GRP_CD AS CARD_DTL_GRP_CD -- 카드상세그룹코드
-			, E.DTL_CD_NM AS CARD_DTL_GRP_NM -- 카드명
+		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(A.RCV_DT, 'yyyyMMdd'), 'yyyy-MM-dd') AS RCV_DT 
+			, A.RCV_SEQ AS RCV_SEQ
+			, FROM_UNIXTIME(UNIX_TIMESTAMP(CONCAT(A.APPR_DT,A.APPR_TM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS APPR_DTTM 
+			, A.REP_APPR_NO AS REP_APPR_NO 
+			, A.APPR_NO AS APPR_NO 
+			, FROM_UNIXTIME(UNIX_TIMESTAMP(CONCAT(A.SALE_DT,A.SALE_TM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS SALE_DTTM 
+			, A.MBR_ID AS MBR_ID 
+			, A.CARD_DTL_GRP_CD AS CARD_DTL_GRP_CD 
+			, E.DTL_CD_NM AS CARD_DTL_GRP_NM 
 			, CONCAT_WS(' / ', A.CARD_DTL_GRP_CD, E.DTL_CD_NM) AS CARD_DTL_GRP
-			, FUNCS.SECUAESDECRYPT(A.CARD_NO) AS CARD_NO -- 카드번호
-			, A.ALCMPN_CD AS ALCMPN_CD -- 제휴사코드
-			, B.ALCMPN_NM AS ALCMPN_NM -- 제휴사명
+			, FUNCS.SECUAESDECRYPT(A.CARD_NO) AS CARD_NO 
+			, A.ALCMPN_CD AS ALCMPN_CD 
+			, B.ALCMPN_NM AS ALCMPN_NM 
 			, CONCAT_WS(' / ', A.ALCMPN_CD, B.ALCMPN_NM) AS ALCMPN
-			, A.MCNT_CD AS MCNT_CD -- 가맹점코드
-			, C.MCNT_NM AS MCNT_NM -- 가맹점명
+			, A.MCNT_CD AS MCNT_CD 
+			, C.MCNT_NM AS MCNT_NM 
 			, CONCAT_WS(' / ', A.MCNT_CD, C.MCNT_NM) AS MCNT
-			, A.STLMT_MCNT_CD AS STLMT_MCNT_CD -- 정산가맹점코드
-			, D.MCNT_NM AS MCNT_NM -- 정산가맹점명
+			, A.STLMT_MCNT_CD AS STLMT_MCNT_CD 
+			, D.MCNT_NM AS MCNT_NM 
 			, CONCAT_WS(' / ', A.STLMT_MCNT_CD, D.MCNT_NM) AS STLMT_MCNT
-			, A.PNT_KND_CD AS PNT_KND_CD -- 포인트종류코드
-			, F.DTL_CD_NM AS PNT_KND_NM -- 포인트종류명
+			, A.PNT_KND_CD AS PNT_KND_CD 
+			, F.DTL_CD_NM AS PNT_KND_NM 
 			, CONCAT_WS(' / ', A.PNT_KND_CD, F.DTL_CD_NM) AS PNT_KND
-			, A.SLIP_CD AS SLIP_CD -- 전표코드
-			, G.DTL_CD_NM AS SLIP_NM -- 전표명
+			, A.SLIP_CD AS SLIP_CD 
+			, G.DTL_CD_NM AS SLIP_NM 
 			, CONCAT_WS(' / ', A.SLIP_CD, G.DTL_CD_NM) AS SLIP
-			, A.SALE_AMT AS SALE_AMT -- 매출금액
-			, A.OCC_PNT + AVL_PNT AS PNT -- 포인트
-			, A.CS_MBR_CMMSN AS CS_MBR_CMMSN -- 제휴사연회비
-			, A.CMMSN AS CMMSN -- 수수료
-			, A.PMNT_WAY_CD AS PMNT_WAY_CD -- 지불수단코드
-			, H.DTL_CD_NM AS PMNT_WAY_NM -- 지불수단명
+			, A.SALE_AMT AS SALE_AMT
+			, A.OCC_PNT + AVL_PNT AS PNT 
+			, A.CS_MBR_CMMSN AS CS_MBR_CMMSN 
+			, A.CMMSN AS CMMSN 
+			, A.PMNT_WAY_CD AS PMNT_WAY_CD
+			, H.DTL_CD_NM AS PMNT_WAY_NM 
 			, CONCAT_WS(' / ', A.PMNT_WAY_CD, H.DTL_CD_NM) AS PMNT_WAY
-			, A.ORG_CD AS ORG_CD -- 기관코드
-			, I.DTL_CD_NM AS ORG_NM -- 기관코드명
+			, A.ORG_CD AS ORG_CD 
+			, I.DTL_CD_NM AS ORG_NM 
 			, CONCAT_WS(' / ', A.ORG_CD, I.DTL_CD_NM) AS ORG
-			, A.OIL_PRDCT_SGRP_CD AS OIL_PRDCT_SGRP_CD -- 유종코드
-			, J.DTL_CD_NM AS OIL_PRDCT_SGRP_NM -- 유종명
+			, A.OIL_PRDCT_SGRP_CD AS OIL_PRDCT_SGRP_CD 
+			, J.DTL_CD_NM AS OIL_PRDCT_SGRP_NM 
 			, CONCAT_WS(' / ', A.OIL_PRDCT_SGRP_CD, J.DTL_CD_NM) AS OIL_PRDCT_SGRP
-			, CASE WHEN LENGTH(TRIM(A.STLMT_MCNT_CD)) &lt;&gt; 5 OR A.STLMT_MCNT_CD IN ('BOHUM','HOMEP','PINIX') THEN 0 ELSE SALE_QTY END AS SALE_QTY -- 주유량
-			, A.CPN_PRD_CD AS CPN_PRD_CD -- 쿠폰코드
-			, K.PRD_NM AS CPN_PRD_NM -- 쿠폰명
+			, CASE WHEN LENGTH(TRIM(A.STLMT_MCNT_CD)) &lt;&gt; 5 OR A.STLMT_MCNT_CD IN ('BOHUM','HOMEP','PINIX') THEN 0 ELSE SALE_QTY END AS SALE_QTY 
+			, A.CPN_PRD_CD AS CPN_PRD_CD 
+			, K.PRD_NM AS CPN_PRD_NM 
 			, CONCAT_WS(' / ', A.CPN_PRD_CD, K.PRD_NM) AS CPN_PRD
-			, CASE WHEN LENGTH(TRIM(A.STLMT_MCNT_CD)) &lt;&gt; 5 OR A.STLMT_MCNT_CD IN ('BOHUM','HOMEP','PINIX') THEN '01' ELSE '02' END AS TRX_TYPE -- 01일경우 일반 02일경우 주유
+			, CASE WHEN LENGTH(TRIM(A.STLMT_MCNT_CD)) &lt;&gt; 5 OR A.STLMT_MCNT_CD IN ('BOHUM','HOMEP','PINIX') THEN '01' ELSE '02' END AS TRX_TYPE 
 		FROM (
 			SELECT RCV_DT ,RCV_SEQ ,APPR_DT ,APPR_TM ,REP_APPR_NO ,APPR_NO
 				,SALE_DT ,SALE_TM ,MBR_ID ,CARD_DTL_GRP_CD ,CARD_NO
@@ -119,39 +119,39 @@
 		WHERE A.MBR_ID = #{mbrId}
 	</select>
 	<select id="selectTransactionHistory" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
-		SELECT RCV_DT -- 접수일시
-			, RCV_SEQ-- 접수번호
-			, APPR_DTTM -- 승인일시
-			, REP_APPR_NO -- 대표승인번호
-			, APPR_NO -- 승인번호
-			, SALE_DTTM -- 매출일시
-			, MBR_ID -- 회원ID
+		SELECT RCV_DT 
+			, RCV_SEQ
+			, APPR_DTTM 
+			, REP_APPR_NO 
+			, APPR_NO 
+			, SALE_DTTM 
+			, MBR_ID 
 			, CARD_DTL_GRP
-			, CARD_NO -- 카드번호
+			, CARD_NO 
 			, ALCMPN
 			, MCNT
 			, STLMT_MCNT
 			, PNT_KND
 			, SLIP
-			, SALE_AMT -- 매출금액
-			, PNT -- 포인트
-			, CS_MBR_CMMSN -- 제휴사연회비
-			, CMMSN -- 수수료
+			, SALE_AMT 
+			, PNT 
+			, CS_MBR_CMMSN 
+			, CMMSN 
 			, PMNT_WAY
 			, ORG
 			, OIL_PRDCT_SGRP
-			, SALE_QTY -- 주유량
+			, SALE_QTY 
 			, CPN_PRD
-			, TRX_TYPE -- 01일경우 일반 02일경우 주유
+			, TRX_TYPE 
 		FROM MOCK_TB_SEL_TRX_HIST
 		WHERE MBR_ID = #{mbrId}
 	</select>
 
 	<select id="selectEmailSendHistory" parameterType="map" resultType="AutoMappedMap">
-		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(A.SND_DT, 'yyyyMMdd'), 'yyyy-MM-dd') AS SND_DT  -- 발송일자
-			, B.EMAIL_TITL AS EMAIL_TITL -- 이메일 제목
-			, A.LCPT_EMAIL_SND_RSLT_CD AS LCPT_EMAIL_SND_RSLT_CD-- 이메일 발송 결과코드
-			, C.DTL_CD_NM AS LCPT_EMAIL_SND_RSLT_NM -- 이메일 발송 결과명
+		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(A.SND_DT, 'yyyyMMdd'), 'yyyy-MM-dd') AS SND_DT  
+			, B.EMAIL_TITL AS EMAIL_TITL 
+			, A.LCPT_EMAIL_SND_RSLT_CD AS LCPT_EMAIL_SND_RSLT_CD
+			, C.DTL_CD_NM AS LCPT_EMAIL_SND_RSLT_NM 
 			, CONCAT_WS(' / ' , A.LCPT_EMAIL_SND_RSLT_CD, C.DTL_CD_NM) AS LCPT_EMAIL_SND_RSLT
 		FROM OCB.DW_EMAIL_SND_RSLT_CTNT A
 		JOIN OCB.DW_EMAIL_SND_CTNT B ON A.SYS_SRC_CD = B.SYS_SRC_CD AND A.MSG_ID = B.MSG_ID	AND A.SUB_MSG_ID = B.SUB_MSG_ID	AND A.MSG_GRP_ID = B.MSG_GRP_ID
@@ -161,10 +161,10 @@
 	</select>
 
 	<select id="selectAppPushHistory" parameterType="map" resultType="AutoMappedMap">
-		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(A.SND_DTTM, 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS SND_DTTM -- 발송일자
-			, A.MSG_TITL AS MSG_TITL -- Push 제목
-			, A.PUSH_SND_RSLT_CD AS PUSH_SND_RSLT_CD-- Push 발송 결과코드
-			, B.DTL_CD_NM AS PUSH_SND_RSLT_NM -- Push 발송 결과명
+		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(A.SND_DTTM, 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS SND_DTTM 
+			, A.MSG_TITL AS MSG_TITL 
+			, A.PUSH_SND_RSLT_CD AS PUSH_SND_RSLT_CD
+			, B.DTL_CD_NM AS PUSH_SND_RSLT_NM 
 			, CONCAT_WS(' / ', A.PUSH_SND_RSLT_CD, B.DTL_CD_NM) AS PUSH_SND_RSLT
 		FROM OCB.DW_PUSH_SND_LOG_CTNT A
 		LEFT OUTER JOIN (SELECT DTL_CD, DTL_CD_NM FROM OCB.DW_OCB_INTG_CD WHERE DOMN_ID = 'PUSH_SND_RSLT_CD') B ON A.PUSH_SND_RSLT_CD = B.DTL_CD
