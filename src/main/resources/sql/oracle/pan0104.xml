@@ -22,13 +22,13 @@
 	</select>
 	
 	<sql id="selectNoticeResults_test">
-		select '201610' base_ym
+		select #{baseYm} base_ym
 		, '' united_id
 		, '1234' mbr_id
 		, '홍길동' mbr_kor_nm
-		, '01096048666' clphn_no
+		, '01012345678' clphn_no
 		, '1600328@partner.skcc.com' email_addr
-		, '20161120' extnct_obj_dt
+		, #{baseYm} extnct_obj_dt
 		from dual
 	</sql>
 	
