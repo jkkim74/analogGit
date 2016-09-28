@@ -1,13 +1,9 @@
 package com.skplanet.pandora.controller;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,16 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skplanet.pandora.common.BizException;
-import com.skplanet.pandora.common.CsvCreatorTemplate;
-import com.skplanet.pandora.common.Helper;
 import com.skplanet.pandora.model.ApiResponse;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
-import com.skplanet.pandora.service.FtpService;
+import com.skplanet.pandora.service.NoticeService;
 import com.skplanet.pandora.service.PtsService;
-import com.skplanet.pandora.service.SmsService;
 import com.skplanet.pandora.service.SshService;
 import com.skplanet.pandora.service.UploadService;
 
@@ -51,22 +44,7 @@ public class ApiController {
 	private SshService sshService;
 
 	@Autowired
-	private SmsService smsService;
-
-	@Autowired
-	private FtpService ftpService;
-
-	@Value("${ftp.notice.host}")
-	private String ftpHost;
-
-	@Value("${ftp.notice.port}")
-	private int ftpPort;
-
-	@Value("${ftp.notice.username}")
-	private String ftpUsername;
-
-	@Value("${ftp.notice.password}")
-	private String ftpPassword;
+	private NoticeService noticeService;
 
 	@GetMapping("/members")
 	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam(defaultValue = "0") int offset,
@@ -226,86 +204,23 @@ public class ApiController {
 		switch (notiTarget) {
 		case "ocbcom":
 		case "em":
-			noticeUsingFtp(params, notiTarget);
+			noticeService.noticeUsingFtp(params, notiTarget);
 			break;
 		case "sms":
-			noticeUsingSms(params);
+			noticeService.noticeUsingSms(params);
 			break;
 		case "tm":
 			break;
 		case "all":
-			noticeUsingFtp(params, "ocbcom");
-			noticeUsingFtp(params, "em");
-			noticeUsingSms(params);
+			noticeService.noticeUsingFtp(params, "ocbcom");
+			noticeService.noticeUsingFtp(params, "em");
+			noticeService.noticeUsingSms(params);
 			break;
 		default:
 			throw new BizException("전송 대상이 지정되지 않았습니다");
 		}
 
 		return ApiResponse.builder().message("전송 완료").build();
-	}
-
-	private void noticeUsingFtp(final Map<String, Object> params, final String notiTarget) {
-
-		String remotePath = "";
-		if ("ocbcom".equals(notiTarget)) {
-			remotePath = "pointExEmail/extinction_" + Helper.nowDateString() + ".txt";
-		} else if ("em".equals(notiTarget)) {
-			remotePath = "pointExEmail/extinction_em_" + Helper.nowDateString() + ".txt";
-		}
-
-		CsvCreatorTemplate<AutoMappedMap> csvCreator = new CsvCreatorTemplate<AutoMappedMap>() {
-
-			int offset = 0;
-			int limit = 1000;
-
-			@Override
-			public List<AutoMappedMap> nextList() {
-				params.put("offset", offset);
-				params.put("limit", limit);
-
-				List<AutoMappedMap> list = oracleRepository.selectNoticeResults(params);
-
-				offset += limit;
-				return list;
-			}
-
-			@Override
-			public void printEach(CSVPrinter printer, AutoMappedMap map) throws IOException {
-				String extnctObjDt = (String) map.get("extnctObjDt");
-
-				if ("ocbcom".equals(notiTarget)) {
-					// 소명예정년,소멸예정월,소멸예정일,EC_USER_ID
-					printer.printRecord(extnctObjDt.substring(0, 4), extnctObjDt.substring(4, 6),
-							extnctObjDt.substring(6, 8), map.get("unitedId"));
-				} else if ("em".equals(notiTarget)) {
-					String mbrId = (String) map.get("mbrId");
-					String unitedId = (String) map.get("unitedId");
-					String encrypted = Helper.skpEncrypt(mbrId + "," + unitedId);
-
-					// 소명예정년,소멸예정월,소멸예정일,고객성명,이메일주소,암호화값
-					printer.printRecord(extnctObjDt.substring(0, 4), extnctObjDt.substring(4, 6),
-							extnctObjDt.substring(6, 8), map.get("mbrKorNm"), map.get("emailAddr"), encrypted);
-				}
-			}
-
-		};
-
-		Path filePath = null;
-		try {
-			filePath = csvCreator.create(Helper.uniqueCsvFilename());
-		} catch (IOException e) {
-			throw new BizException("CSV 파일 생성 실패", e);
-		}
-
-		ftpService.send(filePath, remotePath, ftpHost, ftpPort, ftpUsername, ftpPassword);
-	}
-
-	private void noticeUsingSms(final Map<String, Object> params) {
-		params.put("noPaging", true);
-		List<AutoMappedMap> list = oracleRepository.selectNoticeResults(params);
-
-		smsService.send(list);
 	}
 
 }

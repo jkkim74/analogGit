@@ -21,6 +21,17 @@
 		ORDER BY A.EXTNCT_MBR_FG_CD
 	</select>
 	
+	<sql id="selectNoticeResults_test">
+		select '201610' base_ym
+		, '' united_id
+		, '1234' mbr_id
+		, '홍길동' mbr_kor_nm
+		, '01096048666' clphn_no
+		, '1600328@partner.skcc.com' email_addr
+		, '20161120' extnct_obj_dt
+		from dual
+	</sql>
+	
 	<sql id="selectNoticeResults_inner">
 		SELECT BASE_YM
 			, UNITED_ID
@@ -74,11 +85,11 @@
 	<select id="selectNoticeResults" parameterType="map" resultType="AutoMappedMap">
 		<choose>
 			<when test="noPaging != null and noPaging == true">
-				<include refid="selectNoticeResults_inner" />
+				<include refid="selectNoticeResults_test" />
 			</when>
 			<otherwise>
 				<include refid="pagingHead" />
-				<include refid="selectNoticeResults_inner" />
+				<include refid="selectNoticeResults_test" />
 				<include refid="pagingFoot" />
 			</otherwise>
 		</choose>
@@ -87,7 +98,7 @@
 	
 	<select id="countNoticeResults" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM (
-			<include refid="selectNoticeResults_inner" />
+			<include refid="selectNoticeResults_test" />
 		)
 	</select>
 

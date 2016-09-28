@@ -44,11 +44,12 @@ public class SmsService {
 
 	public void send(List<AutoMappedMap> receivers) {
 		for (AutoMappedMap m : receivers) {
-			String baseYm = (String) m.get("baseYm");
+			String extnctObjDt = (String) m.get("extnctObjDt");
 
 			HashMap<String, Object> model = new HashMap<>();
 			model.put("mbrKorNm", m.get("mbrKorNm"));
-			model.put("baseMonth", baseYm.substring(4, 6));
+			model.put("mm", extnctObjDt.substring(4, 6));
+			model.put("dd", extnctObjDt.substring(6, 8));
 
 			String clphnNo = (String) m.get("clphnNo");
 
