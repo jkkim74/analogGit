@@ -50,10 +50,10 @@ angular.module('App')
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
                 // $scope.gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-                //   $scope.loadMerged();
+                //   $scope.loadMembers();
                 // });
                 gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-                    $scope.loadMerged();
+                    $scope.loadMembers();
                 });
             }
         };
