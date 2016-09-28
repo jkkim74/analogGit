@@ -179,5 +179,15 @@ public class ApiController {
 
 		return ApiResponse.builder().message("추출 완료").build();
 	}
+	
+	@GetMapping("/expirePointTargets")
+	public List<AutoMappedMap> getExpirePointTargets(@RequestParam Map<String, Object> params) {
+		return oracleRepository.selectExpirePointTargets(params);
+	}
+
+	@GetMapping("/notificationResults")
+	public List<AutoMappedMap> getNotificationResults(@RequestParam Map<String, Object> params) {
+		return oracleRepository.selectNotificationResults(params);
+	}
 
 }

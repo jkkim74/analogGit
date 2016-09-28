@@ -47,4 +47,8 @@ public interface OracleRepository {
 
 	List<AutoMappedMap> selectEmailAddrDup(Map<String, Object> params);
 
+	List<AutoMappedMap> selectExpirePointTargets(Map<String, Object> params);
+
+	List<AutoMappedMap> selectNotificationResults(Map<String, Object> params);
+
 }
