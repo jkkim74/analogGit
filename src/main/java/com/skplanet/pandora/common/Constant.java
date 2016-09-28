@@ -14,4 +14,6 @@ public class Constant {
 
 	public static final String LDAP_USER_SEARCH_FILTER = "(&(objectClass=*)(CN={0}))";
 
+	public static final String EMREJECT_PW = "9gPXBD95qbDedk5PaRLE";
+
 }

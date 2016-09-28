@@ -87,6 +87,7 @@ angular.module('App')
         this.saveAccess = new ApiPost('saveAccess');
         this.extractMemberInfo = new ApiPost('extractMemberInfo');
         this.getExpirePointTargets = new ApiGet('expirePointTargets');
-        this.getNotificationResults = new ApiGet('notificationResults');
+        this.getNoticeResults = new ApiGet('noticeResults');
+        this.noticeExpirePoint = new ApiPost('noticeExpirePoint');
 
     }]);

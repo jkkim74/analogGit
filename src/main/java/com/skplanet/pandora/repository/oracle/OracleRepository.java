@@ -49,8 +49,8 @@ public interface OracleRepository {
 
 	List<AutoMappedMap> selectExpirePointTargets(Map<String, Object> params);
 
-	List<AutoMappedMap> selectNotificationResults(Map<String, Object> params);
+	List<AutoMappedMap> selectNoticeResults(Map<String, Object> params);
 
-	int countNotificationResults(Map<String, Object> params);
+	int countNoticeResults(Map<String, Object> params);
 
 }
