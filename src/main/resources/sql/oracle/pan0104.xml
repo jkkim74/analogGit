@@ -28,7 +28,7 @@
 		, '홍길동' mbr_kor_nm
 		, '01012345678' clphn_no
 		, '1600328@partner.skcc.com' email_addr
-		, #{baseYm} extnct_obj_dt
+		, '20161120' extnct_obj_dt
 		from dual
 	</sql>
 	
