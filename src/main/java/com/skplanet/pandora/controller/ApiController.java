@@ -186,8 +186,11 @@ public class ApiController {
 	}
 
 	@GetMapping("/notificationResults")
-	public List<AutoMappedMap> getNotificationResults(@RequestParam Map<String, Object> params) {
-		return oracleRepository.selectNotificationResults(params);
+	public ApiResponse getNotificationResults(@RequestParam Map<String, Object> params) {
+
+		List<AutoMappedMap> list = oracleRepository.selectNotificationResults(params);
+		int count = oracleRepository.countNotificationResults(params);
+		return ApiResponse.builder().value(list).totalRecords(count).build();
 	}
 
 }

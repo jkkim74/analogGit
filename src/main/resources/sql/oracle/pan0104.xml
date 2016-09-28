@@ -21,9 +21,9 @@
 		GROUP BY A.EXTNCT_MBR_FG_CD, A.MBR_FG_NM, A.EXTNCT_MBR_FG_NM
 		ORDER BY A.EXTNCT_MBR_FG_CD
 	</select>
-
-	<select id="selectNotificationResults" parameterType="map" resultType="AutoMappedMap">
-		SELECT BASE_YM
+	
+	<sql id="selectNotificationResults_inner">
+		SELECT TO_CHAR(TO_DATE(BASE_YM, 'YYYYMM'), 'YYYY-MM') AS BASE_YM
 			, UNITED_ID
 			, MBR_ID
 			, MBR_KOR_NM
@@ -43,23 +43,45 @@
 					OR B.JOBP_TEL_NO IS NOT NULL
 					OR B.HOME_TEL_NO IS NOT NULL THEN 1 ELSE 2 END AS TM /* TM고객 */
 			FROM MART_EXTNCT_MBR_NOTI_MST B
-			WHERE B.BASE_YM = #{baseYm} /* 조회년월 */
+			<where>
+				<if test="baseYm != null and baseYm != ''">
+					AND B.BASE_YM = #{baseYm} /* 조회년월 */
+				</if>
+				<if test="unitedId != null and unitedId != ''">
+					AND B.UNITED_ID = #{unitedId}
+				</if>
+				<if test="mbrKorNm != null and mbrKorNm != ''">
+					AND B.MBR_KOR_NM = #{mbrKorNm}
+				</if>
+				<if test="clphnNo != null and clphnNo != ''">
+					AND B.CLPHN_NO = #{clphnNo}
+				</if>
+				<if test="emailAddr != null and emailAddr != ''">
+					AND B.EMAIL_ADDR = #{emailAddr}
+				</if>
+			</where>
 		) T
 		<where>
-			<if test="baseDest == 'ocbcom'">
-				AND OCBCOM = 1
-			</if>
-			<if test="baseDest == 'em'">
-				AND EM = 1
-			</if>
-			<if test="baseDest == 'sms'">
-				AND SMS = 1
-			</if>
-			<if test="baseDest == 'tm'">
-				AND TM = 1
-			</if>
+			<if test="baseDest == 'ocbcom'">AND OCBCOM = 1</if>
+			<if test="baseDest == 'em'">AND EM = 1</if>
+			<if test="baseDest == 'sms'">AND SMS = 1</if>
+			<if test="baseDest == 'tm'">AND TM = 1</if>
 		</where>
 		ORDER BY BASE_YM DESC
+	</sql>
+
+	<select id="selectNotificationResults" parameterType="map" resultType="AutoMappedMap">
+		<include refid="pagingHead" />
+
+		<include refid="selectNotificationResults_inner" />
+		
+		<include refid="pagingFoot" />
+	</select>
+	
+	<select id="countNotificationResults" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM (
+			<include refid="selectNotificationResults_inner" />
+		)
 	</select>
 
 </mapper>

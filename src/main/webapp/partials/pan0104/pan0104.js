@@ -44,7 +44,7 @@ angular.module('App')
         $scope.gridOptionsTarget = {
             enableColumnMenus: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-            minRowsToShow: 14,
+            minRowsToShow: 7,
             columnDefs: [
                 { field: 'mbrFgNm', displayName: '회원구분', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'extnctMbrFgNm', displayName: '항목', width: 150, cellTooltip: true, headerTooltip: true },
@@ -62,9 +62,8 @@ angular.module('App')
             enableSorting: false,
             useExternalPagination: true,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-            minRowsToShow: 7,
             columnDefs: [
-                { field: 'baseYm', displayName: '조회년월', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'baseYm', displayName: '기준년월', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'unitedId', displayName: 'OCB닷컴 United ID', cellTooltip: true, headerTooltip: true },
                 { field: 'mbrId', displayName: '회원ID', cellTooltip: true, headerTooltip: true },
                 { field: 'mbrKorNm', displayName: '고객성명', cellTooltip: true, headerTooltip: true },
@@ -74,26 +73,43 @@ angular.module('App')
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
                 gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-                    $scope.searchResults();
+                    var offset = (newPage - 1) * pageSize;
+                    $scope.searchResults(offset, pageSize);
                 });
             }
         };
 
-        $scope.searchTargets = function (baseYm) {
-            if (baseYm === '') {
+        $scope.searchTargets = function () {
+            if ($scope.selectedOption.value === '') {
                 return;
             }
 
-            $scope.targetPromise = apiService.getExpirePointTargets({ baseYm: baseYm });
+            var params = {
+                baseYm: $scope.selectedOption.value
+            };
+
+            $scope.targetPromise = apiService.getExpirePointTargets(params);
             $scope.targetPromise.then(function (data) {
                 $scope.gridOptionsTarget.data = data;
             });
         };
 
-        $scope.searchResults = function (baseYm, baseDest) {
-            $scope.resultPromise = apiService.getNotificationResults({ baseYm: baseYm, baseDest: baseDest });
+        $scope.searchResults = function (offset, limit) {
+            var params = {
+                baseYm: $scope.selectedOption2.value,
+                baseDest: $scope.selectedOption3.value,
+                unitedId: $scope.unitedId,
+                mbrKorNm: $scope.mbrKorNm,
+                clphnNo: $scope.clphnNo,
+                emailAddr: $scope.emailAddr,
+                offset: offset || 0,
+                limit: limit || $scope.gridOptionsResult.paginationPageSize
+            };
+
+            $scope.resultPromise = apiService.getNotificationResults(params);
             $scope.resultPromise.then(function (data) {
-                $scope.gridOptionsResult.data = data;
+                $scope.gridOptionsResult.data = data.value;
+                $scope.gridOptionsResult.totalItems = data.totalRecords;
             });
         };
 

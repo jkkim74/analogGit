@@ -51,4 +51,6 @@ public interface OracleRepository {
 
 	List<AutoMappedMap> selectNotificationResults(Map<String, Object> params);
 
+	int countNotificationResults(Map<String, Object> params);
+
 }

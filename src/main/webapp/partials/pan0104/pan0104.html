@@ -7,7 +7,7 @@
                     <label>조회년월</label>
                     <form class="form-inline">
                         <select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
-                            ng-model="selectedOption" ng-change="searchTargets(selectedOption.value)"></select>
+                            ng-model="selectedOption" ng-change="searchTargets()"></select>
                     </form>
 
                     <div cg-busy="targetPromise">
@@ -36,7 +36,7 @@
                             <div class="col-md-6">
                                 <form class="form-horizontal">
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">조회년월</label>
+                                        <label class="col-sm-4 control-label">기준년월</label>
                                         <div class="col-sm-8">
                                             <select class="form-control" ng-init="selectedOption2 = selectOptions2[0]" ng-options="option.label for option in selectOptions2"
                                                 ng-model="selectedOption2"></select>
@@ -45,13 +45,13 @@
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">고객성명</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" placeholder="ex) 홍길동">
+                                            <input type="text" class="form-control" placeholder="ex) 홍길동" ng-model="mbrKorNm">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">OCB닷컴 United ID</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" ng-model="unitedId">
                                         </div>
                                     </div>
                                 </form>
@@ -68,13 +68,13 @@
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">휴대폰번호</label>
                                         <div class="col-sm-8">
-                                            <input type="tel" class="form-control" placeholder="ex) 01012345678 ('-' 없이)">
+                                            <input type="tel" class="form-control" placeholder="ex) 01012345678 ('-' 없이)" ng-model="clphnNo">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">이메일주소</label>
                                         <div class="col-sm-8">
-                                            <input type="email" class="form-control" placeholder="ex) user@email.com">
+                                            <input type="email" class="form-control" placeholder="ex) user@email.com" ng-model="emailAddr">
                                         </div>
                                     </div>
                                 </form>
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-info" ng-click="searchResults(selectedOption2.value, selectedOption3.value)">조회</button>
+                <button type="button" class="btn btn-info" ng-click="searchResults()">조회</button>
                 <div cg-busy="resultPromise">
                     <div class="grid-div" ui-grid="gridOptionsResult" ui-grid-pagination ui-grid-resize-columns></div>
                 </div>
