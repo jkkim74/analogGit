@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.skplanet.pandora.common.BizException;
 import com.skplanet.pandora.common.CsvCreatorTemplate;
@@ -15,6 +16,7 @@ import com.skplanet.pandora.common.Helper;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 
+@Service
 public class NoticeService {
 
 	@Autowired
