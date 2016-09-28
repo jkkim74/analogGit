@@ -43,6 +43,8 @@ public class SmsService {
 	private String sender;
 
 	public void send(List<AutoMappedMap> receivers) {
+		log.info("Send to SMS");
+		
 		for (AutoMappedMap m : receivers) {
 			String extnctObjDt = (String) m.get("extnctObjDt");
 

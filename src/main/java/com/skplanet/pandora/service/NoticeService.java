@@ -16,7 +16,10 @@ import com.skplanet.pandora.common.Helper;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class NoticeService {
 
 	@Autowired
@@ -42,6 +45,8 @@ public class NoticeService {
 
 	public void noticeUsingFtp(final Map<String, Object> params, final String notiTarget) {
 
+		log.info("notice using ftp: {}, {}", params, notiTarget);
+
 		String remotePath = "";
 		if ("ocbcom".equals(notiTarget)) {
 			remotePath = "pointExEmail/extinction_" + Helper.nowDateString() + ".txt";
@@ -49,11 +54,19 @@ public class NoticeService {
 			remotePath = "pointExEmail/extinction_em_" + Helper.nowDateString() + ".txt";
 		}
 
+		log.info("remotePath={}", remotePath);
+
 		CsvCreatorTemplate<AutoMappedMap> csvCreator = new CsvCreatorTemplate<AutoMappedMap>() {
+
+			int offset = 0;
+			int limit = 10000;
 
 			@Override
 			public List<AutoMappedMap> nextList() {
-				params.put("noPaging", true);
+				params.put("offset", offset);
+				params.put("limit", limit);
+				offset += limit;
+
 				return oracleRepository.selectNoticeResults(params);
 			}
 

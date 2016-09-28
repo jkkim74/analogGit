@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 public class FtpService {
 
 	public void send(Path localPath, String remotePath, String host, int port, String username, String password) {
+		log.info("Send to FTP");
+		
 		FTPClient ftpClient = new FTPClient();
 
 		try {
