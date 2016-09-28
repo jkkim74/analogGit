@@ -114,7 +114,7 @@ angular.module('App')
         };
 
         $scope.noticeExpirePoint = function (notiTarget) {
-            var param = {
+            var params = {
                 baseYm: $scope.selectedOption.value,
                 notiTarget: notiTarget
             };

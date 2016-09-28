@@ -51,18 +51,10 @@ public class NoticeService {
 
 		CsvCreatorTemplate<AutoMappedMap> csvCreator = new CsvCreatorTemplate<AutoMappedMap>() {
 
-			int offset = 0;
-			int limit = 1000;
-
 			@Override
 			public List<AutoMappedMap> nextList() {
-				params.put("offset", offset);
-				params.put("limit", limit);
-
-				List<AutoMappedMap> list = oracleRepository.selectNoticeResults(params);
-
-				offset += limit;
-				return list;
+				params.put("noPaging", true);
+				return oracleRepository.selectNoticeResults(params);
 			}
 
 			@Override
