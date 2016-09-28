@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
+
+	<select id="selectExpirePointTargets" parameterType="map" resultType="AutoMappedMap">
+		SELECT A.EXTNCT_MBR_FG_CD
+			, A.MBR_FG_NM /* 회원구분 */
+			, A.EXTNCT_MBR_FG_NM /* 항목 */
+			, SUM(CASE WHEN B.UNITED_ID IS NOT NULL THEN 1 ELSE 0 END) AS OCBCOM /* OCB.com 고객수 */
+			, SUM(CASE WHEN B.EMAIL_ADDR IS NOT NULL THEN 1 ELSE 0 END) AS EM /* EM 고객수 */
+			, SUM(CASE WHEN B.CLPHN_NO IS NOT NULL AND B.CLPHN_CORCT_FG_CD IN ('1','3') THEN 1 ELSE 0 END) AS SMS /* SMS고객수 */
+			, SUM(CASE WHEN (B.CLPHN_NO IS NOT NULL AND B.CLPHN_CORCT_FG_CD IN ('1','3'))
+				OR B.JOBP_TEL_NO IS NOT NULL
+				OR B.HOME_TEL_NO IS NOT NULL THEN 1 ELSE 0 END) AS TM /* TM고객수 */
+			, COUNT(1) AS TOT_CNT /* 전체고객수 */
+			, SUM(B.AVL_PNT) AS TOT_PNT /* 전체포인트 */
+		FROM MART_EXTNCT_MBR_FG_CD_MST A
+		LEFT OUTER
+		JOIN MART_EXTNCT_MBR_NOTI_MST B ON A.EXTNCT_MBR_FG_CD = B.EXTNCT_MBR_FG_CD
+		WHERE B.BASE_YM = #{baseYm} /* 조회년월 */
+		GROUP BY A.EXTNCT_MBR_FG_CD, A.MBR_FG_NM, A.EXTNCT_MBR_FG_NM
+		ORDER BY A.EXTNCT_MBR_FG_CD
+	</select>
+	
+	<sql id="selectNotificationResults_inner">
+		SELECT TO_CHAR(TO_DATE(BASE_YM, 'YYYYMM'), 'YYYY-MM') AS BASE_YM
+			, UNITED_ID
+			, MBR_ID
+			, MBR_KOR_NM
+			, CLPHN_NO
+			, EMAIL_ADDR
+		FROM (
+			SELECT B.BASE_YM
+				, B.UNITED_ID
+				, B.MBR_ID /* 회원ID */
+				, B.MBR_KOR_NM /* 고객성명 */
+				, B.CLPHN_NO /* 핸드폰 */
+				, B.EMAIL_ADDR /* 이메일 */
+				, CASE WHEN B.UNITED_ID IS NOT NULL THEN 1 ELSE 2 END AS OCBCOM /* OCB.com 고객 */
+				, CASE WHEN B.EMAIL_ADDR IS NOT NULL THEN 1 ELSE 2 END AS EM /* EM 고객 */
+				, CASE WHEN B.CLPHN_NO IS NOT NULL AND B.CLPHN_CORCT_FG_CD IN ('1','3') THEN 1 ELSE 2 END AS SMS /* SMS고객 */
+				, CASE WHEN (B.CLPHN_NO IS NOT NULL AND B.CLPHN_CORCT_FG_CD IN ('1','3'))
+					OR B.JOBP_TEL_NO IS NOT NULL
+					OR B.HOME_TEL_NO IS NOT NULL THEN 1 ELSE 2 END AS TM /* TM고객 */
+			FROM MART_EXTNCT_MBR_NOTI_MST B
+			<where>
+				<if test="baseYm != null and baseYm != ''">
+					AND B.BASE_YM = #{baseYm} /* 조회년월 */
+				</if>
+				<if test="unitedId != null and unitedId != ''">
+					AND B.UNITED_ID = #{unitedId}
+				</if>
+				<if test="mbrKorNm != null and mbrKorNm != ''">
+					AND B.MBR_KOR_NM = #{mbrKorNm}
+				</if>
+				<if test="clphnNo != null and clphnNo != ''">
+					AND B.CLPHN_NO = #{clphnNo}
+				</if>
+				<if test="emailAddr != null and emailAddr != ''">
+					AND B.EMAIL_ADDR = #{emailAddr}
+				</if>
+			</where>
+		) T
+		<where>
+			<if test="baseDest == 'ocbcom'">AND OCBCOM = 1</if>
+			<if test="baseDest == 'em'">AND EM = 1</if>
+			<if test="baseDest == 'sms'">AND SMS = 1</if>
+			<if test="baseDest == 'tm'">AND TM = 1</if>
+		</where>
+		ORDER BY BASE_YM DESC
+	</sql>
+
+	<select id="selectNotificationResults" parameterType="map" resultType="AutoMappedMap">
+		<include refid="pagingHead" />
+
+		<include refid="selectNotificationResults_inner" />
+		
+		<include refid="pagingFoot" />
+	</select>
+	
+	<select id="countNotificationResults" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM (
+			<include refid="selectNotificationResults_inner" />
+		)
+	</select>
+
+</mapper>
