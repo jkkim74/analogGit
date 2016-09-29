@@ -87,7 +87,7 @@ angular.module('App')
         this.saveAccess = new ApiPost('saveAccess');
         this.extractMemberInfo = new ApiPost('extractMemberInfo');
         this.getExtinctionSummary = new ApiGet('extinctionSummary');
-        this.getNoticeResults = new ApiGet('noticeResults');
+        this.getExtinctionTargets = new ApiGet('extinctionTargets');
         this.noticeExtinction = new ApiPost('noticeExtinction');
 
     }]);

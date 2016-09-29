@@ -41,7 +41,7 @@ angular.module('App')
             { label: 'TM', value: 'tm' }
         ];
 
-        $scope.gridOptionsTarget = {
+        $scope.gridOptionsSummary = {
             enableColumnMenus: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             minRowsToShow: 7,
@@ -57,7 +57,7 @@ angular.module('App')
             ]
         };
 
-        $scope.gridOptionsResult = {
+        $scope.gridOptionsTargets = {
             enableColumnMenus: false,
             enableSorting: false,
             useExternalPagination: true,
@@ -74,12 +74,12 @@ angular.module('App')
                 $scope.gridApi = gridApi;
                 gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                     var offset = (newPage - 1) * pageSize;
-                    $scope.searchResults(offset, pageSize);
+                    $scope.searchTargets(offset, pageSize);
                 });
             }
         };
 
-        $scope.searchTargets = function () {
+        $scope.searchSummary = function () {
             if ($scope.selectedOption.value === '') {
                 return;
             }
@@ -88,39 +88,39 @@ angular.module('App')
                 baseYm: $scope.selectedOption.value
             };
 
-            $scope.targetPromise = apiSvc.getExtinctionSummary(params);
-            $scope.targetPromise.then(function (data) {
-                $scope.gridOptionsTarget.data = data;
+            $scope.summaryPromise = apiSvc.getExtinctionSummary(params);
+            $scope.summaryPromise.then(function (data) {
+                $scope.gridOptionsSummary.data = data;
             });
         };
 
-        $scope.searchResults = function (offset, limit) {
+        $scope.searchTargets = function (offset, limit) {
             var params = {
                 baseYm: $scope.selectedOption2.value,
-                notiTarget: $scope.selectedOption3.value,
+                notiType: $scope.selectedOption3.value,
                 unitedId: $scope.unitedId,
                 mbrKorNm: $scope.mbrKorNm,
                 clphnNo: $scope.clphnNo,
                 emailAddr: $scope.emailAddr,
                 offset: offset || 0,
-                limit: limit || $scope.gridOptionsResult.paginationPageSize
+                limit: limit || $scope.gridOptionsTargets.paginationPageSize
             };
 
-            $scope.resultPromise = apiSvc.getNoticeResults(params);
-            $scope.resultPromise.then(function (data) {
-                $scope.gridOptionsResult.data = data.value;
-                $scope.gridOptionsResult.totalItems = data.totalRecords;
+            $scope.targetsPromise = apiSvc.getExtinctionTargets(params);
+            $scope.targetsPromise.then(function (data) {
+                $scope.gridOptionsTargets.data = data.value;
+                $scope.gridOptionsTargets.totalItems = data.totalRecords;
             });
         };
 
-        $scope.noticeExtinction = function (notiTarget) {
+        $scope.noticeExtinction = function (notiType) {
             var params = {
                 baseYm: $scope.selectedOption.value,
-                notiTarget: notiTarget
+                notiType: notiType
             };
 
-            $scope.targetPromise = apiSvc.noticeExtinction(params);
-            $scope.targetPromise.then(function () {
+            $scope.summaryPromise = apiSvc.noticeExtinction(params);
+            $scope.summaryPromise.then(function () {
 
             });
         };

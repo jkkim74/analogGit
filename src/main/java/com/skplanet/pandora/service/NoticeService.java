@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.skplanet.pandora.model.AutoMappedMap;
+import com.skplanet.pandora.model.NotificationType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.util.CsvCreatorTemplate;
 import com.skplanet.pandora.util.Helper;
@@ -29,14 +30,14 @@ public class NoticeService {
 	@Autowired
 	private FtpService ftpService;
 
-	public void noticeUsingFtp(final Map<String, Object> params, final String notiTarget) {
+	public void noticeUsingFtp(final Map<String, Object> params, final NotificationType notiType) {
 
-		log.info("notice using ftp: {}, {}", params, notiTarget);
+		log.info("notice using ftp: {}, {}", params, notiType);
 
 		String remotePath = "";
-		if ("ocbcom".equals(notiTarget)) {
+		if (notiType == NotificationType.OCBCOM) {
 			remotePath = "pointExEmail/extinction_" + Helper.nowDateString() + ".txt";
-		} else if ("em".equals(notiTarget)) {
+		} else if (notiType == NotificationType.EM) {
 			remotePath = "pointExEmail/extinction_em_" + Helper.nowDateString() + ".txt";
 		}
 
@@ -53,18 +54,18 @@ public class NoticeService {
 				params.put("limit", limit);
 				offset += limit;
 
-				return oracleRepository.selectNoticeResults(params);
+				return oracleRepository.selectExtinctionTargets(params);
 			}
 
 			@Override
 			public void printRecord(CSVPrinter printer, AutoMappedMap map) throws IOException {
 				String extnctObjDt = (String) map.get("extnctObjDt");
 
-				if ("ocbcom".equals(notiTarget)) {
+				if (notiType == NotificationType.OCBCOM) {
 					// 소명예정년,소멸예정월,소멸예정일,EC_USER_ID
 					printer.printRecord(extnctObjDt.substring(0, 4), extnctObjDt.substring(4, 6),
 							extnctObjDt.substring(6, 8), map.get("unitedId"));
-				} else if ("em".equals(notiTarget)) {
+				} else if (notiType == NotificationType.EM) {
 					String mbrId = (String) map.get("mbrId");
 					String unitedId = (String) map.get("unitedId");
 					String encrypted = Helper.skpEncrypt(mbrId + "," + unitedId);
@@ -77,14 +78,14 @@ public class NoticeService {
 
 		};
 
-		Path filePath = csvCreator.create(Helper.uniqueCsvFilename(notiTarget));
+		Path filePath = csvCreator.create(Helper.uniqueCsvFilename(notiType.name().toLowerCase()));
 
 		ftpService.sendForNotification(filePath, remotePath);
 	}
 
 	public void noticeUsingSms(final Map<String, Object> params) {
 		params.put("noPaging", true);
-		List<AutoMappedMap> list = oracleRepository.selectNoticeResults(params);
+		List<AutoMappedMap> list = oracleRepository.selectExtinctionTargets(params);
 
 		smsService.send(list);
 	}

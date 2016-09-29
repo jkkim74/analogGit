@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.skplanet.pandora.exception.BizException;
 import com.skplanet.pandora.model.ApiResponse;
 import com.skplanet.pandora.model.AutoMappedMap;
+import com.skplanet.pandora.model.NotificationType;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
@@ -53,7 +54,7 @@ public class ApiController {
 		String username = AuthController.getUserInfo().getUsername();
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
-		List<AutoMappedMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit);
+		List<AutoMappedMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, true);
 		int count = oracleRepository.countMembers(uploadProgress);
 		return ApiResponse.builder().value(list).totalRecords(count).build();
 	}
@@ -159,14 +160,14 @@ public class ApiController {
 	}
 
 	@PostMapping("/sendPts")
-	public ApiResponse sendPts(@RequestParam String ptsUsername, @RequestParam String ptsMasking,
+	public ApiResponse sendPts(@RequestParam String ptsUsername, @RequestParam boolean ptsMasking,
 			@RequestParam String pageId) {
 
 		String username = AuthController.getUserInfo().getUsername();
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
-		ptsService.send(ptsUsername, uploadProgress);
+		ptsService.send(ptsUsername, ptsMasking, uploadProgress);
 
 		return ApiResponse.builder().message("PTS 전송 성공").build();
 	}
@@ -189,31 +190,31 @@ public class ApiController {
 		return oracleRepository.selectExtinctionSummary(params);
 	}
 
-	@GetMapping("/noticeResults")
-	public ApiResponse getNoticeResults(@RequestParam Map<String, Object> params) {
+	@GetMapping("/extinctionTargets")
+	public ApiResponse getExtinctionTargets(@RequestParam Map<String, Object> params) {
 
-		List<AutoMappedMap> list = oracleRepository.selectNoticeResults(params);
-		int count = oracleRepository.countNoticeResults(params);
+		List<AutoMappedMap> list = oracleRepository.selectExtinctionTargets(params);
+		int count = oracleRepository.countExtinctionTargets(params);
 		return ApiResponse.builder().value(list).totalRecords(count).build();
 	}
 
 	@PostMapping("/noticeExtinction")
 	public ApiResponse noticeExtinction(@RequestParam Map<String, Object> params) {
-		String notiTarget = (String) params.get("notiTarget");
+		NotificationType notiType = NotificationType.valueOf(((String) params.get("notiType")).toUpperCase());
 
-		switch (notiTarget) {
-		case "ocbcom":
-		case "em":
-			noticeService.noticeUsingFtp(params, notiTarget);
+		switch (notiType) {
+		case OCBCOM:
+		case EM:
+			noticeService.noticeUsingFtp(params, notiType);
 			break;
-		case "sms":
+		case SMS:
 			noticeService.noticeUsingSms(params);
 			break;
-		case "tm":
+		case TM:
 			break;
-		case "all":
-			noticeService.noticeUsingFtp(params, "ocbcom");
-			noticeService.noticeUsingFtp(params, "em");
+		case ALL:
+			noticeService.noticeUsingFtp(params, NotificationType.OCBCOM);
+			noticeService.noticeUsingFtp(params, NotificationType.EM);
 			noticeService.noticeUsingSms(params);
 			break;
 		default:

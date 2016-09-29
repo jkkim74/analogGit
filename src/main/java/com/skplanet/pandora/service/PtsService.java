@@ -26,13 +26,13 @@ public class PtsService {
 	@Autowired
 	private OracleRepository oracleRepository;
 
-	public void send(String ptsUsername, UploadProgress uploadProgress) {
-		String csvFile = createCsvFile(ptsUsername, uploadProgress);
+	public void send(String ptsUsername, boolean ptsMasking, UploadProgress uploadProgress) {
+		String csvFile = createCsvFile(ptsUsername, ptsMasking, uploadProgress);
 		
 		process(csvFile);
 	}
 
-	private String createCsvFile(String ptsUsername, final UploadProgress uploadProgress) {
+	private String createCsvFile(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
 
 		CsvCreatorTemplate<AutoMappedMap> csvCreator = new CsvCreatorTemplate<AutoMappedMap>() {
 
@@ -41,7 +41,7 @@ public class PtsService {
 
 			@Override
 			protected List<AutoMappedMap> nextList() {
-				List<AutoMappedMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit);
+				List<AutoMappedMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, ptsMasking);
 				offset += limit;
 				return list;
 			}

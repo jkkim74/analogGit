@@ -23,13 +23,23 @@
 		<include refid="pagingHead" />
 
 		<if test="uploadProgress.pageId == 'pan0101'">
-			<include refid="selectMembers_pan0101" />
+			<if test="masking == true">
+				<include refid="selectMembers_pan0101" />
+			</if>
+			<if test="masking == false">
+				<include refid="selectMembers_pan0101_nomas" />
+			</if>
 		</if>
 		<if test="uploadProgress.pageId == 'pan0103'">
 			<include refid="selectMembers_pan0103" />
 		</if>
 		<if test="uploadProgress.pageId == 'pan0105'">
-			<include refid="selectMembers_pan0105" />
+			<if test="masking == true">
+				<include refid="selectMembers_pan0105" />
+			</if>
+			<if test="masking == false">
+				<include refid="selectMembers_pan0105_nomas" />
+			</if>
 		</if>
 		<if test="uploadProgress.pageId == 'pan0106'">
 			<include refid="selectMembers_pan0106" />

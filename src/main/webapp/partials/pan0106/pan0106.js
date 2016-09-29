@@ -130,8 +130,8 @@ angular.module('App')
         // self.checkUploadProgress();
 
 
-        $scope.sendPts = function (ptsUsername, ptsMasking) {
-            $scope.sendPtsPromise = apiSvc.sendPts({ ptsUsername: ptsUsername, ptsMasking: !!ptsMasking });
+        $scope.sendPts = function () {
+            $scope.sendPtsPromise = apiSvc.sendPts({ ptsUsername: $scope.ptsUsername, ptsMasking: !!$scope.ptsMasking });
             $scope.sendPtsPromise.finally(function () {
 
             });

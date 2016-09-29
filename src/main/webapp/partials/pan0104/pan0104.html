@@ -7,22 +7,22 @@
                     <label>조회년월</label>
                     <form class="form-inline">
                         <select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
-                            ng-model="selectedOption" ng-change="searchTargets()"></select>
+                            ng-model="selectedOption" ng-change="searchSummary()"></select>
                     </form>
 
-                    <div cg-busy="targetPromise">
-                        <div class="grid-div" ui-grid="gridOptionsTarget" ui-grid-resize-columns></div>
+                    <div cg-busy="summaryPromise">
+                        <div class="grid-div" ui-grid="gridOptionsSummary" ui-grid-resize-columns></div>
                     </div>
 
                     <div class="pull-right btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-sm" role="group">
-                            <button type="button" class="btn btn-primary" ng-click="noticeExtinction('ocbcom')" ng-disabled="!gridOptionsTarget.data.length">OCB 전송</button>
-                            <button type="button" class="btn btn-primary" ng-click="noticeExtinction('em')" ng-disabled="!gridOptionsTarget.data.length">EM 전송</button>
-                            <button type="button" class="btn btn-primary" ng-click="noticeExtinction('sms')" ng-disabled="!gridOptionsTarget.data.length">SMS 전송</button>
-                            <!--<button type="button" class="btn btn-primary" ng-click="noticeExtinction('tm')" ng-disabled="!gridOptionsTarget.data.length">TM 전송</button>-->
+                            <button type="button" class="btn btn-primary" ng-click="noticeExtinction('ocbcom')" ng-disabled="!gridOptionsSummary.data.length">OCB 전송</button>
+                            <button type="button" class="btn btn-primary" ng-click="noticeExtinction('em')" ng-disabled="!gridOptionsSummary.data.length">EM 전송</button>
+                            <button type="button" class="btn btn-primary" ng-click="noticeExtinction('sms')" ng-disabled="!gridOptionsSummary.data.length">SMS 전송</button>
+                            <!--<button type="button" class="btn btn-primary" ng-click="noticeExtinction('tm')" ng-disabled="!gridOptionsSummary.data.length">TM 전송</button>-->
                         </div>
                         <div class="btn-group btn-group-sm" role="group">
-                            <button type="button" class="btn btn-primary" ng-click="noticeExtinction('all')" ng-disabled="!gridOptionsTarget.data.length">전체 전송</button>
+                            <button type="button" class="btn btn-primary" ng-click="noticeExtinction('all')" ng-disabled="!gridOptionsSummary.data.length">전체 전송</button>
                         </div>
                     </div>
                 </div>
@@ -82,9 +82,9 @@
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-info" ng-click="searchResults()">조회</button>
-                <div cg-busy="resultPromise">
-                    <div class="grid-div" ui-grid="gridOptionsResult" ui-grid-pagination ui-grid-resize-columns></div>
+                <button type="button" class="btn btn-info" ng-click="searchTargets()">조회</button>
+                <div cg-busy="targetsPromise">
+                    <div class="grid-div" ui-grid="gridOptionsTargets" ui-grid-pagination ui-grid-resize-columns></div>
                 </div>
             </div>
         </div>

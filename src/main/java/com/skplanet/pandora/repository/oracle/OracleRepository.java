@@ -23,7 +23,7 @@ public interface OracleRepository {
 	int countUploadedPreview(@Param("pageId") String pageId, @Param("username") String username);
 
 	List<AutoMappedMap> selectMembers(@Param("uploadProgress") UploadProgress uploadProgress,
-			@Param("offset") int offset, @Param("limit") int limit);
+			@Param("offset") int offset, @Param("limit") int limit, @Param("masking") boolean masking);
 
 	int countMembers(@Param("uploadProgress") UploadProgress uploadProgress);
 
@@ -49,8 +49,8 @@ public interface OracleRepository {
 
 	List<AutoMappedMap> selectExtinctionSummary(Map<String, Object> params);
 
-	List<AutoMappedMap> selectNoticeResults(Map<String, Object> params);
+	List<AutoMappedMap> selectExtinctionTargets(Map<String, Object> params);
 
-	int countNoticeResults(Map<String, Object> params);
+	int countExtinctionTargets(Map<String, Object> params);
 
 }
