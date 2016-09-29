@@ -12,9 +12,25 @@ import kr.co.skplanet.crypto.EncryptCustomerInfo;
 
 public final class Helper {
 
+	private static DateFormatter dfAsDate = new DateFormatter("yyyyMMdd");
+	private static DateFormatter dfAsDatetime = new DateFormatter("yyyyMMddHHmmss");
+
 	public static String nowDateString() {
-		DateFormatter df = new DateFormatter("yyyyMMdd");
-		return df.print(new Date(), Locale.getDefault());
+		return dfAsDate.print(new Date(), Locale.getDefault());
+	}
+
+	public static String yesterdayDateString() {
+		// now - 1day(24*60*60*1000)
+		Date yesterday = new Date(System.currentTimeMillis() - 86400000);
+		return dfAsDate.print(yesterday, Locale.getDefault());
+	}
+
+	public static String toDateString(Date date) {
+		return dfAsDate.print(date, Locale.getDefault());
+	}
+
+	public static String toDatetimeString(Date date) {
+		return dfAsDatetime.print(date, Locale.getDefault());
 	}
 
 	public static String uniqueCsvFilename(String prefix) {

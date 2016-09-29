@@ -83,4 +83,8 @@ public class FtpService {
 		send(localPath, remotePath, notificationHost, notificationPort, notificationUsername, notificationPassword);
 	}
 
+	public void sendForLogging(Path localPath, String remotePath) {
+
+	}
+
 }
