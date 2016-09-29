@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .service('uploadService', ['$log', '$q', '$http', '$stateParams', 'toastr', 'Upload', '$interval', 'authService', function ($log, $q, $http, $stateParams, toastr, Upload, $interval, authService) {
+    .service('uploadService', ['$log', '$q', '$http', '$stateParams', 'toastr', 'Upload', '$interval', 'authSvc', function ($log, $q, $http, $stateParams, toastr, Upload, $interval, authSvc) {
 
         this.upload = function (params) {
             var deferred = $q.defer();
@@ -10,7 +10,7 @@ angular.module('App')
                 Upload.upload({
                     url: '/api/upload',
                     data: angular.extend({ pageId: $stateParams.pageId }, params),
-                    headers: { 'Authorization': 'Bearer ' + authService.getAccessToken() }
+                    headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
                     toastr.success(resp.config.data.file.name, resp.data.message);
                     deferred.resolve();
@@ -19,7 +19,7 @@ angular.module('App')
 
                     if (resp.status === 401) {
                         toastr.error('로그인이 필요합니다');
-                        authService.logout();
+                        authSvc.logout();
                     } else {
                         toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }
@@ -45,7 +45,7 @@ angular.module('App')
             function uploadedPreview() {
                 $http.get('/api/upload', {
                     params: { pageId: $stateParams.pageId },
-                    headers: { 'Authorization': 'Bearer ' + authService.getAccessToken() }
+                    headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
                     if (resp.data.value.length > 0) {
                         $interval.cancel(canceler);
@@ -57,7 +57,7 @@ angular.module('App')
 
                     if (resp.status === 401) {
                         toastr.error('로그인이 필요합니다');
-                        authService.logout();
+                        authSvc.logout();
                     } else {
                         toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }
@@ -76,7 +76,7 @@ angular.module('App')
             function uploadedPreview() {
                 $http.get('/api/upload', {
                     params: { pageId: $stateParams.pageId, countOnly: true },
-                    headers: { 'Authorization': 'Bearer ' + authService.getAccessToken() }
+                    headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
                     deferred.notify(resp.data.totalRecords);
 
@@ -90,7 +90,7 @@ angular.module('App')
 
                     if (resp.status === 401) {
                         toastr.error('로그인이 필요합니다');
-                        authService.logout();
+                        authSvc.logout();
                     } else {
                         toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }

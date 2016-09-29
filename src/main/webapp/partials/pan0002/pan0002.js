@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Pan0002Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService) {
+    .controller('Pan0002Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc) {
 
         var self = this;
 
@@ -28,14 +28,14 @@ angular.module('App')
         };
 
         $scope.createUser = function (username) {
-            apiService.createUser({ username: username.toUpperCase() }).then(function () {
+            apiSvc.createUser({ username: username.toUpperCase() }).then(function () {
                 self.loadUsers();
             });
         };
 
 
         self.loadUsers = function () {
-            $scope.usersPromise = apiService.getUsers();
+            $scope.usersPromise = apiSvc.getUsers();
             $scope.usersPromise.then(function (data) {
                 $scope.gridOptionsUserList.data = data;
             });

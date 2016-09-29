@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService) {
+    .controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService) {
 
         var self = this;
         $scope.title = '멤버 ID 일괄 전환';
@@ -71,7 +71,7 @@ angular.module('App')
             var offset = ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptionsMembers.paginationPageSize;
             var limit = $scope.gridOptionsMembers.paginationPageSize;
 
-            $scope.membersPromise = apiService.getMembers({ offset: offset, limit: limit });
+            $scope.membersPromise = apiSvc.getMembers({ offset: offset, limit: limit });
             $scope.membersPromise.then(function (data) {
                 $scope.gridOptionsMembers.data = data.value;
                 $scope.gridOptionsMembers.totalItems = data.totalRecords;
@@ -92,7 +92,7 @@ angular.module('App')
 
 
         $scope.sendPts = function (ptsUsername, ptsMasking) {
-            $scope.sendPtsPromise = apiService.sendPts({ ptsUsername: ptsUsername, ptsMasking: !!ptsMasking });
+            $scope.sendPtsPromise = apiSvc.sendPts({ ptsUsername: ptsUsername, ptsMasking: !!ptsMasking });
             $scope.sendPtsPromise.finally(function () {
 
             });

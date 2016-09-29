@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', '$uibModal', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, $uibModal) {
+    .controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', '$uibModal', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, $uibModal) {
 
         $scope.title = '고객 정보 및 장기 거래 실적 조회';
 
@@ -304,63 +304,63 @@ angular.module('App')
         $scope.searchAll = function (searchType, searchKeyword) {
             var params = { searchType: searchType, searchKeyword: searchKeyword };
 
-            $scope.memberInfoPromise = apiService.getMemberInfo(params);
+            $scope.memberInfoPromise = apiSvc.getMemberInfo(params);
             $scope.memberInfoPromise.then(function (data) {
                 $scope.gridOptionsBasicInfo.data = data;
                 $scope.gridOptionsMemberInfo.data = data;
             });
 
-            $scope.agreementInfoPromise = apiService.getAgreementInfo(params);
+            $scope.agreementInfoPromise = apiSvc.getAgreementInfo(params);
             $scope.agreementInfoPromise.then(function (data) {
                 $scope.gridOptionsAgreementInfo.data = data;
             });
 
-            $scope.joinInfoOcbappPromise = apiService.getJoinInfoOcbapp(params);
+            $scope.joinInfoOcbappPromise = apiSvc.getJoinInfoOcbapp(params);
             $scope.joinInfoOcbappPromise.then(function (data) {
                 $scope.gridOptionsJoinInfoOcbapp.data = data;
             });
 
-            $scope.joinInfoOcbcomPromise = apiService.getJoinInfoOcbcom(params);
+            $scope.joinInfoOcbcomPromise = apiSvc.getJoinInfoOcbcom(params);
             $scope.joinInfoOcbcomPromise.then(function (data) {
                 $scope.gridOptionsJoinInfoOcbcom.data = data;
             });
 
-            $scope.latestUsageInfoPromise = apiService.getLastestUsageInfo(params);
+            $scope.latestUsageInfoPromise = apiSvc.getLastestUsageInfo(params);
             $scope.latestUsageInfoPromise.then(function (data) {
                 $scope.gridOptionsLastestUsageInfo.data = data;
             });
 
-            $scope.marketingMemberInfoPromise = apiService.getMarketingMemberInfo(params);
+            $scope.marketingMemberInfoPromise = apiSvc.getMarketingMemberInfo(params);
             $scope.marketingMemberInfoPromise.then(function (data) {
                 $scope.gridOptionsMarketingMemberInfo.data = data;
             });
 
-            $scope.memberInfoHistoryPromise = apiService.getMarketingMemberInfoHistory(params);
+            $scope.memberInfoHistoryPromise = apiSvc.getMarketingMemberInfoHistory(params);
             $scope.memberInfoHistoryPromise.then(function (data) {
                 $scope.gridOptionsMarketingMemberInfoHistory.data = data;
             });
 
-            $scope.thirdPartyProvideHistoryPromise = apiService.getThirdPartyProvideHistory(params);
+            $scope.thirdPartyProvideHistoryPromise = apiSvc.getThirdPartyProvideHistory(params);
             $scope.thirdPartyProvideHistoryPromise.then(function (data) {
                 $scope.gridOptionsThirdPartyProvideHistory.data = data;
             });
 
-            $scope.cardListPromise = apiService.getCardList(params);
+            $scope.cardListPromise = apiSvc.getCardList(params);
             $scope.cardListPromise.then(function (data) {
                 $scope.gridOptionsCardList.data = data;
             });
 
-            $scope.transactionHistoryPromise = apiService.getTransactionHistory(params);
+            $scope.transactionHistoryPromise = apiSvc.getTransactionHistory(params);
             $scope.transactionHistoryPromise.then(function (data) {
                 $scope.gridOptionsTransactionHistory.data = data;
             });
 
-            $scope.emailSendHistoryPromise = apiService.getEmailSendHistory(params);
+            $scope.emailSendHistoryPromise = apiSvc.getEmailSendHistory(params);
             $scope.emailSendHistoryPromise.then(function (data) {
                 $scope.gridOptionsEmailSendHistory.data = data;
             });
 
-            $scope.appPushHistoryPromise = apiService.getAppPushHistory(params);
+            $scope.appPushHistoryPromise = apiSvc.getAppPushHistory(params);
             $scope.appPushHistoryPromise.then(function (data) {
                 $scope.gridOptionsAppPushHistory.data = data;
             });

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .service('apiService', ['$log', '$q', '$http', '$stateParams', 'toastr', 'authService', function ($log, $q, $http, $stateParams, toastr, authService) {
+    .service('apiSvc', ['$log', '$q', '$http', '$stateParams', 'toastr', 'authSvc', function ($log, $q, $http, $stateParams, toastr, authSvc) {
 
         function ApiGet(command) {
             return function (params) {
@@ -9,7 +9,7 @@ angular.module('App')
 
                 $http.get('/api/' + command, {
                     params: angular.extend({ pageId: $stateParams.pageId }, params),
-                    headers: { 'Authorization': 'Bearer ' + authService.getAccessToken() }
+                    headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
                     deferred.resolve(resp.data);
                 }).catch(function (resp) {
@@ -17,7 +17,7 @@ angular.module('App')
 
                     if (resp.status === 401) {
                         toastr.error('로그인이 필요합니다');
-                        authService.logout();
+                        authSvc.logout();
                     } else {
                         toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }
@@ -35,7 +35,7 @@ angular.module('App')
 
                 $http.post('/api/' + command, angular.extend({ pageId: $stateParams.pageId }, params), {
                     headers: {
-                        'Authorization': 'Bearer ' + authService.getAccessToken(),
+                        'Authorization': 'Bearer ' + authSvc.getAccessToken(),
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     transformRequest: function (obj) {
@@ -52,7 +52,7 @@ angular.module('App')
 
                     if (resp.status === 401) {
                         toastr.error('로그인이 필요합니다');
-                        authService.logout();
+                        authSvc.logout();
                     } else {
                         toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }

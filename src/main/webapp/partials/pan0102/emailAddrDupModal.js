@@ -8,11 +8,11 @@ angular.module('App')
             close: '&',
             dismiss: '&'
         },
-        controller: function (apiService, uiGridConstants) {
+        controller: function (apiSvc, uiGridConstants) {
             var self = this;
 
             self.$onInit = function () {
-                self.emailAddrDupPromise = apiService.getEmailAddrDup({ mbrId: self.resolve.mbrId });
+                self.emailAddrDupPromise = apiSvc.getEmailAddrDup({ mbrId: self.resolve.mbrId });
                 self.emailAddrDupPromise.then(function (data) {
                     self.gridOptionsEmailAddrDup.data = data;
                 });

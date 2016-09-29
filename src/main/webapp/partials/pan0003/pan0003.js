@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Pan0003Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService, uploadService) {
+    .controller('Pan0003Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService) {
 
         var self = this;
 
@@ -38,7 +38,7 @@ angular.module('App')
         };
 
         self.loadUsersAccess = function () {
-            $scope.accessPromise = apiService.getUsersAccess();
+            $scope.accessPromise = apiSvc.getUsersAccess();
             $scope.accessPromise.then(function (data) {
                 $scope.gridOptionsAccessList.data = data;
             });
@@ -59,7 +59,7 @@ angular.module('App')
             var username = selectedRow.username;
             var pageList = $scope.checkResults.join(',');
 
-            apiService.saveAccess({ username: username, pageList: pageList }).then(function () {
+            apiSvc.saveAccess({ username: username, pageList: pageList }).then(function () {
                 selectedRow.pageList = pageList;
             });
         };

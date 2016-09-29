@@ -1,16 +1,16 @@
 'use strict';
 
 angular.module('App')
-    .controller('HomeCtrl', ['$scope', '$q', '$http', '$state', 'authService', function ($scope, $q, $http, $state, authService) {
+    .controller('HomeCtrl', ['$scope', '$q', '$http', '$state', 'authSvc', function ($scope, $q, $http, $state, authSvc) {
 
-        $scope.isAuthenticated = authService.isAuthenticated();
+        $scope.isAuthenticated = authSvc.isAuthenticated();
 
         $scope.isAllowedPage = function (pageId) {
-            return authService.isAllowedPage(pageId);
+            return authSvc.isAllowedPage(pageId);
         }
 
         $scope.authenticate = function (username, password) {
-            authService.authenticate(username, password);
+            authSvc.authenticate(username, password);
         };
 
     }]);

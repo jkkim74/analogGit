@@ -1,19 +1,19 @@
 'use strict';
 
 angular.module('App')
-    .controller('HeaderCtrl', ['$scope', 'authService', function ($scope, authService) {
+    .controller('HeaderCtrl', ['$scope', 'authSvc', function ($scope, authSvc) {
 
-        $scope.isAuthenticated = authService.isAuthenticated();
+        $scope.isAuthenticated = authSvc.isAuthenticated();
 
         $scope.isAllowedPage = function (pageId) {
-            return authService.isAllowedPage(pageId);
+            return authSvc.isAllowedPage(pageId);
         }
 
         $scope.logout = function () {
-            authService.logout();
+            authSvc.logout();
         };
 
-        authService.getUsername().then(function (username) {
+        authSvc.getUsername().then(function (username) {
             $scope.username = username;
         });
 

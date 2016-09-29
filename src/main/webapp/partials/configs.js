@@ -45,7 +45,7 @@ angular.module('App')
         blockUIConfig.autoBlock = false;
 
     }])
-    .run(['$rootScope', '$state', 'authService', function ($rootScope, $state, authService) {
+    .run(['$rootScope', '$state', 'authSvc', function ($rootScope, $state, authSvc) {
 
         $rootScope.$on('$stateChangeStart',
             function (event, toState, toParams, fromState, fromParams, options) {
@@ -54,12 +54,12 @@ angular.module('App')
                     needAuth = false;
                 }
 
-                if (needAuth && !authService.isAuthenticated()) {
+                if (needAuth && !authSvc.isAuthenticated()) {
                     $state.transitionTo('index.home');
                     event.preventDefault();
                 }
 
-                if (needAuth && toState.name === 'index.page' && !authService.isAllowedPage(toParams.pageId)) {
+                if (needAuth && toState.name === 'index.page' && !authSvc.isAllowedPage(toParams.pageId)) {
                     $state.transitionTo('index.home');
                     event.preventDefault();
                 }

@@ -8,11 +8,11 @@ angular.module('App')
             close: '&',
             dismiss: '&'
         },
-        controller: function (apiService, uiGridConstants) {
+        controller: function (apiSvc, uiGridConstants) {
             var self = this;
 
             self.$onInit = function () {
-                self.clphnNoDupPromise = apiService.getClphnNoDup({ mbrId: self.resolve.mbrId });
+                self.clphnNoDupPromise = apiSvc.getClphnNoDup({ mbrId: self.resolve.mbrId });
                 self.clphnNoDupPromise.then(function (data) {
                     self.gridOptionsClphnNoDup.data = data;
                 });

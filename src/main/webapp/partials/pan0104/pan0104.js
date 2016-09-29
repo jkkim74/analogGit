@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Pan0104Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiService', function ($scope, $q, $http, $timeout, uiGridConstants, apiService) {
+    .controller('Pan0104Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc) {
 
         var self = this;
 
@@ -88,7 +88,7 @@ angular.module('App')
                 baseYm: $scope.selectedOption.value
             };
 
-            $scope.targetPromise = apiService.getExtinctionSummary(params);
+            $scope.targetPromise = apiSvc.getExtinctionSummary(params);
             $scope.targetPromise.then(function (data) {
                 $scope.gridOptionsTarget.data = data;
             });
@@ -106,7 +106,7 @@ angular.module('App')
                 limit: limit || $scope.gridOptionsResult.paginationPageSize
             };
 
-            $scope.resultPromise = apiService.getNoticeResults(params);
+            $scope.resultPromise = apiSvc.getNoticeResults(params);
             $scope.resultPromise.then(function (data) {
                 $scope.gridOptionsResult.data = data.value;
                 $scope.gridOptionsResult.totalItems = data.totalRecords;
@@ -119,7 +119,7 @@ angular.module('App')
                 notiTarget: notiTarget
             };
 
-            $scope.targetPromise = apiService.noticeExtinction(params);
+            $scope.targetPromise = apiSvc.noticeExtinction(params);
             $scope.targetPromise.then(function () {
 
             });

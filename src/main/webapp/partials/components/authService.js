@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .service('authService', ['$log', '$q', '$http', '$timeout', '$state', 'toastr', function ($log, $q, $http, $timeout, $state, toastr) {
+    .service('authSvc', ['$log', '$q', '$http', '$timeout', '$state', 'toastr', function ($log, $q, $http, $timeout, $state, toastr) {
 
         var self = this;
 
