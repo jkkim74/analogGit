@@ -17,7 +17,6 @@ angular.module('App', [
     'ui.validate',
     'toastr',
     'cgBusy',
-    'blockUI',
     'anim-in-out'
 ]).value('cgBusyDefaults', {
     message: 'Loading...',

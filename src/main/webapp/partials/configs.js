@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .config(['$stateProvider', '$urlRouterProvider', '$provide', 'blockUIConfig', function ($stateProvider, $urlRouterProvider, $provide, blockUIConfig) {
+    .config(['$stateProvider', '$urlRouterProvider', '$provide', function ($stateProvider, $urlRouterProvider, $provide) {
 
         $urlRouterProvider.otherwise('/');
 
@@ -39,10 +39,6 @@ angular.module('App')
                 window.scrollTo(0, 0);
             };
         });
-
-        // 전체 화면 블록킹 용
-        blockUIConfig.message = 'Waiting...';
-        blockUIConfig.autoBlock = false;
 
     }])
     .run(['$rootScope', '$state', 'authSvc', function ($rootScope, $state, authSvc) {
