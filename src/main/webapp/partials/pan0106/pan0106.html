@@ -24,7 +24,7 @@
                     <div>
                         <uib-progressbar ng-show="!uploadProgress && uploadedRecords" animate="false" type="success">업로드 완료 <strong class="text-danger">{{ uploadedRecords | number }}</strong> 건</uib-progressbar>
                         <uib-progressbar ng-show="!uploadProgress && !uploadedRecords" animate="false" type="warning">업로드 대기</uib-progressbar>
-                        <uib-progressbar ng-show="uploadProgress" class="progress-striped active">업로드 임시 테이블 적재 중 <strong class="">{{ uploadedRecords | number }}</strong> 건</uib-progressbar>
+                        <uib-progressbar ng-show="uploadProgress" class="progress-striped active">업로드 적재 중 <strong class="">{{ uploadedRecords | number }}</strong> 건</uib-progressbar>
                     </div>
                 </div>
                 <div class="col-md-6" ng-if="enablePreview">
