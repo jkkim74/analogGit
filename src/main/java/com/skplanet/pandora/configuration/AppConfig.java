@@ -23,6 +23,7 @@ public class AppConfig extends AsyncConfigurerSupport {
 		executor.setCorePoolSize(7);
 		executor.setMaxPoolSize(42);
 		executor.setQueueCapacity(200);
+		executor.setWaitForTasksToCompleteOnShutdown(true);
 		executor.initialize();
 		return executor;
 	}
