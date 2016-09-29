@@ -1,4 +1,4 @@
-package com.skplanet.pandora.common;
+package com.skplanet.pandora.util;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -28,8 +28,11 @@ public final class Helper {
 		return df.print(new Date(), Locale.getDefault());
 	}
 
-	public static String uniqueCsvFilename() {
-		return nowDateString() + "_" + UUID.randomUUID() + ".csv";
+	public static String uniqueCsvFilename(String prefix) {
+		if (prefix != null && prefix.trim().length() > 0) {
+			return prefix + '_' + nowDateString() + '_' + UUID.randomUUID() + ".csv";
+		}
+		return nowDateString() + '_' + UUID.randomUUID() + ".csv";
 	}
 
 	private static final String ENC_KEY = "0123456789abcdef";

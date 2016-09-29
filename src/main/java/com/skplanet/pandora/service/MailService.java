@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
-import com.skplanet.pandora.common.BizException;
+import com.skplanet.pandora.exception.BizException;
 
 @Service
 @SuppressWarnings("deprecation")

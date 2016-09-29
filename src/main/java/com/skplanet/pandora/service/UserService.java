@@ -18,11 +18,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
-import com.skplanet.pandora.common.BizException;
-import com.skplanet.pandora.common.Constant;
+import com.skplanet.pandora.exception.BizException;
 import com.skplanet.pandora.model.UserInfo;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.security.CustomUserDetailsContextMapper;
+import com.skplanet.pandora.util.Constant;
 
 @Service
 public class UserService {

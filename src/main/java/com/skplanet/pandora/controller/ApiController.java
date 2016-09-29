@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.skplanet.pandora.common.BizException;
+import com.skplanet.pandora.exception.BizException;
 import com.skplanet.pandora.model.ApiResponse;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.model.UploadProgress;
@@ -184,9 +184,9 @@ public class ApiController {
 		return ApiResponse.builder().message("추출 완료").build();
 	}
 
-	@GetMapping("/expirePointTargets")
-	public List<AutoMappedMap> getExpirePointTargets(@RequestParam Map<String, Object> params) {
-		return oracleRepository.selectExpirePointTargets(params);
+	@GetMapping("/extinctionSummary")
+	public List<AutoMappedMap> getExtinctionSummary(@RequestParam Map<String, Object> params) {
+		return oracleRepository.selectExtinctionSummary(params);
 	}
 
 	@GetMapping("/noticeResults")
@@ -197,8 +197,8 @@ public class ApiController {
 		return ApiResponse.builder().value(list).totalRecords(count).build();
 	}
 
-	@PostMapping("/noticeExpirePoint")
-	public ApiResponse noticeExpirePoint(@RequestParam Map<String, Object> params) {
+	@PostMapping("/noticeExtinction")
+	public ApiResponse noticeExtinction(@RequestParam Map<String, Object> params) {
 		String notiTarget = (String) params.get("notiTarget");
 
 		switch (notiTarget) {

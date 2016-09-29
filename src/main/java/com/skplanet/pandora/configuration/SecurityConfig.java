@@ -18,9 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.ldap.authentication.UserDetailsServiceLdapAuthoritiesPopulator;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
-import com.skplanet.pandora.common.Constant;
 import com.skplanet.pandora.security.CustomAuthenticationProvider;
 import com.skplanet.pandora.security.CustomUserDetailsContextMapper;
+import com.skplanet.pandora.util.Constant;
 
 @Configuration
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)

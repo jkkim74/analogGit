@@ -88,7 +88,7 @@ angular.module('App')
                 baseYm: $scope.selectedOption.value
             };
 
-            $scope.targetPromise = apiService.getExpirePointTargets(params);
+            $scope.targetPromise = apiService.getExtinctionSummary(params);
             $scope.targetPromise.then(function (data) {
                 $scope.gridOptionsTarget.data = data;
             });
@@ -113,13 +113,13 @@ angular.module('App')
             });
         };
 
-        $scope.noticeExpirePoint = function (notiTarget) {
+        $scope.noticeExtinction = function (notiTarget) {
             var params = {
                 baseYm: $scope.selectedOption.value,
                 notiTarget: notiTarget
             };
 
-            $scope.targetPromise = apiService.noticeExpirePoint(params);
+            $scope.targetPromise = apiService.noticeExtinction(params);
             $scope.targetPromise.then(function () {
 
             });

@@ -7,14 +7,12 @@ import java.util.Map;
 
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.skplanet.pandora.common.BizException;
-import com.skplanet.pandora.common.CsvCreatorTemplate;
-import com.skplanet.pandora.common.Helper;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
+import com.skplanet.pandora.util.CsvCreatorTemplate;
+import com.skplanet.pandora.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,18 +28,6 @@ public class NoticeService {
 
 	@Autowired
 	private FtpService ftpService;
-
-	@Value("${ftp.notice.host}")
-	private String ftpHost;
-
-	@Value("${ftp.notice.port}")
-	private int ftpPort;
-
-	@Value("${ftp.notice.username}")
-	private String ftpUsername;
-
-	@Value("${ftp.notice.password}")
-	private String ftpPassword;
 
 	public void noticeUsingFtp(final Map<String, Object> params, final String notiTarget) {
 
@@ -71,7 +57,7 @@ public class NoticeService {
 			}
 
 			@Override
-			public void printEach(CSVPrinter printer, AutoMappedMap map) throws IOException {
+			public void printRecord(CSVPrinter printer, AutoMappedMap map) throws IOException {
 				String extnctObjDt = (String) map.get("extnctObjDt");
 
 				if ("ocbcom".equals(notiTarget)) {
@@ -91,14 +77,9 @@ public class NoticeService {
 
 		};
 
-		Path filePath = null;
-		try {
-			filePath = csvCreator.create(Helper.uniqueCsvFilename());
-		} catch (IOException e) {
-			throw new BizException("CSV 파일 생성 실패", e);
-		}
+		Path filePath = csvCreator.create(Helper.uniqueCsvFilename(notiTarget));
 
-		ftpService.send(filePath, remotePath, ftpHost, ftpPort, ftpUsername, ftpPassword);
+		ftpService.sendForNotification(filePath, remotePath);
 	}
 
 	public void noticeUsingSms(final Map<String, Object> params) {

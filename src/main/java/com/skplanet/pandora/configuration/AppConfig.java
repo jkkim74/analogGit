@@ -22,7 +22,7 @@ public class AppConfig extends AsyncConfigurerSupport {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 		executor.setCorePoolSize(7);
 		executor.setMaxPoolSize(42);
-		executor.setQueueCapacity(11);
+		executor.setQueueCapacity(200);
 		executor.initialize();
 		return executor;
 	}

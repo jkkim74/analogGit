@@ -19,19 +19,18 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.CaseFormat;
-import com.skplanet.pandora.common.BizException;
-import com.skplanet.pandora.common.Constant;
+import com.skplanet.pandora.exception.BizException;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.model.UploadStatus;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
+import com.skplanet.pandora.util.Constant;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,18 +52,6 @@ public class UploadService {
 
 	@Autowired
 	private FtpService ftpService;
-
-	@Value("${ftp.extract.host}")
-	private String ftpHost;
-
-	@Value("${ftp.extract.port}")
-	private int ftpPort;
-
-	@Value("${ftp.extract.username}")
-	private String ftpUsername;
-
-	@Value("${ftp.extract.password}")
-	private String ftpPassword;
 
 	@Transactional("mysqlTxManager")
 	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
@@ -200,7 +187,7 @@ public class UploadService {
 		markRunning(pageId, username, columnName, filePath.getFileName().toString());
 
 		String remotePath = "web/" + filePath.getFileName().toString();
-		ftpService.send(filePath, remotePath, ftpHost, ftpPort, ftpUsername, ftpPassword);
+		ftpService.sendForExtraction(filePath, remotePath);
 
 		markFinish(pageId, username);
 

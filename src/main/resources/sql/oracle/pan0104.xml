@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
 
-	<select id="selectExpirePointTargets" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectExtinctionSummary" parameterType="map" resultType="AutoMappedMap">
 		SELECT A.EXTNCT_MBR_FG_CD
 			, A.MBR_FG_NM /* 회원구분 */
 			, A.EXTNCT_MBR_FG_NM /* 항목 */
@@ -85,11 +85,11 @@
 	<select id="selectNoticeResults" parameterType="map" resultType="AutoMappedMap">
 		<choose>
 			<when test="noPaging != null and noPaging == true">
-				<include refid="selectNoticeResults_test" />
+				<include refid="selectNoticeResults_inner" />
 			</when>
 			<otherwise>
 				<include refid="pagingHead" />
-				<include refid="selectNoticeResults_test" />
+				<include refid="selectNoticeResults_inner" />
 				<include refid="pagingFoot" />
 			</otherwise>
 		</choose>
@@ -98,7 +98,7 @@
 	
 	<select id="countNoticeResults" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM (
-			<include refid="selectNoticeResults_test" />
+			<include refid="selectNoticeResults_inner" />
 		)
 	</select>
 

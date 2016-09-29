@@ -1,4 +1,4 @@
-package com.skplanet.pandora.common;
+package com.skplanet.pandora.exception;
 
 import org.springframework.core.NestedRuntimeException;
 
