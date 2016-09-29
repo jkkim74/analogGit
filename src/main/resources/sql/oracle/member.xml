@@ -47,7 +47,12 @@
 			</if>
 		</if>
 		<if test="uploadProgress.pageId == 'pan0106'">
-			<include refid="selectMembers_pan0106" />
+			<if test="masking == true">
+				<include refid="selectMembers_pan0106" />
+			</if>
+			<if test="masking == false">
+				<include refid="selectMembers_pan0106_nomas" />
+			</if>
 		</if>
 
 		<include refid="pagingFoot" />
