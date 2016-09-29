@@ -9,8 +9,8 @@ angular.module('App')
             return authSvc.isAllowedPage(pageId);
         }
 
-        $scope.authenticate = function (username, password) {
-            authSvc.authenticate(username, password);
+        $scope.authenticate = function () {
+            $scope.loginPromise = authSvc.authenticate($scope.username, $scope.password);
         };
 
     }]);
