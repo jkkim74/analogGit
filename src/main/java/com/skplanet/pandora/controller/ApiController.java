@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.skplanet.pandora.common.BizException;
 import com.skplanet.pandora.model.ApiResponse;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
+import com.skplanet.pandora.service.NoticeService;
 import com.skplanet.pandora.service.PtsService;
 import com.skplanet.pandora.service.SshService;
 import com.skplanet.pandora.service.UploadService;
@@ -40,6 +42,9 @@ public class ApiController {
 
 	@Autowired
 	private SshService sshService;
+
+	@Autowired
+	private NoticeService noticeService;
 
 	@GetMapping("/members")
 	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam(defaultValue = "0") int offset,
@@ -174,23 +179,48 @@ public class ApiController {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
-		sshService.execute(username, inputDataType, periodType, periodFrom, periodTo,
-				uploadProgress.getFilename());
+		sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, uploadProgress.getFilename());
 
 		return ApiResponse.builder().message("추출 완료").build();
 	}
-	
+
 	@GetMapping("/expirePointTargets")
 	public List<AutoMappedMap> getExpirePointTargets(@RequestParam Map<String, Object> params) {
 		return oracleRepository.selectExpirePointTargets(params);
 	}
 
-	@GetMapping("/notificationResults")
-	public ApiResponse getNotificationResults(@RequestParam Map<String, Object> params) {
+	@GetMapping("/noticeResults")
+	public ApiResponse getNoticeResults(@RequestParam Map<String, Object> params) {
 
-		List<AutoMappedMap> list = oracleRepository.selectNotificationResults(params);
-		int count = oracleRepository.countNotificationResults(params);
+		List<AutoMappedMap> list = oracleRepository.selectNoticeResults(params);
+		int count = oracleRepository.countNoticeResults(params);
 		return ApiResponse.builder().value(list).totalRecords(count).build();
+	}
+
+	@PostMapping("/noticeExpirePoint")
+	public ApiResponse noticeExpirePoint(@RequestParam Map<String, Object> params) {
+		String notiTarget = (String) params.get("notiTarget");
+
+		switch (notiTarget) {
+		case "ocbcom":
+		case "em":
+			noticeService.noticeUsingFtp(params, notiTarget);
+			break;
+		case "sms":
+			noticeService.noticeUsingSms(params);
+			break;
+		case "tm":
+			break;
+		case "all":
+			noticeService.noticeUsingFtp(params, "ocbcom");
+			noticeService.noticeUsingFtp(params, "em");
+			noticeService.noticeUsingSms(params);
+			break;
+		default:
+			throw new BizException("전송 대상이 지정되지 않았습니다");
+		}
+
+		return ApiResponse.builder().message("전송 완료").build();
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.skplanet.pandora.controller;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -75,7 +76,7 @@ public class TestController {
 	public void testSms(@RequestParam Map<String, Object> params) {
 		Map<String, Object> model = new HashMap<>();
 		model.put("msg", new Date());
-		smsService.send(new String[] { (String) params.get("to") }, "pan0104.vm", model);
+		smsService.send(Arrays.asList((String) params.get("to")), "pan0104.vm", model);
 	}
 
 	@GetMapping("/testClientIp")

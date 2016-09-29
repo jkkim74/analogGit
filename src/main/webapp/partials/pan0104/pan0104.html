@@ -16,13 +16,13 @@
 
                     <div class="pull-right btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-sm" role="group">
-                            <button type="button" class="btn btn-primary" ng-click="" ng-disabled="!gridOptionsTarget.data.length">OCB 전송</button>
-                            <button type="button" class="btn btn-primary" ng-click="" ng-disabled="!gridOptionsTarget.data.length">EM 전송</button>
-                            <button type="button" class="btn btn-primary" ng-click="" ng-disabled="!gridOptionsTarget.data.length">SMS 전송</button>
-                            <button type="button" class="btn btn-primary" ng-click="" ng-disabled="!gridOptionsTarget.data.length">TM 전송</button>
+                            <button type="button" class="btn btn-primary" ng-click="noticeExpirePoint('ocbcom')" ng-disabled="!gridOptionsTarget.data.length">OCB 전송</button>
+                            <button type="button" class="btn btn-primary" ng-click="noticeExpirePoint('em')" ng-disabled="!gridOptionsTarget.data.length">EM 전송</button>
+                            <button type="button" class="btn btn-primary" ng-click="noticeExpirePoint('sms')" ng-disabled="!gridOptionsTarget.data.length">SMS 전송</button>
+                            <!--<button type="button" class="btn btn-primary" ng-click="noticeExpirePoint('tm')" ng-disabled="!gridOptionsTarget.data.length">TM 전송</button>-->
                         </div>
                         <div class="btn-group btn-group-sm" role="group">
-                            <button type="button" class="btn btn-primary" ng-click="" ng-disabled="!gridOptionsTarget.data.length">전체 전송</button>
+                            <button type="button" class="btn btn-primary" ng-click="noticeExpirePoint('all')" ng-disabled="!gridOptionsTarget.data.length">전체 전송</button>
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
             <div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label>전송 결과 조회</label>
+                        <label>전송 대상 조회</label>
                         <div class="row">
                             <div class="col-md-6">
                                 <form class="form-horizontal">

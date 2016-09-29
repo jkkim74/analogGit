@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.skplanet.pandora.common.BizException;
-import com.skplanet.pandora.repository.mysql.MysqlRepository;
 
 @Service
 @SuppressWarnings("deprecation")
@@ -26,9 +25,6 @@ public class MailService {
 
 	@Autowired
 	private VelocityEngine velocityEngine;
-
-	@Autowired
-	private MysqlRepository mysqlRepository;
 
 	@Value("${mail.from}")
 	private String from;
@@ -48,8 +44,6 @@ public class MailService {
 			helper.setText(text, true);
 
 			mailSender.send(mimeMessage);
-
-			// mysqlRepository.upsertSubmissionResult(SubmissionType.EM);
 		} catch (MessagingException e) {
 			throw new BizException("Failed to send EMAIL", e);
 		}

@@ -2,6 +2,8 @@ package com.skplanet.pandora.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.skplanet.pandora.common.BizException;
-import com.skplanet.pandora.repository.mysql.MysqlRepository;
+import com.skplanet.pandora.model.AutoMappedMap;
 
 import lombok.extern.slf4j.Slf4j;
 import skp.bss.msg.rms.front.HttpMessageApi;
@@ -31,9 +33,6 @@ public class SmsService {
 	@Autowired
 	private VelocityEngine velocityEngine;
 
-	@Autowired
-	private MysqlRepository mysqlRepository;
-
 	@Value("${sms.serviceId}")
 	private String serviceId;
 
@@ -43,8 +42,25 @@ public class SmsService {
 	@Value("${sms.sender}")
 	private String sender;
 
+	public void send(List<AutoMappedMap> receivers) {
+		log.info("Send to SMS");
+		
+		for (AutoMappedMap m : receivers) {
+			String extnctObjDt = (String) m.get("extnctObjDt");
+
+			HashMap<String, Object> model = new HashMap<>();
+			model.put("mbrKorNm", m.get("mbrKorNm"));
+			model.put("mm", extnctObjDt.substring(4, 6));
+			model.put("dd", extnctObjDt.substring(6, 8));
+
+			String clphnNo = (String) m.get("clphnNo");
+
+			send(Arrays.asList(clphnNo), "pan0104.vm", model);
+		}
+	}
+
 	@Async
-	public void send(String[] receivers, String templateName, Map<String, Object> model) {
+	public void send(List<String> receiverPhoneNumbers, String templateName, Map<String, Object> model) {
 		MultiRequestVo multiRequest = new MultiRequestVo();
 		multiRequest.setOcallPhonNum(sender); /* 발신전화번호 */
 
@@ -54,10 +70,10 @@ public class SmsService {
 
 		List<ReceiveNumVo> receiveNumList = new ArrayList<>();
 
-		for (int i = 0, n = receivers.length; i < n; i++) {
+		for (int i = 0, n = receiverPhoneNumbers.size(); i < n; i++) {
 			ReceiveNumVo receiveNumVo = new ReceiveNumVo();
 			receiveNumVo.setReqNum(String.valueOf(i));
-			receiveNumVo.setRcvPhonNum(receivers[i]);
+			receiveNumVo.setRcvPhonNum(receiverPhoneNumbers.get(i));
 			receiveNumList.add(receiveNumVo);
 		}
 
@@ -70,13 +86,10 @@ public class SmsService {
 				for (ReceiveNumVo rcvNum : resultVo.getRcvPhonNumList()) {
 					log.debug("##### ReqNum={}, RcvPhonNum={}, TransactionId={}", rcvNum.getReqNum(),
 							rcvNum.getRcvPhonNum(), rcvNum.getTransactionId());
-
-					// mysqlRepository.upsertSubmissionResult(SubmissionType.SMS);
 				}
 			} else {
 				throw new BizException(resultVo.getResultCode() + " : " + resultVo.getResultMessage());
 			}
-
 		} catch (IOException e) {
 			throw new BizException("Failed to send SMS", e);
 		}

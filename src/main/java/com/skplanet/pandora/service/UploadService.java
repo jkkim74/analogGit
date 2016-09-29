@@ -2,7 +2,6 @@ package com.skplanet.pandora.service;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -11,8 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -54,17 +51,20 @@ public class UploadService {
 	@Autowired
 	private Job importJob;
 
-	@Value("${ftp.host}")
-	private String host;
+	@Autowired
+	private FtpService ftpService;
 
-	@Value("${ftp.port}")
-	private int port;
+	@Value("${ftp.extract.host}")
+	private String ftpHost;
 
-	@Value("${ftp.username}")
-	private String username;
+	@Value("${ftp.extract.port}")
+	private int ftpPort;
 
-	@Value("${ftp.password}")
-	private String password;
+	@Value("${ftp.extract.username}")
+	private String ftpUsername;
+
+	@Value("${ftp.extract.password}")
+	private String ftpPassword;
 
 	@Transactional("mysqlTxManager")
 	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
@@ -199,44 +199,12 @@ public class UploadService {
 
 		markRunning(pageId, username, columnName, filePath.getFileName().toString());
 
-		forwardUsingFtp(filePath);
+		String remotePath = "web/" + filePath.getFileName().toString();
+		ftpService.send(filePath, remotePath, ftpHost, ftpPort, ftpUsername, ftpPassword);
 
 		markFinish(pageId, username);
 
 		removeUploadedFile(filePath);
-	}
-
-	private void forwardUsingFtp(Path filePath) {
-		FTPClient ftpClient = new FTPClient();
-
-		try {
-			ftpClient.connect(host, port);
-			ftpClient.login(username, password);
-			ftpClient.enterLocalPassiveMode();
-			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-
-			String remotePath = "web/" + filePath.getFileName().toString();
-
-			try (InputStream localIn = new FileInputStream(filePath.toFile())) {
-				log.info("Start uploading file");
-				boolean done = ftpClient.storeFile(remotePath, localIn);
-				if (done) {
-					log.info("The file is uploaded successfully.");
-				}
-			}
-
-		} catch (IOException e) {
-			throw new BizException("Failed to forward using FTP", e);
-		} finally {
-			try {
-				if (ftpClient.isConnected()) {
-					ftpClient.logout();
-					ftpClient.disconnect();
-				}
-			} catch (IOException e) {
-				throw new IllegalStateException(e);
-			}
-		}
 	}
 
 }

@@ -15,27 +15,39 @@
 			, COUNT(1) AS TOT_CNT /* 전체고객수 */
 			, SUM(B.AVL_PNT) AS TOT_PNT /* 전체포인트 */
 		FROM MART_EXTNCT_MBR_FG_CD_MST A
-		LEFT OUTER
-		JOIN MART_EXTNCT_MBR_NOTI_MST B ON A.EXTNCT_MBR_FG_CD = B.EXTNCT_MBR_FG_CD
+		LEFT OUTER JOIN MART_EXTNCT_MBR_NOTI_MST B ON A.EXTNCT_MBR_FG_CD = B.EXTNCT_MBR_FG_CD
 		WHERE B.BASE_YM = #{baseYm} /* 조회년월 */
 		GROUP BY A.EXTNCT_MBR_FG_CD, A.MBR_FG_NM, A.EXTNCT_MBR_FG_NM
 		ORDER BY A.EXTNCT_MBR_FG_CD
 	</select>
 	
-	<sql id="selectNotificationResults_inner">
-		SELECT TO_CHAR(TO_DATE(BASE_YM, 'YYYYMM'), 'YYYY-MM') AS BASE_YM
+	<sql id="selectNoticeResults_test">
+		select #{baseYm} base_ym
+		, '' united_id
+		, '1234' mbr_id
+		, '홍길동' mbr_kor_nm
+		, '01012345678' clphn_no
+		, '1600328@partner.skcc.com' email_addr
+		, '20161120' extnct_obj_dt
+		from dual
+	</sql>
+	
+	<sql id="selectNoticeResults_inner">
+		SELECT BASE_YM
 			, UNITED_ID
 			, MBR_ID
 			, MBR_KOR_NM
 			, CLPHN_NO
 			, EMAIL_ADDR
+			, EXTNCT_OBJ_DT
 		FROM (
-			SELECT B.BASE_YM
-				, B.UNITED_ID
-				, B.MBR_ID /* 회원ID */
-				, B.MBR_KOR_NM /* 고객성명 */
-				, B.CLPHN_NO /* 핸드폰 */
-				, B.EMAIL_ADDR /* 이메일 */
+			SELECT TO_CHAR(TO_DATE(BASE_YM, 'YYYYMM'), 'YYYY-MM') AS BASE_YM
+				, UNITED_ID
+				, MBR_ID /* 회원ID */
+				, MBR_KOR_NM /* 고객성명 */
+				, CLPHN_NO /* 핸드폰 */
+				, EMAIL_ADDR /* 이메일 */
+				, EXTNCT_OBJ_DT /* 소멸대상일자 */
 				, CASE WHEN B.UNITED_ID IS NOT NULL THEN 1 ELSE 2 END AS OCBCOM /* OCB.com 고객 */
 				, CASE WHEN B.EMAIL_ADDR IS NOT NULL THEN 1 ELSE 2 END AS EM /* EM 고객 */
 				, CASE WHEN B.CLPHN_NO IS NOT NULL AND B.CLPHN_CORCT_FG_CD IN ('1','3') THEN 1 ELSE 2 END AS SMS /* SMS고객 */
@@ -62,25 +74,31 @@
 			</where>
 		) T
 		<where>
-			<if test="baseDest == 'ocbcom'">AND OCBCOM = 1</if>
-			<if test="baseDest == 'em'">AND EM = 1</if>
-			<if test="baseDest == 'sms'">AND SMS = 1</if>
-			<if test="baseDest == 'tm'">AND TM = 1</if>
+			<if test="notiTarget == 'ocbcom'">AND OCBCOM = 1</if>
+			<if test="notiTarget == 'em'">AND EM = 1</if>
+			<if test="notiTarget == 'sms'">AND SMS = 1</if>
+			<if test="notiTarget == 'tm'">AND TM = 1</if>
 		</where>
 		ORDER BY BASE_YM DESC
 	</sql>
 
-	<select id="selectNotificationResults" parameterType="map" resultType="AutoMappedMap">
-		<include refid="pagingHead" />
-
-		<include refid="selectNotificationResults_inner" />
-		
-		<include refid="pagingFoot" />
+	<select id="selectNoticeResults" parameterType="map" resultType="AutoMappedMap">
+		<choose>
+			<when test="noPaging != null and noPaging == true">
+				<include refid="selectNoticeResults_test" />
+			</when>
+			<otherwise>
+				<include refid="pagingHead" />
+				<include refid="selectNoticeResults_test" />
+				<include refid="pagingFoot" />
+			</otherwise>
+		</choose>
+	
 	</select>
 	
-	<select id="countNotificationResults" parameterType="map" resultType="int">
+	<select id="countNoticeResults" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM (
-			<include refid="selectNotificationResults_inner" />
+			<include refid="selectNoticeResults_test" />
 		)
 	</select>
 

@@ -189,6 +189,12 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/PtsApiClient_1.5.jar</systemPath>
 		</dependency>
+		
+		<dependency>
+			<groupId>kr.co.skplanet.crypto</groupId>
+			<artifactId>jcrypto-skp</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -314,7 +320,7 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-	<!-- profiles (maven profile 사용안함. spring profile 사용. 빌드위해 남겨놓음) -->
+	<!-- profiles (maven profile 사용안함. spring profile 사용. 빌드 인자로 사용 중이라 남겨놓음) -->
 	<profiles>
 		<profile>
 			<id>dev</id>

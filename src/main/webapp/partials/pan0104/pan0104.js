@@ -97,7 +97,7 @@ angular.module('App')
         $scope.searchResults = function (offset, limit) {
             var params = {
                 baseYm: $scope.selectedOption2.value,
-                baseDest: $scope.selectedOption3.value,
+                notiTarget: $scope.selectedOption3.value,
                 unitedId: $scope.unitedId,
                 mbrKorNm: $scope.mbrKorNm,
                 clphnNo: $scope.clphnNo,
@@ -106,10 +106,22 @@ angular.module('App')
                 limit: limit || $scope.gridOptionsResult.paginationPageSize
             };
 
-            $scope.resultPromise = apiService.getNotificationResults(params);
+            $scope.resultPromise = apiService.getNoticeResults(params);
             $scope.resultPromise.then(function (data) {
                 $scope.gridOptionsResult.data = data.value;
                 $scope.gridOptionsResult.totalItems = data.totalRecords;
+            });
+        };
+
+        $scope.noticeExpirePoint = function (notiTarget) {
+            var params = {
+                baseYm: $scope.selectedOption.value,
+                notiTarget: notiTarget
+            };
+
+            $scope.targetPromise = apiService.noticeExpirePoint(params);
+            $scope.targetPromise.then(function () {
+
             });
         };
 
