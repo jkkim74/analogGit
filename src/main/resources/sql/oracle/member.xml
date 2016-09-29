@@ -31,7 +31,12 @@
 			</if>
 		</if>
 		<if test="uploadProgress.pageId == 'pan0103'">
-			<include refid="selectMembers_pan0103" />
+			<if test="masking == true">
+				<include refid="selectMembers_pan0103" />
+			</if>
+			<if test="masking == false">
+				<include refid="selectMembers_pan0103_nomas" />
+			</if>
 		</if>
 		<if test="uploadProgress.pageId == 'pan0105'">
 			<if test="masking == true">

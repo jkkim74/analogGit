@@ -5,7 +5,6 @@
 	<sql id="selectMembers_pan0101">
 		<choose>
 			<when test="uploadProgress.columnName == 'OCBCOM_LGN_ID'">
-
 				SELECT A.MBR_ID
 					, DECODE(B.LGN_ID,NULL,B.LGN_ID,SUBSTR(B.LGN_ID,1,LENGTH(B.LGN_ID)-2)||'**') AS OCBCOM_LGN_ID
 					, A.CI_NO
@@ -70,7 +69,6 @@
 	<sql id="selectMembers_pan0101_nomas">
 		<choose>
 			<when test="uploadProgress.columnName == 'OCBCOM_LGN_ID'">
-
 				SELECT A.MBR_ID
 					, B.LGN_ID AS OCBCOM_LGN_ID
 					, A.CI_NO

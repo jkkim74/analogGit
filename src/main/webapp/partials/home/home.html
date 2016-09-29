@@ -1,7 +1,7 @@
 <div class="container-fluid section-body">
-    <div class="section-content-wrapper">
+    <div class="section-content-wrapper" cg-busy="loginPromise">
         <div class="section-login center-block">
-            <div ng-show="!isAuthenticated" cg-busy="loginPromise">
+            <div ng-show="!isAuthenticated">
                 <form name="loginForm" ng-submit="authenticate()">
                     <div class="col-md-5">
                         <div class="input-group input-group-lg">

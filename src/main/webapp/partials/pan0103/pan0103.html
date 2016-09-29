@@ -30,7 +30,7 @@
                 <div class="col-md-6" ng-if="enablePreview">
                     <label>업로드 미리보기</label>
                     <div cg-busy="{promise:uploadPromise, message:uploadProgressLoadingMessage}">
-                        <div ui-grid="gridOptionsPreview"></div>
+                        <div ui-grid="gridOptionsPreview" ui-grid-resize-columns></div>
                     </div>
                 </div>
             </div>

@@ -20,12 +20,12 @@ angular.module('App')
             minRowsToShow: 9,
             columnDefs: [
                 { field: 'no', displayName: 'No.', width: 100, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
-                { field: 'column1', displayName: '회원ID' },
-                { field: 'column2', displayName: '카드번호' },
-                { field: 'column3', displayName: 'CI번호' },
-                { field: 'column4', displayName: '성명' },
-                { field: 'column5', displayName: '생년월일' },
-                { field: 'column6', displayName: '성별' }
+                { field: 'column1', displayName: '회원ID', cellTooltip: true, headerTooltip: true },
+                { field: 'column2', displayName: '카드번호', width: 200, cellTooltip: true, headerTooltip: true },
+                { field: 'column3', displayName: 'CI번호', cellTooltip: true, headerTooltip: true },
+                { field: 'column4', displayName: '성명', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'column5', displayName: '생년월일', cellTooltip: true, headerTooltip: true },
+                { field: 'column6', displayName: '성별', cellTooltip: true, headerTooltip: true }
             ]
         };
 

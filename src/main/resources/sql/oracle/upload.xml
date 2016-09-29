@@ -61,13 +61,34 @@
 	</update>
 
 	<select id="selectUploadedPreview" parameterType="map" resultType="AutoMappedMap">
-		SELECT *
-		FROM (
-			SELECT IN_SQ.*, ROWNUM AS RNUM
-			FROM ( SELECT * FROM TMP_${pageId}_${username} ) IN_SQ
-			WHERE ROWNUM &lt;= 100
-		)
-		WHERE RNUM &gt; 0
+		<choose>
+			<when test="pageId != null and pageId == 'pan0103'">
+				SELECT *
+				FROM (
+					SELECT IN_SQ.*, ROWNUM AS RNUM
+					FROM (
+						SELECT COLUMN1
+							, DECODE(COLUMN2,NULL,COLUMN2,SUBSTR(COLUMN2,1,LENGTH(COLUMN2)-8)||'****'||SUBSTR(COLUMN2,LENGTH(COLUMN2)-3,4)) AS COLUMN2
+							, COLUMN3
+							, DECODE(COLUMN4,NULL,COLUMN4,SUBSTR(COLUMN4,1,LENGTH(COLUMN4)-2)||'*'||SUBSTR(COLUMN4,LENGTH(COLUMN4),1)) AS COLUMN4
+							, DECODE(COLUMN5,NULL,COLUMN5,'****-**-**') AS COLUMN5
+							, COLUMN6
+						FROM TMP_${pageId}_${username}
+					) IN_SQ
+					WHERE ROWNUM &lt;= 100
+				)
+				WHERE RNUM &gt; 0
+			</when>
+			<otherwise>
+				SELECT *
+				FROM (
+					SELECT IN_SQ.*, ROWNUM AS RNUM
+					FROM ( SELECT * FROM TMP_${pageId}_${username} ) IN_SQ
+					WHERE ROWNUM &lt;= 100
+				)
+				WHERE RNUM &gt; 0
+			</otherwise>
+		</choose>
 	</select>
 	<select id="selectUploadedPreview" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
 		SELECT * FROM TMP_${pageId}_${username} LIMIT 0, 100
