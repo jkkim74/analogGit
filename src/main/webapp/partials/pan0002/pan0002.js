@@ -23,7 +23,7 @@ angular.module('App')
                     cellTemplate: '<div class="ui-grid-cell-contents"><span title="TOOLTIP">{{ COL_FIELD CUSTOM_FILTERS }}</span> <i class="fa fa-pencil" aria-hidden="true" title="수정하려면 더블클릭"></i></div>'
                 },
                 {
-                    field: 'enabled', displayName: '사용여부', width: 50, type: 'boolean', enableCellEdit: true,
+                    field: 'enabled', displayName: '사용여부', width: 50, cellTooltip: true, headerTooltip: true, type: 'boolean', enableCellEdit: true,
                     cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.enabled" ng-change="grid.appScope.saveColumn(row.entity, {name:\'enabled\'}, COL_FIELD)"></div>'
                 },
                 { field: 'beginDttm', displayName: '사용시작일시', cellTooltip: true, headerTooltip: true },
