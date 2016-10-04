@@ -50,6 +50,14 @@ public class AuthController {
 		return userService.getUsers(params);
 	}
 
+	@PostMapping("/api/userInfo")
+	@RolesAllowed("ROLE_ADMIN")
+	@Transactional("mysqlTxManager")
+	public ApiResponse updateUser(@RequestParam Map<String, Object> params) {
+		userService.updateUser(params);
+		return ApiResponse.builder().message("사용자 정보 수정 완료").build();
+	}
+
 	@PostMapping("/api/saveAccess")
 	@RolesAllowed("ROLE_ADMIN")
 	@Transactional("mysqlTxManager")

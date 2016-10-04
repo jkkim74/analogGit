@@ -26,7 +26,7 @@ angular.module('App')
             minRowsToShow: 20,
             columnDefs: [
                 { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
-                { field: 'username', displayName: 'Pnet ID' }
+                { field: 'username', displayName: 'Pnet ID', cellTooltip: true, headerTooltip: true }
             ],
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;

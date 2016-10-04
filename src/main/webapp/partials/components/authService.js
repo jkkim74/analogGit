@@ -117,7 +117,7 @@ angular.module('App')
 
             var userInfo = JSON.parse(sessionStorage.getItem('user_info'));
 
-            return userInfo && userInfo.pageList.indexOf(pageId.toUpperCase()) !== -1;
+            return userInfo && userInfo.pageList && userInfo.pageList.indexOf(pageId.toUpperCase()) !== -1;
         };
 
     }]);

@@ -83,6 +83,7 @@ angular.module('App')
         this.sendPts = new ApiPost('sendPts');
         this.createUser = new ApiPost('users');
         this.getUsers = new ApiGet('users');
+        this.saveUser = new ApiPost('userInfo');
         this.saveAccess = new ApiPost('saveAccess');
         this.extractMemberInfo = new ApiPost('extractMemberInfo');
         this.getExtinctionSummary = new ApiGet('extinctionSummary');
