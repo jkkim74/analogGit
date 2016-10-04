@@ -28,8 +28,8 @@ public class UserInfo implements UserDetails {
 	private String fullname;
 	private String emailAddr;
 	private String ptsUsername;
-	private String beginDt;
-	private String endDt;
+	private String beginDttm;
+	private String endDttm;
 	private String pageList;
 	private Collection<? extends GrantedAuthority> authorities;
 
