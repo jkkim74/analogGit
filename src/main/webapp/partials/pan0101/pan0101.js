@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService) {
+    .controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', 'authSvc', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService, authSvc) {
 
         var self = this;
         $scope.title = '멤버 ID 일괄 전환';
@@ -92,10 +92,14 @@ angular.module('App')
 
 
         $scope.sendPts = function () {
-            $scope.sendPtsPromise = apiSvc.sendPts({ ptsUsername: $scope.ptsUsername, ptsMasking: !!$scope.ptsMasking });
+            $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: !!$scope.ptsMasking });
             $scope.sendPtsPromise.finally(function () {
 
             });
         };
+
+        authSvc.getUserInfo().then(function (userInfo) {
+            $scope.ptsUsername = userInfo.ptsUsername;
+        });
 
     }]);

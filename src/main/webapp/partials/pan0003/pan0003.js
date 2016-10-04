@@ -18,7 +18,7 @@ angular.module('App')
             });
         });
 
-        $scope.gridOptionsAccessList = {
+        $scope.gridOptionsUserList = {
             enableColumnMenus: false,
             enableRowSelection: true,
             enableRowHeaderSelection: false,
@@ -37,13 +37,13 @@ angular.module('App')
             }
         };
 
-        self.loadUsersAccess = function () {
-            $scope.accessPromise = apiSvc.getUsersAccess();
-            $scope.accessPromise.then(function (data) {
-                $scope.gridOptionsAccessList.data = data;
+        self.loadUsers = function () {
+            $scope.usersPromise = apiSvc.getUsers();
+            $scope.usersPromise.then(function (data) {
+                $scope.gridOptionsUserList.data = data;
             });
         };
-        self.loadUsersAccess();
+        self.loadUsers();
 
         self.initSelection = function (entity) {
             $scope.checkPageId.PAN0101 = entity.pageList.indexOf('PAN0101') !== -1;

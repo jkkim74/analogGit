@@ -79,13 +79,13 @@ angular.module('App')
             return deferred.promise;
         };
 
-        this.getUsername = function () {
+        this.getUserInfo = function () {
             var deferred = $q.defer();
 
             $timeout(function () {
                 if (self.isAuthenticated()) {
                     var userInfo = JSON.parse(sessionStorage.getItem('user_info'));
-                    deferred.resolve(userInfo.username);
+                    deferred.resolve(userInfo);
                 } else {
                     deferred.reject();
                 }

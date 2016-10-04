@@ -20,14 +20,16 @@ public interface MysqlRepository {
 			@Param("columnName") String columnName, @Param("filename") String filename,
 			@Param("uploadStatus") UploadStatus uploadStatus);
 
-	List<String> selectUsers();
+	List<UserInfo> selectUsers(Map<String, Object> params);
 
-	int upsertUserInfo(UserInfo user);
+	int upsertUser(Map<String, Object> params);
 
-	List<AutoMappedMap> selectAccess(@Param("username") String username);
+	void insertAuthorities(@Param("username") String username, @Param("authorities") String authorities);
 
-	void insertAccess(@Param("username") String username, @Param("pageList") String pageList);
+	void deleteAuthorities(@Param("username") String username);
 
-	void deleteAccess(@Param("username") String username);
+	void insertAccesses(@Param("username") String username, @Param("pageList") String pageList);
+
+	void deleteAccesses(@Param("username") String username);
 
 }

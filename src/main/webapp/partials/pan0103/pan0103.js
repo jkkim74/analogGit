@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService) {
+    .controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', 'authSvc', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService, authSvc) {
 
         var self = this;
         $scope.title = '배치 적립 파일 검증';
@@ -100,10 +100,14 @@ angular.module('App')
 
 
         $scope.sendPts = function () {
-            $scope.sendPtsPromise = apiSvc.sendPts({ ptsUsername: $scope.ptsUsername, ptsMasking: !!$scope.ptsMasking });
+            $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: !!$scope.ptsMasking });
             $scope.sendPtsPromise.finally(function () {
 
             });
         };
+
+        authSvc.getUserInfo().then(function (userInfo) {
+            $scope.ptsUsername = userInfo.ptsUsername;
+        });
 
     }]);

@@ -2,21 +2,68 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.pandora.repository.mysql.MysqlRepository">
 
-	<select id="selectUsers" parameterType="map" resultType="string">
-		SELECT USERNAME FROM USERS
+	<resultMap type="UserInfo" id="UserInfoResultMap">
+		<id property="username" column="USERNAME" javaType="string" />
+		<result property="enabled" column="ENABLED" javaType="_boolean" />
+		<result property="ptsUsername" column="PTS_USERNAME" javaType="string" />
+		<result property="beginDt" column="BEGIN_DT" javaType="string" />
+		<result property="endDt" column="END_DT" javaType="string" />
+		<result property="pageList" column="PAGE_LIST" javaType="string" />
+		<collection property="authorities" ofType="org.springframework.security.core.authority.SimpleGrantedAuthority">
+			<constructor>
+				<arg column="AUTHORITY" javaType="string" />
+			</constructor>
+		</collection>
+	</resultMap>
+
+	<select id="selectUsers" parameterType="map" resultMap="UserInfoResultMap">
+		<choose>
+			<when test="onlyUsername == true">
+				SELECT USERNAME, NULL AS AUTHORITY FROM USERS
+			</when>
+			<otherwise>
+				SELECT *
+				FROM (
+					SELECT A.*, IFNULL(GROUP_CONCAT(B.PAGE_ID), '') AS PAGE_LIST
+					FROM USERS A
+					LEFT OUTER JOIN PAGE_ACCESS B ON A.USERNAME = B.USERNAME
+					GROUP BY A.USERNAME
+					<if test="username != null and username != ''">
+						HAVING A.USERNAME = #{username}
+					</if>
+				) U
+				NATURAL JOIN AUTHORITIES
+			</otherwise>
+		</choose>
 	</select>
 
-	<select id="selectAccess" parameterType="map" resultType="AutoMappedMap">
-		SELECT A.USERNAME, IFNULL(GROUP_CONCAT(B.PAGE_ID), '') AS PAGE_LIST
-		FROM USERS A
-		LEFT OUTER JOIN PAGE_ACCESS B ON A.USERNAME = B.USERNAME
-		GROUP BY A.USERNAME
-		<if test="username != null and username != ''">
-		HAVING A.USERNAME = #{username}
-		</if>
-	</select>
+	<update id="upsertUser" parameterType="map">
+		INSERT
+		INTO USERS ( USERNAME, ENABLED, BEGIN_DT )
+		VALUES ( #{username}, 1, DATE_FORMAT(NOW(),'%Y%m%d') )
+		ON DUPLICATE KEY
+		<trim prefix="UPDATE" suffixOverrides=",">
+			<if test="username != null and username != ''">USERNAME = #{username},</if>
+			<if test="ptsUsername != null and ptsUsername != ''">PTS_USERNAME = #{ptsUsername},</if>
+			<if test="enabled != null and enabled != ''">ENABLED = #{enabled},</if>
+			<if test="enabled != null and enabled == 1">BEGIN_DT = DATE_FORMAT(NOW(),'%Y%m%d'),</if>
+			<if test="enabled != null and enabled == 0">END_DT = DATE_FORMAT(NOW(),'%Y%m%d'),</if>
+		</trim>
+	</update>
 
-	<insert id="insertAccess" parameterType="map">
+	<insert id="insertAuthorities" parameterType="map">
+		INSERT INTO AUTHORITIES (USERNAME, AUTHORITY)
+		VALUES
+		<foreach item="authority" collection="authorities.split(',')" separator=",">
+			( #{username}, UPPER(#{authority}) )
+		</foreach>
+	</insert>
+
+	<delete id="deleteAuthorities" parameterType="map">
+		DELETE FROM AUTHORITIES WHERE USERNAME = #{username}
+	</delete>
+
+	<insert id="insertAccesses" parameterType="map">
 		INSERT INTO PAGE_ACCESS (USERNAME, PAGE_ID)
 		VALUES
 		<foreach item="pageId" collection="pageList.split(',')" separator=",">
@@ -24,7 +71,7 @@
 		</foreach>
 	</insert>
 
-	<delete id="deleteAccess" parameterType="map">
+	<delete id="deleteAccesses" parameterType="map">
 		DELETE FROM PAGE_ACCESS WHERE USERNAME = #{username} AND PAGE_ID NOT IN ('PAN0002', 'PAN0003')
 	</delete>
 

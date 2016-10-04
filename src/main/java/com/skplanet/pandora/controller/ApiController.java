@@ -15,6 +15,7 @@ import com.skplanet.pandora.model.ApiResponse;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.model.NotificationType;
 import com.skplanet.pandora.model.UploadProgress;
+import com.skplanet.pandora.model.UserInfo;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.pandora.service.NoticeService;
@@ -160,10 +161,10 @@ public class ApiController {
 	}
 
 	@PostMapping("/sendPts")
-	public ApiResponse sendPts(@RequestParam String ptsUsername, @RequestParam boolean ptsMasking,
-			@RequestParam String pageId) {
+	public ApiResponse sendPts(@RequestParam boolean ptsMasking, @RequestParam String pageId) {
 
 		String username = AuthController.getUserInfo().getUsername();
+		String ptsUsername = ((UserInfo) AuthController.getUserInfo()).getPtsUsername();
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 

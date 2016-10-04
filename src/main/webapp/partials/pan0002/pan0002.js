@@ -18,7 +18,7 @@ angular.module('App')
                 { field: 'username', displayName: 'Pnet ID', width: 100 },
                 { field: 'fullname', displayName: '이름', width: 100 },
                 { field: 'emailAddr', displayName: '이메일주소', width: 200 },
-                // { field: 'isAdmin', displayName: '관리자여부', width: 100 },
+                { field: 'ptsUsername', displayName: 'PTS 계정', width: 150 },
                 { field: 'beginDt', displayName: '사용시작일자' },
                 { field: 'endDt', displayName: '사용종료일자' }
             ],

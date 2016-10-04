@@ -15,8 +15,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.ldap.authentication.UserDetailsServiceLdapAuthoritiesPopulator;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.ldap.authentication.NullLdapAuthoritiesPopulator;
 
 import com.skplanet.pandora.security.CustomAuthenticationProvider;
 import com.skplanet.pandora.security.CustomUserDetailsContextMapper;
@@ -48,23 +47,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			CustomUserDetailsContextMapper userDetailsContextMapper,
 			CustomAuthenticationProvider authenticationProvider) throws Exception {
 
-		// auth.inMemoryAuthentication().withUser("user").password("test1234!").roles("USER", "ADMIN");
+		// auth.inMemoryAuthentication().withUser("user").password("test1234!").roles("USER",
+		// "ADMIN");
 
 		auth.authenticationProvider(authenticationProvider);
 
 		auth.ldapAuthentication().userSearchFilter(Constant.LDAP_USER_SEARCH_FILTER).userSearchBase(ldapBaseDn)
-				.userDetailsContextMapper(userDetailsContextMapper)
-				.ldapAuthoritiesPopulator(new UserDetailsServiceLdapAuthoritiesPopulator(userDetailsService))
-				.contextSource(ldapContextSource());
+				.ldapAuthoritiesPopulator(new NullLdapAuthoritiesPopulator())
+				.userDetailsContextMapper(userDetailsContextMapper).contextSource(ldapContextSource());
 
-	}
-
-	@Bean
-	public JdbcUserDetailsManager userDetailsManager() {
-		JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager();
-		userDetailsManager.setDataSource(mysqlDataSource);
-		userDetailsManager.afterPropertiesSet();
-		return userDetailsManager;
 	}
 
 	@Bean

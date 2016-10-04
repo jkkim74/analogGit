@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Pan0105Ctrl', ['$scope', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'apiSvc', 'uploadService', function ($scope, $q, $http, $timeout, $filter, uiGridConstants, apiSvc, uploadService) {
+    .controller('Pan0105Ctrl', ['$scope', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'apiSvc', 'uploadService', 'authSvc', function ($scope, $q, $http, $timeout, $filter, uiGridConstants, apiSvc, uploadService, authSvc) {
 
         var self = this;
         $scope.title = '거래 실적 및 유실적 고객 추출';
@@ -107,10 +107,14 @@ angular.module('App')
         };
 
         $scope.sendPts = function () {
-            $scope.sendPtsPromise = apiSvc.sendPts({ ptsUsername: $scope.ptsUsername, ptsMasking: !!$scope.ptsMasking });
+            $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: !!$scope.ptsMasking });
             $scope.sendPtsPromise.finally(function () {
 
             });
         };
+
+        authSvc.getUserInfo().then(function (userInfo) {
+            $scope.ptsUsername = userInfo.ptsUsername;
+        });
 
     }]);

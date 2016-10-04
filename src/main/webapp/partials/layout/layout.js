@@ -13,8 +13,8 @@ angular.module('App')
             authSvc.logout();
         };
 
-        authSvc.getUsername().then(function (username) {
-            $scope.username = username;
+        authSvc.getUserInfo().then(function (userInfo) {
+            $scope.username = userInfo.username;
         });
 
     }])

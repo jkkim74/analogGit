@@ -1,6 +1,7 @@
 package com.skplanet.pandora.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skplanet.pandora.model.ApiResponse;
-import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.model.UserInfo;
-import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.service.UserService;
 
 @RestController
@@ -28,56 +26,35 @@ public class AuthController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private MysqlRepository mysqlRepository;
-
 	static UserDetails getUserInfo() {
 		return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
 	@GetMapping("/auth/me")
 	public UserDetails me() {
-		UserDetails user = getUserInfo();
-		UserInfo userInfo = UserInfo.builder().username(user.getUsername()).authorities(user.getAuthorities()).build();
-		userInfo.setPageList((String) mysqlRepository.selectAccess(user.getUsername()).get(0).get("pageList"));
-		if (user instanceof UserInfo) {
-			userInfo.setFullname(((UserInfo) user).getFullname());
-			userInfo.setEmailAddr(((UserInfo) user).getEmailAddr());
-			userInfo.setEnabled(user.isEnabled());
-		}
-		return userInfo;
+		return getUserInfo();
 	}
 
 	@PostMapping("/api/users")
 	@RolesAllowed("ROLE_ADMIN")
 	@Transactional("mysqlTxManager")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ApiResponse createUser(@RequestParam String username) {
-		userService.createUser(username);
+	public ApiResponse createUser(@RequestParam Map<String, Object> params) {
+		userService.createUser(params);
 		return ApiResponse.builder().message("사용자 등록 성공").build();
 	}
 
 	@GetMapping("/api/users")
 	@RolesAllowed("ROLE_ADMIN")
-	public List<UserInfo> getUsers() {
-		return userService.getUsers();
-	}
-
-	@GetMapping("/api/usersAccess")
-	@RolesAllowed("ROLE_ADMIN")
-	public List<AutoMappedMap> getAccess() {
-		return mysqlRepository.selectAccess(null);
+	public List<UserInfo> getUsers(@RequestParam Map<String, Object> params) {
+		return userService.getUsers(params);
 	}
 
 	@PostMapping("/api/saveAccess")
 	@RolesAllowed("ROLE_ADMIN")
 	@Transactional("mysqlTxManager")
 	public ApiResponse saveAccess(@RequestParam String username, @RequestParam String pageList) {
-		mysqlRepository.deleteAccess(username);
-
-		if (!StringUtils.isEmpty(pageList)) {
-			mysqlRepository.insertAccess(username, pageList);
-		}
+		userService.updateAccesses(username, pageList);
 		return ApiResponse.builder().message("화면 권한 수정 완료").build();
 	}
 
