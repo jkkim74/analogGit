@@ -45,9 +45,9 @@
 		<trim prefix="UPDATE" suffixOverrides=",">
 			<if test="username != null and username != ''">USERNAME = #{username},</if>
 			<if test="ptsUsername != null and ptsUsername != ''">PTS_USERNAME = #{ptsUsername},</if>
-			<if test="enabled != null and enabled != ''">ENABLED = #{enabled},</if>
-			<if test="enabled != null and enabled == 1">BEGIN_DT = DATE_FORMAT(NOW(),'%Y%m%d'),</if>
-			<if test="enabled != null and enabled == 0">END_DT = DATE_FORMAT(NOW(),'%Y%m%d'),</if>
+			<if test="enabled != null and enabled != ''">ENABLED = IF('true' = #{enabled}, 1, 0),</if>
+			<if test="enabled != null and enabled == 'true'">BEGIN_DT = DATE_FORMAT(NOW(),'%Y%m%d'), END_DT = NULL,</if>
+			<if test="enabled != null and enabled == 'false'">END_DT = DATE_FORMAT(NOW(),'%Y%m%d'),</if>
 		</trim>
 	</update>
 

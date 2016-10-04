@@ -46,7 +46,7 @@ angular.module('App')
                     }
                 }).then(function (resp) {
                     toastr.success((resp.data && resp.data.message) || resp.config.url);
-                    deferred.resolve();
+                    deferred.resolve(resp.data);
                 }).catch(function (resp) {
                     $log.error(resp);
 

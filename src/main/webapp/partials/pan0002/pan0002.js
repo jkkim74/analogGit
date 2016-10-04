@@ -11,7 +11,6 @@ angular.module('App')
             enableColumnMenus: false,
             enableCellEdit: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-            enableRowSelection: true,
             showGridFooter: true,
             minRowsToShow: 20,
             columnDefs: [
@@ -23,12 +22,28 @@ angular.module('App')
                     field: 'ptsUsername', displayName: 'PTS 계정', width: 150, cellTooltip: true, headerTooltip: true, enableCellEdit: true,
                     cellTemplate: '<div class="ui-grid-cell-contents"><span title="TOOLTIP">{{ COL_FIELD CUSTOM_FILTERS }}</span> <i class="fa fa-pencil" aria-hidden="true" title="수정하려면 더블클릭"></i></div>'
                 },
+                {
+                    field: 'enabled', displayName: '사용여부', type: 'boolean', enableCellEdit: true,
+                    cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.enabled" ng-change="grid.appScope.saveColumn(row.entity, {name:\'enabled\'}, COL_FIELD)"></div>'
+                },
                 { field: 'beginDt', displayName: '사용시작일자', cellTooltip: true, headerTooltip: true },
                 { field: 'endDt', displayName: '사용종료일자', cellTooltip: true, headerTooltip: true }
             ],
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
-                gridApi.rowEdit.on.saveRow($scope, self.saveRow);
+                gridApi.edit.on.afterCellEdit($scope, $scope.saveColumn);
+            }
+        };
+
+        $scope.saveColumn = function (rowEntity, colDef, newValue, oldValue) {
+            if (newValue === oldValue) {
+                return;
+            }
+
+            if (colDef.name === 'ptsUsername') {
+                apiSvc.saveUser({ username: rowEntity.username, ptsUsername: rowEntity.ptsUsername });
+            } else if (colDef.name === 'enabled') {
+                apiSvc.saveUser({ username: rowEntity.username, enabled: rowEntity.enabled });
             }
         };
 
@@ -50,5 +65,21 @@ angular.module('App')
             });
         };
         self.loadUsers();
+
+        // $scope.disableUser = function () {
+        //     var selectedRows = $scope.gridApi.selection.getSelectedRows();
+        //     if (selectedRows.length <= 0) {
+        //         return;
+        //     }
+
+        //     selectedRows.forEach(function (row) {
+        //         row.enabled = false;
+        //         apiSvc.saveUser({ username: row.username, enabled: row.enabled });
+        //     });
+        // };
+
+        $scope.setUserAsAdmin = function () {
+
+        };
 
     }]);
