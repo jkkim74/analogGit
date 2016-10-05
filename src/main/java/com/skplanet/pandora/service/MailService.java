@@ -26,7 +26,7 @@ public class MailService {
 	@Autowired
 	private VelocityEngine velocityEngine;
 
-	@Value("${mail.from}")
+	@Value("${pandora.mail.from}")
 	private String from;
 
 	@Async

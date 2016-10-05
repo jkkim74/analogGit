@@ -18,28 +18,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FtpService {
 
-	@Value("${ftp.extraction.host}")
+	@Value("${pandora.ftp.extraction.host}")
 	private String extractionHost;
 
-	@Value("${ftp.extraction.port}")
+	@Value("${pandora.ftp.extraction.port}")
 	private int extractionPort;
 
-	@Value("${ftp.extraction.username}")
+	@Value("${pandora.ftp.extraction.username}")
 	private String extractionUsername;
 
-	@Value("${ftp.extraction.password}")
+	@Value("${pandora.ftp.extraction.password}")
 	private String extractionPassword;
 
-	@Value("${ftp.notification.host}")
+	@Value("${pandora.ftp.notification.host}")
 	private String notificationHost;
 
-	@Value("${ftp.notification.port}")
+	@Value("${pandora.ftp.notification.port}")
 	private int notificationPort;
 
-	@Value("${ftp.notification.username}")
+	@Value("${pandora.ftp.notification.username}")
 	private String notificationUsername;
 
-	@Value("${ftp.notification.password}")
+	@Value("${pandora.ftp.notification.password}")
 	private String notificationPassword;
 
 	public void send(Path localPath, String remotePath, String host, int port, String username, String password) {

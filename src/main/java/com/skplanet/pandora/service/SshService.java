@@ -16,16 +16,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SshService {
 
-	@Value("${ssh.host}")
+	@Value("${pandora.ssh.host}")
 	private String sshHost;
 
-	@Value("${ssh.port}")
+	@Value("${pandora.ssh.port}")
 	private int sshPort;
 
-	@Value("${ssh.username}")
+	@Value("${pandora.ssh.username}")
 	private String sshUsername;
 
-	@Value("${ssh.password}")
+	@Value("${pandora.ssh.password}")
 	private String sshPassword;
 
 	public void execute(String username, String inputDataType, String periodType, String periodFrom, String periodTo,

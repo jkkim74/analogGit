@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private MysqlRepository mysqlRepository;
 
-	@Value("${ldap.baseDn}")
+	@Value("${pandora.ldap.baseDn}")
 	private String ldapBaseDn;
 
 	private ContextMapper<UserInfo> nullContextMapper = new AbstractContextMapper<UserInfo>() {

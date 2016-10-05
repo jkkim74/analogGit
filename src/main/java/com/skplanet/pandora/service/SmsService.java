@@ -33,13 +33,13 @@ public class SmsService {
 	@Autowired
 	private VelocityEngine velocityEngine;
 
-	@Value("${sms.serviceId}")
+	@Value("${pandora.sms.serviceId}")
 	private String serviceId;
 
-	@Value("${sms.appKey}")
+	@Value("${pandora.sms.appKey}")
 	private String appKey;
 
-	@Value("${sms.sender}")
+	@Value("${pandora.sms.sender}")
 	private String sender;
 
 	public void send(List<AutoMappedMap> receivers) {

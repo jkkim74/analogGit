@@ -14,13 +14,13 @@ import skp.bss.msg.rms.front.HttpMessageApi;
 @Configuration
 public class SmsConfig {
 
-	@Value("${sms.url}")
+	@Value("${pandora.sms.url}")
 	private String url;
 
-	@Value("${sms.serviceId}")
+	@Value("${pandora.sms.serviceId}")
 	private String serviceId;
 
-	@Value("${sms.appKey}")
+	@Value("${pandora.sms.appKey}")
 	private String appKey;
 
 	@Bean

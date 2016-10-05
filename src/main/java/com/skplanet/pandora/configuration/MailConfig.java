@@ -11,28 +11,28 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @Configuration
 public class MailConfig {
 
-	@Value("${mail.host}")
+	@Value("${pandora.mail.host}")
 	private String host;
 
-	@Value("${mail.port}")
+	@Value("${pandora.mail.port}")
 	private int port;
 
-	@Value("${mail.username:}")
+	@Value("${pandora.mail.username:}")
 	private String username;
 
-	@Value("${mail.password:}")
+	@Value("${pandora.mail.password:}")
 	private String password;
 
-	@Value("${mail.smtp.ehlo:true}")
+	@Value("${pandora.mail.smtp.ehlo:true}")
 	private String smtpEhlo;
 
-	@Value("${mail.smtp.auth:false}")
+	@Value("${pandora.mail.smtp.auth:false}")
 	private String smtpAuth;
 
-	@Value("${mail.smtp.starttls.enable:false}")
+	@Value("${pandora.mail.smtp.starttls.enable:false}")
 	private String smtpStartTlsEnable;
 
-	@Value("${mail.debug:false}")
+	@Value("${pandora.mail.debug:false}")
 	private String debug;
 
 	@Bean

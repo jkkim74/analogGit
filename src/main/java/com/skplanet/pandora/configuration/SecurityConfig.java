@@ -30,16 +30,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Qualifier("mysqlDataSource")
 	private DataSource mysqlDataSource;
 
-	@Value("${ldap.url}")
+	@Value("${pandora.ldap.url}")
 	private String ldapUrl;
 
-	@Value("${ldap.baseDn}")
+	@Value("${pandora.ldap.baseDn}")
 	private String ldapBaseDn;
 
-	@Value("${ldap.username}")
+	@Value("${pandora.ldap.username}")
 	private String ldapUsername;
 
-	@Value("${ldap.password}")
+	@Value("${pandora.ldap.password}")
 	private String ldapPassword;
 
 	@Autowired
