@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.io.Resources;
-import com.ptsapi.client.ApiClient;
 import com.skplanet.pandora.exception.BizException;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.model.UploadProgress;
@@ -67,6 +66,8 @@ public class PtsService {
 	private void process(String filename) {
 		log.info("Sending file [{}]", filename);
 		
+		com.ptsapi.client.ApiClient apiClient = new com.ptsapi.client.ApiClient();
+		
 		String ptsProperties = Resources.getResource("config/PTS.properties").getPath();
 
 		log.debug("PTS.properties location={}", ptsProperties);
@@ -81,7 +82,7 @@ public class PtsService {
 		String[] command = { theFilename, ptsProperties };
 
 		try {
-			ApiClient.main(command);
+			apiClient.main(command);
 		} catch (IOException e) {
 			throw new BizException("PTS 전송 실패", e);
 		}
