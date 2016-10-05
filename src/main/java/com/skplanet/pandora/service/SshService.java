@@ -48,38 +48,40 @@ public class SshService {
 			session.connect();
 
 			execChannel = (ChannelExec) session.openChannel("exec");
-			execChannel.connect();
 			execChannel.setCommand(command);
 			// execChannel.start();
 
 			execChannel.setInputStream(null);
 			execChannel.setErrStream(System.err);
 
-			try (InputStream in = execChannel.getInputStream()) {
+			InputStream in = execChannel.getInputStream();
 
-				byte[] tmp = new byte[1024];
-				while (true) {
-					while (in.available() > 0) {
-						int i = in.read(tmp, 0, 1024);
-						if (i < 0)
-							break;
-						System.out.println(new String(tmp, 0, i));
-					}
+			execChannel.connect();
 
-					if (execChannel.isClosed()) {
-						if (in.available() > 0)
-							continue;
-						System.out.println("exit_status: " + execChannel.getExitStatus());
+			byte[] tmp = new byte[1024];
+			while (true) {
+				while (in.available() > 0) {
+					int i = in.read(tmp, 0, 1024);
+					if (i < 0)
 						break;
-					}
+					System.out.println(new String(tmp, 0, i));
+				}
 
-					try {
-						Thread.sleep(1000);
-					} catch (Exception e) {
-					}
+				if (execChannel.isClosed()) {
+					if (in.available() > 0)
+						continue;
+					System.out.println("exit_status: " + execChannel.getExitStatus());
+					break;
+				}
+
+				try {
+					Thread.sleep(1000);
+				} catch (Exception e) {
 				}
 			}
 
+			execChannel.disconnect();
+			session.disconnect();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
