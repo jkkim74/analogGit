@@ -54,8 +54,8 @@ public class AuthController {
 	@RolesAllowed("ROLE_ADMIN")
 	@Transactional("mysqlTxManager")
 	public ApiResponse updateUser(@RequestParam Map<String, Object> params) {
-		userService.updateUser(params);
-		return ApiResponse.builder().message("사용자 정보 수정 완료").build();
+		UserInfo user = userService.updateUser(params);
+		return ApiResponse.builder().message("사용자 정보 수정 완료").value(user).build();
 	}
 
 	@PostMapping("/api/saveAccess")
@@ -64,6 +64,14 @@ public class AuthController {
 	public ApiResponse saveAccess(@RequestParam String username, @RequestParam String pageList) {
 		userService.updateAccesses(username, pageList);
 		return ApiResponse.builder().message("화면 권한 수정 완료").build();
+	}
+
+	@PostMapping("/api/admin")
+	@RolesAllowed("ROLE_ADMIN")
+	@Transactional("mysqlTxManager")
+	public ApiResponse saveAdmin(@RequestParam String username, @RequestParam boolean isAdmin) {
+		userService.updateAdmin(username, isAdmin);
+		return ApiResponse.builder().message("관리자 정보 수정 완료").build();
 	}
 
 }

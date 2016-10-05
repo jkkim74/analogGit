@@ -26,7 +26,7 @@ public interface MysqlRepository {
 
 	void insertAuthorities(@Param("username") String username, @Param("authorities") String authorities);
 
-	void deleteAuthorities(@Param("username") String username);
+	void deleteAuthorities(@Param("username") String username, @Param("authorities") String authorities);
 
 	void insertAccesses(@Param("username") String username, @Param("pageList") String pageList);
 

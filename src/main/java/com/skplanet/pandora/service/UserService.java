@@ -108,8 +108,11 @@ public class UserService implements UserDetailsService {
 		return users;
 	}
 
-	public void updateUser(Map<String, Object> params) {
+	public UserInfo updateUser(Map<String, Object> params) {
 		mysqlRepository.upsertUser(params);
+
+		List<UserInfo> users = mysqlRepository.selectUsers(params);
+		return users.get(0);
 	}
 
 	public void updateAccesses(String username, String pageList) {
@@ -117,6 +120,14 @@ public class UserService implements UserDetailsService {
 
 		if (!StringUtils.isEmpty(pageList)) {
 			mysqlRepository.insertAccesses(username, pageList);
+		}
+	}
+
+	public void updateAdmin(String username, boolean isAdmin) {
+		if (isAdmin) {
+			mysqlRepository.insertAuthorities(username, "ROLE_ADMIN");
+		} else {
+			mysqlRepository.deleteAuthorities(username, "ROLE_ADMIN");
 		}
 	}
 

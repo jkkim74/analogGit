@@ -55,12 +55,17 @@
 		INSERT INTO AUTHORITIES (USERNAME, AUTHORITY)
 		VALUES
 		<foreach item="authority" collection="authorities.split(',')" separator=",">
-			( #{username}, UPPER(#{authority}) )
+			( #{username}, #{authority} )
 		</foreach>
 	</insert>
 
 	<delete id="deleteAuthorities" parameterType="map">
-		DELETE FROM AUTHORITIES WHERE USERNAME = #{username}
+		DELETE FROM AUTHORITIES
+		WHERE USERNAME = #{username}
+		AND AUTHORITY IN
+		<foreach item="authority" collection="authorities.split(',')" separator="," open="(" close=")">
+			#{authority}
+		</foreach> 
 	</delete>
 
 	<insert id="insertAccesses" parameterType="map">

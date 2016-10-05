@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Pan0002Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc) {
+    .controller('Pan0002Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'toastr', 'apiSvc', function ($scope, $q, $http, $timeout, uiGridConstants, toastr, apiSvc) {
 
         var self = this;
 
@@ -23,11 +23,15 @@ angular.module('App')
                     cellTemplate: '<div class="ui-grid-cell-contents"><span title="TOOLTIP">{{ COL_FIELD CUSTOM_FILTERS }}</span> <i class="fa fa-pencil" aria-hidden="true" title="수정하려면 더블클릭"></i></div>'
                 },
                 {
-                    field: 'enabled', displayName: '사용여부', width: 50, cellTooltip: true, headerTooltip: true, type: 'boolean', enableCellEdit: true,
+                    field: 'enabled', displayName: '사용여부', width: 50, cellTooltip: true, headerTooltip: true, type: 'boolean',
                     cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.enabled" ng-change="grid.appScope.saveColumn(row.entity, {name:\'enabled\'}, COL_FIELD)"></div>'
                 },
                 { field: 'beginDttm', displayName: '사용시작일시', cellTooltip: true, headerTooltip: true },
-                { field: 'endDttm', displayName: '사용종료일시', cellTooltip: true, headerTooltip: true }
+                { field: 'endDttm', displayName: '사용종료일시', cellTooltip: true, headerTooltip: true },
+                {
+                    field: 'isAdmin', displayName: '관리자', width: 50, cellTooltip: true, headerTooltip: true, type: 'boolean',
+                    cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.isAdmin" ng-change="grid.appScope.saveColumn(row.entity, {name:\'isAdmin\'}, COL_FIELD)" ng-init="grid.appScope.initAdmin(row.entity)"></div>'
+                }
             ],
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
@@ -43,7 +47,23 @@ angular.module('App')
             if (colDef.name === 'ptsUsername') {
                 apiSvc.saveUser({ username: rowEntity.username, ptsUsername: rowEntity.ptsUsername });
             } else if (colDef.name === 'enabled') {
-                apiSvc.saveUser({ username: rowEntity.username, enabled: rowEntity.enabled });
+                apiSvc.saveUser({ username: rowEntity.username, enabled: rowEntity.enabled }).then(function (data) {
+                    rowEntity.beginDttm = data.value.beginDttm;
+                    rowEntity.endDttm = data.value.endDttm;
+                });
+            } else if (colDef.name === 'isAdmin') {
+                var allRows = $scope.gridApi.core.getVisibleRows($scope.gridApi.grid);
+                var admins = allRows.filter(function (row) {
+                    return row.entity.isAdmin;
+                });
+
+                if (admins.length <= 0) {
+                    toastr.warning('최소 1명의 관리자는 필요합니다');
+                    rowEntity.isAdmin = true;
+                    return;
+                }
+
+                apiSvc.saveAdmin({ username: rowEntity.username, isAdmin: rowEntity.isAdmin });
             }
         };
 
@@ -66,20 +86,12 @@ angular.module('App')
         };
         self.loadUsers();
 
-        // $scope.disableUser = function () {
-        //     var selectedRows = $scope.gridApi.selection.getSelectedRows();
-        //     if (selectedRows.length <= 0) {
-        //         return;
-        //     }
+        $scope.initAdmin = function (rowEntity) {
+            var roleAdmin = rowEntity.authorities.filter(function (obj) {
+                return obj.authority === 'ROLE_ADMIN';
+            });
 
-        //     selectedRows.forEach(function (row) {
-        //         row.enabled = false;
-        //         apiSvc.saveUser({ username: row.username, enabled: row.enabled });
-        //     });
-        // };
-
-        $scope.setUserAsAdmin = function () {
-
+            rowEntity.isAdmin = roleAdmin.length > 0;
         };
 
     }]);

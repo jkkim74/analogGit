@@ -11,9 +11,6 @@
                 </div>
 
                 <div class="col-md-9">
-                    <ul class="list-inline">
-                        <li><button type="button" class="btn btn-info" ng-click="setUserAsAdmin()">관리자지정</button></li>
-                    </ul>
                     <div cg-busy="usersPromise">
                         <div ui-grid="gridOptionsUserList" ui-grid-selection ui-grid-resize-column ui-grid-edit></div>
                     </div>
