@@ -19,7 +19,7 @@ public class DataSourceConfig {
 
 	@Bean
 	@Primary
-	@ConfigurationProperties(prefix = "pandora.datasource.mysql")
+	@ConfigurationProperties(prefix = "spring.datasource.mysql")
 	public DataSource mysqlDataSource() {
 		return DataSourceBuilder.create().build();
 	}
