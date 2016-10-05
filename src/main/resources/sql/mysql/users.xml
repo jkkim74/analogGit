@@ -77,7 +77,15 @@
 	</insert>
 
 	<delete id="deleteAccesses" parameterType="map">
-		DELETE FROM PAGE_ACCESS WHERE USERNAME = #{username} AND PAGE_ID NOT IN ('PAN0002', 'PAN0003')
+		DELETE FROM PAGE_ACCESS
+		WHERE USERNAME = #{username}
+		AND PAGE_ID
+		<if test="forAdmin == true">
+			IN ('PAN0002', 'PAN0003')
+		</if>
+		<if test="forAdmin == false">
+			NOT IN ('PAN0002', 'PAN0003')
+		</if>
 	</delete>
 
 </mapper>
