@@ -19,7 +19,7 @@
                             <div class="form-group">
                                 <label>추출대상</label>
                                 <select class="form-control" ng-init="selectedOption2 = selectOptions2[0]" ng-options="option.label for option in selectOptions2"
-                                    ng-model="selectedOption2"></select>
+                                    ng-model="selectedOption2" ng-change="changeColumnVisible()"></select>
                             </div>
                             <div class="form-group">
                                 <label>일자기준</label>

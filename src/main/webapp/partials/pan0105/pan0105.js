@@ -117,4 +117,18 @@ angular.module('App')
             $scope.ptsUsername = userInfo.ptsUsername;
         });
 
+        $scope.changeColumnVisible = function () {
+            if ($scope.selectedOption2.value === 'mbrId') {
+                $scope.gridOptionsMembers.columnDefs.forEach(function (def) {
+                    def.visible = def.name === 'mbrId';
+                });
+            } else {
+                $scope.gridOptionsMembers.columnDefs.forEach(function (def) {
+                    def.visible = true;
+                });
+            }
+
+            $scope.gridApi.grid.refresh();
+        };
+
     }]);
