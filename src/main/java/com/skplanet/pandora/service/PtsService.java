@@ -59,7 +59,7 @@ public class PtsService {
 
 		};
 
-		Path filePath = csvCreator.create(Helper.uniqueCsvFilename("P140802BKhub_" + ptsUsername));
+		Path filePath = csvCreator.create(Helper.uniquePtsCsvFilename("P140802BKhub_" + ptsUsername,ptsUsername));
 
 		return filePath.toFile().getAbsolutePath();
 	}
