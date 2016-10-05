@@ -61,4 +61,7 @@ angular.module('App')
                 }
             });
 
+        // check token validity
+        authSvc.userInfo();
+
     }]);

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .service('authSvc', ['$log', '$q', '$http', '$timeout', '$state', 'toastr', function ($log, $q, $http, $timeout, $state, toastr) {
+    .service('authSvc', ['$log', '$q', '$http', '$timeout', '$state', 'toastr', '$window', function ($log, $q, $http, $timeout, $state, toastr, $window) {
 
         var self = this;
 
@@ -50,17 +50,17 @@ angular.module('App')
         };
 
         this.logout = function () {
-            sessionStorage.removeItem('access_token');
-            sessionStorage.removeItem('user_info');
+            $window.sessionStorage.removeItem('access_token');
+            $window.sessionStorage.removeItem('user_info');
             $state.reload();
         };
 
         this.isAuthenticated = function () {
-            return sessionStorage.getItem('access_token') != null;
+            return $window.sessionStorage.getItem('access_token') != null;
         };
 
         this.getAccessToken = function () {
-            return sessionStorage.getItem('access_token');
+            return $window.sessionStorage.getItem('access_token');
         };
 
         this.userInfo = function () {
@@ -69,7 +69,7 @@ angular.module('App')
             $http.get('/auth/me', {
                 headers: { 'Authorization': 'Bearer ' + self.getAccessToken() }
             }).then(function (resp) {
-                sessionStorage.setItem('user_info', JSON.stringify(resp.data));
+                $window.sessionStorage.setItem('user_info', JSON.stringify(resp.data));
                 deferred.resolve(resp);
             }, function (resp) {
                 self.logout();
@@ -84,7 +84,7 @@ angular.module('App')
 
             $timeout(function () {
                 if (self.isAuthenticated()) {
-                    var userInfo = JSON.parse(sessionStorage.getItem('user_info'));
+                    var userInfo = JSON.parse($window.sessionStorage.getItem('user_info'));
                     deferred.resolve(userInfo);
                 } else {
                     deferred.reject();
@@ -99,7 +99,7 @@ angular.module('App')
                 return false;
             }
 
-            var userInfo = JSON.parse(sessionStorage.getItem('user_info'));
+            var userInfo = JSON.parse($window.sessionStorage.getItem('user_info'));
             var hasAdmin = false;
 
             userInfo.authorities.forEach(function (obj) {
@@ -115,7 +115,7 @@ angular.module('App')
                 return false;
             }
 
-            var userInfo = JSON.parse(sessionStorage.getItem('user_info'));
+            var userInfo = JSON.parse($window.sessionStorage.getItem('user_info'));
 
             return userInfo && userInfo.pageList && userInfo.pageList.indexOf(pageId.toUpperCase()) !== -1;
         };
