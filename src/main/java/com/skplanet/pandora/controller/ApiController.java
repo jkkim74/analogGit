@@ -62,6 +62,10 @@ public class ApiController {
 
 	@GetMapping("/memberInfo")
 	public List<AutoMappedMap> getMemberInfo(@RequestParam Map<String, Object> params) {
+		
+		String mbrId = oracleRepository.selectMbrId(params);
+		params.put("searchType", "mbrId");
+		params.put("searchKeyword", mbrId);
 
 		return oracleRepository.selectMemberInfo(params);
 	}
