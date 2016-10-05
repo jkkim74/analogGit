@@ -24,11 +24,16 @@ public class IdmsService {
 	private static final String IDMS_BIZ_SITE_ID = "PANDORA";
 
 	/*
+	 * Biz 사용자ID 발급 시 IDMS를 통하는 계정(1,2)과 Biz 사용자가 직접 발급하는 계정을 구분하기 위한 항목. 1:관리자,
+	 * 2:제휴사 관리자, 3:임의발급계정
+	 */
+	public static final int BIZ_USER_ID_TYPE = 1;
+
+	/*
 	 * Biz 사용자 ID의 계정 운용 상태 정보. 1:정상, 2:사용정지/잠금, 3:해지
 	 */
-	public static final int USER_STATUS_ENABLED = 1;
-	public static final int USER_STATUS_DIASABLED = 2;
-	public static final int USER_STATUS_DELETED = 3;
+	public static final int BIZ_USER_STATUS_ENABLED = 1;
+	public static final int BIZ_USER_STATUS_DIASABLED = 2;
 
 	@Autowired
 	private FtpService ftpService;
@@ -66,13 +71,7 @@ public class IdmsService {
 
 		String filename = IDMS_BIZ_SITE_ID + "_ID_" + Helper.yesterdayDateString() + ".log";
 
-		/*
-		 * Biz 사용자ID 발급 시 IDMS를 통하는 계정(1,2)과 Biz 사용자가 직접 발급하는 계정을 구분하기 위한 항목.
-		 * 1:관리자, 2:제휴사 관리자, 3:임의발급계정
-		 */
-		int bizUserIdType = 3;
-
-		writeToFileAsCsv(filename, bizUserId, bizUserName, bizUserCompany, bizUserIdStatus, bizUserIdType,
+		writeToFileAsCsv(filename, bizUserId, bizUserName, bizUserCompany, bizUserIdStatus, BIZ_USER_ID_TYPE,
 				bizUserIdCreatedDttm, bizUserIdUsageFromDt, bizUserIdUsageToDt);
 	}
 
