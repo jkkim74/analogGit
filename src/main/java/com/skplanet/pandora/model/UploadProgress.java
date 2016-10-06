@@ -10,5 +10,14 @@ public class UploadProgress {
 	private String columnName;
 	private String filename;
 	private UploadStatus uploadStatus;
+	public String getPageId() {
+		return pageId;
+	}
+	public void setPageId(String pageId) {
+		this.pageId = pageId;
+	}
+	
+	
+	
 
 }
