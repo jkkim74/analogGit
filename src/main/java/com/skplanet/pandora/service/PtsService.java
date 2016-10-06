@@ -106,6 +106,7 @@ public class PtsService {
 					keyList.add("유종");
 					keyList.add("주유량");
 					keyList.add("쿠폰");
+					keyList.add("회원한글명");
 					keyList.add("NO");
 					printer.printRecord(keyList);
 				} else if ((uploadProgress.getPageId()).equals("pan0106")) {
@@ -430,6 +431,11 @@ public class PtsService {
 					} else {
 						dataList.add(map.get("cpnPrd").toString());
 					}
+					if (map.get("mbrKorNm") == null) {
+						dataList.add(" ");
+					} else {
+						dataList.add(map.get("mbrKorNm").toString());
+					}					
 					if (map.get("rnum") == null) {
 						dataList.add(" ");
 					} else {

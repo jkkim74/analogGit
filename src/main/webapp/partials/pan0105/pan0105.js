@@ -54,7 +54,8 @@ angular.module('App')
                 { field: 'org', displayName: '기관', width: 300, cellTooltip: true, headerTooltip: true },
                 { field: 'oilPrdctSgrp', displayName: '유종', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'saleQty', displayName: '주유량', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
-                { field: 'cpnPrd', displayName: '쿠폰', width: 100, cellTooltip: true, headerTooltip: true }
+                { field: 'cpnPrd', displayName: '쿠폰', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'mbrKorNm', displayName: '회원한글명', width: 100, cellTooltip: true, headerTooltip: true }
             ],
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
