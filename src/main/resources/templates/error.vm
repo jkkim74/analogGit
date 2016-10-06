@@ -24,6 +24,7 @@
 
   <div class="jumbotron">
     <div class="container text-center">
+      <p style="font-style:bold; font-size:15vw;">\(·-·)/</p>
       <h1>${status} <small>${error}</small></h1>
       <p><a class="btn btn-primary btn-lg" href="/#" role="button">홈으로</a></p>
     </div>
