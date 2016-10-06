@@ -1,0 +1,52 @@
+@font-face {
+    font-family: 'dau132';
+    src: url('fonts/dau132.eot');
+    src: url('fonts/dau132.eot?#iefix') format('embedded-opentype'),
+    url('fonts/dau132.woff') format('woff'),
+    url('fonts/dau132.ttf') format('truetype');
+    src:local(※), url('fonts/dau132.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'dau142';
+    src: url('fonts/dau142.eot');
+    src: url('fonts/dau142.eot?#iefix') format('embedded-opentype'),
+    url('fonts/dau142.woff') format('woff'),
+    url('fonts/dau142.ttf') format('truetype');
+    src:local(※), url('fonts/dau142.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'dau152';
+    src: url('fonts/dau152.eot');
+    src: url('fonts/dau152.eot?#iefix') format('embedded-opentype'),
+    url('fonts/dau152.woff') format('woff'),
+    url('fonts/dau152.ttf') format('truetype');
+    src:local(※), url('fonts/dau152.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'skp-mm';
+    src: url('fonts/SKPGoMM.eot');
+    src: url('fonts/SKPGoMM.eot?#iefix') format('embedded-opentype'),
+        url('fonts/SKPGoMM.woff') format('woff'),
+        url('fonts/SKPGoMM.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'skp-bm';
+    src: url('fonts/SKPGoBM.eot');
+    src: url('fonts/SKPGoBM.eot?#iefix') format('embedded-opentype'),
+        url('fonts/SKPGoBM.woff') format('woff'),
+        url('fonts/SKPGoBM.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
