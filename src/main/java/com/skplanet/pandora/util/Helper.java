@@ -43,13 +43,6 @@ public final class Helper {
 		}
 		return nowDateString() + '_' + UUID.randomUUID() + ".csv";
 	}
-	
-	public static String uniquePtsCsvFilename(String prefix,String ptsUsername) {
-		if (prefix != null && prefix.trim().length() > 0) {
-			return prefix + '_' + nowDateTimeString() + '_' + ptsUsername + "-" + nowDateTimeString() + ".csv";
-		}
-		return nowDateString() + '_' + UUID.randomUUID() + ".csv";
-	}	
 
 	public static String skpEncrypt(String plainText) {
 		String emrejectKey = Resources.getResource("config/emreject.key").getPath();
