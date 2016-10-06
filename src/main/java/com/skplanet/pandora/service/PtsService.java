@@ -33,8 +33,8 @@ public class PtsService {
 
 	public void send(String ptsUsername, boolean ptsMasking, UploadProgress uploadProgress) {
 		String csvFile = createCsvFile(ptsUsername, ptsMasking, uploadProgress);
-		
-		process(csvFile,ptsUsername);
+
+		process(csvFile, ptsUsername);
 	}
 
 	private String createCsvFile(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
@@ -53,19 +53,85 @@ public class PtsService {
 
 			@Override
 			protected void printHeader(CSVPrinter printer, List<AutoMappedMap> list) throws IOException {
-				List<?> keyList = list.get(0).keyList();
-				printer.printRecord(keyList);
+
+				if ((uploadProgress.getPageId()).equals("pan0101")) {
+					List<String> keyList = new ArrayList<String>();
+					keyList.add("회원ID");
+					keyList.add("OCB닷컴 로그인ID");
+					keyList.add("CI번호");
+					keyList.add("한글성명");
+					keyList.add("카드번호");
+					keyList.add("시럽스마트월렛회원ID");
+					keyList.add("11번가회원ID");
+					keyList.add("NO");
+					printer.printRecord(keyList);
+				} else {
+
+					List<?> keyList = list.get(0).keyList();
+					printer.printRecord(keyList);
+				}
 			}
 
 			@Override
 			protected void printRecord(CSVPrinter printer, AutoMappedMap map) throws IOException {
-				
-				List<String> dataList = new ArrayList<String>();
-				for ( int i = 0 ; i < map.size() ; i++){
-					dataList.add((String) map.get(i));
+
+				if ((uploadProgress.getPageId()).equals("pan0101")) {
+
+					List<String> dataList = new ArrayList<String>();
+
+					if (map.get("mbrId") == null) {
+						dataList.add(" ");
+					} else {
+						dataList.add((String) map.get("mbrId"));
+					}
+					
+					if (map.get("ocbcomLgnId") == null) {
+						dataList.add(" ");
+					} else {
+						dataList.add((String) map.get("ocbcomLgnId"));
+					}
+					
+					if (map.get("ciNo") == null) {
+						dataList.add(" ");
+					} else {
+						dataList.add((String) map.get("ciNo"));
+					}
+					
+					if (map.get("mbrKorNm") == null) {
+						dataList.add(" ");
+					} else {
+						dataList.add((String) map.get("mbrKorNm"));
+					}
+					
+					if (map.get("cardNo") == null) {
+						dataList.add(" ");
+					} else {
+						dataList.add((String) map.get("cardNo"));
+					}
+					
+					if (map.get("sywMbrId") == null) {
+						dataList.add(" ");
+					} else {
+						dataList.add((String) map.get("sywMbrId"));
+					}
+					
+					if (map.get("evsMbrId") == null) {
+						dataList.add(" ");
+					} else {
+						dataList.add((String) map.get("evsMbrId"));
+					}
+					
+					if (map.get("rnum") == null) {
+						dataList.add(" ");
+					} else {
+						dataList.add((String) map.get("rnum"));
+					}
+					
+
+					printer.printRecord(dataList);
+				} else {
+					printer.printRecord(map.valueList());
 				}
-				//printer.printRecord(map.valueList());
-				printer.printRecord(dataList);
 			}
 
 		};
@@ -77,17 +143,13 @@ public class PtsService {
 
 	private void process(String filename, String ptsUsername) {
 		log.info("Sending file [{}]", filename);
-		
 
-		
 		String ptsProperties = Resources.getResource("config/PTS.properties").getPath();
 
 		log.debug("PTS.properties location={}", ptsProperties);
 
 		String theFilename = filename;
-		
-		
-		
+
 		BufferedReader in = null;
 		FileWriter fw = null;
 		BufferedWriter bw = null;
@@ -100,8 +162,8 @@ public class PtsService {
 			String line = null;
 			int cnt = 0;
 			while ((line = in.readLine()) != null) {
-				if ( cnt == 0 )
-					bw.write(line + filename.substring(0,filename.lastIndexOf("/")));
+				if (cnt == 0)
+					bw.write(line + filename.substring(0, filename.lastIndexOf("/")));
 				else
 					bw.write(line);
 
@@ -127,12 +189,13 @@ public class PtsService {
 				e.printStackTrace();
 			}
 
-		}		
-		
-		log.info("Sending file [{}]", filename.substring(filename.lastIndexOf("/")+1,filename.length()));
+		}
+
+		log.info("Sending file [{}]", filename.substring(filename.lastIndexOf("/") + 1, filename.length()));
 		log.info("Sending pts dir [{}]", ptsProperties + "." + ptsUsername);
 
-		String[] command = { filename.substring(filename.lastIndexOf("/")+1,filename.length()), ptsProperties + "." + ptsUsername };
+		String[] command = { filename.substring(filename.lastIndexOf("/") + 1, filename.length()),
+				ptsProperties + "." + ptsUsername };
 
 		try {
 			ApiClient.main(command);
