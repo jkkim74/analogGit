@@ -82,49 +82,49 @@ public class PtsService {
 					if (map.get("mbrId") == null) {
 						dataList.add(" ");
 					} else {
-						dataList.add((String) map.get("mbrId"));
+						dataList.add( map.get("mbrId").toString());
 					}
 					
 					if (map.get("ocbcomLgnId") == null) {
 						dataList.add(" ");
 					} else {
-						dataList.add((String) map.get("ocbcomLgnId"));
+						dataList.add((String) map.get("ocbcomLgnId").toString());
 					}
 					
 					if (map.get("ciNo") == null) {
 						dataList.add(" ");
 					} else {
-						dataList.add((String) map.get("ciNo"));
+						dataList.add((String) map.get("ciNo").toString());
 					}
 					
 					if (map.get("mbrKorNm") == null) {
 						dataList.add(" ");
 					} else {
-						dataList.add((String) map.get("mbrKorNm"));
+						dataList.add((String) map.get("mbrKorNm").toString());
 					}
 					
 					if (map.get("cardNo") == null) {
 						dataList.add(" ");
 					} else {
-						dataList.add((String) map.get("cardNo"));
+						dataList.add((String) map.get("cardNo").toString());
 					}
 					
 					if (map.get("sywMbrId") == null) {
 						dataList.add(" ");
 					} else {
-						dataList.add((String) map.get("sywMbrId"));
+						dataList.add((String) map.get("sywMbrId").toString());
 					}
 					
 					if (map.get("evsMbrId") == null) {
 						dataList.add(" ");
 					} else {
-						dataList.add((String) map.get("evsMbrId"));
+						dataList.add((String) map.get("evsMbrId").toString());
 					}
 					
 					if (map.get("rnum") == null) {
 						dataList.add(" ");
 					} else {
-						dataList.add((String) map.get("rnum"));
+						dataList.add((String) map.get("rnum").toString());
 					}
 					
 
