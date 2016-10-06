@@ -19,7 +19,6 @@ angular.module('App')
             };
 
             self.gridOptionsEmailAddrDup = {
-                enableColumnMenus: false,
                 enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
                 flatEntityAccess: true,
                 columnDefs: [

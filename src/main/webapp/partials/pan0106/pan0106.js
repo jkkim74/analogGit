@@ -11,7 +11,6 @@ angular.module('App')
         ];
 
         $scope.gridOptionsPreview = {
-            enableColumnMenus: false,
             enableSorting: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             minRowsToShow: 7,

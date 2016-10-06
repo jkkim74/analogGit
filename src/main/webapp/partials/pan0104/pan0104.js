@@ -42,7 +42,6 @@ angular.module('App')
         ];
 
         $scope.gridOptionsSummary = {
-            enableColumnMenus: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             minRowsToShow: 7,
             columnDefs: [
@@ -58,7 +57,6 @@ angular.module('App')
         };
 
         $scope.gridOptionsTargets = {
-            enableColumnMenus: false,
             enableSorting: false,
             useExternalPagination: true,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,

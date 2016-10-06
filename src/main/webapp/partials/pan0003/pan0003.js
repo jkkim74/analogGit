@@ -19,7 +19,6 @@ angular.module('App')
         });
 
         $scope.gridOptionsUserList = {
-            enableColumnMenus: false,
             enableRowSelection: true,
             enableRowHeaderSelection: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,

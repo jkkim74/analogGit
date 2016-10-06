@@ -40,6 +40,20 @@ angular.module('App')
             };
         });
 
+        // angular-ui-grid default
+        $provide.decorator('GridOptions', function ($delegate) {
+            var gridOptions;
+            gridOptions = angular.copy($delegate);
+            gridOptions.initialize = function (options) {
+                var initOptions;
+                initOptions = $delegate.initialize(options);
+                initOptions.enableColumnMenus = false;
+                return initOptions;
+            };
+            return gridOptions;
+        });
+
+        // angular-ui-bootstrap default
         uibDatepickerConfig.showWeeks = false;
     }])
     .run(['$rootScope', '$state', 'authSvc', function ($rootScope, $state, authSvc) {

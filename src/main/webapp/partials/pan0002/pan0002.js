@@ -8,7 +8,6 @@ angular.module('App')
         $scope.title = '사용자 등록 관리';
 
         $scope.gridOptionsUserList = {
-            enableColumnMenus: false,
             enableCellEdit: false,
             multiSelect: false,
             enableRowSelection: true,

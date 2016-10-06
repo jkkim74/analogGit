@@ -15,7 +15,6 @@ angular.module('App')
 
         // 기본 정보
         $scope.gridOptionsBasicInfo = {
-            enableColumnMenus: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             flatEntityAccess: true,
@@ -31,7 +30,6 @@ angular.module('App')
 
         // 회원 원장
         $scope.gridOptionsMemberInfo = {
-            enableColumnMenus: false,
             enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             flatEntityAccess: true,
             minRowsToShow: 1,
@@ -66,7 +64,6 @@ angular.module('App')
 
         // 마케팅 동의 내역
         $scope.gridOptionsAgreementInfo = {
-            enableColumnMenus: false,
             enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             flatEntityAccess: true,
             minRowsToShow: 1,
@@ -90,7 +87,6 @@ angular.module('App')
 
         // 채널 가입 현황
         $scope.gridOptionsJoinInfoOcbapp = {
-            enableColumnMenus: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             flatEntityAccess: true,
@@ -102,7 +98,6 @@ angular.module('App')
             ]
         };
         $scope.gridOptionsJoinInfoOcbcom = {
-            enableColumnMenus: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             flatEntityAccess: true,
             minRowsToShow: 3,
@@ -116,7 +111,6 @@ angular.module('App')
 
         // 거래 유형별 최종 서비스 이용 일자
         $scope.gridOptionsLastestUsageInfo = {
-            enableColumnMenus: false,
             enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             flatEntityAccess: true,
@@ -132,7 +126,6 @@ angular.module('App')
 
         // 마케팅 회원 원장
         $scope.gridOptionsMarketingMemberInfo = {
-            enableColumnMenus: false,
             enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             flatEntityAccess: true,
             minRowsToShow: 1,
@@ -163,7 +156,6 @@ angular.module('App')
 
         // 마케팅 회원 원장 이력
         $scope.gridOptionsMarketingMemberInfoHistory = {
-            enableColumnMenus: false,
             flatEntityAccess: true,
             minRowsToShow: 5,
             columnDefs: [
@@ -184,7 +176,6 @@ angular.module('App')
 
         // 3자 제공 동의 이력
         $scope.gridOptionsThirdPartyProvideHistory = {
-            enableColumnMenus: false,
             flatEntityAccess: true,
             minRowsToShow: 5,
             columnDefs: [
@@ -206,7 +197,6 @@ angular.module('App')
 
         // 보유 카드 목록
         $scope.gridOptionsCardList = {
-            enableColumnMenus: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             flatEntityAccess: true,
             minRowsToShow: 5,
@@ -222,7 +212,6 @@ angular.module('App')
 
         // 거래 내역
         $scope.gridOptionsTransactionHistory = {
-            enableColumnMenus: false,
             flatEntityAccess: true,
             columnDefs: [
                 { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
@@ -278,7 +267,6 @@ angular.module('App')
 
         // 이메일 발송 이력
         $scope.gridOptionsEmailSendHistory = {
-            enableColumnMenus: false,
             flatEntityAccess: true,
             columnDefs: [
                 { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
@@ -290,7 +278,6 @@ angular.module('App')
 
         // 앱 푸시 이력
         $scope.gridOptionsAppPushHistory = {
-            enableColumnMenus: false,
             flatEntityAccess: true,
             columnDefs: [
                 { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
