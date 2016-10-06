@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .config(['$stateProvider', '$urlRouterProvider', '$provide', function ($stateProvider, $urlRouterProvider, $provide) {
+    .config(['$stateProvider', '$urlRouterProvider', '$provide', 'uibDatepickerConfig', function ($stateProvider, $urlRouterProvider, $provide, uibDatepickerConfig) {
 
         $urlRouterProvider.otherwise('/');
 
@@ -40,6 +40,7 @@ angular.module('App')
             };
         });
 
+        uibDatepickerConfig.showWeeks = false;
     }])
     .run(['$rootScope', '$state', 'authSvc', function ($rootScope, $state, authSvc) {
 

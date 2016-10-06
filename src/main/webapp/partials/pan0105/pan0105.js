@@ -27,11 +27,6 @@ angular.module('App')
             { label: '미포함', value: false }
         ];
 
-        $scope.datepickerOptions = {
-            showWeeks: false
-        };
-        $scope.altInputFormats = ['M!/d!/yyyy'];
-
         $scope.gridOptionsMembers = {
             enablePaginationControls: false,
             paginationPageSize: 100,
