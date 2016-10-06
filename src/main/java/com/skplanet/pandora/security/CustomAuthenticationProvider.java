@@ -1,6 +1,9 @@
 package com.skplanet.pandora.security;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -16,6 +19,9 @@ import org.springframework.stereotype.Component;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 	@Autowired
+	private Environment env;
+
+	@Autowired
 	private UserDetailsService userDetailsService;
 
 	/*
@@ -28,6 +34,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
 			if (userDetails != null && !userDetails.isEnabled()) {
 				throw new DisabledException("사용 정지된 사용자입니다.");
+			}
+
+			// local test only
+			if (Arrays.asList(env.getActiveProfiles()).contains("local")) {
+				return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 			}
 		} catch (UsernameNotFoundException e) {
 			throw new InternalAuthenticationServiceException("등록된 사용자가 아닙니다.", e);
