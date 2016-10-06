@@ -63,7 +63,7 @@ public class PtsService {
 
 		};
 
-		Path filePath = csvCreator.create(Helper.uniquePtsCsvFilename("P140802BKhub_" + ptsUsername,ptsUsername));
+		Path filePath = csvCreator.create(Helper.uniqueCsvFilename("P140802BKhub_" + ptsUsername));
 
 		return filePath.toFile().getAbsolutePath();
 	}
@@ -127,11 +127,11 @@ public class PtsService {
 
 		String[] command = { filename.substring(filename.lastIndexOf("/")+1,filename.length()), ptsProperties + "." + ptsUsername };
 
-/*		try {
+		try {
 			ApiClient.main(command);
 		} catch (IOException e) {
 			throw new BizException("PTS 전송 실패", e);
-		}*/
+		}
 	}
 
 }
