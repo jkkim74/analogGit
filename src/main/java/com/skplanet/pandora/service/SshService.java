@@ -64,13 +64,13 @@ public class SshService {
 					int i = in.read(tmp, 0, 1024);
 					if (i < 0)
 						break;
-					System.out.println(new String(tmp, 0, i));
+					log.info(new String(tmp, 0, i));
 				}
 
 				if (execChannel.isClosed()) {
 					if (in.available() > 0)
 						continue;
-					System.out.println("exit_status: " + execChannel.getExitStatus());
+					log.info("exit_status: {}", execChannel.getExitStatus());
 					break;
 				}
 
