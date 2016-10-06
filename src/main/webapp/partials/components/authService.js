@@ -115,6 +115,11 @@ angular.module('App')
                 return false;
             }
 
+            // TODO: for CTAS sources. to be removed.
+            if (pageId.indexOf("ctas") != -1) {
+                return true;
+            }
+
             var userInfo = JSON.parse($window.sessionStorage.getItem('user_info'));
 
             return userInfo && userInfo.pageList && userInfo.pageList.indexOf(pageId.toUpperCase()) !== -1;
