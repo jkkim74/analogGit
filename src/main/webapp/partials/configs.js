@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .config(['$stateProvider', '$urlRouterProvider', '$provide', 'uibDatepickerConfig', function ($stateProvider, $urlRouterProvider, $provide, uibDatepickerConfig) {
+    .config(['$stateProvider', '$urlRouterProvider', '$provide', 'uibDatepickerConfig', '$translateProvider', function ($stateProvider, $urlRouterProvider, $provide, uibDatepickerConfig, $translateProvider) {
 
         $urlRouterProvider.otherwise('/');
 
@@ -52,6 +52,9 @@ angular.module('App')
             };
             return gridOptions;
         });
+
+        // angular-ui-grid-translate
+        $translateProvider.preferredLanguage('ko');
 
         // angular-ui-bootstrap default
         uibDatepickerConfig.showWeeks = false;
