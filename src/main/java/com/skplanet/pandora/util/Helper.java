@@ -19,6 +19,10 @@ public final class Helper {
 		return dfAsDate.print(new Date(), Locale.getDefault());
 	}
 
+	public static String nowDateTimeString() {
+		return dfAsDatetime.print(new Date(), Locale.getDefault());
+	}	
+	
 	public static String yesterdayDateString() {
 		// now - 1day(24*60*60*1000)
 		Date yesterday = new Date(System.currentTimeMillis() - 86400000);
@@ -39,6 +43,13 @@ public final class Helper {
 		}
 		return nowDateString() + '_' + UUID.randomUUID() + ".csv";
 	}
+	
+	public static String uniquePtsCsvFilename(String prefix,String ptsUsername) {
+		if (prefix != null && prefix.trim().length() > 0) {
+			return prefix + '_' + nowDateTimeString() + '_' + ptsUsername + "-" + nowDateTimeString() + ".csv";
+		}
+		return nowDateString() + '_' + UUID.randomUUID() + ".csv";
+	}	
 
 	public static String skpEncrypt(String plainText) {
 		String emrejectKey = Resources.getResource("config/emreject.key").getPath();
