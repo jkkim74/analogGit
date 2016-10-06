@@ -18,6 +18,8 @@ angular.module('App', [
     'ui.grid.rowEdit',
     'ui.grid.cellNav',
     'ui.validate',
+    'pascalprecht.translate',
+    'angular-ui-grid-translate',
     'toastr',
     'cgBusy',
     'anim-in-out'
