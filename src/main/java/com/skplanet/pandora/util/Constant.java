@@ -12,6 +12,9 @@ public class Constant {
 	public static final String PAN0103 = "PAN0103";
 	public static final String PAN0105 = "PAN0105";
 
+	public static final String USER_ACCESSES = "PAN0101,PAN0102,PAN0103,PAN0104,PAN0105,PAN0106";
+	public static final String ADMIN_ACCESSES = "PAN0002,PAN0003";
+
 	public static final String LDAP_USER_SEARCH_FILTER = "(&(objectClass=*)(CN={0}))";
 
 	public static final String EMREJECT_PW = "9gPXBD95qbDedk5PaRLE";

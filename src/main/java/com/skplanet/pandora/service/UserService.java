@@ -116,7 +116,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	public void updateAccesses(String username, String pageList) {
-		mysqlRepository.deleteAccesses(username, false);
+		mysqlRepository.deleteAccesses(username, Constant.USER_ACCESSES);
 
 		if (!StringUtils.isEmpty(pageList)) {
 			mysqlRepository.insertAccesses(username, pageList);
@@ -126,10 +126,10 @@ public class UserService implements UserDetailsService {
 	public void updateAdmin(String username, boolean isAdmin) {
 		if (isAdmin) {
 			mysqlRepository.insertAuthorities(username, "ROLE_ADMIN");
-			mysqlRepository.insertAccesses(username, "PAN0002,PAN0003");
+			mysqlRepository.insertAccesses(username, Constant.ADMIN_ACCESSES);
 		} else {
 			mysqlRepository.deleteAuthorities(username, "ROLE_ADMIN");
-			mysqlRepository.deleteAccesses(username, true);
+			mysqlRepository.deleteAccesses(username, Constant.ADMIN_ACCESSES);
 		}
 	}
 

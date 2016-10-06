@@ -30,6 +30,6 @@ public interface MysqlRepository {
 
 	void insertAccesses(@Param("username") String username, @Param("pageList") String pageList);
 
-	void deleteAccesses(@Param("username") String username);
+	void deleteAccesses(@Param("username") String username, @Param("pageList") String pageList);
 
 }
