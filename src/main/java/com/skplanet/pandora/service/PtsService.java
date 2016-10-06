@@ -1,5 +1,9 @@
 package com.skplanet.pandora.service;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -9,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.io.Resources;
+import com.ptsapi.client.ApiClient;
 import com.skplanet.pandora.exception.BizException;
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.model.UploadProgress;
@@ -28,7 +33,7 @@ public class PtsService {
 	public void send(String ptsUsername, boolean ptsMasking, UploadProgress uploadProgress) {
 		String csvFile = createCsvFile(ptsUsername, ptsMasking, uploadProgress);
 		
-		process(csvFile);
+		process(csvFile,ptsUsername);
 	}
 
 	private String createCsvFile(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
@@ -63,26 +68,67 @@ public class PtsService {
 		return filePath.toFile().getAbsolutePath();
 	}
 
-	private void process(String filename) {
+	private void process(String filename, String ptsUsername) {
 		log.info("Sending file [{}]", filename);
 		
-		com.ptsapi.client.ApiClient apiClient = new com.ptsapi.client.ApiClient();
+
 		
 		String ptsProperties = Resources.getResource("config/PTS.properties").getPath();
 
 		log.debug("PTS.properties location={}", ptsProperties);
 
 		String theFilename = filename;
-
-		// PTS API Client에서 '/'를 앞에 붙이므로 여기선 제거해준다.
-		if (theFilename.startsWith("/")) {
-			theFilename = theFilename.substring(1);
-		}
-
-		String[] command = { theFilename, ptsProperties };
+		
+		
+		
+		BufferedReader in = null;
+		FileWriter fw = null;
+		BufferedWriter bw = null;
 
 		try {
-			apiClient.main(command);
+			in = new BufferedReader(new FileReader(ptsProperties));
+			fw = new FileWriter(ptsProperties + "." + ptsUsername);
+			bw = new BufferedWriter(fw);
+
+			String line = null;
+			int cnt = 0;
+			while ((line = in.readLine()) != null) {
+				if ( cnt == 0 )
+					bw.write(line + filename.substring(0,filename.lastIndexOf("/")));
+				else
+					bw.write(line);
+
+				bw.newLine();
+				cnt++;
+			}
+
+			in.close();
+			bw.close();
+			fw.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (in != null)
+					in.close();
+				if (bw != null)
+					bw.close();
+				if (fw != null)
+					fw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}		
+		
+		log.info("Sending file [{}]", filename.substring(filename.lastIndexOf("/")+1,filename.length()));
+		log.info("Sending pts dir [{}]", ptsProperties + "." + ptsUsername);
+
+		String[] command = { filename.substring(filename.lastIndexOf("/")+1,filename.length()), ptsProperties + "." + ptsUsername };
+
+		try {
+			//ApiClient.main(command);
 		} catch (IOException e) {
 			throw new BizException("PTS 전송 실패", e);
 		}
