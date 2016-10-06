@@ -1,0 +1,52 @@
+@font-face {
+    font-family: 'dau132';
+    src: url('dau132.eot');
+    src: url('dau132.eot?#iefix') format('embedded-opentype'),
+    url('dau132.woff') format('woff'),
+    url('dau132.ttf') format('truetype');
+    src:local(※), url('dau132.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'dau142';
+    src: url('dau142.eot');
+    src: url('dau142.eot?#iefix') format('embedded-opentype'),
+    url('dau142.woff') format('woff'),
+    url('dau142.ttf') format('truetype');
+    src:local(※), url('dau142.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'dau152';
+    src: url('dau152.eot');
+    src: url('dau152.eot?#iefix') format('embedded-opentype'),
+    url('dau152.woff') format('woff'),
+    url('dau152.ttf') format('truetype');
+    src:local(※), url('dau152.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'skp-mm';
+    src: url('SKPGoMM.eot');
+    src: url('SKPGoMM.eot?#iefix') format('embedded-opentype'),
+        url('SKPGoMM.woff') format('woff'),
+        url('SKPGoMM.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'skp-bm';
+    src: url('SKPGoBM.eot');
+    src: url('SKPGoBM.eot?#iefix') format('embedded-opentype'),
+        url('SKPGoBM.woff') format('woff'),
+        url('SKPGoBM.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
