@@ -61,7 +61,7 @@ angular.module('App')
                 }
             });
 
-        // check token validity
+        // check token validity when application started
         authSvc.userInfo();
 
     }]);

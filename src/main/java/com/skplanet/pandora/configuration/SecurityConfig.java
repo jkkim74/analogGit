@@ -47,9 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			CustomUserDetailsContextMapper userDetailsContextMapper,
 			CustomAuthenticationProvider authenticationProvider) throws Exception {
 
-		// auth.inMemoryAuthentication().withUser("user").password("test1234!").roles("USER",
-		// "ADMIN");
-
 		auth.authenticationProvider(authenticationProvider);
 
 		auth.ldapAuthentication().userSearchFilter(Constant.LDAP_USER_SEARCH_FILTER).userSearchBase(ldapBaseDn)

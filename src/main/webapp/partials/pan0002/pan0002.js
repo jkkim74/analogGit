@@ -10,8 +10,10 @@ angular.module('App')
         $scope.gridOptionsUserList = {
             enableColumnMenus: false,
             enableCellEdit: false,
+            multiSelect: false,
+            enableRowSelection: true,
+            enableRowHeaderSelection: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-            showGridFooter: true,
             minRowsToShow: 20,
             columnDefs: [
                 { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
