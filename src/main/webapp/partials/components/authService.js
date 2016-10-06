@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .service('authSvc', ['$log', '$q', '$http', '$timeout', '$state', 'toastr', '$window', function ($log, $q, $http, $timeout, $state, toastr, $window) {
+    .service('authSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$timeout', '$window', '$state', 'toastr', function ($log, $q, $http, $httpParamSerializer, $timeout, $window, $state, toastr) {
 
         var self = this;
 
@@ -11,22 +11,18 @@ angular.module('App')
             var clientId = '50e81484-2b00-43df-a5cd-37538ec422ef';
             var clientSecret = '52245357-e466-4957-a4c6-5c2ddaa46f6f';
 
-            $http.post('/oauth/token',
+            var params = {
+                grant_type: 'password',
+                username: username,
+                password: password,
+                scope: 'all'
+            };
+
+            $http.post('/oauth/token', $httpParamSerializer(params),
                 {
-                    username: username,
-                    password: password,
-                    grant_type: 'password',
-                    scope: 'all'
-                }, {
                     headers: {
                         'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    transformRequest: function (obj) {
-                        var str = [];
-                        for (var p in obj)
-                            str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
-                        return str.join('&');
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
                     }
                 }
             ).then(function (resp) {
@@ -52,7 +48,7 @@ angular.module('App')
         this.logout = function () {
             $window.sessionStorage.removeItem('access_token');
             $window.sessionStorage.removeItem('user_info');
-            $state.reload();
+            $state.go('index.home');
         };
 
         this.isAuthenticated = function () {
@@ -64,6 +60,10 @@ angular.module('App')
         };
 
         this.userInfo = function () {
+            if (!self.isAuthenticated()) {
+                return;
+            }
+
             var deferred = $q.defer();
 
             $http.get('/auth/me', {

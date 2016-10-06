@@ -14,7 +14,7 @@ angular.module('App')
         };
 
         authSvc.getUserInfo().then(function (userInfo) {
-            $scope.username = userInfo.username;
+            $scope.name = userInfo.fullname || userInfo.username;
         });
 
     }])

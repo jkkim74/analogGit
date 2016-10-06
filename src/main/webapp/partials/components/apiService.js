@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .service('apiSvc', ['$log', '$q', '$http', '$stateParams', 'toastr', 'authSvc', function ($log, $q, $http, $stateParams, toastr, authSvc) {
+    .service('apiSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$stateParams', 'toastr', 'authSvc', function ($log, $q, $http, $httpParamSerializer, $stateParams, toastr, authSvc) {
 
         function ApiGet(command) {
             return function (params) {
@@ -33,16 +33,10 @@ angular.module('App')
             return function (params) {
                 var deferred = $q.defer();
 
-                $http.post('/api/' + command, angular.extend({ pageId: $stateParams.pageId }, params), {
+                $http.post('/api/' + command, $httpParamSerializer(angular.extend({ pageId: $stateParams.pageId }, params)), {
                     headers: {
                         'Authorization': 'Bearer ' + authSvc.getAccessToken(),
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    transformRequest: function (obj) {
-                        var str = [];
-                        for (var p in obj)
-                            str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
-                        return str.join('&');
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
                     }
                 }).then(function (resp) {
                     toastr.success((resp.data && resp.data.message) || resp.config.url);
@@ -90,5 +84,8 @@ angular.module('App')
         this.getExtinctionSummary = new ApiGet('extinctionSummary');
         this.getExtinctionTargets = new ApiGet('extinctionTargets');
         this.noticeExtinction = new ApiPost('noticeExtinction');
+
+        // ctas
+        this.getCampaigns = new ApiGet('campaigns');
 
     }]);
