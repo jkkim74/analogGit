@@ -127,11 +127,11 @@ public class PtsService {
 
 		String[] command = { filename.substring(filename.lastIndexOf("/")+1,filename.length()), ptsProperties + "." + ptsUsername };
 
-		try {
-			//ApiClient.main(command);
+/*		try {
+			ApiClient.main(command);
 		} catch (IOException e) {
 			throw new BizException("PTS 전송 실패", e);
-		}
+		}*/
 	}
 
 }
