@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.csv.CSVPrinter;
@@ -58,7 +59,13 @@ public class PtsService {
 
 			@Override
 			protected void printRecord(CSVPrinter printer, AutoMappedMap map) throws IOException {
-				printer.printRecord(map.valueList());
+				
+				List<String> dataList = new ArrayList<String>();
+				for ( int i = 0 ; i < map.size() ; i++){
+					dataList.add((String) map.get(i));
+				}
+				//printer.printRecord(map.valueList());
+				printer.printRecord(dataList);
 			}
 
 		};
