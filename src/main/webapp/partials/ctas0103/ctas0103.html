@@ -1,0 +1,463 @@
+<div class="modal-header">
+    <button type="button" class="close" aria-label="Close" ng-click="$ctrl.dismiss()"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">DI 타겟 등록</h4>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" name="form">
+        <div class="panel panel-info">
+            <div class="panel-heading">기본선택</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">OCB닷컴 회원 여부</label>
+                    <div class="col-sm-8">
+                        <div class="checkbox">
+                            <label><input type="checkbox"> Y</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">캠페인 블랙리스트 포함 여부</label>
+                    <div class="col-sm-8">
+                        <div class="checkbox">
+                            <label><input type="checkbox"> N</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">회원프로파일</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">성별</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="gender" value="male">남</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="gender" value="female">여</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">연령</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="age" value="15-19">15-19</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="age" value="20-24">20-24</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="age" value="25-29">25-29</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="age" value="30-34">30-34</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="age" value="35-39">35-39</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="age" value="40-44">40-44</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="age" value="45-49">45-49</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="age" value="50-54">50-54</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="age" value="55-59">55-59</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="age" value="60gte">60세이상</label> &nbsp;&nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">거주 지역</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">직장 지역</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">기미혼여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="married" value="true">기혼</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="married" value="false">미혼</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">동의여부</div>
+            <div class="panel-body">
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">모바일전단 모수</div>
+            <div class="panel-body">
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">가입 서비스</div>
+            <div class="panel-body">
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">회원 등급</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">6.2.9 등급</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="629Grade" value="629-1">신규</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="629Grade" value="629-2">캐쉬백우수</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="629Grade" value="629-3">캐쉬백단골</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="629Grade" value="629-4">제휴사고정</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="629Grade" value="629-5">제휴사단골</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="629Grade" value="629-6">일반</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="629Grade" value="629-7">휴면</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="629Grade" value="629-8">이탈</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="629Grade" value="629-9">잠재</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">앱/웹 이용 실적</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">기간별 OCB닷컴 로그인 실적</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="ocbcom" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbcom" value="M-2">2개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbcom" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbcom" value="M-4">4개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbcom" value="M-5">5개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbcom" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">기간별 앱 이용 실적</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="app" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="app" value="M-2">2개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="app" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="app" value="M-4">4개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="app" value="M-5">5개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="app" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">기간별 출석체크 실적</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="present" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="present" value="M-2">2개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="present" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="present" value="M-4">4개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="present" value="M-5">5개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="present" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">기간별 룰렛 실적</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="roulette" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="roulette" value="M-2">2개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="roulette" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="roulette" value="M-4">4개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="roulette" value="M-5">5개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="roulette" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">기간별 게임 실적</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="game" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="game" value="M-2">2개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="game" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="game" value="M-4">4개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="game" value="M-5">5개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="game" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">서비스별 이용 실적</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">OCB Plus 기간별 유실적 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="ocbplus" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbplus" value="M-2">2개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbplus" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbplus" value="M-4">4개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbplus" value="M-5">5개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbplus" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">OCB 락 기간별 유실적 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="ocbrock" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbrock" value="M-2">2개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbrock" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbrock" value="M-4">4개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbrock" value="M-5">5개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbrock" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">미리줌 기간별 유실적 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="period" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="period" value="M-2">2개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="period" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="period" value="M-4">4개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="period" value="M-5">5개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="period" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">더줌 기간별 유실적 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="product" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="product" value="M-2">2개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="product" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="product" value="M-4">4개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="product" value="M-5">5개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="product" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">상품전단 유실적 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="product" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="product" value="M-2">2개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="product" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="product" value="M-4">4개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="product" value="M-5">5개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="product" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">보유 카드</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">모바일카드 보유 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="mobileCard" value="Y">보유 </label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="mobileCard" value="N">미보유</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">자사카드 보유 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="ocbcomCard" value="Y">보유 </label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ocbcomCard" value="N">미보유</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">제휴신용카드 보유 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="creditCard" value="Y">보유 </label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="creditCard" value="N">미보유</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">제휴체크카드 보유 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="debitCard" value="Y">보유 </label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="debitCard" value="N">미보유</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">통신카드 보유 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="communicationCard" value="Y">보유 </label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="communicationCard" value="N">미보유</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">EBC카드 보유 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="ebcCard" value="Y">보유 </label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="ebcCard" value="N">미보유</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">화물복지카드 보유 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="cargoCard" value="Y">보유 </label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="cargoCard" value="N">미보유</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">주유전용카드 보유 여부</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="refuelCard" value="Y">보유 </label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="refuelCard" value="N">미보유</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">업종별 유실적 여부</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">주유</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="oil" value="M">당월</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="oil" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="oil" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="oil" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">통신</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="communication" value="M">당월</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="communication" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="communication" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="communication" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">금융</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="financial" value="M">당월</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="financial" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="financial" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="financial" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">기타 오프라인</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="etcOffline" value="M">당월</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="etcOffline" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="etcOffline" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="etcOffline" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">온라인</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="online" value="M">당월</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="online" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="online" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="online" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">온라인쿠폰</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="onlineCoupon" value="M">당월</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="onlineCoupon" value="M-1">1개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="onlineCoupon" value="M-3">3개월내</label> &nbsp;&nbsp;
+                            <label><input type="radio" ng-model="onlineCoupon" value="M-6">6개월내</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">보유 포인트</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">가용 포인트</label>
+                    <div class="col-sm-8">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="point" value="0">0</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" ng-model="point" value="500lt">500포인트 미만</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" ng-model="point" value="500-1000">500포인트 이상 1,000포인트 미만</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" ng-model="point" value="1000-2500">1000포인트 이상 2,500포인트 미만</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" ng-model="point" value="2500-5000">2,500포인트 이상 5,000포인트 미만</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" ng-model="point" value="5000-10000">5,000포인트 이상 10,000포인트 미만</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" ng-model="point" value="10000-20000">10,000포인트 이상 20,000포인트 미만</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" ng-model="point" value="20000-30000">20,000포인트 이상 30,000포인트 미만</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" ng-model="point" value="30000-50000">30,000포인트 이상 50,000포인트 미만</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-danger" ng-disabled="form.$invalid">등록</button>
+    <button type="button" class="btn btn-default" ng-click="$ctrl.dismiss()">닫기</button>
+</div>

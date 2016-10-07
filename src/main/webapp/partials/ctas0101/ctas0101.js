@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Ctas0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'toastr', 'apiSvc', function ($scope, $q, $http, $timeout, uiGridConstants, toastr, apiSvc) {
+    .controller('Ctas0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal', function ($scope, $q, $http, $timeout, uiGridConstants, toastr, apiSvc, $uibModal) {
 
         var self = this;
         $scope.title = '이메일 발송 관리';
@@ -64,6 +64,36 @@ angular.module('App')
                 { field: 'sndSts', displayName: '발송일자', cellTooltip: true, headerTooltip: true },
                 { field: 'sndSts', displayName: '셀상태', width: 100, cellTooltip: true, headerTooltip: true }
             ]
+        };
+
+        $scope.openTargeting = function () {
+            var modalInstance = $uibModal.open({
+                component: 'ctas0103Modal',
+                size: 'lg',
+                resolve: {}
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selectedTargeting = selectedItem;
+            }, function () {
+
+            });
+        };
+
+        $scope.requestSubmission = function () {
+            var componentName;
+            if ($scope.selectedOption.value === 'em') {
+                componentName = 'ctas0104Modal';
+            } else {
+                componentName = 'ctas0102Modal';
+            }
+
+            $uibModal.open({
+                component: componentName,
+                resolve: {
+                    notiType: function () { return $scope.selectedOption.value; }
+                }
+            });
         };
 
     }]);
