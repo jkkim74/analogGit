@@ -62,7 +62,7 @@ public class ApiController {
 
 	@GetMapping("/memberInfo")
 	public List<AutoMappedMap> getMemberInfo(@RequestParam Map<String, Object> params) {
-		
+
 		String mbrId = oracleRepository.selectMbrId(params);
 		params.put("searchType", "mbrId");
 		params.put("searchKeyword", mbrId);
@@ -83,7 +83,7 @@ public class ApiController {
 		String mbrId = oracleRepository.selectMbrId(params);
 		List<AutoMappedMap> result = querycacheRepository.selectJoinInfo(mbrId);
 
-		if (result == null || result.size() <= 0) {
+		if (result == null || result.size() <= 0 || result.get(0) == null) {
 			AutoMappedMap m = new AutoMappedMap();
 			m.put("OCB_APP_JOIN_YN", "N");
 			result.add(m);
