@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.skplanet.pandora.model.AutoMappedMap;
-import com.skplanet.pandora.model.NotificationType;
+import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.util.CsvCreatorTemplate;
 import com.skplanet.pandora.util.Helper;
@@ -30,14 +30,14 @@ public class NoticeService {
 	@Autowired
 	private FtpService ftpService;
 
-	public void noticeUsingFtp(final Map<String, Object> params, final NotificationType notiType) {
+	public void noticeUsingFtp(final Map<String, Object> params, final TransmissionType notiType) {
 
 		log.info("notice using ftp: {}, {}", params, notiType);
 
 		String remotePath = "";
-		if (notiType == NotificationType.OCBCOM) {
+		if (notiType == TransmissionType.OCBCOM) {
 			remotePath = "pointExEmail/extinction_" + Helper.nowDateString() + ".txt";
-		} else if (notiType == NotificationType.EM) {
+		} else if (notiType == TransmissionType.EM) {
 			remotePath = "pointExEmail/extinction_em_" + Helper.nowDateString() + ".txt";
 		}
 
@@ -61,11 +61,11 @@ public class NoticeService {
 			public void printRecord(CSVPrinter printer, AutoMappedMap map) throws IOException {
 				String extnctObjDt = (String) map.get("extnctObjDt");
 
-				if (notiType == NotificationType.OCBCOM) {
+				if (notiType == TransmissionType.OCBCOM) {
 					// 소명예정년,소멸예정월,소멸예정일,EC_USER_ID
 					printer.printRecord(extnctObjDt.substring(0, 4), extnctObjDt.substring(4, 6),
 							extnctObjDt.substring(6, 8), map.get("unitedId"));
-				} else if (notiType == NotificationType.EM) {
+				} else if (notiType == TransmissionType.EM) {
 					String mbrId = (String) map.get("mbrId");
 					String unitedId = (String) map.get("unitedId");
 					String encrypted = Helper.skpEncrypt(mbrId + "," + unitedId);

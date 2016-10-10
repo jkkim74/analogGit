@@ -80,7 +80,7 @@ angular.module('App')
             });
         };
 
-        $scope.requestSubmission = function () {
+        $scope.requestTransmission = function () {
             var componentName;
             if ($scope.selectedOption.value === 'em') {
                 componentName = 'ctas0104Modal';

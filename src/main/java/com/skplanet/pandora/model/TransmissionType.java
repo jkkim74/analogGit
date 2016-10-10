@@ -1,5 +1,5 @@
 package com.skplanet.pandora.model;
 
-public enum NotificationType {
+public enum TransmissionType {
 	ALL, OCBCOM, EM, SMS, TM, PTS, PUSH
 }

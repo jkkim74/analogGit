@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.skplanet.pandora.exception.BizException;
 import com.skplanet.pandora.model.ApiResponse;
 import com.skplanet.pandora.model.AutoMappedMap;
-import com.skplanet.pandora.model.NotificationType;
+import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.model.UserInfo;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
@@ -205,7 +205,7 @@ public class ApiController {
 
 	@PostMapping("/noticeExtinction")
 	public ApiResponse noticeExtinction(@RequestParam Map<String, Object> params) {
-		NotificationType notiType = NotificationType.valueOf(((String) params.get("notiType")).toUpperCase());
+		TransmissionType notiType = TransmissionType.valueOf(((String) params.get("notiType")).toUpperCase());
 
 		switch (notiType) {
 		case OCBCOM:
@@ -218,8 +218,8 @@ public class ApiController {
 		case TM:
 			break;
 		case ALL:
-			noticeService.noticeUsingFtp(params, NotificationType.OCBCOM);
-			noticeService.noticeUsingFtp(params, NotificationType.EM);
+			noticeService.noticeUsingFtp(params, TransmissionType.OCBCOM);
+			noticeService.noticeUsingFtp(params, TransmissionType.EM);
 			noticeService.noticeUsingSms(params);
 			break;
 		default:
