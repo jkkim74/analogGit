@@ -2,7 +2,7 @@
 
 angular.module('App')
     .component('emailAddrDupModal', {
-        templateUrl: 'emailAddrDupModal.html',
+        templateUrl: 'partials/common/grid-modal-tpl.html',
         bindings: {
             resolve: '<',
             close: '&',
@@ -11,20 +11,22 @@ angular.module('App')
         controller: function (apiSvc, uiGridConstants) {
             var self = this;
 
-            self.$onInit = function () {
-                self.emailAddrDupPromise = apiSvc.getEmailAddrDup({ mbrId: self.resolve.mbrId });
-                self.emailAddrDupPromise.then(function (data) {
-                    self.gridOptionsEmailAddrDup.data = data;
-                });
-            };
+            self.title = '중복 이메일주소 보유자';
 
-            self.gridOptionsEmailAddrDup = {
+            self.gridOptions = {
                 enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-                flatEntityAccess: true,
                 columnDefs: [
                     { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
                     { field: 'mbrId', displayName: '회원ID', cellTooltip: true, headerTooltip: true }
                 ]
             };
+
+            self.$onInit = function () {
+                self.gridPromise = apiSvc.getEmailAddrDup({ mbrId: self.resolve.mbrId });
+                self.gridPromise.then(function (data) {
+                    self.gridOptions.data = data;
+                });
+            };
+
         }
     });

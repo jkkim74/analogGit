@@ -42,7 +42,7 @@ angular.module('App')
                 { field: 'clphnNoDt', displayName: '휴대전화번호 최종 유입 출처/일자', width: 100, cellTooltip: true, headerTooltip: true },
                 {
                     field: 'clphnNoDupYn', displayName: '휴대전화번호 중복 여부', width: 100, cellTooltip: true, headerTooltip: true,
-                    cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'popup-cell\': row.entity.clphnNoDupYn === \'1\'}" title="TOOLTIP" ng-click="row.entity.clphnNoDupYn === \'1\' && grid.appScope.clphnNoDupYnClicked(row.entity.mbrId)">{{ COL_FIELD CUSTOM_FILTERS }}</div>'
+                    cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'popup-cell\': row.entity.clphnNoDupYn === \'Y\'}" title="TOOLTIP" ng-click="row.entity.clphnNoDupYn === \'Y\' && grid.appScope.openDupModal(\'clphnNoDup\', row.entity.mbrId)">{{ COL_FIELD CUSTOM_FILTERS }}</div>'
                 },
                 { field: 'homeTelNo', displayName: '자택전화번호', width: 150, cellTooltip: true, headerTooltip: true },
                 { field: 'homeTelNoDt', displayName: '자택전화번호 최종 유입 출처/일자', width: 100, cellTooltip: true, headerTooltip: true },
@@ -56,7 +56,7 @@ angular.module('App')
                 { field: 'emailAddrDt', displayName: '이메일주소 최종 유입 출처/일자', width: 100, cellTooltip: true, headerTooltip: true },
                 {
                     field: 'emailAddrDupYn', displayName: '이메일주소 중복 여부', width: 100, cellTooltip: true, headerTooltip: true,
-                    cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'popup-cell\': row.entity.emailAddrDupYn === \'1\'}" title="TOOLTIP" ng-click="row.entity.emailAddrDupYn === \'1\' && grid.appScope.emailAddrDupYnClicked(row.entity.mbrId)">{{ COL_FIELD CUSTOM_FILTERS }}</div>'
+                    cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'popup-cell\': row.entity.emailAddrDupYn === \'Y\'}" title="TOOLTIP" ng-click="row.entity.emailAddrDupYn === \'Y\' && grid.appScope.openDupModal(\'emailAddrDupModal\', row.entity.mbrId)">{{ COL_FIELD CUSTOM_FILTERS }}</div>'
                 },
                 { field: 'destrExpctnDt', displayName: '개인정보 유효 기간 만료 예정일자', width: 100, cellTooltip: true, headerTooltip: true }
             ]
@@ -135,7 +135,7 @@ angular.module('App')
                 { field: 'clphnNoFnlInfl', displayName: '휴대전화번호 최종 유입 출처/일자', width: 100, cellTooltip: true, headerTooltip: true },
                 {
                     field: 'clphnNoDupYn', displayName: '휴대전화번호 중복 여부', width: 100, cellTooltip: true, headerTooltip: true,
-                    cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'popup-cell\': row.entity.clphnNoDupYn === \'1\'}" title="TOOLTIP" ng-click="row.entity.clphnNoDupYn === \'1\' && grid.appScope.clphnNoDupYnClicked(row.entity.mbrId)">{{ COL_FIELD CUSTOM_FILTERS }}</div>'
+                    cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'popup-cell\': row.entity.clphnNoDupYn === \'Y\'}" title="TOOLTIP" ng-click="row.entity.clphnNoDupYn === \'Y\' && grid.appScope.openDupModal(\'clphnNoDupModal\', row.entity.mbrId)">{{ COL_FIELD CUSTOM_FILTERS }}</div>'
                 },
                 { field: 'homeTelNo', displayName: '자택전화번호', width: 150, cellTooltip: true, headerTooltip: true },
                 { field: 'homeTelNoFnlInfl', displayName: '자택전화번호 최종 유입 출처/일자', width: 100, cellTooltip: true, headerTooltip: true },
@@ -149,7 +149,7 @@ angular.module('App')
                 { field: 'emailAddrFnlInfl', displayName: '이메일주소 최종 유입 출처/일자', width: 100, cellTooltip: true, headerTooltip: true },
                 {
                     field: 'emailAddrDupYn', displayName: '이메일주소 중복 여부', width: 100, cellTooltip: true, headerTooltip: true,
-                    cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'popup-cell\': row.entity.emailAddrDupYn === \'1\'}" title="TOOLTIP" ng-click="row.entity.emailAddrDupYn === \'1\' && grid.appScope.emailAddrDupYnClicked(row.entity.mbrId)">{{ COL_FIELD CUSTOM_FILTERS }}</div>'
+                    cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'popup-cell\': row.entity.emailAddrDupYn === \'Y\'}" title="TOOLTIP" ng-click="row.entity.emailAddrDupYn === \'Y\' && grid.appScope.openDupModal(\'emailAddrDupModal\', row.entity.mbrId)">{{ COL_FIELD CUSTOM_FILTERS }}</div>'
                 }
             ]
         };
@@ -353,19 +353,9 @@ angular.module('App')
             });
         };
 
-        $scope.clphnNoDupYnClicked = function (mbrId) {
+        $scope.openDupModal = function (modalName, mbrId) {
             $uibModal.open({
-                component: 'clphnNoDupModal',
-                size: 'sm',
-                resolve: {
-                    mbrId: function () { return mbrId; }
-                }
-            });
-        };
-
-        $scope.emailAddrDupYnClicked = function (mbrId) {
-            $uibModal.open({
-                component: 'emailAddrDupModal',
+                component: modalName,
                 size: 'sm',
                 resolve: {
                     mbrId: function () { return mbrId; }
