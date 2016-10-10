@@ -11,10 +11,12 @@ angular.module('App')
         controller: function () {
             var self = this;
 
+            self.options = {};
+
             self.$onInit = function () {
 
             };
 
-            
+
         }
     });
