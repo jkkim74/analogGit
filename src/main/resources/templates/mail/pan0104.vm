@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="ko">
 
 <body>
-	Message: $msg
+	${mbrKorNm}고객님, OK캐쉬백포인트가 ${mm}/${dd} 소멸될 예정입니다. 소멸 이전에 적립 또는 사용시 유효기간이 5년 연장됩니다. 자세한 사항은 okcashbag.com을 참조해주세요.
 </body>
 
 </html>

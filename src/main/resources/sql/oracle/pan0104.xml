@@ -21,17 +21,6 @@
 		ORDER BY A.EXTNCT_MBR_FG_CD
 	</select>
 	
-	<!-- <sql id="selectExtinctionTargets_test">
-		select #{baseYm} base_ym
-		, '' united_id
-		, '1234' mbr_id
-		, '홍길동' mbr_kor_nm
-		, '01012345678' clphn_no
-		, '1600328@partner.skcc.com' email_addr
-		, '20161120' extnct_obj_dt
-		from dual
-	</sql> -->
-	
 	<sql id="selectExtinctionTargets_inner">
 		SELECT BASE_YM
 			, UNITED_ID
