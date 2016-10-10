@@ -230,4 +230,11 @@ public class ApiController {
 		return ApiResponse.builder().message("전송 완료").build();
 	}
 
+	// CTAS
+	@PostMapping("/requestTransmission")
+	public ApiResponse requestTransmission(@RequestParam Map<String, Object> params) {
+		querycacheRepository.selectTargeting(params);
+		return ApiResponse.builder().message("전송 요청 완료").build();
+	}
+
 }

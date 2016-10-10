@@ -90,7 +90,8 @@ angular.module('App')
             $uibModal.open({
                 component: componentName,
                 resolve: {
-                    notiType: function () { return $scope.selectedOption.value; }
+                    notiType: function () { return $scope.selectedOption.value; },
+                    selectedTargeting: function () { return $scope.selectedTargeting; }
                 }
             });
         };

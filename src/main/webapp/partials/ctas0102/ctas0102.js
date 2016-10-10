@@ -8,11 +8,20 @@ angular.module('App')
             close: '&',
             dismiss: '&'
         },
-        controller: function () {
+        controller: function (apiSvc) {
             var self = this;
 
             self.$onInit = function () {
-                
+
+            };
+
+            self.requestTransmission = function () {
+
+                var params = angular.extend(self.resolve.selectedTargeting, {});
+
+                apiSvc.requestTransmission(params).then(function () {
+                    self.close();
+                });
             };
 
         }

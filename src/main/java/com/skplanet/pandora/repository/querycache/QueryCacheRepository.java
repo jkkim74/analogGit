@@ -21,4 +21,7 @@ public interface QueryCacheRepository {
 
 	List<AutoMappedMap> selectAppPushHistory(@Param("mbrId") String mbrId);
 
+	// CTAS
+	List<AutoMappedMap> selectTargeting(Map<String, Object> params);
+
 }

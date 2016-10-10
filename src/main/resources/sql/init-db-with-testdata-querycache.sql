@@ -1,4 +1,4 @@
-create table if not exists MOCK_TB_SEL_TRX_HIST (
+create table MOCK_TB_SEL_TRX_HIST (
 	rcv_dt DATE,
 	rcv_seq VARCHAR(50),
 	appr_dttm DATE,
@@ -34,3 +34,11 @@ insert into MOCK_TB_SEL_TRX_HIST (rcv_dt, rcv_seq, appr_dttm, rep_appr_no, appr_
 insert into MOCK_TB_SEL_TRX_HIST (rcv_dt, rcv_seq, appr_dttm, rep_appr_no, appr_no, sale_dttm, mbr_id, card_dtl_grp, card_no, alcmpn, mcnt, stlmt_mcnt, pnt_knd, slip, sale_amt, pnt, cs_mbr_cmmsn, cmmsn, pmnt_way, org, oil_prdct_sgrp, sale_qty, cpn_prd, trx_type) values ('2015-12-10', null, '2016-05-07 02:55:51', '78345 CEDEX', null, '2016-06-02 21:45:36', '1', 'diners-club-carte-blanche', '30245582852310', 'Trantow, Beatty and King', 'Adams Inc', 'Rogahn Inc', null, null, 8042, 906, 61, 74, null, 'Yost-Stehr', null, 20, '30.196.200.80', '02');
 insert into MOCK_TB_SEL_TRX_HIST (rcv_dt, rcv_seq, appr_dttm, rep_appr_no, appr_no, sale_dttm, mbr_id, card_dtl_grp, card_no, alcmpn, mcnt, stlmt_mcnt, pnt_knd, slip, sale_amt, pnt, cs_mbr_cmmsn, cmmsn, pmnt_way, org, oil_prdct_sgrp, sale_qty, cpn_prd, trx_type) values ('2015-12-16', null, '2015-12-28 23:37:07', null, '3830-455', '2015-10-14 18:09:26', '1', 'bankcard', '5602248095379760', 'Dare, Ritchie and Lebsack', 'Roob-Kohler', 'Koepp, Gleason and Grimes', null, null, 6337, 178, 93, 13, null, 'Krajcik-Corwin', null, 70, '58.26.18.61', '01');
 insert into MOCK_TB_SEL_TRX_HIST (rcv_dt, rcv_seq, appr_dttm, rep_appr_no, appr_no, sale_dttm, mbr_id, card_dtl_grp, card_no, alcmpn, mcnt, stlmt_mcnt, pnt_knd, slip, sale_amt, pnt, cs_mbr_cmmsn, cmmsn, pmnt_way, org, oil_prdct_sgrp, sale_qty, cpn_prd, trx_type) values ('2016-03-25', '25646', '2016-09-11 01:08:37', null, null, '2015-10-19 15:41:05', '1', 'maestro', '5018731090629679980', 'Toy, Lakin and Gorczany', 'Daugherty-Nienow', 'Reynolds, Legros and Fay', null, null, 6082, 430, 11, 58, null, 'O''Kon Inc', null, 5, '203.209.152.17', '02');
+
+create table if not exists MART_MBR_TGTNG_MST (
+	mbr_id varchar(50),
+	OCB_MKTNG_AGRMT_YN varchar(1),
+	GNDR_FG_CD varchar(1),
+	age int
+);
+insert into MART_MBR_TGTNG_MST (mbr_id, OCB_MKTNG_AGRMT_YN, gndr_fg_cd, age) values('1', '1', '1', 20);
