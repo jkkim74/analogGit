@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Ctas0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal', function ($scope, $q, $http, $timeout, uiGridConstants, toastr, apiSvc, $uibModal) {
+    .controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http', '$timeout', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal', function ($scope, $log, $q, $http, $timeout, uiGridConstants, toastr, apiSvc, $uibModal) {
 
         var self = this;
         $scope.title = '이메일 발송 관리';
@@ -74,9 +74,8 @@ angular.module('App')
             });
 
             modalInstance.result.then(function (selectedItem) {
+                $log.debug(selectedItem);
                 $scope.selectedTargeting = selectedItem;
-            }, function () {
-
             });
         };
 
