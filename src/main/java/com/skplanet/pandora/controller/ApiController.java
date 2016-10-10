@@ -86,6 +86,7 @@ public class ApiController {
 		if (result == null || result.size() <= 0 || result.get(0) == null) {
 			AutoMappedMap m = new AutoMappedMap();
 			m.put("OCB_APP_JOIN_YN", "N");
+			result.clear();
 			result.add(m);
 		} else {
 			log.info("{}", result);
