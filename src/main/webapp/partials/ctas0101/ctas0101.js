@@ -59,6 +59,7 @@ angular.module('App')
         $scope.saveCampaign = function () {
             var campaign = angular.extend({}, $scope.campaign);
             angular.extend(campaign, {
+                cmpgnSndChnlFgCd: campaign.cmpgnSndChnlFgCd.value,
                 mergeDt: $filter('date')(campaign.mergeDt, 'yyyyMMdd')
             });
 
@@ -72,14 +73,14 @@ angular.module('App')
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             minRowsToShow: 5,
             columnDefs: [
-                { field: 'cpmnCd', displayName: '셀ID', width: 50, cellTooltip: true, headerTooltip: true },
-                { field: 'cpmnNm', displayName: '설명', cellTooltip: true, headerTooltip: true },
-                { field: 'sndChnl', displayName: '백분율(%)', width: 50, cellTooltip: true, headerTooltip: true },
-                { field: 'mrgDt', displayName: '추출수', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
-                { field: 'sndDt', displayName: '최종추출수', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
-                { field: 'requester', displayName: '머지일자', cellTooltip: true, headerTooltip: true },
-                { field: 'sndSts', displayName: '발송일자', cellTooltip: true, headerTooltip: true },
-                { field: 'sndSts', displayName: '셀상태', width: 100, cellTooltip: true, headerTooltip: true }
+                { field: 'cellId', displayName: '셀ID', width: 50, cellTooltip: true, headerTooltip: true },
+                { field: 'cellDesc', displayName: '설명', cellTooltip: true, headerTooltip: true },
+                { field: 'cellPrcntg', displayName: '백분율(%)', width: 50, cellTooltip: true, headerTooltip: true },
+                { field: 'extrctCnt', displayName: '추출수', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
+                { field: 'fnlExtrctCnt', displayName: '최종추출수', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
+                { field: 'mergeDt', displayName: '머지일자', cellTooltip: true, headerTooltip: true },
+                { field: 'sndDt', displayName: '발송일자', cellTooltip: true, headerTooltip: true },
+                { field: 'stsFgNm', displayName: '셀상태', width: 100, cellTooltip: true, headerTooltip: true }
             ]
         };
 

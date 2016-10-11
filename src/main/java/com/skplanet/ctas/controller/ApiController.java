@@ -29,8 +29,8 @@ public class ApiController {
 
 	@GetMapping("/campaigns")
 	public ApiResponse getCampaigns(@RequestParam Map<String, Object> params) {
-		List<AutoMappedMap> list = oracleRepository.selectCampaigns(params);
-		int count = oracleRepository.countCampaigns(params);
+		List<AutoMappedMap> list = oracleRepository.selectCampaign(params);
+		int count = oracleRepository.countCampaign(params);
 		return ApiResponse.builder().value(list).totalRecords(count).build();
 	}
 

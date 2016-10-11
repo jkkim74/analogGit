@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.ctas.repository.oracle.OracleRepository">
+
+	<select id="selectCampaignTargetingInfo" parameterType="map" resultType="AutoMappedMap">
+		SELECT TGTNG_CNDTN_CLMN_NM, TGTNG_CNDTN_CLMN_VAL
+		FROM WEB_CMPGN_TGTNG_INFO
+		WHERE CMPGN_ID = #{cmpgnId}
+	</select>
+
+	<insert id="insertCampaignTargetingInfo" parameterType="map">
+		INSERT /*+ APPEND_VALUES */
+		INTO WEB_CMPGN_TGTNG_INFO ( CMPGN_ID, TGTNG_CNDTN_CLMN_NM, TGTNG_CNDTN_CLMN_VAL, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
+		VALUES ( #{cmpgnId}, #{tgtngCndtnClmnNm}, #{tgtngCndtnClmnVal}, #{username}, SYSDATE, #{username}, SYSDATE )
+	</insert>
+	
+	<delete id="deleteCampaignTargetingInfo" parameterType="map">
+		DELETE FROM WEB_CMPGN_TGTNG_INFO WHERE CMPGN_ID = #{cmpgnId}
+	</delete>
+
+</mapper>

@@ -19,27 +19,27 @@
 		LIMIT #{offset}, #{limit}
 	</sql>
 
-	<select id="selectCampaigns" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectCampaign" parameterType="map" resultType="AutoMappedMap">
 		<include refid="pagingHead" />
-		<include refid="selectCampaigns_inner" />
+		<include refid="selectCampaign_inner" />
 		<include refid="pagingFoot" />
 	</select>
-	<select id="selectCampaigns" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
+	<select id="selectCampaign" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
 		<include refid="selectCampaigns_inner" />
 		<include refid="pagingFoot" />
 	</select>
 
-	<sql id="selectCampaigns_inner">
+	<sql id="selectCampaign_inner">
 		SELECT CMPGN_ID
-		, CMPGN_NM
-		, TO_CHAR(TO_DATE(MERGE_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS MERGE_DT
-		, TO_CHAR(TO_DATE(SND_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS SND_DT
-		, OBJ_REG_FG_CD
-		, TOT_CNT
-		, DUP_DEL_CNT
-		, CMPGN_SND_CHNL_FG_CD
-		, CASE STS_FG_CD WHEN '02' THEN '머지완료' WHEN '03' THEN '전송완료' ELSE '저장완료' END AS STS_FG_NM
-		, UPD_ID
+			, CMPGN_NM
+			, TO_CHAR(TO_DATE(MERGE_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS MERGE_DT
+			, TO_CHAR(TO_DATE(SND_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS SND_DT
+			, OBJ_REG_FG_CD
+			, TOT_CNT
+			, DUP_DEL_CNT
+			, CMPGN_SND_CHNL_FG_CD
+			, CASE STS_FG_CD WHEN '02' THEN '머지완료' WHEN '03' THEN '전송완료' ELSE '저장완료' END AS STS_FG_NM
+			, UPD_ID
 		FROM WEB_CMPGN_MST
 		<where>
 			<if test="periodFrom != null and periodFrom != ''">AND SND_DT &gt;= #{periodFrom}</if>
@@ -47,9 +47,9 @@
 		</where>
 	</sql>
 
-	<select id="countCampaigns" parameterType="map" resultType="int">
+	<select id="countCampaign" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM (
-		<include refid="selectCampaigns_inner" />
+		<include refid="selectCampaign_inner" />
 		)
 	</select>
 
@@ -61,7 +61,7 @@
 	</select>
 
 	<update id="upsertCampaign" parameterType="map">
-		INSERT
+		INSERT /*+ APPEND_VALUES */
 		INTO WEB_CMPGN_MST ( CMPGN_ID, CMPGN_NM, MERGE_DT, CMPGN_SND_CHNL_FG_CD, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
 		VALUES ( #{cmpgnId}, #{cmpgnNm}, #{mergeDt}, #{cmpgnSndChnlFgCd}, '01', #{username}, SYSDATE, #{username}, SYSDATE )
 		ON DUPLICATE KEY
@@ -78,5 +78,32 @@
 			UPT_DTTM = SYSDATE,
 		</trim>
 	</update>
+
+	<delete id="deleteCampaign" parameterType="map">
+		DELETE FROM WEB_CMPGN_MST WHERE CMPGN_ID = #{cmpgnId}
+	</delete>
+	
+	<select id="selectCampaignDetail" parameterType="map" resultType="AutoMappedMap">
+		SELECT CELL_ID
+			, CELL_DESC
+			, 0 AS CELL_PRCNTG
+			, EXTRCT_CNT
+			, FNL_EXTRCT_CNT
+			, MERGE_DT
+			, SND_DT
+			, CASE STS_FG_CD WHEN '02' THEN '추출완료' WHEN '03' THEN '전송완료' ELSE '' END AS STS_FG_NM
+		FROM WEB_CMPGN_DTL
+		WHERE CMPGN_ID = #{cmpgnId}
+	</select>
+
+	<insert id="insertCampaignDetail" parameterType="map">
+		INSERT /*+ APPEND_VALUES */
+		INTO WEB_CMPGN_DTL ( CELL_ID, CMPGN_ID, EXTRCT_CNT, MERGE_DT, CELL_DESC, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
+		VALUES ( #{cellId}, #{cmpgnId}, #{extrctCnt}, #{mergeDt}, #{cellDesc}, '02', #{username}, SYSDATE, #{username}, SYSDATE )
+	</insert>
+
+	<delete id="deleteCampaignDetail" parameterType="map">
+		DELETE FROM WEB_CMPGN_DTL WHERE CMPGN_ID = #{cmpgnId}
+	</delete>
 
 </mapper>
