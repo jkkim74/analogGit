@@ -25,7 +25,7 @@
 		<include refid="pagingFoot" />
 	</select>
 	<select id="selectCampaign" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
-		<include refid="selectCampaigns_inner" />
+		<include refid="selectCampaign_inner" />
 		<include refid="pagingFoot" />
 	</select>
 
