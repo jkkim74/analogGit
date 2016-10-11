@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import com.skplanet.pandora.model.AutoMappedMap;
 
+@Repository("pandoraQueryCacheRepository")
 public interface QueryCacheRepository {
 
 	List<AutoMappedMap> selectTest(Map<String, Object> params);
@@ -20,8 +22,5 @@ public interface QueryCacheRepository {
 	List<AutoMappedMap> selectEmailSendHistory(@Param("mbrId") String mbrId);
 
 	List<AutoMappedMap> selectAppPushHistory(@Param("mbrId") String mbrId);
-
-	// CTAS
-	List<AutoMappedMap> selectTargeting(Map<String, Object> params);
 
 }

@@ -65,7 +65,7 @@ public class MyBatisConfig {
 	@Bean
 	public MapperScannerConfigurer mysqlMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
-		configurer.setBasePackage("com.skplanet.pandora.repository.mysql");
+		configurer.setBasePackage("com.skplanet.ctas.repository.mysql,com.skplanet.pandora.repository.mysql");
 		configurer.setSqlSessionFactoryBeanName("mysqlSqlSessionFactory");
 		return configurer;
 	}
@@ -80,7 +80,7 @@ public class MyBatisConfig {
 	@Bean
 	public MapperScannerConfigurer oracleMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
-		configurer.setBasePackage("com.skplanet.pandora.repository.oracle");
+		configurer.setBasePackage("com.skplanet.ctas.repository.oracle,com.skplanet.pandora.repository.oracle");
 		configurer.setSqlSessionFactoryBeanName("oracleSqlSessionFactory");
 		return configurer;
 	}
@@ -95,7 +95,7 @@ public class MyBatisConfig {
 	@Bean
 	public MapperScannerConfigurer querycacheMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
-		configurer.setBasePackage("com.skplanet.pandora.repository.querycache");
+		configurer.setBasePackage("com.skplanet.ctas.repository.querycache,com.skplanet.pandora.repository.querycache");
 		configurer.setSqlSessionFactoryBeanName("querycacheSqlSessionFactory");
 		return configurer;
 	}

@@ -25,7 +25,7 @@ import com.skplanet.pandora.service.UploadService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@RestController
+@RestController("pandoraApiController")
 @RequestMapping("api")
 @Slf4j
 public class ApiController {
@@ -228,13 +228,6 @@ public class ApiController {
 		}
 
 		return ApiResponse.builder().message("전송 완료").build();
-	}
-
-	// CTAS
-	@PostMapping("/requestTransmission")
-	public ApiResponse requestTransmission(@RequestParam Map<String, Object> params) {
-		querycacheRepository.selectTargeting(params);
-		return ApiResponse.builder().message("전송 요청 완료").build();
 	}
 
 }

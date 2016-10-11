@@ -1,4 +1,4 @@
-package com.skplanet.pandora;
+package com.skplanet;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
