@@ -2,6 +2,7 @@
   "devDependencies": {
     "bower": "^1.7.9",
     "gulp": "^3.9.1",
+    "gulp-angular-filesort": "^1.1.1",
     "gulp-csslint": "^1.0.0",
     "gulp-eslint": "^3.0.1",
     "gulp-inject": "^4.1.0",
@@ -15,8 +16,5 @@
   "scripts": {
     "postinstall": "bower install",
     "prestart": "npm install"
-  },
-  "dependencies": {
-    "gulp-angular-filesort": "^1.1.1"
   }
 }
