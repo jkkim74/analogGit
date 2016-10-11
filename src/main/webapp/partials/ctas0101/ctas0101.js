@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http', '$timeout', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal', function ($scope, $log, $q, $http, $timeout, uiGridConstants, toastr, apiSvc, $uibModal) {
+    .controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal', function ($scope, $log, $q, $http, $timeout, $filter, uiGridConstants, toastr, apiSvc, $uibModal) {
 
         var self = this;
         $scope.title = '이메일 발송 관리';
@@ -19,14 +19,13 @@ angular.module('App')
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             minRowsToShow: 16,
             columnDefs: [
-                { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
-                { field: 'cpmnCd', displayName: '캠페인코드', cellTooltip: true, headerTooltip: true },
-                { field: 'cpmnNm', displayName: '캠페인명', cellTooltip: true, headerTooltip: true },
-                { field: 'sndChnl', displayName: '발송채널', cellTooltip: true, headerTooltip: true },
-                { field: 'mrgDt', displayName: '머지일자', cellTooltip: true, headerTooltip: true },
+                { field: 'cmpgnId', displayName: '캠페인코드', cellTooltip: true, headerTooltip: true },
+                { field: 'cmpgnNm', displayName: '캠페인명', cellTooltip: true, headerTooltip: true },
+                { field: 'cmpgnSndChnlFgCd', displayName: '발송채널', cellTooltip: true, headerTooltip: true },
+                { field: 'mergeDt', displayName: '머지일자', cellTooltip: true, headerTooltip: true },
                 { field: 'sndDt', displayName: '발송일자', cellTooltip: true, headerTooltip: true },
-                { field: 'requester', displayName: '요청담당자', cellTooltip: true, headerTooltip: true },
-                { field: 'sndSts', displayName: '상태', cellTooltip: true, headerTooltip: true }
+                { field: 'updId', displayName: '요청자', cellTooltip: true, headerTooltip: true },
+                { field: 'stsFgNm', displayName: '상태', cellTooltip: true, headerTooltip: true }
             ],
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
@@ -40,16 +39,17 @@ angular.module('App')
         $scope.search = function (offset, limit) {
             var params = {
                 offset: offset || 0,
-                limit: limit || $scope.gridOptionsList.paginationPageSize
+                limit: limit || $scope.gridOptionsList.paginationPageSize,
+                periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
+                periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd')
             };
 
-            // $scope.searchPromise = apiSvc.getCampaigns(params);
-            // $scope.searchPromise.then(function (data) {
-            //     $scope.gridOptionsList.data = data.value;
-            //     $scope.gridOptionsList.totalItems = data.totalRecords;
-            // });
+            $scope.searchPromise = apiSvc.getCampaigns(params);
+            $scope.searchPromise.then(function (data) {
+                $scope.gridOptionsList.data = data.value;
+                $scope.gridOptionsList.totalItems = data.totalRecords;
+            });
         };
-
 
         $scope.gridOptionsCellList = {
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
