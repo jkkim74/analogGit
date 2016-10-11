@@ -14,4 +14,8 @@ public interface OracleRepository {
 
 	int countCampaigns(Map<String, Object> params);
 
+	String nextCampaignId();
+
+	int upsertCampaign(Map<String, Object> params);
+
 }

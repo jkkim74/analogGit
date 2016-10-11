@@ -28,18 +28,18 @@
 		<include refid="selectCampaigns_inner" />
 		<include refid="pagingFoot" />
 	</select>
-	
+
 	<sql id="selectCampaigns_inner">
 		SELECT CMPGN_ID
-			, CMPGN_NM
-			, TO_CHAR(TO_DATE(MERGE_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS MERGE_DT
-			, TO_CHAR(TO_DATE(SND_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS SND_DT
-			, OBJ_REG_FG_CD
-			, TOT_CNT
-			, DUP_DEL_CNT
-			, CMPGN_SND_CHNL_FG_CD
-			, CASE STS_FG_CD WHEN '01' THEN '머지완료' WHEN '02' THEN '전송완료' ELSE '' END AS STS_FG_NM
-			, UPD_ID
+		, CMPGN_NM
+		, TO_CHAR(TO_DATE(MERGE_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS MERGE_DT
+		, TO_CHAR(TO_DATE(SND_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS SND_DT
+		, OBJ_REG_FG_CD
+		, TOT_CNT
+		, DUP_DEL_CNT
+		, CMPGN_SND_CHNL_FG_CD
+		, CASE STS_FG_CD WHEN '02' THEN '머지완료' WHEN '03' THEN '전송완료' ELSE '저장완료' END AS STS_FG_NM
+		, UPD_ID
 		FROM WEB_CMPGN_MST
 		<where>
 			<if test="periodFrom != null and periodFrom != ''">AND SND_DT &gt;= #{periodFrom}</if>
@@ -49,8 +49,34 @@
 
 	<select id="countCampaigns" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM (
-			<include refid="selectCampaigns_inner" />
+		<include refid="selectCampaigns_inner" />
 		)
 	</select>
+
+	<select id="nextCampaignId" parameterType="map" resultType="string">
+		SELECT 'CM' || TO_CHAR(SUBSTR(NVL(MAX(CMPGN_ID), 'CM00000'), 3) + 1, '09999') FROM WEB_CMPGN_MST
+	</select>
+	<select id="nextCampaignId" parameterType="map" resultType="string" databaseId="hsql">
+		SELECT ( IFNULL(MAX(CMPGN_ID),'0') + 1 ) || '' FROM WEB_CMPGN_MST
+	</select>
+
+	<update id="upsertCampaign" parameterType="map">
+		INSERT
+		INTO WEB_CMPGN_MST ( CMPGN_ID, CMPGN_NM, MERGE_DT, CMPGN_SND_CHNL_FG_CD, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
+		VALUES ( #{cmpgnId}, #{cmpgnNm}, #{mergeDt}, #{cmpgnSndChnlFgCd}, '01', #{username}, SYSDATE, #{username}, SYSDATE )
+		ON DUPLICATE KEY
+		<trim prefix="UPDATE" suffixOverrides=",">
+			<if test="cmpgnNm != null and cmpgnNm != ''">CMPGN_NM = #{cmpgnNm},</if>
+			<if test="mergeDt != null and mergeDt != ''">MERGE_DT = #{mergeDt},</if>
+			<if test="sndDt != null and sndDt != ''">SND_DT = #{sndDt},</if>
+			<if test="objRegFgCd != null and objRegFgCd != ''">OBJ_REG_FG_CD = #{objRegFgCd},</if>
+			<if test="totCnt != null and totCnt != ''">TOT_CNT = TO_NUMBER(#{totCnt}),</if>
+			<if test="dupDelCnt != null and dupDelCnt != ''">DUP_DEL_CNT = TO_NUMBER(#{dupDelCnt}),</if>
+			<if test="cmpgnSndChnlFgCd != null and cmpgnSndChnlFgCd != ''">CMPGN_SND_CHNL_FG_CD = #{cmpgnSndChnlFgCd},</if>
+			<if test="stsFgCd != null and stsFgCd != ''">STS_FG_CD = #{stsFgCd},</if>
+			<if test="username != null and username != ''">UPD_ID = #{username},</if>
+			UPT_DTTM = SYSDATE,
+		</trim>
+	</update>
 
 </mapper>

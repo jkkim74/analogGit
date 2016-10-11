@@ -7,11 +7,12 @@ angular.module('App')
         $scope.title = '이메일 발송 관리';
 
         $scope.visibleDetail = true;
+        $scope.campaign = {};
 
         $scope.selectOptions = [
-            { label: '커머스센터 대용량 메일', value: 'em' },
-            { label: '앱푸시/모바일전용 회원ID 전송 (PTS)', value: 'push' },
-            { label: 'SMS 발송용 목록 전송 (PTS)', value: 'sms' }
+            { label: '커머스센터 대용량 메일', value: 'MAIL' },
+            { label: '앱푸시/모바일전용 회원ID 전송 (PTS)', value: 'PUSH' },
+            { label: 'SMS 발송용 목록 전송 (PTS)', value: 'SMS' }
         ];
 
         $scope.gridOptionsList = {
@@ -48,6 +49,22 @@ angular.module('App')
             $scope.searchPromise.then(function (data) {
                 $scope.gridOptionsList.data = data.value;
                 $scope.gridOptionsList.totalItems = data.totalRecords;
+            });
+        };
+
+        $scope.clear = function () {
+            $scope.campaign = {};
+        };
+
+        $scope.saveCampaign = function () {
+            var campaign = angular.extend({}, $scope.campaign);
+            angular.extend(campaign, {
+                mergeDt: $filter('date')(campaign.mergeDt, 'yyyyMMdd')
+            });
+
+            $scope.savePromise = apiSvc.saveCampaign(campaign);
+            $scope.savePromise.then(function (data) {
+                $scope.campaign.cmpgnId = data.value.cmpgnId;
             });
         };
 

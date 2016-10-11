@@ -26,7 +26,7 @@ public class AuthController {
 	@Autowired
 	private UserService userService;
 
-	static UserDetails getUserInfo() {
+	public static UserDetails getUserInfo() {
 		return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 

@@ -87,6 +87,7 @@ angular.module('App')
 
         // ctas
         this.getCampaigns = new ApiGet('campaigns');
+        this.saveCampaign = new ApiPost('campaigns');
         this.requestTransmission = new ApiPost('requestTransmission');
 
     }]);
