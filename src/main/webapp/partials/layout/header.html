@@ -7,17 +7,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-            <a class="navbar-brand" ng-href="/" uib-tooltip="홈으로" tooltip-placement="bottom"><strong>개인정보 조회 시스템</strong></a>
+            <a class="navbar-brand" ng-href="/" uib-tooltip="홈으로" tooltip-placement="bottom"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-navbar-collapse">
             <ul class="nav navbar-nav">
-                <li ng-show="isAllowedPage('pan0101')" ui-sref-active="active"><a ui-sref="index.page({pageId: 'pan0101'})">멤버 ID 일괄 전환</a></li>
-                <li ng-show="isAllowedPage('pan0102')" ui-sref-active="active"><a ui-sref="index.page({pageId: 'pan0102'})">고객 정보 및 장기 거래 실적 조회</a></li>
-                <li ng-show="isAllowedPage('pan0103')" ui-sref-active="active"><a ui-sref="index.page({pageId: 'pan0103'})">배치 적립 파일 검증</a></li>
-                <li ng-show="isAllowedPage('pan0104')" ui-sref-active="active"><a ui-sref="index.page({pageId: 'pan0104'})">시효 만료 포인트 사전 고지</a></li>
-                <li ng-show="isAllowedPage('pan0105')" ui-sref-active="active"><a ui-sref="index.page({pageId: 'pan0105'})">거래 실적 및 유실적 고객 추출</a></li>
-                <li ng-show="isAllowedPage('pan0106')" ui-sref-active="active"><a ui-sref="index.page({pageId: 'pan0106'})">회원 프로파일 분석</a></li>
+                <li ng-show="isAllowedPage('pan0101')" ui-sref-active="active" uib-tooltip="멤버 ID 일괄 전환" tooltip-placement="bottom"><a ui-sref="index.page({pageId: 'pan0101'})">멤버 ID 일괄 전환</a></li>
+                <li ng-show="isAllowedPage('pan0102')" ui-sref-active="active" uib-tooltip="고객 정보 및 장기 거래 실적 조회" tooltip-placement="bottom"><a ui-sref="index.page({pageId: 'pan0102'})">고객 정보 및 장기 거래 실적 조회</a></li>
+                <li ng-show="isAllowedPage('pan0103')" ui-sref-active="active" uib-tooltip="배치 적립 파일 검증" tooltip-placement="bottom"><a ui-sref="index.page({pageId: 'pan0103'})">배치 적립 파일 검증</a></li>
+                <li ng-show="isAllowedPage('pan0104')" ui-sref-active="active" uib-tooltip="시효 만료 포인트 사전 고지" tooltip-placement="bottom"><a ui-sref="index.page({pageId: 'pan0104'})">시효 만료 포인트 사전 고지</a></li>
+                <li ng-show="isAllowedPage('pan0105')" ui-sref-active="active" uib-tooltip="거래 실적 및 유실적 고객 추출" tooltip-placement="bottom"><a ui-sref="index.page({pageId: 'pan0105'})">거래 실적 및 유실적 고객 추출</a></li>
+                <li ng-show="isAllowedPage('pan0106')" ui-sref-active="active" uib-tooltip="회원 프로파일 분석" tooltip-placement="bottom"><a ui-sref="index.page({pageId: 'pan0106'})">회원 프로파일 분석</a></li>
             </ul>
             <div ng-if="isAuthenticated">
                 <ul class="nav navbar-nav navbar-right">
