@@ -18,7 +18,7 @@ gulp.task('inject', function () {
     var cssSources = gulp.src(['src/main/webapp/partials/**/*.css', 'src/main/webapp/styles/**/*.css'], { read: false });
     var bowerComponents = gulp.src(mainBowerFiles(), { read: false });
 
-    return target.pipe(inject(jsSources.pipe(angularFilesort()), { ignorePath: 'src/main/webapp', addRootSlash: false }))
+    return target.pipe(inject(jsSources.pipe(sort()).pipe(angularFilesort()), { ignorePath: 'src/main/webapp', addRootSlash: false }))
         .pipe(inject(cssSources.pipe(sort()), { ignorePath: 'src/main/webapp', addRootSlash: false }))
         .pipe(inject(bowerComponents, { name: 'bower', ignorePath: 'src/main/webapp', addRootSlash: false }))
         .pipe(gulp.dest('src/main/webapp'));
