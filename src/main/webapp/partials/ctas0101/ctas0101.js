@@ -15,6 +15,10 @@ angular.module('App')
             { label: 'SMS 발송용 목록 전송 (PTS)', value: 'SMS' }
         ];
 
+        $scope.dateOptions = {
+            minDate: new Date()
+        };
+
         $scope.gridOptionsList = {
             enableRowSelection: true,
             enableRowHeaderSelection: false,
@@ -56,7 +60,9 @@ angular.module('App')
         };
 
         $scope.clear = function () {
-            $scope.campaign = {};
+            $scope.campaign = {
+                cmpgnSndChnlFgCd: $scope.selectOptions[0]
+            };
         };
 
         $scope.saveCampaign = function () {
@@ -71,6 +77,7 @@ angular.module('App')
             $scope.savePromise = apiSvc.saveCampaign(campaign);
             $scope.savePromise.then(function (data) {
                 $scope.campaign.cmpgnId = data.value.cmpgnId;
+                $scope.search();
                 deferred.resolve();
             }, function () {
                 deferred.reject();

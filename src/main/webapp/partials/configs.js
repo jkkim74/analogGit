@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .config(['$stateProvider', '$urlRouterProvider', '$provide', 'uibDatepickerConfig', '$translateProvider', function ($stateProvider, $urlRouterProvider, $provide, uibDatepickerConfig, $translateProvider) {
+    .config(['$stateProvider', '$urlRouterProvider', '$provide', '$translateProvider', 'uibDatepickerConfig', 'uibDatepickerPopupConfig', function ($stateProvider, $urlRouterProvider, $provide, $translateProvider, uibDatepickerConfig, uibDatepickerPopupConfig) {
 
         $urlRouterProvider.otherwise('/');
 
@@ -34,7 +34,7 @@ angular.module('App')
             });
 
         // 화면 전환 시 스크롤 초기화
-        $provide.decorator('$uiViewScroll', function ($delegate) {
+        $provide.decorator('$uiViewScroll', function () {
             return function (uiViewElement) {
                 window.scrollTo(0, 0);
             };
@@ -58,6 +58,9 @@ angular.module('App')
 
         // angular-ui-bootstrap default
         uibDatepickerConfig.showWeeks = false;
+        uibDatepickerPopupConfig.clearText = '초기화';
+        uibDatepickerPopupConfig.closeText = '닫기';
+        uibDatepickerPopupConfig.currentText = '오늘';
     }])
     .run(['$rootScope', '$state', 'authSvc', function ($rootScope, $state, authSvc) {
 
