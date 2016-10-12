@@ -78,10 +78,10 @@ public class UploadController {
 			int count = oracleRepository.countUploadedPreview(pageId, username);
 
 			if (uploadProgress.getUploadStatus() == UploadStatus.FINISH) {
-				return ApiResponse.builder().code(910).message(UploadStatus.FINISH.toString()).totalRecords(count)
+				return ApiResponse.builder().code(910).message(UploadStatus.FINISH.toString()).totalItems(count)
 						.build();
 			}
-			return ApiResponse.builder().totalRecords(count).build();
+			return ApiResponse.builder().totalItems(count).build();
 		} else {
 			List<AutoMappedMap> list = oracleRepository.selectUploadedPreview(pageId, username);
 			return ApiResponse.builder().value(list).build();

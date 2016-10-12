@@ -82,16 +82,16 @@ angular.module('App')
             $scope.membersPromise = apiSvc.getMembers(params);
             $scope.membersPromise.then(function (data) {
                 $scope.gridOptionsMembers.data = data.value;
-                $scope.gridOptionsMembers.totalItems = data.totalRecords;
+                $scope.gridOptionsMembers.totalItems = data.totalItems;
             });
         };
 
         self.checkUploadProgress = function () {
             uploadService.getUploadProgress().finally(function (data) {
                 $scope.uploadProgress = false;
-            }, function (totalRecords) {
+            }, function (totalItems) {
                 $scope.uploadProgress = true;
-                $scope.uploadedRecords = totalRecords;
+                $scope.uploadedItems = totalItems;
             });
         };
 

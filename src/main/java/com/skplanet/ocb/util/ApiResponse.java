@@ -11,6 +11,6 @@ public class ApiResponse {
 	private String message;
 	private String developerMessage;
 	private Object value;
-	private int totalRecords;
+	private int totalItems;
 
 }

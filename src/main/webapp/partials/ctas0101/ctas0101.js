@@ -51,7 +51,7 @@ angular.module('App')
             $scope.searchPromise = apiSvc.getCampaigns(params);
             $scope.searchPromise.then(function (data) {
                 $scope.gridOptionsList.data = data.value;
-                $scope.gridOptionsList.totalItems = data.totalRecords;
+                $scope.gridOptionsList.totalItems = data.totalItems;
             });
         };
 

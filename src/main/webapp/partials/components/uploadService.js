@@ -78,7 +78,7 @@ angular.module('App')
                     params: { pageId: $stateParams.pageId, countOnly: true },
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
-                    deferred.notify(resp.data.totalRecords);
+                    deferred.notify(resp.data.totalItems);
 
                     if (resp.data.code == 910) {
                         $interval.cancel(canceler);

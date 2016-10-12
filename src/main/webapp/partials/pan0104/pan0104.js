@@ -109,7 +109,7 @@ angular.module('App')
             $scope.targetsPromise = apiSvc.getExtinctionTargets(params);
             $scope.targetsPromise.then(function (data) {
                 $scope.gridOptionsTargets.data = data.value;
-                $scope.gridOptionsTargets.totalItems = data.totalRecords;
+                $scope.gridOptionsTargets.totalItems = data.totalItems;
             });
         };
 

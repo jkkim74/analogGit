@@ -57,7 +57,7 @@ public class ApiController {
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 		List<AutoMappedMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, true);
 		int count = oracleRepository.countMembers(uploadProgress);
-		return ApiResponse.builder().value(list).totalRecords(count).build();
+		return ApiResponse.builder().value(list).totalItems(count).build();
 	}
 
 	@GetMapping("/memberInfo")
@@ -201,7 +201,7 @@ public class ApiController {
 
 		List<AutoMappedMap> list = oracleRepository.selectExtinctionTargets(params);
 		int count = oracleRepository.countExtinctionTargets(params);
-		return ApiResponse.builder().value(list).totalRecords(count).build();
+		return ApiResponse.builder().value(list).totalItems(count).build();
 	}
 
 	@PostMapping("/noticeExtinction")
