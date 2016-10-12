@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .service('authSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$timeout', '$window', '$state', 'toastr', function ($log, $q, $http, $httpParamSerializer, $timeout, $window, $state, toastr) {
+    .service('authSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$timeout', '$window', '$state', 'toastr', '$uibModalStack', function ($log, $q, $http, $httpParamSerializer, $timeout, $window, $state, toastr, $uibModalStack) {
 
         var self = this;
 
@@ -49,6 +49,7 @@ angular.module('App')
             $window.sessionStorage.removeItem('access_token');
             $window.sessionStorage.removeItem('user_info');
             $state.go('index.home', null, { reload: true });
+            $uibModalStack.dismissAll();
         };
 
         this.isAuthenticated = function () {
