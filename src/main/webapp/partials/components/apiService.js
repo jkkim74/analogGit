@@ -79,9 +79,9 @@ angular.module('App')
         this.sendPts = new ApiPost('sendPts');
         this.createUser = new ApiPost('users');
         this.getUsers = new ApiGet('users');
-        this.saveUser = new ApiPost('userInfo');
-        this.saveAdmin = new ApiPost('admin');
-        this.saveAccess = new ApiPost('saveAccess');
+        this.saveUser = new ApiPost('users/info');
+        this.saveAdmin = new ApiPost('users/admin');
+        this.saveAccess = new ApiPost('users/access');
         this.extractMemberInfo = new ApiPost('extractMemberInfo');
         this.getExtinctionSummary = new ApiGet('extinctionSummary');
         this.getExtinctionTargets = new ApiGet('extinctionTargets');

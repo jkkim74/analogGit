@@ -67,7 +67,7 @@ angular.module('App')
 
             var deferred = $q.defer();
 
-            $http.get('/auth/me', {
+            $http.get('/api/users/me', {
                 headers: { 'Authorization': 'Bearer ' + self.getAccessToken() }
             }).then(function (resp) {
                 $window.sessionStorage.setItem('user_info', JSON.stringify(resp.data));
