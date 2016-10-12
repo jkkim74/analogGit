@@ -57,7 +57,9 @@ angular.module('App')
         };
 
         $scope.gridOptionsTargets = {
-            enableSorting: false,
+            enableRowSelection: true,
+            enableRowHeaderSelection: false,
+            multiSelect: false,
             useExternalPagination: true,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             columnDefs: [

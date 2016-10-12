@@ -29,8 +29,9 @@ angular.module('App')
         };
 
         $scope.gridOptionsMembers = {
-            enablePaginationControls: false,
-            paginationPageSize: 100,
+            enableRowSelection: true,
+            enableRowHeaderSelection: false,
+            multiSelect: false,
             useExternalPagination: true,
             columnDefs: [
                 { field: 'mbrId', displayName: '회원ID', cellTooltip: true, headerTooltip: true },
@@ -48,11 +49,9 @@ angular.module('App')
             ],
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
-                // $scope.gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-                //   $scope.loadMembers();
-                // });
                 gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-                    $scope.loadMembers();
+                    var offset = (newPage - 1) * pageSize;
+                    $scope.loadMembers(offset, pageSize);
                 });
             }
         };
@@ -74,11 +73,13 @@ angular.module('App')
             });
         };
 
-        $scope.loadMembers = function () {
-            var offset = ($scope.gridApi.pagination.getPage() - 1) * $scope.gridOptionsMembers.paginationPageSize;
-            var limit = $scope.gridOptionsMembers.paginationPageSize;
+        $scope.loadMembers = function (offset, limit) {
+            var params = {
+                offset: offset || 0,
+                limit: limit || $scope.gridOptionsMembers.paginationPageSize
+            }
 
-            $scope.membersPromise = apiSvc.getMembers({ offset: offset, limit: limit });
+            $scope.membersPromise = apiSvc.getMembers(params);
             $scope.membersPromise.then(function (data) {
                 $scope.gridOptionsMembers.data = data.value;
                 $scope.gridOptionsMembers.totalItems = data.totalRecords;

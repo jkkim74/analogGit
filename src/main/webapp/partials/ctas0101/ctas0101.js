@@ -16,6 +16,9 @@ angular.module('App')
         ];
 
         $scope.gridOptionsList = {
+            enableRowSelection: true,
+            enableRowHeaderSelection: false,
+            multiSelect: false,
             useExternalPagination: true,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             minRowsToShow: 16,
