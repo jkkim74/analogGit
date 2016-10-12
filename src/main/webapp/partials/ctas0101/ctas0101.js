@@ -117,7 +117,7 @@ angular.module('App')
             if ($scope.selectedOption.value === 'em') {
                 componentName = 'ctas0104Modal';
             } else {
-                componentName = 'ctas0102Modal';
+                componentName = 'ctas0105Modal';
             }
 
             $uibModal.open({

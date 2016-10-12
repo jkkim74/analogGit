@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('App')
-    .component('ctas0102Modal', {
-        templateUrl: 'partials/ctas0102/ctas0102.html',
+    .component('ctas0105Modal', {
+        templateUrl: 'partials/ctas0105/ctas0105.html',
         bindings: {
             resolve: '<',
             close: '&',
