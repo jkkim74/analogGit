@@ -48,7 +48,7 @@ angular.module('App')
         this.logout = function () {
             $window.sessionStorage.removeItem('access_token');
             $window.sessionStorage.removeItem('user_info');
-            $state.go('index.home');
+            $state.go('index.home', null, { reload: true });
         };
 
         this.isAuthenticated = function () {
