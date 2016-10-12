@@ -7,17 +7,15 @@
 						<div class="input-group">
 							<span class="input-group-addon">발송일자</span>
 							<input type="date" class="form-control" ng-model="periodFrom" uib-datepicker-popup is-open="popup.opened" ng-required="true">
-							<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup.opened=true"><i class="glyphicon glyphicon-calendar"></i></button></span>
+							<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup.opened=true"><i class="fa fa-calendar"></i></button></span>
 						</div>
 						<div class="input-group">
 							<input type="date" class="form-control" ng-model="periodTo" uib-datepicker-popup is-open="popup2.opened" ng-required="true">
-							<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup2.opened=true"><i class="glyphicon glyphicon-calendar"></i></button></span>
+							<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup2.opened=true"><i class="fa fa-calendar"></i></button></span>
 						</div>
 						<button type="button" class="btn btn-info" ng-click="search()">조회</button>
-						<div class="pull-right">
-							<button type="button" class="btn btn-primary" ng-click="visibleDetail=true; clear()">등록</button>
-							<button type="button" class="btn btn-danger" ng-click="">삭제</button>
-						</div>
+						<button type="button" class="btn btn-primary" ng-click="visibleDetail=true; clear()">등록</button>
+						<button type="button" class="btn btn-danger" ng-click="">삭제</button>
 					</form>
 					<div cg-busy="searchPromise">
 						<div class="grid-div" ui-grid="gridOptionsList" ui-grid-pagination ui-grid-resize-columns ui-grid-selection></div>
@@ -27,7 +25,7 @@
 				<div class="col-md-6" ng-show="visibleDetail">
 					<div class="row">
 						<div class="col-md-10">
-							<form class="form-horizontal" name="form">
+							<form class="form-horizontal" name="campaignForm">
 								<legend>캠페인 상세 정보</legend>
 
 								<div class="form-group">
@@ -54,15 +52,15 @@
 									<div class="col-sm-6">
 										<div class="input-group">
 											<input type="date" class="form-control" ng-model="campaign.mergeDt" ng-required="true" uib-datepicker-popup is-open="popup3.opened">
-											<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup3.opened=true"><i class="glyphicon glyphicon-calendar"></i></button></span>
+											<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup3.opened=true"><i class="fa fa-calendar"></i></button></span>
 										</div>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-4 control-label">캠페인 대상자 등록</label>
 									<div class="col-sm-8">
-										<button type="button" class="btn btn-default" ng-disabled="form.$invalid">CSV 파일 등록</button>
-										<button type="button" class="btn btn-default" ng-click="openTargeting()" ng-disabled="form.$invalid">타겟팅 조건 선택</button>
+										<button type="button" class="btn btn-default" ng-disabled="campaignForm.$invalid">CSV 파일 등록</button>
+										<button type="button" class="btn btn-default" ng-click="openTargeting()" ng-disabled="campaignForm.$invalid">타겟팅 조건 선택</button>
 									</div>
 								</div>
 								<div class="form-group">
