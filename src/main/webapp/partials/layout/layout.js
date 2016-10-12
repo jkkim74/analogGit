@@ -3,6 +3,7 @@
 angular.module('App')
     .controller('HeaderCtrl', ['$scope', 'authSvc', function ($scope, authSvc) {
 
+        $scope.isNavCollapsed = true
         $scope.isAuthenticated = authSvc.isAuthenticated();
 
         $scope.isAllowedPage = function (pageId) {

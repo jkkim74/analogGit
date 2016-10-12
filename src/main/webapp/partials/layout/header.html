@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation" ng-controller="HeaderCtrl">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation" ng-controller="HeaderCtrl" ng-cloak>
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
@@ -11,7 +11,7 @@
 			<span ng-hide="isAuthenticated" class="navbar-brand">개인정보 조회 시스템</span>
 		</div>
 
-		<div class="collapse navbar-collapse" ng-init="isNavCollapsed=true" uib-collapse="isNavCollapsed">
+		<div class="collapse navbar-collapse" uib-collapse="isNavCollapsed" ng-hide="isNavCollapsed">
 			<ul class="nav navbar-nav">
 				<li ng-show="isAllowedPage('pan0101')" ui-sref-active="active" uib-tooltip="멤버 ID 일괄 전환" tooltip-placement="bottom"><a ui-sref="index.page({pageId: 'pan0101'})">멤버 ID 일괄 전환</a></li>
 				<li ng-show="isAllowedPage('pan0102')" ui-sref-active="active" uib-tooltip="고객 정보 및 장기 거래 실적 조회" tooltip-placement="bottom"><a ui-sref="index.page({pageId: 'pan0102'})">고객 정보 및 장기 거래 실적 조회</a></li>
