@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import com.skplanet.ocb.security.UserInfo;
 import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.model.UploadStatus;
 
+@Repository
 public interface MysqlRepository {
 
 	AutoMappedMap selectTest(Map<String, Object> params);

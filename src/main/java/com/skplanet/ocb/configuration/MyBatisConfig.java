@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.TypeAliasRegistry;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.stereotype.Repository;
 
 import com.skplanet.ocb.security.UserInfo;
 import com.skplanet.ocb.util.AutoMappedMap;
@@ -26,10 +28,16 @@ public class MyBatisConfig {
 	public org.apache.ibatis.session.Configuration configuration() {
 		org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
 		config.setMapUnderscoreToCamelCase(true);
-		config.getTypeAliasRegistry().registerAlias(AutoMappedMap.class);
-		config.getTypeAliasRegistry().registerAlias(UserInfo.class);
-		config.getTypeAliasRegistry().registerAliases("com.skplanet.ctas.model");
-		config.getTypeAliasRegistry().registerAliases("com.skplanet.pandora.model");
+
+		TypeAliasRegistry registry = config.getTypeAliasRegistry();
+		registry.registerAlias(AutoMappedMap.class);
+		registry.registerAlias(UserInfo.class);
+
+		String aliasPackages = "com.skplanet.ctas.model;com.skplanet.pandora.model";
+		for (String aliases : aliasPackages.split(";")) {
+			registry.registerAliases(aliases);
+		}
+
 		return config;
 	}
 
@@ -71,6 +79,7 @@ public class MyBatisConfig {
 	@Bean
 	public MapperScannerConfigurer mysqlMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
+		configurer.setAnnotationClass(Repository.class);
 		configurer.setBasePackage("com.skplanet.ctas.repository.mysql;com.skplanet.pandora.repository.mysql");
 		configurer.setSqlSessionFactoryBeanName("mysqlSqlSessionFactory");
 		return configurer;
@@ -86,6 +95,7 @@ public class MyBatisConfig {
 	@Bean
 	public MapperScannerConfigurer oracleMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
+		configurer.setAnnotationClass(Repository.class);
 		configurer.setBasePackage("com.skplanet.ctas.repository.oracle;com.skplanet.pandora.repository.oracle");
 		configurer.setSqlSessionFactoryBeanName("oracleSqlSessionFactory");
 		return configurer;
@@ -101,6 +111,7 @@ public class MyBatisConfig {
 	@Bean
 	public MapperScannerConfigurer querycacheMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
+		configurer.setAnnotationClass(Repository.class);
 		configurer.setBasePackage("com.skplanet.ctas.repository.querycache;com.skplanet.pandora.repository.querycache");
 		configurer.setSqlSessionFactoryBeanName("querycacheSqlSessionFactory");
 		return configurer;
