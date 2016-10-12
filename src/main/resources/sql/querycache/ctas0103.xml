@@ -9,7 +9,7 @@
 			<if test="true">AND OCB_MKTNG_AGRMT_YN = '1'  </if>
 			<if test="gndrFgCd != null and gndrFgCd != ''">AND GNDR_FG_CD = #{gndrFgCd}  </if>
 			<if test="age != null and age != ''">
-				<foreach item="item" collection="age.split('-')" open="AND AGE BETWEEN" separator="AND"> TO_NUMBER(#{item}) </foreach>
+				<foreach collection="age.split('-')" item="item" open="AND AGE BETWEEN" separator="AND"> TO_NUMBER(#{item}) </foreach>
 			</if>
 			<if test="homeHjdLgrpCd != null and homeHjdLgrpCd != ''">AND HOME_HJD_LGRP_CD = #{homeHjdLgrpCd} </if>
 			<if test="homeHjdMgrpCd != null and homeHjdMgrpCd != ''">AND HOME_HJD_MGRP_CD = #{homeHjdMgrpCd} </if>
@@ -66,7 +66,7 @@
 			<if test="onlnMth07FnlYachvDt != null and onlnMth07FnlYachvDt != ''">AND ONLN_MTH07_FNL_YACHV_DT &gt;= #{onlnMth07FnlYachvDt} </if>
 			<if test="onlnMth07CpnFnlYachvDt != null and onlnMth07CpnFnlYachvDt != ''">AND ONLN_MTH07_CPN_FNL_YACHV_DT &gt;= #{onlnMth07CpnFnlYachvDt} </if>
 			<if test="avlPnt != null and avlPnt != ''">
-				<foreach item="item" collection="avlPnt.split('-')" open="AND AVL_PNT BETWEEN" separator="AND"> TO_NUMBER(#{item}) </foreach>
+				<foreach collection="avlPnt.split('-')" item="item" open="AND AVL_PNT BETWEEN" separator="AND"> TO_NUMBER(#{item}) </foreach>
 			</if>
 		</where>
 	</select>

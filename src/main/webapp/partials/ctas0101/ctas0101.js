@@ -63,10 +63,17 @@ angular.module('App')
                 mergeDt: $filter('date')(campaign.mergeDt, 'yyyyMMdd')
             });
 
+            var deferred = $q.defer();
+
             $scope.savePromise = apiSvc.saveCampaign(campaign);
             $scope.savePromise.then(function (data) {
                 $scope.campaign.cmpgnId = data.value.cmpgnId;
+                deferred.resolve();
+            }, function () {
+                deferred.reject();
             });
+
+            return deferred.promise;
         };
 
         $scope.gridOptionsCellList = {
@@ -85,15 +92,20 @@ angular.module('App')
         };
 
         $scope.openTargeting = function () {
-            var modalInstance = $uibModal.open({
-                component: 'ctas0103Modal',
-                size: 'lg',
-                resolve: {}
-            });
+            $scope.saveCampaign().then(function () {
+                var modalInstance = $uibModal.open({
+                    component: 'ctas0103Modal',
+                    size: 'lg',
+                    resolve: {
+                        campaign: function () { return $scope.campaign; },
+                        targetingInfo: function () { return $scope.targetingInfo; }
+                    }
+                });
 
-            modalInstance.result.then(function (selectedItem) {
-                $log.debug(selectedItem);
-                $scope.selectedTargeting = selectedItem;
+                modalInstance.result.then(function (selectedItem) {
+                    $log.debug(selectedItem);
+                    $scope.targetingInfo = selectedItem;
+                });
             });
         };
 
@@ -109,7 +121,7 @@ angular.module('App')
                 component: componentName,
                 resolve: {
                     notiType: function () { return $scope.selectedOption.value; },
-                    selectedTargeting: function () { return $scope.selectedTargeting; }
+                    targetingInfo: function () { return $scope.targetingInfo; }
                 }
             });
         };

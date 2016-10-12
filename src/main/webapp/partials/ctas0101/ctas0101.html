@@ -1,6 +1,5 @@
 <div class="container-fluid section-body">
-	<ng-include src="'partials/layout/sidebar.html'"></ng-include>
-	<div class="col-md-11 section-content-wrapper">
+	<div class="col-md-12 section-content-wrapper">
 		<div class="section-content">
 			<div class="row">
 				<div class="col-md-6">
@@ -28,7 +27,7 @@
 				<div class="col-md-6" ng-show="visibleDetail">
 					<div class="row">
 						<div class="col-md-10">
-							<form class="form-horizontal" name="campaignForm">
+							<form class="form-horizontal" name="form">
 								<legend>캠페인 상세 정보</legend>
 
 								<div class="form-group">
@@ -47,14 +46,14 @@
 									<label class="col-sm-4 control-label">캠페인 발송 채널</label>
 									<div class="col-sm-6">
 										<select class="form-control" ng-init="campaign.cmpgnSndChnlFgCd = selectOptions[0]" ng-options="option.label for option in selectOptions"
-											ng-model="campaign.cmpgnSndChnlFgCd"></select>
+											ng-model="campaign.cmpgnSndChnlFgCd" ng-required="true"></select>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-4 control-label">머지일자</label>
 									<div class="col-sm-6">
 										<div class="input-group">
-											<input type="date" class="form-control" ng-model="campaign.mergeDt" uib-datepicker-popup is-open="popup3.opened">
+											<input type="date" class="form-control" ng-model="campaign.mergeDt" ng-required="true" uib-datepicker-popup is-open="popup3.opened">
 											<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup3.opened=true"><i class="glyphicon glyphicon-calendar"></i></button></span>
 										</div>
 									</div>
@@ -62,8 +61,8 @@
 								<div class="form-group">
 									<label class="col-sm-4 control-label">캠페인 대상자 등록</label>
 									<div class="col-sm-8">
-										<button type="button" class="btn btn-default">CSV 파일 등록</button>
-										<button type="button" class="btn btn-default" ng-click="openTargeting()">타겟팅 조건 선택</button>
+										<button type="button" class="btn btn-default" ng-disabled="form.$invalid">CSV 파일 등록</button>
+										<button type="button" class="btn btn-default" ng-click="openTargeting()" ng-disabled="form.$invalid">타겟팅 조건 선택</button>
 									</div>
 								</div>
 								<div class="form-group">
@@ -80,7 +79,7 @@
 
 						<div class="col-md-2">
 							<form class="form-inline text-right">
-								<button type="button" class="btn btn-success" ng-click="saveCampaign()" ng-disabled="campaignForm.$invalid">저장</button>
+								<button type="button" class="btn btn-success" ng-click="saveCampaign()" ng-disabled="!campaign.cmpgnNm">저장</button>
 								<button type="button" class="btn btn-danger" ng-click="visibleDetail=false; clear()">취소</button>
 							</form>
 						</div>

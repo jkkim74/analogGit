@@ -9,9 +9,20 @@
 	</select>
 
 	<insert id="insertCampaignTargetingInfo" parameterType="map">
-		INSERT /*+ APPEND_VALUES */
+		INSERT /*+ APPEND_VALUES */ ALL
+		<foreach collection="targetingInfo" item="value" index="key" separator=" ">
+			INTO WEB_CMPGN_TGTNG_INFO ( CMPGN_ID, TGTNG_CNDTN_CLMN_NM, TGTNG_CNDTN_CLMN_VAL, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
+				VALUES ( #{cmpgnId}, #{key}, #{value}, #{username}, SYSDATE, #{username}, SYSDATE )
+		</foreach>
+		SELECT * FROM DUAL
+	</insert>
+	<insert id="insertCampaignTargetingInfo" parameterType="map" databaseId="hsql">
+		INSERT
 		INTO WEB_CMPGN_TGTNG_INFO ( CMPGN_ID, TGTNG_CNDTN_CLMN_NM, TGTNG_CNDTN_CLMN_VAL, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
-		VALUES ( #{cmpgnId}, #{tgtngCndtnClmnNm}, #{tgtngCndtnClmnVal}, #{username}, SYSDATE, #{username}, SYSDATE )
+		VALUES
+		<foreach collection="targetingInfo" item="value" index="key" separator=",">
+			( #{cmpgnId}, #{key}, #{value}, #{username}, SYSDATE, #{username}, SYSDATE )
+		</foreach>
 	</insert>
 	
 	<delete id="deleteCampaignTargetingInfo" parameterType="map">

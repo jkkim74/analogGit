@@ -54,8 +54,8 @@
 	<insert id="insertAuthorities" parameterType="map">
 		INSERT INTO AUTHORITIES (USERNAME, AUTHORITY)
 		VALUES
-		<foreach item="authority" collection="authorities.split(',')" separator=",">
-			( #{username}, #{authority} )
+		<foreach collection="authorities.split(',')" item="item" separator=",">
+			( #{username}, #{item} )
 		</foreach>
 	</insert>
 
@@ -63,16 +63,16 @@
 		DELETE FROM AUTHORITIES
 		WHERE USERNAME = #{username}
 		AND AUTHORITY IN
-		<foreach item="authority" collection="authorities.split(',')" separator="," open="(" close=")">
-			#{authority}
+		<foreach collection="authorities.split(',')" item="item" separator="," open="(" close=")">
+			#{item}
 		</foreach> 
 	</delete>
 
 	<insert id="insertAccesses" parameterType="map">
 		INSERT INTO PAGE_ACCESS (USERNAME, PAGE_ID)
 		VALUES
-		<foreach item="pageId" collection="pageList.split(',')" separator=",">
-			( #{username}, UPPER(#{pageId}) )
+		<foreach collection="pageList.split(',')" item="item" separator=",">
+			( #{username}, UPPER(#{item}) )
 		</foreach>
 	</insert>
 
@@ -80,8 +80,8 @@
 		DELETE FROM PAGE_ACCESS
 		WHERE USERNAME = #{username}
 		AND PAGE_ID IN
-		<foreach item="pageId" collection="pageList.split(',')" separator="," open="(" close=")">
-			UPPER(#{pageId})
+		<foreach collection="pageList.split(',')" item="item" separator="," open="(" close=")">
+			UPPER(#{item})
 		</foreach>
 	</delete>
 

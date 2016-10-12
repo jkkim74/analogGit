@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import com.skplanet.pandora.model.AutoMappedMap;
 import com.skplanet.pandora.model.UploadProgress;
 
+@Repository("pandoraOracleRepository")
 public interface OracleRepository {
 
 	AutoMappedMap selectTest(Map<String, Object> params);

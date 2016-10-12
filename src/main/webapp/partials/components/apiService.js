@@ -39,7 +39,9 @@ angular.module('App')
                         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
                     }
                 }).then(function (resp) {
-                    toastr.success((resp.data && resp.data.message) || resp.config.url);
+                    if (resp.data && resp.data.message) {
+                        toastr.success((resp.data && resp.data.message) || resp.config.url);
+                    }
                     deferred.resolve(resp.data);
                 }).catch(function (resp) {
                     $log.error(resp);
@@ -88,6 +90,8 @@ angular.module('App')
         // ctas
         this.getCampaigns = new ApiGet('campaigns');
         this.saveCampaign = new ApiPost('campaigns');
+        this.getCampaignTargetingInfo = new ApiGet('campaigns/targeting');
+        this.saveCampaignTargetingInfo = new ApiPost('campaigns/targeting');
         this.requestTransmission = new ApiPost('requestTransmission');
 
     }]);

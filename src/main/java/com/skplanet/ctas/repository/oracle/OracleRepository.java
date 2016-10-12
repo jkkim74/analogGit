@@ -3,6 +3,7 @@ package com.skplanet.ctas.repository.oracle;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.skplanet.pandora.model.AutoMappedMap;
@@ -19,7 +20,7 @@ public interface OracleRepository {
 	int upsertCampaign(Map<String, Object> params);
 
 	int deleteCampaign(Map<String, Object> params);
-	
+
 	List<AutoMappedMap> selectCampaignDetail(Map<String, Object> params);
 
 	int insertCampaignDetail(Map<String, Object> params);
@@ -27,9 +28,10 @@ public interface OracleRepository {
 	int deleteCampaignDetail(Map<String, Object> params);
 
 	List<AutoMappedMap> selectCampaignTargetingInfo(Map<String, Object> params);
-	
-	int insertCampaignTargetingInfo(Map<String, Object> params);
 
-	int deleteCampaignTargetingInfo(Map<String, Object> params);
+	int insertCampaignTargetingInfo(@Param("username") String username, @Param("cmpgnId") String campaignId,
+			@Param("targetingInfo") Map<String, Object> targetingInfo);
+
+	int deleteCampaignTargetingInfo(@Param("cmpgnId") String campaignId);
 
 }

@@ -8,11 +8,12 @@ angular.module('App')
             close: '&',
             dismiss: '&'
         },
-        controller: function () {
+        controller: function (apiSvc) {
             var self = this;
 
             self.$onInit = function () {
-                self.options = {};
+                self.campaign = self.resolve.campaign;
+                self.options = angular.extend({}, self.resolve.targetingInfo);
                 self.months = [];
 
                 for (var i = 0; i < 7; i++ , month--) {
@@ -28,7 +29,11 @@ angular.module('App')
             };
 
             self.ok = function () {
-                self.close({ $value: self.options });
+                var params = angular.extend({ cmpgnId: self.campaign.cmpgnId }, self.options);
+
+                apiSvc.saveCampaignTargetingInfo(params).then(function () {
+                    self.close({ $value: self.options });
+                });
             };
         }
     });

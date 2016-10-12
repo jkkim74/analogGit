@@ -47,7 +47,26 @@ public class ApiController {
 
 		oracleRepository.upsertCampaign(params);
 
-		return ApiResponse.builder().code(0).value(params).build();
+		return ApiResponse.builder().message("저장 완료").value(params).build();
+	}
+
+	@GetMapping("/campaigns/targeting")
+	public ApiResponse getCampaignTargetingInfo(@RequestParam Map<String, Object> params) {
+		List<AutoMappedMap> list = oracleRepository.selectCampaignTargetingInfo(params);
+		return ApiResponse.builder().value(list).build();
+	}
+
+	@PostMapping("/campaigns/targeting")
+	@Transactional("oracleTxManager")
+	public ApiResponse saveCampaignTargetingInfo(@RequestParam Map<String, Object> params) {
+		String username = AuthController.getUserInfo().getUsername();
+		String campaignId = (String) params.get("cmpgnId");
+		params.remove("cmpgnId");
+
+		oracleRepository.deleteCampaignTargetingInfo(campaignId);
+		oracleRepository.insertCampaignTargetingInfo(username, campaignId, params);
+
+		return ApiResponse.builder().message("타게팅 정보 저장 완료").build();
 	}
 
 	@PostMapping("/requestTransmission")
