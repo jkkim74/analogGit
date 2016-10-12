@@ -25,7 +25,7 @@ import com.skplanet.pandora.util.Constant;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("api/upload")
+@RequestMapping("api/files")
 @Slf4j
 public class UploadController {
 

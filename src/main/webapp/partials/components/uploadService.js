@@ -8,7 +8,7 @@ angular.module('App')
 
             if (params.file) {
                 Upload.upload({
-                    url: '/api/upload',
+                    url: '/api/files',
                     data: angular.extend({ pageId: $stateParams.pageId }, params),
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
@@ -43,7 +43,7 @@ angular.module('App')
             var canceler = $interval(uploadedPreview, 500);
 
             function uploadedPreview() {
-                $http.get('/api/upload', {
+                $http.get('/api/files', {
                     params: { pageId: $stateParams.pageId },
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
