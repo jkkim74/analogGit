@@ -1,6 +1,7 @@
 .navbar-default {
     background-color: white;
     height:5vh;
+    font-size: 1vw;
 }
 .navbar-default .navbar-nav > li > a:hover {
     color: #f25053;
