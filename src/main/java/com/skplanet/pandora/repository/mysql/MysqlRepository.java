@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.skplanet.pandora.model.AutoMappedMap;
+import com.skplanet.ocb.security.UserInfo;
+import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.model.UploadStatus;
-import com.skplanet.pandora.model.UserInfo;
 
 public interface MysqlRepository {
 

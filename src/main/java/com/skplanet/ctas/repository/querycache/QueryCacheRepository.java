@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.skplanet.pandora.model.AutoMappedMap;
+import com.skplanet.ocb.util.AutoMappedMap;
 
 @Repository("ctasQueryCacheRepository")
 public interface QueryCacheRepository {

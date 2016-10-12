@@ -14,9 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.skplanet.pandora.exception.BizException;
+import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.util.Helper;
 import com.skplanet.pandora.util.Constant;
-import com.skplanet.pandora.util.Helper;
 
 @Service
 public class IdmsService {

@@ -1,4 +1,4 @@
-package com.skplanet.pandora.util;
+package com.skplanet.ocb.util;
 
 import java.util.Date;
 import java.util.Locale;
@@ -12,6 +12,8 @@ import kr.co.skplanet.crypto.EncryptCustomerInfo;
 
 public final class Helper {
 
+	private static final String EMREJECT_PW = "9gPXBD95qbDedk5PaRLE";
+
 	private static DateFormatter dfAsDate = new DateFormatter("yyyyMMdd");
 	private static DateFormatter dfAsDatetime = new DateFormatter("yyyyMMddHHmmss");
 
@@ -21,8 +23,8 @@ public final class Helper {
 
 	public static String nowDateTimeString() {
 		return dfAsDatetime.print(new Date(), Locale.getDefault());
-	}	
-	
+	}
+
 	public static String yesterdayDateString() {
 		// now - 1day(24*60*60*1000)
 		Date yesterday = new Date(System.currentTimeMillis() - 86400000);
@@ -48,7 +50,7 @@ public final class Helper {
 		String emrejectKey = Resources.getResource("config/emreject.key").getPath();
 
 		try {
-			String[] values = EncryptCustomerInfo.getValues(emrejectKey, Constant.EMREJECT_PW);
+			String[] values = EncryptCustomerInfo.getValues(emrejectKey, EMREJECT_PW);
 
 			String key = values[0];
 			String iv = values[1];

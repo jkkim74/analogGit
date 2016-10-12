@@ -1,4 +1,4 @@
-package com.skplanet.pandora.configuration;
+package com.skplanet.ocb.configuration;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -16,6 +16,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
+import com.skplanet.ocb.security.UserInfo;
+import com.skplanet.ocb.util.AutoMappedMap;
+
 @Configuration
 public class MyBatisConfig {
 
@@ -23,6 +26,9 @@ public class MyBatisConfig {
 	public org.apache.ibatis.session.Configuration configuration() {
 		org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
 		config.setMapUnderscoreToCamelCase(true);
+		config.getTypeAliasRegistry().registerAlias(AutoMappedMap.class);
+		config.getTypeAliasRegistry().registerAlias(UserInfo.class);
+		config.getTypeAliasRegistry().registerAliases("com.skplanet.ctas.model");
 		config.getTypeAliasRegistry().registerAliases("com.skplanet.pandora.model");
 		return config;
 	}
@@ -65,7 +71,7 @@ public class MyBatisConfig {
 	@Bean
 	public MapperScannerConfigurer mysqlMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
-		configurer.setBasePackage("com.skplanet.ctas.repository.mysql,com.skplanet.pandora.repository.mysql");
+		configurer.setBasePackage("com.skplanet.ctas.repository.mysql;com.skplanet.pandora.repository.mysql");
 		configurer.setSqlSessionFactoryBeanName("mysqlSqlSessionFactory");
 		return configurer;
 	}
@@ -80,7 +86,7 @@ public class MyBatisConfig {
 	@Bean
 	public MapperScannerConfigurer oracleMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
-		configurer.setBasePackage("com.skplanet.ctas.repository.oracle,com.skplanet.pandora.repository.oracle");
+		configurer.setBasePackage("com.skplanet.ctas.repository.oracle;com.skplanet.pandora.repository.oracle");
 		configurer.setSqlSessionFactoryBeanName("oracleSqlSessionFactory");
 		return configurer;
 	}
@@ -95,7 +101,7 @@ public class MyBatisConfig {
 	@Bean
 	public MapperScannerConfigurer querycacheMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
-		configurer.setBasePackage("com.skplanet.ctas.repository.querycache,com.skplanet.pandora.repository.querycache");
+		configurer.setBasePackage("com.skplanet.ctas.repository.querycache;com.skplanet.pandora.repository.querycache");
 		configurer.setSqlSessionFactoryBeanName("querycacheSqlSessionFactory");
 		return configurer;
 	}

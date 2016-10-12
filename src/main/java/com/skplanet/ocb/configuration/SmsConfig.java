@@ -1,4 +1,4 @@
-package com.skplanet.pandora.configuration;
+package com.skplanet.ocb.configuration;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -14,13 +14,13 @@ import skp.bss.msg.rms.front.HttpMessageApi;
 @Configuration
 public class SmsConfig {
 
-	@Value("${pandora.sms.url}")
+	@Value("${sms.url}")
 	private String url;
 
-	@Value("${pandora.sms.serviceId}")
+	@Value("${sms.serviceId}")
 	private String serviceId;
 
-	@Value("${pandora.sms.appKey}")
+	@Value("${sms.appKey}")
 	private String appKey;
 
 	@Bean

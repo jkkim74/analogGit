@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.skplanet.ctas.repository.oracle.OracleRepository;
 import com.skplanet.ctas.repository.querycache.QueryCacheRepository;
+import com.skplanet.ocb.util.ApiResponse;
+import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.pandora.controller.AuthController;
-import com.skplanet.pandora.model.ApiResponse;
-import com.skplanet.pandora.model.AutoMappedMap;
 
 @RestController("ctasApiController")
 @RequestMapping("api")

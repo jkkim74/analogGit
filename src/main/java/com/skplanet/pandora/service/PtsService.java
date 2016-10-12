@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.io.Resources;
 import com.ptsapi.client.ApiClient;
-import com.skplanet.pandora.exception.BizException;
-import com.skplanet.pandora.model.AutoMappedMap;
+import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.util.AutoMappedMap;
+import com.skplanet.ocb.util.Helper;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.util.CsvCreatorTemplate;
-import com.skplanet.pandora.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
 

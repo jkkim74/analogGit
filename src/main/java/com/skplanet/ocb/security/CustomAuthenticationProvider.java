@@ -1,4 +1,4 @@
-package com.skplanet.pandora.security;
+package com.skplanet.ocb.security;
 
 import java.util.Arrays;
 

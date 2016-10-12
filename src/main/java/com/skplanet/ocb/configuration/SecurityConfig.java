@@ -1,4 +1,4 @@
-package com.skplanet.pandora.configuration;
+package com.skplanet.ocb.configuration;
 
 import javax.sql.DataSource;
 
@@ -17,29 +17,30 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.ldap.authentication.NullLdapAuthoritiesPopulator;
 
-import com.skplanet.pandora.security.CustomAuthenticationProvider;
-import com.skplanet.pandora.security.CustomUserDetailsContextMapper;
-import com.skplanet.pandora.util.Constant;
+import com.skplanet.ocb.security.CustomAuthenticationProvider;
+import com.skplanet.ocb.security.CustomUserDetailsContextMapper;
 
 @Configuration
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	public static final String LDAP_USER_SEARCH_FILTER = "(&(objectClass=*)(CN={0}))";
+
 	@Autowired
 	@Qualifier("mysqlDataSource")
 	private DataSource mysqlDataSource;
 
-	@Value("${pandora.ldap.url}")
+	@Value("${ldap.url}")
 	private String ldapUrl;
 
-	@Value("${pandora.ldap.baseDn}")
+	@Value("${ldap.baseDn}")
 	private String ldapBaseDn;
 
-	@Value("${pandora.ldap.username}")
+	@Value("${ldap.username}")
 	private String ldapUsername;
 
-	@Value("${pandora.ldap.password}")
+	@Value("${ldap.password}")
 	private String ldapPassword;
 
 	@Autowired
@@ -49,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		auth.authenticationProvider(authenticationProvider);
 
-		auth.ldapAuthentication().userSearchFilter(Constant.LDAP_USER_SEARCH_FILTER).userSearchBase(ldapBaseDn)
+		auth.ldapAuthentication().userSearchFilter(LDAP_USER_SEARCH_FILTER).userSearchBase(ldapBaseDn)
 				.ldapAuthoritiesPopulator(new NullLdapAuthoritiesPopulator())
 				.userDetailsContextMapper(userDetailsContextMapper).contextSource(ldapContextSource());
 

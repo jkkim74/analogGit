@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
-import com.skplanet.pandora.exception.BizException;
+import com.skplanet.ocb.exception.BizException;
 
 @Service
 @SuppressWarnings("deprecation")
@@ -26,7 +26,7 @@ public class MailService {
 	@Autowired
 	private VelocityEngine velocityEngine;
 
-	@Value("${pandora.mail.from}")
+	@Value("${mail.from}")
 	private String from;
 
 	@Async

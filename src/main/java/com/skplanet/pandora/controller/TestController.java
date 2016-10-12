@@ -1,7 +1,6 @@
 package com.skplanet.pandora.controller;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.skplanet.pandora.model.AutoMappedMap;
+import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;

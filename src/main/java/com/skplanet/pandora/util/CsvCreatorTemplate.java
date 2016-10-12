@@ -11,7 +11,7 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
-import com.skplanet.pandora.exception.BizException;
+import com.skplanet.ocb.exception.BizException;
 
 /**
  * 대량 데이터를 끊어서 파일에 쓰기 위한 용도

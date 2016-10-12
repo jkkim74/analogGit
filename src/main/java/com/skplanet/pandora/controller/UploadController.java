@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.skplanet.pandora.exception.BizException;
-import com.skplanet.pandora.model.ApiResponse;
-import com.skplanet.pandora.model.AutoMappedMap;
+import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.util.ApiResponse;
+import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.model.UploadStatus;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;

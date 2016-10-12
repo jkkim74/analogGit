@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.skplanet.pandora.model.ApiResponse;
-import com.skplanet.pandora.model.UserInfo;
+import com.skplanet.ocb.security.UserInfo;
+import com.skplanet.ocb.util.ApiResponse;
 import com.skplanet.pandora.service.UserService;
 
 @RestController

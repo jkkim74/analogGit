@@ -1,4 +1,4 @@
-package com.skplanet.pandora.security;
+package com.skplanet.ocb.security;
 
 import java.util.Collection;
 
@@ -10,8 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.ldap.userdetails.UserDetailsContextMapper;
 import org.springframework.stereotype.Component;
-
-import com.skplanet.pandora.model.UserInfo;
 
 @Component
 public class CustomUserDetailsContextMapper implements UserDetailsContextMapper {

@@ -25,7 +25,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.CaseFormat;
-import com.skplanet.pandora.exception.BizException;
+import com.skplanet.ocb.exception.BizException;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.model.UploadStatus;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;

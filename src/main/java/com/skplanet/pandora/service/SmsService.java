@@ -14,8 +14,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
-import com.skplanet.pandora.exception.BizException;
-import com.skplanet.pandora.model.AutoMappedMap;
+import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.util.AutoMappedMap;
 
 import lombok.extern.slf4j.Slf4j;
 import skp.bss.msg.rms.front.HttpMessageApi;
@@ -33,13 +33,13 @@ public class SmsService {
 	@Autowired
 	private VelocityEngine velocityEngine;
 
-	@Value("${pandora.sms.serviceId}")
+	@Value("${sms.serviceId}")
 	private String serviceId;
 
-	@Value("${pandora.sms.appKey}")
+	@Value("${sms.appKey}")
 	private String appKey;
 
-	@Value("${pandora.sms.sender}")
+	@Value("${sms.sender}")
 	private String sender;
 
 	public void send(List<AutoMappedMap> receivers) {

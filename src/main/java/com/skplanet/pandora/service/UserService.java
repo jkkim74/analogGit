@@ -18,10 +18,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.skplanet.pandora.exception.BizException;
-import com.skplanet.pandora.model.UserInfo;
+import com.skplanet.ocb.configuration.SecurityConfig;
+import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.security.CustomUserDetailsContextMapper;
+import com.skplanet.ocb.security.UserInfo;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
-import com.skplanet.pandora.security.CustomUserDetailsContextMapper;
 import com.skplanet.pandora.util.Constant;
 
 @Service
@@ -36,7 +37,7 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private MysqlRepository mysqlRepository;
 
-	@Value("${pandora.ldap.baseDn}")
+	@Value("${ldap.baseDn}")
 	private String ldapBaseDn;
 
 	private ContextMapper<UserInfo> nullContextMapper = new AbstractContextMapper<UserInfo>() {
@@ -76,7 +77,7 @@ public class UserService implements UserDetailsService {
 	 */
 	private void throwIfNotExistInLdap(final String username) {
 		try {
-			ldapTemplate.searchForObject(ldapBaseDn, Constant.LDAP_USER_SEARCH_FILTER.replace("{0}", username),
+			ldapTemplate.searchForObject(ldapBaseDn, SecurityConfig.LDAP_USER_SEARCH_FILTER.replace("{0}", username),
 					nullContextMapper);
 		} catch (IncorrectResultSizeDataAccessException e) {
 			throw new BizException("유효하지 않은 Pnet ID입니다");
@@ -85,7 +86,8 @@ public class UserService implements UserDetailsService {
 
 	private UserInfo getUserFromLdap(final String username) {
 		try {
-			return ldapTemplate.searchForObject(ldapBaseDn, Constant.LDAP_USER_SEARCH_FILTER.replace("{0}", username),
+			return ldapTemplate.searchForObject(ldapBaseDn,
+					SecurityConfig.LDAP_USER_SEARCH_FILTER.replace("{0}", username),
 					new AbstractContextMapper<UserInfo>() {
 						public UserInfo doMapFromContext(DirContextOperations ctx) {
 							return (UserInfo) userDetailsContextMapper.mapUserFromContext(ctx, username, null);

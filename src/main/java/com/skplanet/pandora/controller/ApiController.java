@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.skplanet.pandora.exception.BizException;
-import com.skplanet.pandora.model.ApiResponse;
-import com.skplanet.pandora.model.AutoMappedMap;
+import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.security.UserInfo;
+import com.skplanet.ocb.util.ApiResponse;
+import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.model.UploadProgress;
-import com.skplanet.pandora.model.UserInfo;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.pandora.service.NoticeService;
