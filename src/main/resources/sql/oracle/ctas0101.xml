@@ -54,18 +54,18 @@
 	</select>
 
 	<select id="nextCampaignId" parameterType="map" resultType="string">
-		SELECT 'CM' || TO_CHAR(SUBSTR(NVL(MAX(CMPGN_ID), 'CM00000'), 3) + 1, '09999') FROM WEB_CMPGN_MST
+		SELECT 'CM' || TO_CHAR(SUBSTR(NVL(MAX(CMPGN_ID), 'CM00000'), 3) + 1, 'FM09999') FROM WEB_CMPGN_MST
 	</select>
 	<select id="nextCampaignId" parameterType="map" resultType="string" databaseId="hsql">
 		SELECT ( IFNULL(MAX(CMPGN_ID),'0') + 1 ) || '' FROM WEB_CMPGN_MST
 	</select>
 
 	<update id="upsertCampaign" parameterType="map">
-		INSERT /*+ APPEND_VALUES */
-		INTO WEB_CMPGN_MST ( CMPGN_ID, CMPGN_NM, MERGE_DT, CMPGN_SND_CHNL_FG_CD, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
-		VALUES ( #{cmpgnId}, #{cmpgnNm}, #{mergeDt}, #{cmpgnSndChnlFgCd}, '01', #{username}, SYSDATE, #{username}, SYSDATE )
-		ON DUPLICATE KEY
-		<trim prefix="UPDATE" suffixOverrides=",">
+		MERGE INTO WEB_CMPGN_MST A
+			USING( SELECT #{cmpgnId} AS CMPGN_ID FROM DUAL) B
+			ON( A.CMPGN_ID = B.CMPGN_ID )
+		WHEN MATCHED THEN
+		<trim prefix="UPDATE SET " suffixOverrides=",">
 			<if test="cmpgnNm != null and cmpgnNm != ''">CMPGN_NM = #{cmpgnNm},</if>
 			<if test="mergeDt != null and mergeDt != ''">MERGE_DT = #{mergeDt},</if>
 			<if test="sndDt != null and sndDt != ''">SND_DT = #{sndDt},</if>
@@ -77,6 +77,9 @@
 			<if test="username != null and username != ''">UPD_ID = #{username},</if>
 			UPT_DTTM = SYSDATE,
 		</trim>
+		WHEN NOT MATCHED THEN
+			INSERT ( CMPGN_ID, CMPGN_NM, MERGE_DT, OBJ_REG_FG_CD, CMPGN_SND_CHNL_FG_CD, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
+			VALUES ( #{cmpgnId}, #{cmpgnNm}, #{mergeDt}, #{objRegFgCd}, #{cmpgnSndChnlFgCd}, '01', #{username}, SYSDATE, #{username}, SYSDATE )
 	</update>
 
 	<delete id="deleteCampaign" parameterType="map">
@@ -97,11 +100,54 @@
 		WHERE CMPGN_ID = #{cmpgnId}
 	</select>
 
-	<insert id="insertCampaignDetail" parameterType="map">
-		INSERT /*+ APPEND_VALUES */
-		INTO WEB_CMPGN_DTL ( CELL_ID, CMPGN_ID, EXTRCT_CNT, MERGE_DT, CELL_DESC, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
-		VALUES ( #{cellId}, #{cmpgnId}, #{extrctCnt}, #{mergeDt}, #{cellDesc}, '02', #{username}, SYSDATE, #{username}, SYSDATE )
+	<select id="nextCellId" parameterType="map" resultType="string">
+		SELECT 'CL' || SUBSTR(#{cmpgnId}, 3) || TO_CHAR(SUBSTR(NVL(MAX(CELL_ID), 'CL00000000'), 8) + 1, 'FM099')
+		FROM WEB_CMPGN_DTL
+		WHERE CMPGN_ID = #{cmpgnId} 
+	</select>
+
+	<insert id="upsertCampaignDetail" parameterType="map">
+		MERGE INTO WEB_CMPGN_DTL A
+			USING( SELECT #{cellId} AS CELL_ID FROM DUAL) B
+			ON( A.CELL_ID = B.CELL_ID )
+		WHEN MATCHED THEN
+		<trim prefix="UPDATE SET " suffixOverrides=",">
+			<if test="cellDesc != null and cellDesc != ''">CELL_DESC = #{cellDesc},</if>
+			<if test="extrctCnt != null and extrctCnt != ''">EXTRCT_CNT = #{extrctCnt},</if>
+			<if test="fnlExtrctCnt != null and fnlExtrctCnt != ''">FNL_EXTRCT_CNT = #{fnlExtrctCnt},</if>
+			<if test="mergeDt != null and mergeDt != ''">MERGE_DT = #{mergeDt},</if>
+			<if test="sndDt != null and sndDt != ''">SND_DT = #{sndDt},</if>
+			<if test="stsFgCd != null and stsFgCd != ''">STS_FG_CD = #{stsFgCd},</if>
+			<if test="username != null and username != ''">UPD_ID = #{username},</if>
+			UPT_DTTM = SYSDATE,
+		</trim>
+		WHEN NOT MATCHED THEN
+			INSERT ( CELL_ID, CMPGN_ID, EXTRCT_CNT, MERGE_DT, CELL_DESC, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
+			VALUES ( #{cellId}, #{cmpgnId}, #{extrctCnt}, #{mergeDt}, #{cellDesc}, '02', #{username}, SYSDATE, #{username}, SYSDATE )
 	</insert>
+	
+	<update id="balanceCellExtrctCnt" parameterType="map">
+		UPDATE WEB_CMPGN_DTL A
+		SET EXTRCT_CNT = 
+		(
+			SELECT
+				CASE WHEN DTL_CNT = ROWNUM
+				THEN TRUNC(DUP_DEL_CNT / DTL_CNT) + MOD(DUP_DEL_CNT, DTL_CNT)
+				ELSE TRUNC(DUP_DEL_CNT / DTL_CNT)
+				END AS EXTRCT_CNT
+			FROM (
+				SELECT CELL_ID
+					, DUP_DEL_CNT
+					, (SELECT COUNT(*) FROM WEB_CMPGN_DTL WHERE CMPGN_ID = #{cmpgnId}) AS DTL_CNT
+					, ROWNUM
+				FROM WEB_CMPGN_DTL
+				JOIN WEB_CMPGN_MST USING(CMPGN_ID)
+				WHERE CMPGN_ID = #{cmpgnId}
+			) B
+			WHERE B.CELL_ID = A.CELL_ID
+		)
+		WHERE CMPGN_ID = #{cmpgnId}
+	</update>
 
 	<delete id="deleteCampaignDetail" parameterType="map">
 		DELETE FROM WEB_CMPGN_DTL WHERE CMPGN_ID = #{cmpgnId}

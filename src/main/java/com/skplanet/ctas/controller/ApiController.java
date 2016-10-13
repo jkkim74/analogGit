@@ -81,13 +81,13 @@ public class ApiController {
 		oracleRepository.deleteCampaignTargetingInfo(params);
 		oracleRepository.insertCampaignTargetingInfo(username, campaignId, params);
 
-		// 셀 정보 저장
-		int extrctCnt = querycacheRepository.countTargeting(params);
-		params.put("cellId", "CL" + campaignId.substring(2) + "001");
-		params.put("extrctCnt", extrctCnt);
-
-		oracleRepository.deleteCampaignDetail(params);
-		oracleRepository.insertCampaignDetail(params);
+		// // 셀 정보 저장
+		// int extrctCnt = querycacheRepository.countTargeting(params);
+		// params.put("cellId", "CL" + campaignId.substring(2) + "001");
+		// params.put("extrctCnt", extrctCnt);
+		//
+		// oracleRepository.deleteCampaignDetail(params);
+		// oracleRepository.insertCampaignDetail(params);
 
 		return ApiResponse.builder().message("타게팅 정보 저장 완료").build();
 	}
@@ -96,6 +96,33 @@ public class ApiController {
 	public ApiResponse getCampaignDetail(@RequestParam Map<String, Object> params) {
 		List<AutoMappedMap> list = oracleRepository.selectCampaignDetail(params);
 		return ApiResponse.builder().value(list).build();
+	}
+
+	@PostMapping("/campaigns/detail")
+	public ApiResponse saveCampaignDetail(@RequestParam Map<String, Object> params) {
+		boolean cellAdd = false;
+		if (params.get("cellId") == null) {
+			String cellId = oracleRepository.nextCellId(params);
+			params.put("cellId", cellId);
+			cellAdd = true;
+		}
+
+		String username = AuthController.getUserInfo().getUsername();
+		params.put("username", username);
+
+		oracleRepository.upsertCampaignDetail(params);
+
+		if (cellAdd) {
+			oracleRepository.balanceCellExtrctCnt(params);
+		}
+		return ApiResponse.builder().message("셀 저장 완료").build();
+	}
+
+	@DeleteMapping("/campaigns/detail")
+	public ApiResponse deleteCampaignDetail(@RequestParam Map<String, Object> params) {
+		oracleRepository.deleteCampaignDetail(params);
+		oracleRepository.balanceCellExtrctCnt(params);
+		return ApiResponse.builder().message("셀 삭제 완료").build();
 	}
 
 	@PostMapping("/requestTransmission")

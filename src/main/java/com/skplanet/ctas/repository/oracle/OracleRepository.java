@@ -22,8 +22,12 @@ public interface OracleRepository {
 	int deleteCampaign(Map<String, Object> params);
 
 	List<AutoMappedMap> selectCampaignDetail(Map<String, Object> params);
+	
+	String nextCellId(Map<String, Object> params);
 
-	int insertCampaignDetail(Map<String, Object> params);
+	int upsertCampaignDetail(Map<String, Object> params);
+
+	int balanceCellExtrctCnt(Map<String, Object> params);
 
 	int deleteCampaignDetail(Map<String, Object> params);
 

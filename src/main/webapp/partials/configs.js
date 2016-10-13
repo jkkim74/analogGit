@@ -87,6 +87,7 @@ angular.module('App').config(['$stateProvider', '$urlRouterProvider', '$provide'
         authSvc.userInfo();
 
         // angular-bootstrap-confirm default
+        confirmationPopoverDefaults.confirmText = '확인';
         confirmationPopoverDefaults.cancelText = '취소';
 
     }]);

@@ -3,7 +3,7 @@
 <mapper namespace="com.skplanet.ctas.repository.querycache.QueryCacheRepository">
 
 	<update id="createTargetingTable" parameterType="map">
-		CREATE TABLE IF NOT EXISTS USER_${username}.WEB_TRGT_${cmpgnId} (
+		CREATE TABLE IF NOT EXISTS WEB_TRGT_${cmpgnId} (
 			MBR_ID STRING
 		)
 		ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
@@ -16,7 +16,7 @@
 	</update>
 
 	<insert id="insertTargeting" parameterType="map">
-		INSERT OVERWRITE TABLE USER_${username}.WEB_TRGT_${cmpgnId}
+		INSERT OVERWRITE TABLE WEB_TRGT_${cmpgnId}
 		<include refid="selectTargeting" />
 	</insert>
 	<insert id="insertTargeting" parameterType="map" databaseId="hsql">
@@ -98,9 +98,6 @@
 	</sql>
 
 	<select id="countTargeting" parameterType="map" resultType="int">
-		SELECT COUNT(*) FROM USER_${username}.WEB_TRGT_${cmpgnId}
-	</select>
-	<select id="countTargeting" parameterType="map" resultType="int" databaseId="hsql">
 		SELECT COUNT(*) FROM WEB_TRGT_${cmpgnId}
 	</select>
 

@@ -1,12 +1,11 @@
 'use strict';
 
-angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal',
-    function ($scope, $log, $q, $http, $timeout, $filter, uiGridConstants, toastr, apiSvc, $uibModal) {
+angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal', 'uibDateParser',
+    function ($scope, $log, $q, $http, $timeout, $filter, uiGridConstants, toastr, apiSvc, $uibModal, uibDateParser) {
 
         var self = this;
         $scope.title = '이메일 발송 관리';
 
-        $scope.visibleDetail = true;
         $scope.campaign = {};
 
         $scope.selectOptions = [
@@ -25,7 +24,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             multiSelect: false,
             useExternalPagination: true,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-            minRowsToShow: 16,
+            minRowsToShow: 8,
             columnDefs: [
                 { field: 'cmpgnId', displayName: '캠페인코드', cellTooltip: true, headerTooltip: true },
                 { field: 'cmpgnNm', displayName: '캠페인명', cellTooltip: true, headerTooltip: true },
@@ -39,12 +38,12 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
                 $scope.gridApi = gridApi;
                 gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                     var offset = (newPage - 1) * pageSize;
-                    $scope.search(offset, pageSize);
+                    $scope.searchCampaign(offset, pageSize);
                 });
             }
         };
 
-        $scope.search = function (offset, limit) {
+        $scope.searchCampaign = function (offset, limit) {
             var params = {
                 offset: offset || 0,
                 limit: limit || $scope.gridOptionsList.paginationPageSize,
@@ -59,7 +58,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             });
         };
 
-        $scope.clear = function () {
+        $scope.clearDetail = function () {
             $scope.campaign = {
                 cmpgnSndChnlFgCd: $scope.selectOptions[0].value
             };
@@ -76,7 +75,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             $scope.savePromise = apiSvc.saveCampaign(campaign);
             $scope.savePromise.then(function (data) {
                 $scope.campaign.cmpgnId = data.value.cmpgnId;
-                $scope.search();
+                $scope.searchCampaign();
                 deferred.resolve();
             }, function () {
                 deferred.reject();
@@ -94,22 +93,41 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             });
         };
 
+        $scope.detailCampaign = function () {
+            var selectedRow = $scope.gridApi.selection.getSelectedRows()[0];
+
+            $scope.campaign = angular.extend({}, selectedRow);
+            $scope.campaign.mergeDt = uibDateParser.parse(selectedRow.mergeDt, 'yyyy-MM-dd');
+
+            $scope.loadCellList();
+            $scope.loadTargeting();
+        };
+
         $scope.gridOptionsCellList = {
+            enableCellEdit: false,
+            enableRowSelection: true,
+            enableRowHeaderSelection: false,
+            multiSelect: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-            minRowsToShow: 5,
+            minRowsToShow: 8,
             columnDefs: [
-                { field: 'cellId', displayName: '셀ID', width: 50, cellTooltip: true, headerTooltip: true },
-                { field: 'cellDesc', displayName: '설명', cellTooltip: true, headerTooltip: true },
-                { field: 'cellPrcntg', displayName: '백분율(%)', width: 50, cellTooltip: true, headerTooltip: true },
-                { field: 'extrctCnt', displayName: '추출수', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
-                { field: 'fnlExtrctCnt', displayName: '최종추출수', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
+                { field: 'cellId', displayName: '셀ID', cellTooltip: true, headerTooltip: true },
+                { field: 'cellDesc', displayName: '설명', cellTooltip: true, headerTooltip: true, enableCellEdit: true },
+                { field: 'cellPrcntg', displayName: '백분율(%)', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'extrctCnt', displayName: '추출수', cellTooltip: true, headerTooltip: true, enableCellEdit: true, cellFilter: 'number' },
+                { field: 'fnlExtrctCnt', displayName: '최종추출수', cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
                 { field: 'mergeDt', displayName: '머지일자', cellTooltip: true, headerTooltip: true },
                 { field: 'sndDt', displayName: '발송일자', cellTooltip: true, headerTooltip: true },
                 { field: 'stsFgNm', displayName: '셀상태', width: 100, cellTooltip: true, headerTooltip: true }
-            ]
+            ],
+            onRegisterApi: function (gridApi) {
+                $scope.gridApi2 = gridApi;
+            }
         };
 
         $scope.openTargeting = function () {
+            $scope.campaign.objRegFgCd = 'TRGT';
+
             $scope.saveCampaign().then(function () {
                 var modalInstance = $uibModal.open({
                     component: 'ctas0103Modal',
@@ -124,21 +142,44 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
                     $log.debug(selectedItem);
                     $scope.targetingInfo = selectedItem;
 
-                    $scope.loadCells();
+                    $scope.loadCellList();
                 });
             });
         };
 
-        $scope.loadCells = function () {
-            $scope.detailPromise = apiSvc.getCampaignDetail($scope.campaign);
-            $scope.detailPromise.then(function (data) {
+        $scope.loadTargeting = function () {
+
+        };
+
+        $scope.loadCellList = function () {
+            $scope.cellListPromise = apiSvc.getCampaignDetail($scope.campaign);
+            $scope.cellListPromise.then(function (data) {
                 $scope.gridOptionsCellList.data = data.value;
+            });
+        };
+
+        $scope.addCell = function () {
+            var params = {
+                cmpgnId: $scope.campaign.cmpgnId
+            };
+            $scope.cellListPromise = apiSvc.saveCampaignDetail(params);
+            $scope.cellListPromise.then(function () {
+                $scope.loadCellList();
+            });
+        };
+
+        $scope.deleteCell = function () {
+            var selectedRow = $scope.gridApi2.selection.getSelectedRows()[0];
+
+            apiSvc.deleteCampaignDetail(selectedRow).then(function () {
+                var index = $scope.gridOptionsCellList.data.indexOf(selectedRow);
+                $scope.gridOptionsCellList.data.splice(index, 1);
             });
         };
 
         $scope.requestTransmission = function () {
             var componentName;
-            if ($scope.selectedOption.value === 'em') {
+            if ($scope.campaign.cmpgnSndChnlFgCd === 'MAIL') {
                 componentName = 'ctas0104Modal';
             } else {
                 componentName = 'ctas0105Modal';
@@ -147,7 +188,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             $uibModal.open({
                 component: componentName,
                 resolve: {
-                    notiType: function () { return $scope.selectedOption.value; },
+                    notiType: function () { return $scope.campaign.cmpgnSndChnlFgCd; },
                     targetingInfo: function () { return $scope.targetingInfo; }
                 }
             });

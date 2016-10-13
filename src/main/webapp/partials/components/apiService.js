@@ -91,13 +91,15 @@ angular.module('App').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
         this.getExtinctionTargets = new ApiGet('extinctionTargets');
         this.noticeExtinction = new ApiPost('noticeExtinction');
 
-        // ctas
+        // CTAS
         this.getCampaigns = new ApiGet('campaigns');
         this.saveCampaign = new ApiPost('campaigns');
         this.deleteCampaign = new ApiPost('campaigns', 'delete');
         this.getCampaignTargetingInfo = new ApiGet('campaigns/targeting');
         this.saveCampaignTargetingInfo = new ApiPost('campaigns/targeting');
         this.getCampaignDetail = new ApiGet('campaigns/detail');
+        this.saveCampaignDetail = new ApiPost('campaigns/detail');
+        this.deleteCampaignDetail = new ApiPost('campaigns/detail', 'delete');
         this.requestTransmission = new ApiPost('requestTransmission');
 
     }]);
