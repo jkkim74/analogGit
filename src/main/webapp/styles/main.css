@@ -2,7 +2,7 @@
 /*@import url(/fonts/skplanetfont.css);*/
 
 body {
-    background-color: #2b2f3a;
+    background-color: #e5e9ec;
     margin-top: 5vh;
     font-family: 'Nanum Gothic', sans-serif;
     /*font-family: 'skp-mm', cursive;*/
@@ -20,16 +20,11 @@ a {
     padding-top: 1.5vh;
 }
 
-.section-body {
-    padding: 0 0;
-}
-
 .section-sidebar {
     color: white;
 }
 
 .section-content-wrapper {
-    background-color: #e5e9ec;
     min-height: 86.9vh;
 }
 .section-content {

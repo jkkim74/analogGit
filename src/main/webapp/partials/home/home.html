@@ -1,34 +1,31 @@
-<div class="container-fluid section-body">
-    <div class="section-content-wrapper">
-        <div class="section-login center-block">
-            <div ng-show="!isAuthenticated">
-                <form name="loginForm" ng-submit="authenticate()" cg-busy="{promise:loginPromise, message:'Waiting...'}">
-                    <div class="col-md-5">
-                        <div class="input-group input-group-lg">
-                            <span class="input-group-addon">아이디</span>
-                            <input type="text" class="form-control" placeholder="Pnet ID" name="username" ng-model="username" ng-required="true" autofocus>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="input-group input-group-lg">
-                            <span class="input-group-addon">비밀번호</span>
-                            <input type="password" class="form-control" placeholder="Pnet Password" name="password" ng-model="password" ng-required="true" ng-minlength="4">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-lg btn-danger" ng-disabled="loginForm.$invalid">로그인</button>
-                    </div>
-                </form>
-            </div>
+<div class="section-login center-block">
+	<div ng-show="!isAuthenticated">
+		<form name="loginForm" ng-submit="authenticate()" cg-busy="{promise:loginPromise, message:'Waiting...'}">
+			<div class="col-md-5">
+				<div class="input-group input-group-lg">
+					<span class="input-group-addon">아이디</span>
+					<input type="text" class="form-control" placeholder="Pnet ID" name="username" ng-model="username" ng-required="true" autofocus>
+				</div>
+			</div>
+			<div class="col-md-5">
+				<div class="input-group input-group-lg">
+					<span class="input-group-addon">비밀번호</span>
+					<input type="password" class="form-control" placeholder="Pnet Password" name="password" ng-model="password" ng-required="true"
+						ng-minlength="4">
+				</div>
+			</div>
+			<div class="col-md-2">
+				<button type="submit" class="btn btn-lg btn-danger" ng-disabled="loginForm.$invalid">로그인</button>
+			</div>
+		</form>
+	</div>
 
-            <div ng-show="isAuthenticated" class="text-center">
-                <div class="col-md-6">
-                    <button ng-show="isAllowedPage('pan0002')" ui-sref="index.page({pageId: 'pan0002'})" type="button" class="btn btn-default btn-lg">사용자 등록 관리 바로가기</button>
-                </div>
-                <div class="col-md-6">
-                    <button ng-show="isAllowedPage('pan0003')" ui-sref="index.page({pageId: 'pan0003'})" type="button" class="btn btn-default btn-lg">화면 권한 관리 바로가기</button>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div ng-show="isAuthenticated" class="text-center">
+		<div class="col-md-6">
+			<button ng-show="isAllowedPage('pan0002')" ui-sref="index.page({pageId: 'pan0002'})" type="button" class="btn btn-default btn-lg">사용자 등록 관리 바로가기</button>
+		</div>
+		<div class="col-md-6">
+			<button ng-show="isAllowedPage('pan0003')" ui-sref="index.page({pageId: 'pan0003'})" type="button" class="btn btn-default btn-lg">화면 권한 관리 바로가기</button>
+		</div>
+	</div>
 </div>

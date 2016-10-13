@@ -1,21 +1,16 @@
-<div class="container-fluid section-body">
-    <ng-include src="'partials/layout/sidebar.html'"></ng-include>
-    <div class="col-md-11 section-content-wrapper">
-        <div class="section-content">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Pnet ID" ng-model="newUsername" required>
-                        <span class="input-group-btn"><button type="button" class="btn btn-primary" ng-click="createUser(newUsername)">사용자 등록</button></span>
-                    </div>
-                </div>
+<div class="section-content">
+	<div class="row">
+		<div class="col-md-3">
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="Pnet ID" ng-model="newUsername" required>
+				<span class="input-group-btn"><button type="button" class="btn btn-primary" ng-click="createUser(newUsername)">사용자 등록</button></span>
+			</div>
+		</div>
 
-                <div class="col-md-9">
-                    <div cg-busy="usersPromise">
-                        <div ui-grid="gridOptionsUserList" ui-grid-selection ui-grid-resize-column ui-grid-edit></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+		<div class="col-md-9">
+			<div cg-busy="usersPromise">
+				<div ui-grid="gridOptionsUserList" ui-grid-selection ui-grid-resize-column ui-grid-edit></div>
+			</div>
+		</div>
+	</div>
 </div>
