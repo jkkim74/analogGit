@@ -15,7 +15,8 @@
 						</div>
 						<button type="button" class="btn btn-info" ng-click="search()">조회</button>
 						<button type="button" class="btn btn-primary" ng-click="visibleDetail=true; clear()">등록</button>
-						<button type="button" class="btn btn-danger" ng-click="">삭제</button>
+						<button type="button" class="btn btn-danger" mwl-confirm on-confirm="deleteCampaign()" title="캠페인 삭제" message="선택된 캠페인을 삭제하시겠습니까?"
+							confirm-text="삭제" confirm-button-type="danger" placement="right" ng-disabled="gridApi.selection.getSelectedCount() <= 0">삭제</button>
 					</form>
 					<div cg-busy="searchPromise">
 						<div class="grid-div" ui-grid="gridOptionsList" ui-grid-pagination ui-grid-resize-columns ui-grid-selection></div>
@@ -41,7 +42,7 @@
 						<div class="form-group">
 							<label class="col-sm-4 control-label">캠페인 발송 채널</label>
 							<div class="col-sm-6">
-								<select class="form-control" ng-init="campaign.cmpgnSndChnlFgCd = selectOptions[0]" ng-options="option.label for option in selectOptions"
+								<select class="form-control" ng-init="campaign.cmpgnSndChnlFgCd = selectOptions[0].value" ng-options="option.value as option.label for option in selectOptions"
 									ng-model="campaign.cmpgnSndChnlFgCd" ng-required="true"></select>
 							</div>
 						</div>
@@ -49,7 +50,8 @@
 							<label class="col-sm-4 control-label">머지일자</label>
 							<div class="col-sm-6">
 								<div class="input-group">
-									<input type="date" class="form-control" ng-model="campaign.mergeDt" ng-required="true" uib-datepicker-popup datepicker-options="dateOptions" is-open="popup3.opened">
+									<input type="date" class="form-control" ng-model="campaign.mergeDt" ng-required="true" uib-datepicker-popup datepicker-options="dateOptions"
+										is-open="popup3.opened">
 									<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup3.opened=true"><i class="fa fa-calendar"></i></button></span>
 								</div>
 							</div>

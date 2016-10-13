@@ -2,9 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.ctas.repository.querycache.QueryCacheRepository">
 
-	<select id="selectTargeting" parameterType="map" resultType="AutoMappedMap">
+	<update id="createTargetingTable" parameterType="map">
+		CREATE TABLE IF NOT EXISTS USER_${username}.WEB_TRGT_${cmpgnId} (
+			MBR_ID STRING
+		)
+		ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+		STORED AS TEXTFILE
+	</update>
+	<update id="createTargetingTable" parameterType="map" databaseId="hsql">
+		CREATE TABLE IF NOT EXISTS WEB_TRGT_${cmpgnId} (
+			MBR_ID VARCHAR(50)
+		)
+	</update>
+
+	<insert id="insertTargeting" parameterType="map">
+		INSERT OVERWRITE TABLE USER_${username}.WEB_TRGT_${cmpgnId}
+		<include refid="selectTargeting" />
+	</insert>
+	<insert id="insertTargeting" parameterType="map" databaseId="hsql">
+		INSERT INTO WEB_TRGT_${cmpgnId}
+		<include refid="selectTargeting" />
+	</insert>
+
+	<sql id="selectTargeting">
 		SELECT MBR_ID
 		FROM MART_MBR_TGTNG_MST
+		<include refid="selectTargeting_where" />
+	</sql>
+	
+	<sql id="selectTargeting_where">
 		<where>
 			<if test="true">AND OCB_MKTNG_AGRMT_YN = '1'  </if>
 			<if test="gndrFgCd != null and gndrFgCd != ''">AND GNDR_FG_CD = #{gndrFgCd}  </if>
@@ -69,6 +95,13 @@
 				<foreach collection="avlPnt.split('-')" item="item" open="AND AVL_PNT BETWEEN" separator="AND"> TO_NUMBER(#{item}) </foreach>
 			</if>
 		</where>
+	</sql>
+
+	<select id="countTargeting" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM USER_${username}.WEB_TRGT_${cmpgnId}
+	</select>
+	<select id="countTargeting" parameterType="map" resultType="int" databaseId="hsql">
+		SELECT COUNT(*) FROM WEB_TRGT_${cmpgnId}
 	</select>
 
 </mapper>

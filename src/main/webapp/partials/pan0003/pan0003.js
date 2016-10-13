@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App')
-    .controller('Pan0003Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService) {
+angular.module('App').controller('Pan0003Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService) {
 
         var self = this;
 

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App')
-    .service('apiSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$stateParams', 'toastr', 'authSvc', function ($log, $q, $http, $httpParamSerializer, $stateParams, toastr, authSvc) {
+angular.module('App').service('apiSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$stateParams', 'toastr', 'authSvc',
+    function ($log, $q, $http, $httpParamSerializer, $stateParams, toastr, authSvc) {
 
         function ApiGet(command) {
             return function (params) {
@@ -29,11 +29,16 @@ angular.module('App')
             };
         }
 
-        function ApiPost(command) {
+        function ApiPost(command, hiddenMethod) {
             return function (params) {
                 var deferred = $q.defer();
 
-                $http.post('/api/' + command, $httpParamSerializer(angular.extend({ pageId: $stateParams.pageId }, params)), {
+                var args = angular.extend({ pageId: $stateParams.pageId }, params);
+                if (hiddenMethod) {
+                    args._method = hiddenMethod;
+                }
+
+                $http.post('/api/' + command, $httpParamSerializer(args), {
                     headers: {
                         'Authorization': 'Bearer ' + authSvc.getAccessToken(),
                         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
@@ -59,7 +64,6 @@ angular.module('App')
                 return deferred.promise;
             };
         }
-
 
         this.getMembers = new ApiGet('members');
         this.getMemberInfo = new ApiGet('memberInfo');
@@ -90,8 +94,10 @@ angular.module('App')
         // ctas
         this.getCampaigns = new ApiGet('campaigns');
         this.saveCampaign = new ApiPost('campaigns');
+        this.deleteCampaign = new ApiPost('campaigns', 'delete');
         this.getCampaignTargetingInfo = new ApiGet('campaigns/targeting');
         this.saveCampaignTargetingInfo = new ApiPost('campaigns/targeting');
+        this.getCampaignDetail = new ApiGet('campaigns/detail');
         this.requestTransmission = new ApiPost('requestTransmission');
 
     }]);

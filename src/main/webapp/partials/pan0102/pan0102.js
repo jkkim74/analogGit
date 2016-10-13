@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App')
-    .controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', '$uibModal', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, $uibModal) {
+angular.module('App').controller('Pan0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', '$uibModal',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, $uibModal) {
 
         $scope.title = '고객 정보 및 장기 거래 실적 조회';
 

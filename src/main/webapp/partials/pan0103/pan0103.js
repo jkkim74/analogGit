@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App')
-    .controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', 'authSvc', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService, authSvc) {
+angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', 'authSvc',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService, authSvc) {
 
         var self = this;
         $scope.title = '배치 적립 파일 검증';

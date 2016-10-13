@@ -84,15 +84,16 @@
 	</delete>
 	
 	<select id="selectCampaignDetail" parameterType="map" resultType="AutoMappedMap">
-		SELECT CELL_ID
-			, CELL_DESC
-			, 0 AS CELL_PRCNTG
-			, EXTRCT_CNT
-			, FNL_EXTRCT_CNT
-			, MERGE_DT
-			, SND_DT
-			, CASE STS_FG_CD WHEN '02' THEN '추출완료' WHEN '03' THEN '전송완료' ELSE '' END AS STS_FG_NM
-		FROM WEB_CMPGN_DTL
+		SELECT A.CELL_ID
+			, A.CELL_DESC
+			, CASE B.DUP_DEL_CNT WHEN 0 THEN 0 ELSE ROUND(A.EXTRCT_CNT / B.DUP_DEL_CNT * 100, 1) END AS CELL_PRCNTG
+			, A.EXTRCT_CNT
+			, A.FNL_EXTRCT_CNT
+			, A.MERGE_DT
+			, A.SND_DT
+			, CASE A.STS_FG_CD WHEN '02' THEN '추출완료' WHEN '03' THEN '머지완료' WHEN '04' THEN '전송완료' ELSE '' END AS STS_FG_NM
+		FROM WEB_CMPGN_DTL A
+		JOIN WEB_CMPGN_MST B USING(CMPGN_ID)
 		WHERE CMPGN_ID = #{cmpgnId}
 	</select>
 

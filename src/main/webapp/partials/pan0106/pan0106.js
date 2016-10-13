@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App')
-    .controller('Pan0106Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', 'authSvc', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService, authSvc) {
+angular.module('App').controller('Pan0106Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', 'authSvc',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService, authSvc) {
 
         var self = this;
         $scope.title = '회원 프로파일 분석';

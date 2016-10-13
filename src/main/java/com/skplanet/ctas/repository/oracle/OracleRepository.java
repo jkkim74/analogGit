@@ -32,6 +32,6 @@ public interface OracleRepository {
 	int insertCampaignTargetingInfo(@Param("username") String username, @Param("cmpgnId") String campaignId,
 			@Param("targetingInfo") Map<String, Object> targetingInfo);
 
-	int deleteCampaignTargetingInfo(@Param("cmpgnId") String campaignId);
+	int deleteCampaignTargetingInfo(Map<String, Object> params);
 
 }

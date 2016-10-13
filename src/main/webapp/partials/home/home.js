@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App')
-    .controller('HomeCtrl', ['$scope', '$q', '$http', '$state', 'authSvc', function ($scope, $q, $http, $state, authSvc) {
+angular.module('App').controller('HomeCtrl', ['$scope', '$q', '$http', '$state', 'authSvc',
+    function ($scope, $q, $http, $state, authSvc) {
 
         $scope.isAuthenticated = authSvc.isAuthenticated();
 

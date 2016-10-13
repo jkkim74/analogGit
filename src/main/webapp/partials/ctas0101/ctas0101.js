@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App')
-    .controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal', function ($scope, $log, $q, $http, $timeout, $filter, uiGridConstants, toastr, apiSvc, $uibModal) {
+angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal',
+    function ($scope, $log, $q, $http, $timeout, $filter, uiGridConstants, toastr, apiSvc, $uibModal) {
 
         var self = this;
         $scope.title = '이메일 발송 관리';
@@ -61,14 +61,13 @@ angular.module('App')
 
         $scope.clear = function () {
             $scope.campaign = {
-                cmpgnSndChnlFgCd: $scope.selectOptions[0]
+                cmpgnSndChnlFgCd: $scope.selectOptions[0].value
             };
         };
 
         $scope.saveCampaign = function () {
             var campaign = angular.extend({}, $scope.campaign);
             angular.extend(campaign, {
-                cmpgnSndChnlFgCd: campaign.cmpgnSndChnlFgCd.value,
                 mergeDt: $filter('date')(campaign.mergeDt, 'yyyyMMdd')
             });
 
@@ -84,6 +83,15 @@ angular.module('App')
             });
 
             return deferred.promise;
+        };
+
+        $scope.deleteCampaign = function () {
+            var selectedRow = $scope.gridApi.selection.getSelectedRows()[0];
+
+            apiSvc.deleteCampaign(selectedRow).then(function () {
+                var index = $scope.gridOptionsList.data.indexOf(selectedRow);
+                $scope.gridOptionsList.data.splice(index, 1);
+            });
         };
 
         $scope.gridOptionsCellList = {
@@ -115,7 +123,16 @@ angular.module('App')
                 modalInstance.result.then(function (selectedItem) {
                     $log.debug(selectedItem);
                     $scope.targetingInfo = selectedItem;
+
+                    $scope.loadCells();
                 });
+            });
+        };
+
+        $scope.loadCells = function () {
+            $scope.detailPromise = apiSvc.getCampaignDetail($scope.campaign);
+            $scope.detailPromise.then(function (data) {
+                $scope.gridOptionsCellList.data = data.value;
             });
         };
 

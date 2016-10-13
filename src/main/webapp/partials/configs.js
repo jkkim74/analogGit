@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App')
-    .config(['$stateProvider', '$urlRouterProvider', '$provide', '$translateProvider', 'uibDatepickerConfig', 'uibDatepickerPopupConfig', function ($stateProvider, $urlRouterProvider, $provide, $translateProvider, uibDatepickerConfig, uibDatepickerPopupConfig) {
+angular.module('App').config(['$stateProvider', '$urlRouterProvider', '$provide', '$translateProvider', 'uibDatepickerConfig', 'uibDatepickerPopupConfig',
+    function ($stateProvider, $urlRouterProvider, $provide, $translateProvider, uibDatepickerConfig, uibDatepickerPopupConfig) {
 
         $urlRouterProvider.otherwise('/');
 
@@ -61,8 +61,9 @@ angular.module('App')
         uibDatepickerPopupConfig.clearText = '초기화';
         uibDatepickerPopupConfig.closeText = '닫기';
         uibDatepickerPopupConfig.currentText = '오늘';
+
     }])
-    .run(['$rootScope', '$state', 'authSvc', function ($rootScope, $state, authSvc) {
+    .run(['$rootScope', '$state', 'authSvc', 'confirmationPopoverDefaults', function ($rootScope, $state, authSvc, confirmationPopoverDefaults) {
 
         $rootScope.$on('$stateChangeStart',
             function (event, toState, toParams, fromState, fromParams, options) {
@@ -84,5 +85,8 @@ angular.module('App')
 
         // check token validity when application started
         authSvc.userInfo();
+
+        // angular-bootstrap-confirm default
+        confirmationPopoverDefaults.cancelText = '취소';
 
     }]);

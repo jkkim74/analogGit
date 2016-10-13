@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App')
-    .controller('Pan0104Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc) {
+angular.module('App').controller('Pan0104Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc) {
 
         var self = this;
 

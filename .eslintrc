@@ -6,8 +6,6 @@
     },
     "extends": "eslint:recommended",
     "globals": {
-        "angular": true,
-        "moment": true,
-        "App": true
+        "angular": true
     }
 }
