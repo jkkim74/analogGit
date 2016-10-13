@@ -22,7 +22,8 @@ angular.module('App', [
     'pascalprecht.translate',
     'angular-ui-grid-translate',
     'toastr',
-    'cgBusy'
+    'cgBusy',
+    'mwl.confirm'
 ]).value('cgBusyDefaults', {
     message: 'Loading...',
 });
