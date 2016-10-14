@@ -48,7 +48,7 @@ public class DataSourceConfig {
 	}
 
 	@Bean
-	public PlatformTransactionManager querycacheManager() {
+	public PlatformTransactionManager querycacheTxManager() {
 		return new DataSourceTransactionManager(querycacheDataSource());
 	}
 
