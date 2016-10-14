@@ -23,6 +23,7 @@
 		<include refid="pagingHead" />
 		<include refid="selectCampaign_inner" />
 		<include refid="pagingFoot" />
+		ORDER BY CMPGN_ID
 	</select>
 	<select id="selectCampaign" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
 		<include refid="selectCampaign_inner" />
@@ -38,7 +39,7 @@
 			, TOT_CNT
 			, DUP_DEL_CNT
 			, CMPGN_SND_CHNL_FG_CD
-			, CASE STS_FG_CD WHEN '02' THEN '머지완료' WHEN '03' THEN '전송완료' ELSE '저장완료' END AS STS_FG_NM
+			, CASE STS_FG_CD WHEN '02' THEN '추출완료' WHEN '03' THEN '머지완료' WHEN '04' THEN '전송완료' ELSE '저장' END AS STS_FG_NM
 			, UPD_ID
 		FROM WEB_CMPGN_MST
 		<where>
@@ -94,7 +95,7 @@
 			, A.FNL_EXTRCT_CNT
 			, A.MERGE_DT
 			, A.SND_DT
-			, CASE A.STS_FG_CD WHEN '02' THEN '추출완료' WHEN '03' THEN '머지완료' WHEN '04' THEN '전송완료' ELSE '' END AS STS_FG_NM
+			, CASE A.STS_FG_CD WHEN '02' THEN '추출완료' WHEN '03' THEN '머지완료' WHEN '04' THEN '전송완료' ELSE '저장' END AS STS_FG_NM
 		FROM WEB_CMPGN_DTL A
 		JOIN WEB_CMPGN_MST B USING(CMPGN_ID)
 		WHERE CMPGN_ID = #{cmpgnId}
