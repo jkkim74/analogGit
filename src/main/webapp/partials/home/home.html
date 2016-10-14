@@ -1,6 +1,6 @@
 <div class="section-login center-block">
 	<div ng-show="!isAuthenticated">
-		<form name="loginForm" ng-submit="authenticate()" cg-busy="{promise:loginPromise, message:'Waiting...'}">
+		<form name="loginForm" ng-submit="authenticate()" cg-busy="loginPromise">
 			<div class="col-md-5">
 				<div class="input-group input-group-lg">
 					<span class="input-group-addon">아이디</span>
