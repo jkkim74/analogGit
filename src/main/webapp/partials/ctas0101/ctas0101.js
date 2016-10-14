@@ -114,9 +114,15 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             minRowsToShow: 8,
             columnDefs: [
                 { field: 'cellId', displayName: '셀ID', cellTooltip: true, headerTooltip: true },
-                { field: 'cellDesc', displayName: '설명', cellTooltip: true, headerTooltip: true, enableCellEdit: true },
+                {
+                    field: 'cellDesc', displayName: '설명', cellTooltip: true, headerTooltip: true, enableCellEdit: true,
+                    cellTemplate: '<div class="ui-grid-cell-contents"><span title="TOOLTIP">{{ COL_FIELD CUSTOM_FILTERS }}</span> <i class="fa fa-pencil" aria-hidden="true" title="수정하려면 더블클릭"></i></div>'
+                },
                 { field: 'cellPrcntg', displayName: '백분율(%)', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'extrctCnt', displayName: '추출수', cellTooltip: true, headerTooltip: true, enableCellEdit: true, cellFilter: 'number' },
+                {
+                    field: 'extrctCnt', displayName: '추출수', cellTooltip: true, headerTooltip: true, enableCellEdit: true, cellFilter: 'number',
+                    cellTemplate: '<div class="ui-grid-cell-contents"><span title="TOOLTIP">{{ COL_FIELD CUSTOM_FILTERS }}</span> <i class="fa fa-pencil" aria-hidden="true" title="수정하려면 더블클릭"></i></div>'
+                },
                 { field: 'fnlExtrctCnt', displayName: '최종추출수', cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
                 { field: 'mergeDt', displayName: '머지일자', cellTooltip: true, headerTooltip: true },
                 { field: 'sndDt', displayName: '발송일자', cellTooltip: true, headerTooltip: true },
@@ -124,7 +130,22 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             ],
             onRegisterApi: function (gridApi) {
                 $scope.gridApi2 = gridApi;
+                $scope.gridApi2.edit.on.afterCellEdit($scope, $scope.saveCellListColumn);
             }
+        };
+
+        $scope.saveCellListColumn = function (rowEntity, colDef, newValue, oldValue) {
+            if (newValue === oldValue) {
+                return;
+            }
+
+            var params = {
+                cellId: rowEntity.cellId,
+                cmpgnId: rowEntity.cmpgnId
+            };
+            params[colDef.name] = newValue;
+
+            apiSvc.saveCampaignDetail(params);
         };
 
         $scope.openTargeting = function () {
@@ -157,6 +178,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             $scope.cellListPromise = apiSvc.getCampaignDetail($scope.currCampaign);
             $scope.cellListPromise.then(function (data) {
                 $scope.gridOptionsCellList.data = data.value;
+                $scope.gridApi2.selection.clearSelectedRows();
             });
         };
 
