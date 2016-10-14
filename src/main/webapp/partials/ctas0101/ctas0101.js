@@ -6,7 +6,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
         var self = this;
         $scope.title = '이메일 발송 관리';
 
-        $scope.campaign = {};
+        $scope.currCampaign = {};
 
         $scope.selectOptions = [
             { label: '커머스센터 대용량 메일', value: 'MAIL' },
@@ -59,7 +59,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
         };
 
         $scope.saveCampaign = function () {
-            var campaign = angular.extend({}, $scope.campaign);
+            var campaign = angular.extend({}, $scope.currCampaign);
             angular.extend(campaign, {
                 mergeDt: $filter('date')(campaign.mergeDt, 'yyyyMMdd')
             });
@@ -68,7 +68,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
 
             $scope.savePromise = apiSvc.saveCampaign(campaign);
             $scope.savePromise.then(function (data) {
-                $scope.campaign.cmpgnId = data.value.cmpgnId;
+                $scope.currCampaign.cmpgnId = data.value.cmpgnId;
                 $scope.searchCampaign();
                 deferred.resolve();
             }, function () {
@@ -90,15 +90,15 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
         $scope.detailCampaign = function () {
             var selectedRow = $scope.gridApi.selection.getSelectedRows()[0];
 
-            $scope.campaign = angular.extend({}, selectedRow);
-            $scope.campaign.mergeDt = uibDateParser.parse(selectedRow.mergeDt, 'yyyy-MM-dd');
+            $scope.currCampaign = angular.extend({}, selectedRow);
+            $scope.currCampaign.mergeDt = uibDateParser.parse(selectedRow.mergeDt, 'yyyy-MM-dd');
 
             $scope.loadCellList();
             $scope.loadTargeting();
         };
 
         $scope.clearDetail = function () {
-            $scope.campaign = {
+            $scope.currCampaign = {
                 cmpgnSndChnlFgCd: $scope.selectOptions[0].value
             };
 
@@ -128,21 +128,21 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
         };
 
         $scope.openTargeting = function () {
-            $scope.campaign.objRegFgCd = 'TRGT';
+            $scope.currCampaign.objRegFgCd = 'TRGT';
 
             $scope.saveCampaign().then(function () {
                 var modalInstance = $uibModal.open({
                     component: 'ctas0103Modal',
                     size: 'lg',
+                    backdrop: 'static',
                     resolve: {
-                        campaign: function () { return $scope.campaign; },
-                        targetingInfo: function () { return $scope.targetingInfo; }
+                        campaign: function () { return $scope.currCampaign; }
                     }
                 });
 
-                modalInstance.result.then(function (selectedItem) {
-                    $log.debug(selectedItem);
-                    $scope.targetingInfo = selectedItem;
+                modalInstance.result.then(function (item) {
+                    $log.debug(item);
+                    $scope.currCampaign = item;
 
                     $scope.loadCellList();
                 });
@@ -154,7 +154,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
         };
 
         $scope.loadCellList = function () {
-            $scope.cellListPromise = apiSvc.getCampaignDetail($scope.campaign);
+            $scope.cellListPromise = apiSvc.getCampaignDetail($scope.currCampaign);
             $scope.cellListPromise.then(function (data) {
                 $scope.gridOptionsCellList.data = data.value;
             });
@@ -162,7 +162,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
 
         $scope.addCell = function () {
             var params = {
-                cmpgnId: $scope.campaign.cmpgnId
+                cmpgnId: $scope.currCampaign.cmpgnId
             };
             $scope.cellListPromise = apiSvc.saveCampaignDetail(params);
             $scope.cellListPromise.then(function () {
@@ -174,14 +174,13 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             var selectedRow = $scope.gridApi2.selection.getSelectedRows()[0];
 
             apiSvc.deleteCampaignDetail(selectedRow).then(function () {
-                var index = $scope.gridOptionsCellList.data.indexOf(selectedRow);
-                $scope.gridOptionsCellList.data.splice(index, 1);
+                $scope.loadCellList();
             });
         };
 
         $scope.requestTransmission = function () {
             var componentName;
-            if ($scope.campaign.cmpgnSndChnlFgCd === 'MAIL') {
+            if ($scope.currCampaign.cmpgnSndChnlFgCd === 'MAIL') {
                 componentName = 'ctas0104Modal';
             } else {
                 componentName = 'ctas0105Modal';
@@ -190,8 +189,8 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             $uibModal.open({
                 component: componentName,
                 resolve: {
-                    notiType: function () { return $scope.campaign.cmpgnSndChnlFgCd; },
-                    targetingInfo: function () { return $scope.targetingInfo; }
+                    notiType: function () { return $scope.currCampaign.cmpgnSndChnlFgCd; },
+                    targetingInfo: function () { return $scope.currCampaign.targetingInfo; }
                 }
             });
         };

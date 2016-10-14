@@ -24,6 +24,4 @@ angular.module('App', [
     'toastr',
     'cgBusy',
     'mwl.confirm'
-]).value('cgBusyDefaults', {
-    message: 'Loading...',
-});
+]);

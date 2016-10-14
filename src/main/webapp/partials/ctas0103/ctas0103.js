@@ -12,7 +12,7 @@ angular.module('App').component('ctas0103Modal', {
 
         self.$onInit = function () {
             self.campaign = self.resolve.campaign;
-            self.options = angular.extend({}, self.resolve.targetingInfo);
+            self.options = angular.extend({ ocbMktngAgrmtYn: 'Y' }, self.campaign.targetingInfo);
             self.months = [];
 
             for (var i = 0; i < 7; i++ , month--) {
@@ -30,8 +30,9 @@ angular.module('App').component('ctas0103Modal', {
         self.ok = function () {
             var params = angular.extend({ cmpgnId: self.campaign.cmpgnId }, self.options);
 
-            apiSvc.saveCampaignTargetingInfo(params).then(function () {
-                self.close({ $value: self.options });
+            self.savePromise = apiSvc.saveCampaignTargetingInfo(params);
+            self.savePromise.then(function (data) {
+                self.close({ $value: data.value });
             });
         };
     }

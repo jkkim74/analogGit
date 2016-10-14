@@ -1,5 +1,6 @@
 package com.skplanet.ctas.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,8 +19,11 @@ import com.skplanet.ocb.util.ApiResponse;
 import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.pandora.controller.AuthController;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController("ctasApiController")
 @RequestMapping("api")
+@Slf4j
 public class ApiController {
 
 	@Autowired
@@ -77,19 +81,40 @@ public class ApiController {
 		querycacheRepository.createTargetingTable(params);
 		querycacheRepository.insertTargeting(params);
 
+		AutoMappedMap campaign = saveCampaignInternal(params, campaignId, username);
+
 		// 타겟팅 조건 저장
 		oracleRepository.deleteCampaignTargetingInfo(params);
-		oracleRepository.insertCampaignTargetingInfo(username, campaignId, params);
+		oracleRepository.insertCampaignTargetingInfo(username, campaignId, removeUnnecessaryFields(params));
 
-		// // 셀 정보 저장
-		// int extrctCnt = querycacheRepository.countTargeting(params);
-		// params.put("cellId", "CL" + campaignId.substring(2) + "001");
-		// params.put("extrctCnt", extrctCnt);
-		//
-		// oracleRepository.deleteCampaignDetail(params);
-		// oracleRepository.insertCampaignDetail(params);
+		campaign.put("targetingInfo", params);
 
-		return ApiResponse.builder().message("타게팅 정보 저장 완료").build();
+		return ApiResponse.builder().message("타게팅 정보 저장 완료").value(campaign).build();
+	}
+
+	private AutoMappedMap saveCampaignInternal(Map<String, Object> params, String campaignId, String username) {
+		int extrctCnt = querycacheRepository.countTargeting(params);
+
+		log.debug("extrctCnt={}", extrctCnt);
+
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("cmpgnId", campaignId);
+		map.put("username", username);
+		map.put("totCnt", String.valueOf(extrctCnt));
+		map.put("dupDelCnt", String.valueOf(extrctCnt));
+		map.put("stsFgCd", "02");
+		map.put("objRegFgCd", "TRGT");
+
+		oracleRepository.upsertCampaign(map);
+
+		return oracleRepository.selectCampaign(map).get(0);
+	}
+
+	private static Map<String, Object> removeUnnecessaryFields(Map<String, Object> map) {
+		map.remove("cmpgnId");
+		map.remove("pageId");
+		map.remove("username");
+		return map;
 	}
 
 	@GetMapping("/campaigns/detail")

@@ -3,7 +3,7 @@
 <mapper namespace="com.skplanet.ctas.repository.querycache.QueryCacheRepository">
 
 	<update id="createTargetingTable" parameterType="map">
-		CREATE TABLE IF NOT EXISTS WEB_TRGT_${cmpgnId} (
+		CREATE TABLE IF NOT EXISTS USER_PS03701.WEB_TRGT_${cmpgnId} (
 			MBR_ID STRING
 		)
 		ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
@@ -16,31 +16,29 @@
 	</update>
 
 	<insert id="insertTargeting" parameterType="map">
-		INSERT OVERWRITE TABLE WEB_TRGT_${cmpgnId}
-		<include refid="selectTargeting" />
+		INSERT OVERWRITE TABLE USER_PS03701.WEB_TRGT_${cmpgnId}
+		SELECT MBR_ID
+		FROM OCB.MART_MBR_TGTNG_MST
+		<include refid="selectTargeting_where" />
 	</insert>
 	<insert id="insertTargeting" parameterType="map" databaseId="hsql">
 		INSERT INTO WEB_TRGT_${cmpgnId}
-		<include refid="selectTargeting" />
-	</insert>
-
-	<sql id="selectTargeting">
 		SELECT MBR_ID
 		FROM MART_MBR_TGTNG_MST
 		<include refid="selectTargeting_where" />
-	</sql>
-	
+	</insert>
+
 	<sql id="selectTargeting_where">
 		<where>
-			<if test="true">AND OCB_MKTNG_AGRMT_YN = '1'  </if>
-			<if test="gndrFgCd != null and gndrFgCd != ''">AND GNDR_FG_CD = #{gndrFgCd}  </if>
+			<if test="ocbMktngAgrmtYn != null and ocbMktngAgrmtYn != ''">AND OCB_MKTNG_AGRMT_YN = #{ocbMktngAgrmtYn} </if>
+			<if test="gndrFgCd != null and gndrFgCd != ''">AND GNDR_FG_CD IN (#{gndrFgCd}) </if>
 			<if test="age != null and age != ''">
-				<foreach collection="age.split('-')" item="item" open="AND AGE BETWEEN" separator="AND"> TO_NUMBER(#{item}) </foreach>
+				<foreach collection="age.split('-')" item="item" open="AND AGE BETWEEN" separator="AND"> #{item} </foreach>
 			</if>
-			<if test="homeHjdLgrpCd != null and homeHjdLgrpCd != ''">AND HOME_HJD_LGRP_CD = #{homeHjdLgrpCd} </if>
-			<if test="homeHjdMgrpCd != null and homeHjdMgrpCd != ''">AND HOME_HJD_MGRP_CD = #{homeHjdMgrpCd} </if>
-			<if test="jobpHjdLgrpCd != null and jobpHjdLgrpCd != ''">AND JOBP_HJD_LGRP_CD = #{jobpHjdLgrpCd} </if>
-			<if test="jobpHjdMgrpCd != null and jobpHjdMgrpCd != ''">AND JOBP_HJD_MGRP_CD = #{jobpHjdMgrpCd} </if>
+			<if test="homeHjdLgrpCd != null and homeHjdLgrpCd != ''">AND HOME_HJD_LGRP_CD IN (#{homeHjdLgrpCd}) </if>
+			<if test="homeHjdMgrpCd != null and homeHjdMgrpCd != ''">AND HOME_HJD_MGRP_CD IN (#{homeHjdMgrpCd}) </if>
+			<if test="jobpHjdLgrpCd != null and jobpHjdLgrpCd != ''">AND JOBP_HJD_LGRP_CD IN (#{jobpHjdLgrpCd}) </if>
+			<if test="jobpHjdMgrpCd != null and jobpHjdMgrpCd != ''">AND JOBP_HJD_MGRP_CD IN (#{jobpHjdMgrpCd}) </if>
 			<if test="mrrgYn != null and mrrgYn != ''">AND MRRG_YN = #{mrrgYn} </if>
 			<if test="emailRcvAgrmtYn != null and emailRcvAgrmtYn != ''">AND EMAIL_RCV_AGRMT_YN = #{emailRcvAgrmtYn} </if>
 			<if test="advtSmsRcvAgrmtYn != null and advtSmsRcvAgrmtYn != ''">AND ADVT_SMS_RCV_AGRMT_YN = #{advtSmsRcvAgrmtYn} </if>
@@ -65,8 +63,8 @@
 				<if test="ocbPlusJoinYn == 'U'">AND OCB_PLUS_JOIN_YN = 1 AND OCB_PLUS_MTH07_FNL_YACHV_DT = '99990101' </if>
 				<if test="ocbPlusJoinYn != 'U'">AND OCB_PLUS_JOIN_YN = #{ocbPlusJoinYn} </if>
 			</if>
-			<if test="seg629Cd != null and seg629Cd != ''">AND SEG_629_CD = #{seg629Cd} </if>
-			<if test="trfcSegCd != null and trfcSegCd != ''">AND TRFC_SEG_CD = #{trfcSegCd} </if>
+			<if test="seg629Cd != null and seg629Cd != ''">AND SEG_629_CD IN (#{seg629Cd}) </if>
+			<if test="trfcSegCd != null and trfcSegCd != ''">AND TRFC_SEG_CD IN (#{trfcSegCd}) </if>
 			<if test="ocbcomMth07FnlLgnDt != null and ocbcomMth07FnlLgnDt != ''">AND OCBCOM_MTH07_FNL_LGN_DT &gt;= #{ocbcomMth07FnlLgnDt} </if>
 			<if test="ocbAppMth07FnlUseDt != null and ocbAppMth07FnlUseDt != ''">AND OCB_APP_MTH07_FNL_USE_DT &gt;= #{ocbAppMth07FnlUseDt} </if>
 			<if test="appAtdcMth07FnlUseDt != null and appAtdcMth07FnlUseDt != ''">AND APP_ATDC_MTH07_FNL_USE_DT &gt;= #{appAtdcMth07FnlUseDt} </if>
@@ -92,13 +90,13 @@
 			<if test="onlnMth07FnlYachvDt != null and onlnMth07FnlYachvDt != ''">AND ONLN_MTH07_FNL_YACHV_DT &gt;= #{onlnMth07FnlYachvDt} </if>
 			<if test="onlnMth07CpnFnlYachvDt != null and onlnMth07CpnFnlYachvDt != ''">AND ONLN_MTH07_CPN_FNL_YACHV_DT &gt;= #{onlnMth07CpnFnlYachvDt} </if>
 			<if test="avlPnt != null and avlPnt != ''">
-				<foreach collection="avlPnt.split('-')" item="item" open="AND AVL_PNT BETWEEN" separator="AND"> TO_NUMBER(#{item}) </foreach>
+				<foreach collection="avlPnt.split('-')" item="item" open="AND AVL_PNT BETWEEN" separator="AND"> #{item} </foreach>
 			</if>
 		</where>
 	</sql>
 
 	<select id="countTargeting" parameterType="map" resultType="int">
-		SELECT COUNT(*) FROM WEB_TRGT_${cmpgnId}
+		SELECT COUNT(*) FROM USER_PS03701.WEB_TRGT_${cmpgnId}
 	</select>
 
 </mapper>

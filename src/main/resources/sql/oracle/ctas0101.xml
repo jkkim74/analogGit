@@ -43,8 +43,9 @@
 			, UPD_ID
 		FROM WEB_CMPGN_MST
 		<where>
-			<if test="periodFrom != null and periodFrom != ''">AND SND_DT &gt;= #{periodFrom}</if>
-			<if test="periodTo != null and periodTo != ''">AND SND_DT &lt;= #{periodTo}</if>
+			<if test="cmpgnId != null and cmpgnId != ''">AND CMPGN_ID = #{cmpgnId} </if>
+			<if test="periodFrom != null and periodFrom != ''">AND SND_DT &gt;= #{periodFrom} </if>
+			<if test="periodTo != null and periodTo != ''">AND SND_DT &lt;= #{periodTo} </if>
 		</where>
 	</sql>
 
@@ -80,7 +81,7 @@
 		</trim>
 		WHEN NOT MATCHED THEN
 			INSERT ( CMPGN_ID, CMPGN_NM, MERGE_DT, OBJ_REG_FG_CD, CMPGN_SND_CHNL_FG_CD, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
-			VALUES ( #{cmpgnId}, #{cmpgnNm}, #{mergeDt}, #{objRegFgCd}, #{cmpgnSndChnlFgCd}, '01', #{username}, SYSDATE, #{username}, SYSDATE )
+			VALUES ( #{cmpgnId}, #{cmpgnNm, jdbcType=VARCHAR}, #{mergeDt, jdbcType=VARCHAR}, #{objRegFgCd, jdbcType=VARCHAR}, #{cmpgnSndChnlFgCd, jdbcType=VARCHAR}, '01', #{username}, SYSDATE, #{username}, SYSDATE )
 	</update>
 
 	<delete id="deleteCampaign" parameterType="map">
@@ -89,12 +90,13 @@
 	
 	<select id="selectCampaignDetail" parameterType="map" resultType="AutoMappedMap">
 		SELECT A.CELL_ID
+			, CMPGN_ID
 			, A.CELL_DESC
 			, CASE B.DUP_DEL_CNT WHEN 0 THEN 0 ELSE ROUND(A.EXTRCT_CNT / B.DUP_DEL_CNT * 100, 1) END AS CELL_PRCNTG
 			, A.EXTRCT_CNT
 			, A.FNL_EXTRCT_CNT
-			, A.MERGE_DT
-			, A.SND_DT
+			, TO_CHAR(TO_DATE(A.MERGE_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS MERGE_DT
+			, TO_CHAR(TO_DATE(A.SND_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS SND_DT
 			, CASE A.STS_FG_CD WHEN '02' THEN '추출완료' WHEN '03' THEN '머지완료' WHEN '04' THEN '전송완료' ELSE '저장' END AS STS_FG_NM
 		FROM WEB_CMPGN_DTL A
 		JOIN WEB_CMPGN_MST B USING(CMPGN_ID)
@@ -124,7 +126,7 @@
 		</trim>
 		WHEN NOT MATCHED THEN
 			INSERT ( CELL_ID, CMPGN_ID, EXTRCT_CNT, MERGE_DT, CELL_DESC, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
-			VALUES ( #{cellId}, #{cmpgnId}, #{extrctCnt}, #{mergeDt}, #{cellDesc}, '02', #{username}, SYSDATE, #{username}, SYSDATE )
+			VALUES ( #{cellId}, #{cmpgnId}, #{extrctCnt, jdbcType=INTEGER}, #{mergeDt, jdbcType=VARCHAR}, #{cellDesc, jdbcType=VARCHAR}, '02', #{username}, SYSDATE, #{username}, SYSDATE )
 	</insert>
 	
 	<update id="balanceCellExtrctCnt" parameterType="map">
@@ -132,7 +134,7 @@
 		SET EXTRCT_CNT = 
 		(
 			SELECT
-				CASE WHEN DTL_CNT = ROWNUM
+				CASE WHEN DTL_CNT = RNUM
 				THEN TRUNC(DUP_DEL_CNT / DTL_CNT) + MOD(DUP_DEL_CNT, DTL_CNT)
 				ELSE TRUNC(DUP_DEL_CNT / DTL_CNT)
 				END AS EXTRCT_CNT
@@ -140,7 +142,7 @@
 				SELECT CELL_ID
 					, DUP_DEL_CNT
 					, (SELECT COUNT(*) FROM WEB_CMPGN_DTL WHERE CMPGN_ID = #{cmpgnId}) AS DTL_CNT
-					, ROWNUM
+					, ROWNUM AS RNUM
 				FROM WEB_CMPGN_DTL
 				JOIN WEB_CMPGN_MST USING(CMPGN_ID)
 				WHERE CMPGN_ID = #{cmpgnId}
@@ -151,7 +153,7 @@
 	</update>
 
 	<delete id="deleteCampaignDetail" parameterType="map">
-		DELETE FROM WEB_CMPGN_DTL WHERE CMPGN_ID = #{cmpgnId}
+		DELETE FROM WEB_CMPGN_DTL WHERE CELL_ID = #{cellId} AND CMPGN_ID = #{cmpgnId}
 	</delete>
 
 </mapper>

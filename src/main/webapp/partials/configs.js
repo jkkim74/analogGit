@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('App').config(['$stateProvider', '$urlRouterProvider', '$provide', '$translateProvider', 'uibDatepickerConfig', 'uibDatepickerPopupConfig',
+angular.module('App').value('cgBusyDefaults', {
+    message: 'Waiting...'
+}).config(['$stateProvider', '$urlRouterProvider', '$provide', '$translateProvider', 'uibDatepickerConfig', 'uibDatepickerPopupConfig',
     function ($stateProvider, $urlRouterProvider, $provide, $translateProvider, uibDatepickerConfig, uibDatepickerPopupConfig) {
 
         $urlRouterProvider.otherwise('/');
@@ -62,8 +64,9 @@ angular.module('App').config(['$stateProvider', '$urlRouterProvider', '$provide'
         uibDatepickerPopupConfig.closeText = '닫기';
         uibDatepickerPopupConfig.currentText = '오늘';
 
-    }])
-    .run(['$rootScope', '$state', 'authSvc', 'confirmationPopoverDefaults', function ($rootScope, $state, authSvc, confirmationPopoverDefaults) {
+    }
+]).run(['$rootScope', '$state', 'authSvc', 'confirmationPopoverDefaults',
+    function ($rootScope, $state, authSvc, confirmationPopoverDefaults) {
 
         $rootScope.$on('$stateChangeStart',
             function (event, toState, toParams, fromState, fromParams, options) {
@@ -90,4 +93,5 @@ angular.module('App').config(['$stateProvider', '$urlRouterProvider', '$provide'
         confirmationPopoverDefaults.confirmText = '확인';
         confirmationPopoverDefaults.cancelText = '취소';
 
-    }]);
+    }
+]);
