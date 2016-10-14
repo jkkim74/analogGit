@@ -12,7 +12,7 @@ angular.module('App').component('ctas0103Modal', {
 
         self.$onInit = function () {
             self.campaign = self.resolve.campaign;
-            self.options = angular.extend({ ocbMktngAgrmtYn: 'Y' }, self.campaign.targetingInfo);
+            self.options = angular.extend({ ocbMktngAgrmtYn: '1' }, self.campaign.targetingInfo);
             self.months = [];
 
             for (var i = 0; i < 7; i++ , month--) {
