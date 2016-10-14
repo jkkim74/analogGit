@@ -58,12 +58,6 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             });
         };
 
-        $scope.clearDetail = function () {
-            $scope.campaign = {
-                cmpgnSndChnlFgCd: $scope.selectOptions[0].value
-            };
-        };
-
         $scope.saveCampaign = function () {
             var campaign = angular.extend({}, $scope.campaign);
             angular.extend(campaign, {
@@ -101,6 +95,14 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
 
             $scope.loadCellList();
             $scope.loadTargeting();
+        };
+
+        $scope.clearDetail = function () {
+            $scope.campaign = {
+                cmpgnSndChnlFgCd: $scope.selectOptions[0].value
+            };
+
+            $scope.gridOptionsCellList.data = [];
         };
 
         $scope.gridOptionsCellList = {
