@@ -71,7 +71,8 @@
 				<div class="form-group">
 					<label class="col-sm-5 control-label">캠페인 대상자 등록</label>
 					<div class="col-sm-7">
-						<button type="button" class="btn btn-default" ng-disabled="campaignForm.$invalid">CSV 파일 등록</button>
+						<button type="button" class="btn btn-default" ngf-select="upload($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'"
+							ngf-max-size="1GB" ng-disabled="campaignForm.$invalid">CSV 파일 등록</button>
 						<button type="button" class="btn btn-default" ng-click="openTargeting()" ng-disabled="campaignForm.$invalid">타겟팅 조건 선택</button>
 					</div>
 				</div>

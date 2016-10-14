@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal', 'uibDateParser',
-    function ($scope, $log, $q, $http, $timeout, $filter, uiGridConstants, toastr, apiSvc, $uibModal, uibDateParser) {
+angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal', 'uibDateParser', 'uploadSvc',
+    function ($scope, $log, $q, $http, $timeout, $filter, uiGridConstants, toastr, apiSvc, $uibModal, uibDateParser, uploadSvc) {
 
         var self = this;
         $scope.title = '이메일 발송 관리';
@@ -146,6 +146,17 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             params[colDef.name] = newValue;
 
             apiSvc.saveCampaignDetail(params);
+        };
+
+        $scope.upload = function (file) {
+            var params = {
+                file: file,
+                columnName: 'mbrId'
+            };
+
+            $scope.uploadPromise = uploadSvc.upload(params);
+            $scope.uploadPromise.then(function () {
+            });
         };
 
         $scope.openTargeting = function () {

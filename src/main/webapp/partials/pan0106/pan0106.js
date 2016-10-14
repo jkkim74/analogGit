@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App').controller('Pan0106Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', 'authSvc',
-    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService, authSvc) {
+angular.module('App').controller('Pan0106Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadSvc', 'authSvc',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadSvc, authSvc) {
 
         var self = this;
         $scope.title = '회원 프로파일 분석';
@@ -91,12 +91,12 @@ angular.module('App').controller('Pan0106Ctrl', ['$scope', '$q', '$http', '$time
             $scope.uploadRecords = 0;
             $scope.uploadProgressLoadingMessage = 'Uploading...';
 
-            $scope.uploadPromise = uploadService.upload({ file: file, columnName: $scope.selectedOption.value });
+            $scope.uploadPromise = uploadSvc.upload({ file: file, columnName: $scope.selectedOption.value });
             $scope.uploadPromise.then(function () {
                 self.checkUploadProgress();
                 $scope.uploadProgressLoadingMessage = 'Loading...';
 
-                return uploadService.getUploadedPreview();
+                return uploadSvc.getUploadedPreview();
             }, null, function (progressPercentage) {
                 $scope.uploadProgressLoadingMessage = 'Uploading...' + progressPercentage + '%';
             }).then(function (data) {
@@ -118,7 +118,7 @@ angular.module('App').controller('Pan0106Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         self.checkUploadProgress = function () {
-            uploadService.getUploadProgress().finally(function (data) {
+            uploadSvc.getUploadProgress().finally(function (data) {
                 $scope.uploadProgress = false;
             }, function (totalItems) {
                 $scope.uploadProgress = true;

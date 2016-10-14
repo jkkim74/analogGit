@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App').service('uploadService', ['$log', '$q', '$http', '$stateParams', 'toastr', 'Upload', '$interval', 'authSvc',
+angular.module('App').service('uploadSvc', ['$log', '$q', '$http', '$stateParams', 'toastr', 'Upload', '$interval', 'authSvc',
     function ($log, $q, $http, $stateParams, toastr, Upload, $interval, authSvc) {
 
         this.upload = function (params) {

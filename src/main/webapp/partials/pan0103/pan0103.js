@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadService', 'authSvc',
-    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadService, authSvc) {
+angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadSvc', 'authSvc',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadSvc, authSvc) {
 
         var self = this;
         $scope.title = '배치 적립 파일 검증';
@@ -60,12 +60,12 @@ angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$time
             $scope.uploadRecords = 0;
             $scope.uploadProgressLoadingMessage = 'Uploading...';
 
-            $scope.uploadPromise = uploadService.upload({ file: file, columnName: $scope.selectedOption.value });
+            $scope.uploadPromise = uploadSvc.upload({ file: file, columnName: $scope.selectedOption.value });
             $scope.uploadPromise.then(function () {
                 self.checkUploadProgress();
                 $scope.uploadProgressLoadingMessage = 'Loading...';
 
-                return uploadService.getUploadedPreview();
+                return uploadSvc.getUploadedPreview();
             }, null, function (progressPercentage) {
                 $scope.uploadProgressLoadingMessage = 'Uploading...' + progressPercentage + '%';
             }).then(function (data) {
@@ -87,7 +87,7 @@ angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         self.checkUploadProgress = function () {
-            uploadService.getUploadProgress().finally(function (data) {
+            uploadSvc.getUploadProgress().finally(function (data) {
                 $scope.uploadProgress = false;
             }, function (totalItems) {
                 $scope.uploadProgress = true;
