@@ -35,7 +35,7 @@
 		<if test="temp == true">
 			TABLE_NAME = 'WEB_TRGT_${cmpgnId}_TMP'
 		</if>
-		<if test="temp == false">
+		<if test="temp == null or temp == false">
 			TABLE_NAME = 'WEB_TRGT_${cmpgnId}'
 		</if>
 	</select>

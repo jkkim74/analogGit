@@ -43,6 +43,7 @@
 			, TOT_CNT
 			, DUP_DEL_CNT
 			, CMPGN_SND_CHNL_FG_CD
+			, STS_FG_CD
 			, CASE STS_FG_CD WHEN '02' THEN '추출완료' WHEN '03' THEN '머지완료' WHEN '04' THEN '전송완료' ELSE '저장' END AS STS_FG_NM
 			, UPD_ID
 		FROM WEB_CMPGN_MST
@@ -109,6 +110,11 @@
 
 	<select id="nextCellId" parameterType="map" resultType="string">
 		SELECT 'CL' || SUBSTR(#{cmpgnId}, 3) || TO_CHAR(SUBSTR(NVL(MAX(CELL_ID), 'CL00000000'), 8) + 1, 'FM099')
+		FROM WEB_CMPGN_DTL
+		WHERE CMPGN_ID = #{cmpgnId} 
+	</select>
+	<select id="nextCellId" parameterType="map" resultType="string" databaseId="hsql">
+		SELECT 'CL' || SUBSTR(#{cmpgnId}, 3) ||  LPAD(CAST(SUBSTR(IFNULL(MAX(CELL_ID), 'CL00000000'), 8) AS INTEGER) + 1, 3, '0')
 		FROM WEB_CMPGN_DTL
 		WHERE CMPGN_ID = #{cmpgnId} 
 	</select>
