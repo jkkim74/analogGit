@@ -7,7 +7,7 @@ angular.module('App').component('ctas0103Modal', {
         close: '&',
         dismiss: '&'
     },
-    controller: function (apiSvc) {
+    controller: function (apiSvc, $filter) {
         var self = this;
 
         self.$onInit = function () {
@@ -28,7 +28,8 @@ angular.module('App').component('ctas0103Modal', {
         };
 
         self.ok = function () {
-            var params = angular.extend({ cmpgnId: self.campaign.cmpgnId }, self.options);
+            var params = angular.extend({}, self.campaign, self.options);
+            params.mergeDt = $filter('date')(params.mergeDt, 'yyyyMMdd');
 
             self.savePromise = apiSvc.saveCampaignTargetingInfo(params);
             self.savePromise.then(function (data) {

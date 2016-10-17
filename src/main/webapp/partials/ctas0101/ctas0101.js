@@ -79,10 +79,8 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
         };
 
         $scope.deleteCampaign = function () {
-            var selectedRow = $scope.gridApi.selection.getSelectedRows()[0];
-
-            apiSvc.deleteCampaign(selectedRow).then(function () {
-                var index = $scope.gridOptionsList.data.indexOf(selectedRow);
+            apiSvc.deleteCampaign($scope.currCampaign).then(function () {
+                var index = $scope.gridOptionsList.data.indexOf($scope.currCampaign);
                 $scope.gridOptionsList.data.splice(index, 1);
 
                 $scope.clearDetail();
@@ -153,7 +151,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
 
         $scope.upload = function (file) {
             var params = {
-                url: '/api/campaigns/targeting',
+                url: '/api/campaigns/targeting/csv',
                 file: file,
                 columnName: 'mbrId'
             };
@@ -171,27 +169,23 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
         };
 
         $scope.openTargeting = function () {
-            $scope.currCampaign.objRegFgCd = 'TRGT';
+            var modalInstance = $uibModal.open({
+                component: 'ctas0103Modal',
+                size: 'lg',
+                backdrop: 'static',
+                resolve: {
+                    campaign: function () { return $scope.currCampaign; }
+                }
+            });
 
-            $scope.saveCampaign().then(function () {
-                var modalInstance = $uibModal.open({
-                    component: 'ctas0103Modal',
-                    size: 'lg',
-                    backdrop: 'static',
-                    resolve: {
-                        campaign: function () { return $scope.currCampaign; }
-                    }
-                });
+            modalInstance.result.then(function (item) {
+                $log.debug(item);
+                $scope.currCampaign = item;
+                $scope.currCampaign.mergeDt = uibDateParser.parse($scope.currCampaign.mergeDt, 'yyyy-MM-dd');
+                $scope.currCampaign.sndDt = uibDateParser.parse($scope.currCampaign.sndDt, 'yyyy-MM-dd');
 
-                modalInstance.result.then(function (item) {
-                    $log.debug(item);
-                    $scope.currCampaign = item;
-                    $scope.currCampaign.mergeDt = uibDateParser.parse($scope.currCampaign.mergeDt, 'yyyy-MM-dd');
-                    $scope.currCampaign.sndDt = uibDateParser.parse($scope.currCampaign.sndDt, 'yyyy-MM-dd');
-
-                    $scope.searchCampaign();
-                    $scope.loadCellList();
-                });
+                $scope.searchCampaign();
+                $scope.loadCellList();
             });
         };
 

@@ -78,8 +78,45 @@ public class ApiController {
 		return ApiResponse.builder().value(list).build();
 	}
 
-	@PostMapping("/campaigns/targeting")
-	public ApiResponse saveCampaignTargetingInfo(@RequestParam("file") MultipartFile file,
+	@PostMapping("/campaigns/targeting/trgt")
+	public ApiResponse saveCampaignTargetingInfoFromHive(@RequestParam Map<String, Object> params) throws IOException {
+
+		String campaignId = (String) params.get("cmpgnId");
+		if (campaignId == null) {
+			campaignId = oracleRepository.nextCampaignId();
+			params.put("cmpgnId", campaignId);
+		}
+		String username = AuthController.getUserInfo().getUsername();
+		params.put("username", username);
+
+		// 타겟팅 추출
+		querycacheRepository.createTargetingTable(params);
+		querycacheRepository.insertTargeting(params);
+
+		int extrctCnt = querycacheRepository.countTargeting(params);
+
+		log.debug("extrctCnt={}", extrctCnt);
+
+		params.put("totCnt", String.valueOf(extrctCnt));
+		params.put("dupDelCnt", String.valueOf(extrctCnt));
+		params.put("stsFgCd", "02");
+		params.put("objRegFgCd", "TRGT");
+
+		oracleRepository.upsertCampaign(params);
+
+		AutoMappedMap campaign = oracleRepository.selectCampaign(params);
+
+		// 타겟팅 조건 저장
+		oracleRepository.deleteCampaignTargetingInfo(params);
+		oracleRepository.insertCampaignTargetingInfo(username, campaignId, removeUnnecessaryFields(params));
+
+		campaign.put("targetingInfo", params);
+
+		return ApiResponse.builder().message("타게팅 정보 저장 완료").value(campaign).build();
+	}
+
+	@PostMapping("/campaigns/targeting/csv")
+	public ApiResponse saveCampaignTargetingInfoFromCsv(@RequestParam("file") MultipartFile file,
 			@RequestParam Map<String, Object> params) throws IOException {
 
 		String campaignId = (String) params.get("cmpgnId");
@@ -90,43 +127,25 @@ public class ApiController {
 		String username = AuthController.getUserInfo().getUsername();
 		params.put("username", username);
 
-		if (file == null || file.isEmpty()) {
-			// 타겟팅 추출
-			querycacheRepository.createTargetingTable(params);
-			querycacheRepository.insertTargeting(params);
+		prepareTargetingCsvTable(params);
 
-			AutoMappedMap campaign = saveCampaignInternal(params, campaignId, username);
+		importCsv(file, params, campaignId, username);
 
-			// 타겟팅 조건 저장
-			oracleRepository.deleteCampaignTargetingInfo(params);
-			oracleRepository.insertCampaignTargetingInfo(username, campaignId, removeUnnecessaryFields(params));
+		oracleRepository.migrateCampaignTargetingCsv(params);
 
-			campaign.put("targetingInfo", params);
+		int totCnt = oracleRepository.countCampaignTargetingCsvTmp(params);
+		int dupDelCnt = oracleRepository.countCampaignTargetingCsv(params);
 
-			return ApiResponse.builder().message("타게팅 정보 저장 완료").value(campaign).build();
-		} else {
-			// CSV 업로드
-			prepareTargetingCsvTable(params);
+		params.put("totCnt", String.valueOf(totCnt));
+		params.put("dupDelCnt", String.valueOf(dupDelCnt));
+		params.put("stsFgCd", "02");
+		params.put("objRegFgCd", "CSV");
 
-			importCsv(file, params, campaignId, username);
+		oracleRepository.upsertCampaign(params);
 
-			oracleRepository.migrateCampaignTargetingCsv(params);
+		AutoMappedMap campaign = oracleRepository.selectCampaign(params);
 
-			int totCnt = oracleRepository.countCampaignTargetingCsvTmp(params);
-			int dupDelCnt = oracleRepository.countCampaignTargetingCsv(params);
-
-			params.put("totCnt", String.valueOf(totCnt));
-			params.put("dupDelCnt", String.valueOf(dupDelCnt));
-			params.put("stsFgCd", "02");
-			params.put("objRegFgCd", "CSV");
-
-			oracleRepository.upsertCampaign(params);
-
-			AutoMappedMap campaign = oracleRepository.selectCampaign(params);
-
-			return ApiResponse.builder().message("CSV 타게팅 정보 업로드 완료").value(campaign).build();
-		}
-
+		return ApiResponse.builder().message("CSV 타게팅 정보 업로드 완료").value(campaign).build();
 	}
 
 	public void importCsv(MultipartFile file, Map<String, Object> params, String campaignId, String username) {
@@ -134,6 +153,7 @@ public class ApiController {
 		JobExecution execution = uploadService
 				.beginImport(uploadService.readyToImport(file, campaignId, username, columnName));
 
+		// 비동기 배치 업로드 완료를 대기
 		while (execution.isRunning()) {
 			try {
 				Thread.sleep(1000L);
@@ -150,28 +170,17 @@ public class ApiController {
 		oracleRepository.truncateCampaignTargetingCsvTable(params);
 	}
 
-	private AutoMappedMap saveCampaignInternal(Map<String, Object> params, String campaignId, String username) {
-		int extrctCnt = querycacheRepository.countTargeting(params);
-
-		log.debug("extrctCnt={}", extrctCnt);
-
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("cmpgnId", campaignId);
-		map.put("username", username);
-		map.put("totCnt", String.valueOf(extrctCnt));
-		map.put("dupDelCnt", String.valueOf(extrctCnt));
-		map.put("stsFgCd", "02");
-		map.put("objRegFgCd", "TRGT");
-
-		oracleRepository.upsertCampaign(map);
-
-		return oracleRepository.selectCampaign(map);
-	}
-
 	private static Map<String, Object> removeUnnecessaryFields(Map<String, Object> map) {
 		map.remove("cmpgnId");
 		map.remove("pageId");
 		map.remove("username");
+		map.remove("cmpgnNm");
+		map.remove("mergeDt");
+		map.remove("cmpgnSndChnlFgCd");
+		map.remove("totCnt");
+		map.remove("dupDelCnt");
+		map.remove("stsFgCd");
+		map.remove("objRegFgCd");
 		return map;
 	}
 
