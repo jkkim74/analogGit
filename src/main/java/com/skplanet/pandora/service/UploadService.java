@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -57,6 +58,8 @@ public class UploadService {
 	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
 		Path filePath = saveUploadFile(file);
 
+		markRunning(pageId, username, columnName, filePath.getFileName().toString());
+
 		prepareTemporaryTable(pageId, username);
 
 		long numberOfColumns = getNumberOfColumnsAndValidate(pageId, filePath);
@@ -65,14 +68,13 @@ public class UploadService {
 				.addString(Constant.USERNAME, username).addString(Constant.FILE_PATH, filePath.toString())
 				.addLong(Constant.NUMBER_OF_COLUMNS, numberOfColumns).toJobParameters();
 
-		markRunning(pageId, username, columnName, filePath.getFileName().toString());
-
 		return jobParameters;
 	}
 
-	public void beginImport(JobParameters jobParameters) {
+	public JobExecution beginImport(JobParameters jobParameters) {
 		try {
-			jobLauncher.run(importJob, jobParameters);
+			JobExecution execution = jobLauncher.run(importJob, jobParameters);
+			return execution;
 		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
 				| JobParametersInvalidException e) {
 			throw new BizException("Import Job Error", e);
