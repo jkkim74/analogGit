@@ -43,4 +43,18 @@ public interface OracleRepository {
 
 	int deleteCampaignTargetingInfo(Map<String, Object> params);
 
+	int countCampaignTargetingCsvTable(Map<String, Object> params);
+
+	void createCampaignTargetingCsvTable(Map<String, Object> params);
+
+	void truncateCampaignTargetingCsvTable(Map<String, Object> params);
+
+	void insertCampaignTargetingCsvTmp(@Param("cmpgnId") String campaignId, @Param("mbrIdList") List<String> bulk);
+
+	void migrateCampaignTargetingCsv(Map<String, Object> params);
+
+	int countCampaignTargetingCsvTmp(Map<String, Object> params);
+
+	int countCampaignTargetingCsv(Map<String, Object> params);
+
 }

@@ -29,4 +29,102 @@
 		DELETE FROM WEB_CMPGN_TGTNG_INFO WHERE CMPGN_ID = #{cmpgnId}
 	</delete>
 
+	<select id="countCampaignTargetingCsvTable" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM USER_TABLES
+		WHERE
+		<if test="temp == true">
+			TABLE_NAME = 'WEB_TRGT_${cmpgnId}_TMP'
+		</if>
+		<if test="temp == false">
+			TABLE_NAME = 'WEB_TRGT_${cmpgnId}'
+		</if>
+	</select>
+	<select id="countCampaignTargetingCsvTable" parameterType="map" resultType="int" databaseId="hsql">
+		SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES
+		WHERE
+		<if test="temp == true">
+			TABLE_NAME = 'WEB_TRGT_' || #{cmpgnId} || '_TMP'
+		</if>
+		<if test="temp == null or temp == false">
+			TABLE_NAME = 'WEB_TRGT_' || #{cmpgnId}
+		</if>
+	</select>
+
+	<update id="createCampaignTargetingCsvTable" parameterType="map">
+		<if test="temp == true">
+			CREATE TABLE WEB_TRGT_${cmpgnId}_TMP
+		</if>
+		<if test="temp == null or temp == false">
+			CREATE TABLE WEB_TRGT_${cmpgnId}
+		</if>
+		(
+			MBR_ID VARCHAR2 (9)
+		)
+		TABLESPACE INTG_DTBS_TDE
+		PCTFREE 10
+		PCTUSED 0
+		INITRANS 1
+		MAXTRANS 255
+		STORAGE
+		(
+			INITIAL 5242880
+			NEXT 5242880
+			MINEXTENTS 1
+			MAXEXTENTS UNLIMITED
+			BUFFER_POOL DEFAULT
+		)
+		NOLOGGING
+	</update>
+	<update id="createCampaignTargetingCsvTable" parameterType="map" databaseId="hsql">
+		<if test="temp == true">
+			CREATE TABLE WEB_TRGT_${cmpgnId}_TMP
+		</if>
+		<if test="temp == null or temp == false">
+			CREATE TABLE WEB_TRGT_${cmpgnId}
+		</if>
+		(
+			MBR_ID VARCHAR2 (9)
+		)
+	</update>
+
+	<update id="truncateCampaignTargetingCsvTable" parameterType="map">
+		<if test="temp == true">
+			TRUNCATE TABLE WEB_TRGT_${cmpgnId}_TMP
+		</if>
+		<if test="temp == null or temp == false">
+			TRUNCATE TABLE WEB_TRGT_${cmpgnId}
+		</if>
+	</update>
+	
+	<insert id="insertCampaignTargetingCsvTmp" parameterType="map">
+		INSERT /*+ APPEND_VALUES */ ALL
+		<foreach collection="mbrIdList" item="item" separator=" ">
+			INTO WEB_TRGT_${cmpgnId}_TMP VALUES ( #{item} )
+		</foreach>
+		SELECT * FROM DUAL
+	</insert>
+	<insert id="insertCampaignTargetingCsvTmp" parameterType="map" databaseId="hsql">
+		INSERT /*+ APPEND_VALUES */
+		INTO WEB_TRGT_${cmpgnId}_TMP
+		VALUES
+		<foreach collection="mbrIdList" item="item" separator=",">
+			( #{item} )
+		</foreach>
+	</insert>
+
+	<insert id="migrateCampaignTargetingCsv" parameterType="map">
+		INSERT INTO WEB_TRGT_${cmpgnId}
+		SELECT MBR_ID
+		FROM WEB_TRGT_${cmpgnId}_TMP
+		GROUP BY MBR_ID
+	</insert>
+
+	<select id="countCampaignTargetingCsvTmp" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM WEB_TRGT_${cmpgnId}_TMP
+	</select>
+
+	<select id="countCampaignTargetingCsv" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM WEB_TRGT_${cmpgnId}
+	</select>
+
 </mapper>

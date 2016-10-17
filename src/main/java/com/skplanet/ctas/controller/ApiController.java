@@ -1,5 +1,9 @@
 package com.skplanet.ctas.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.ctas.repository.oracle.OracleRepository;
 import com.skplanet.ctas.repository.querycache.QueryCacheRepository;
@@ -72,24 +77,88 @@ public class ApiController {
 
 	@PostMapping("/campaigns/targeting")
 	@Transactional("oracleTxManager")
-	public ApiResponse saveCampaignTargetingInfo(@RequestParam Map<String, Object> params) {
+	public ApiResponse saveCampaignTargetingInfo(@RequestParam("file") MultipartFile file,
+			@RequestParam Map<String, Object> params) throws IOException {
+
 		String campaignId = (String) params.get("cmpgnId");
+		if (campaignId == null) {
+			campaignId = oracleRepository.nextCampaignId();
+			params.put("cmpgnId", campaignId);
+		}
 		String username = AuthController.getUserInfo().getUsername();
 		params.put("username", username);
 
-		// 타겟팅 추출
-		querycacheRepository.createTargetingTable(params);
-		querycacheRepository.insertTargeting(params);
+		if (file == null || file.isEmpty()) {
+			// 타겟팅 추출
+			querycacheRepository.createTargetingTable(params);
+			querycacheRepository.insertTargeting(params);
 
-		AutoMappedMap campaign = saveCampaignInternal(params, campaignId, username);
+			AutoMappedMap campaign = saveCampaignInternal(params, campaignId, username);
 
-		// 타겟팅 조건 저장
-		oracleRepository.deleteCampaignTargetingInfo(params);
-		oracleRepository.insertCampaignTargetingInfo(username, campaignId, removeUnnecessaryFields(params));
+			// 타겟팅 조건 저장
+			oracleRepository.deleteCampaignTargetingInfo(params);
+			oracleRepository.insertCampaignTargetingInfo(username, campaignId, removeUnnecessaryFields(params));
 
-		campaign.put("targetingInfo", params);
+			campaign.put("targetingInfo", params);
 
-		return ApiResponse.builder().message("타게팅 정보 저장 완료").value(campaign).build();
+			return ApiResponse.builder().message("타게팅 정보 저장 완료").value(campaign).build();
+		} else {
+			// CSV 업로드
+			prepareTemporaryTable(params);
+
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+				String line = null;
+				int bulkSize = 1000;
+				List<String> bulk = new ArrayList<>(bulkSize);
+				int i = 0;
+
+				while ((line = reader.readLine()) != null) {
+					if (!line.isEmpty()) {
+						bulk.add(line);
+					}
+
+					if (++i >= bulkSize) {
+						oracleRepository.insertCampaignTargetingCsvTmp(campaignId, bulk);
+						i = 0;
+						bulk = new ArrayList<>(bulkSize);
+					}
+				}
+
+				if (!bulk.isEmpty()) {
+					oracleRepository.insertCampaignTargetingCsvTmp(campaignId, bulk);
+				}
+			}
+
+			oracleRepository.migrateCampaignTargetingCsv(params);
+
+			int totCnt = oracleRepository.countCampaignTargetingCsvTmp(params);
+			int dupDelCnt = oracleRepository.countCampaignTargetingCsv(params);
+
+			params.put("totCnt", String.valueOf(totCnt));
+			params.put("dupDelCnt", String.valueOf(dupDelCnt));
+			params.put("stsFgCd", "02");
+			params.put("objRegFgCd", "CSV");
+
+			oracleRepository.upsertCampaign(params);
+
+			AutoMappedMap campaign = oracleRepository.selectCampaign(params);
+
+			return ApiResponse.builder().message("CSV 타게팅 정보 업로드 완료").value(campaign).build();
+		}
+
+	}
+
+	private void prepareTemporaryTable(Map<String, Object> params) {
+		if (oracleRepository.countCampaignTargetingCsvTable(params) <= 0) {
+			oracleRepository.createCampaignTargetingCsvTable(params);
+		}
+		oracleRepository.truncateCampaignTargetingCsvTable(params);
+
+		params.put("temp", true);
+		if (oracleRepository.countCampaignTargetingCsvTable(params) <= 0) {
+			oracleRepository.createCampaignTargetingCsvTable(params);
+		}
+		oracleRepository.truncateCampaignTargetingCsvTable(params);
 	}
 
 	private AutoMappedMap saveCampaignInternal(Map<String, Object> params, String campaignId, String username) {

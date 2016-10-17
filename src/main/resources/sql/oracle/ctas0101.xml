@@ -84,8 +84,8 @@
 			UPT_DTTM = SYSDATE,
 		</trim>
 		WHEN NOT MATCHED THEN
-			INSERT ( CMPGN_ID, CMPGN_NM, MERGE_DT, OBJ_REG_FG_CD, CMPGN_SND_CHNL_FG_CD, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
-			VALUES ( #{cmpgnId}, #{cmpgnNm, jdbcType=VARCHAR}, #{mergeDt, jdbcType=VARCHAR}, #{objRegFgCd, jdbcType=VARCHAR}, #{cmpgnSndChnlFgCd, jdbcType=VARCHAR}, '01', #{username}, SYSDATE, #{username}, SYSDATE )
+			INSERT ( CMPGN_ID, CMPGN_NM, MERGE_DT, OBJ_REG_FG_CD, TOT_CNT, DUP_DEL_CNT, CMPGN_SND_CHNL_FG_CD, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
+			VALUES ( #{cmpgnId}, #{cmpgnNm, jdbcType=VARCHAR}, #{mergeDt, jdbcType=VARCHAR}, #{objRegFgCd, jdbcType=VARCHAR}, TO_NUMBER(#{totCnt, jdbcType=VARCHAR}), TO_NUMBER(#{dupDelCnt, jdbcType=VARCHAR}), #{cmpgnSndChnlFgCd, jdbcType=VARCHAR}, #{stsFgCd, jdbcType=VARCHAR}, #{username}, SYSDATE, #{username}, SYSDATE )
 	</update>
 
 	<delete id="deleteCampaign" parameterType="map">

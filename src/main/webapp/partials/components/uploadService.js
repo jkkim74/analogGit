@@ -8,12 +8,12 @@ angular.module('App').service('uploadSvc', ['$log', '$q', '$http', '$stateParams
 
             if (params.file) {
                 Upload.upload({
-                    url: '/api/files',
+                    url: params.url || '/api/files',
                     data: angular.extend({ pageId: $stateParams.pageId }, params),
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
                     toastr.success(resp.config.data.file.name, resp.data.message);
-                    deferred.resolve();
+                    deferred.resolve(resp.data);
                 }, function (resp) {
                     $log.error(resp);
 

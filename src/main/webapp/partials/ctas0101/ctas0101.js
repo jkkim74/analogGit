@@ -151,12 +151,20 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
 
         $scope.upload = function (file) {
             var params = {
+                url: '/api/campaigns/targeting',
                 file: file,
                 columnName: 'mbrId'
             };
 
+            params = angular.extend(params, $scope.currCampaign);
+            params.mergeDt = $filter('date')(params.mergeDt, 'yyyyMMdd');
+
             $scope.uploadPromise = uploadSvc.upload(params);
-            $scope.uploadPromise.then(function () {
+            $scope.uploadPromise.then(function (data) {
+                $scope.currCampaign = data.value;
+                $scope.currCampaign.mergeDt = uibDateParser.parse($scope.currCampaign.mergeDt, 'yyyy-MM-dd');
+
+                $scope.searchCampaign();
             });
         };
 
