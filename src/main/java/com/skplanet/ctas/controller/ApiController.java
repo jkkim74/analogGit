@@ -1,13 +1,11 @@
 package com.skplanet.ctas.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.batch.core.JobExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,9 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.ctas.repository.oracle.OracleRepository;
 import com.skplanet.ctas.repository.querycache.QueryCacheRepository;
+import com.skplanet.ocb.exception.BizException;
 import com.skplanet.ocb.util.ApiResponse;
 import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.pandora.controller.AuthController;
+import com.skplanet.pandora.service.UploadService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,6 +36,9 @@ public class ApiController {
 
 	@Autowired
 	private QueryCacheRepository querycacheRepository;
+
+	@Autowired
+	private UploadService uploadService;
 
 	@GetMapping("/campaigns")
 	public ApiResponse getCampaigns(@RequestParam Map<String, Object> params) {
@@ -76,7 +79,6 @@ public class ApiController {
 	}
 
 	@PostMapping("/campaigns/targeting")
-	@Transactional("oracleTxManager")
 	public ApiResponse saveCampaignTargetingInfo(@RequestParam("file") MultipartFile file,
 			@RequestParam Map<String, Object> params) throws IOException {
 
@@ -104,30 +106,9 @@ public class ApiController {
 			return ApiResponse.builder().message("타게팅 정보 저장 완료").value(campaign).build();
 		} else {
 			// CSV 업로드
-			prepareTemporaryTable(params);
+			prepareTargetingCsvTable(params);
 
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-				String line = null;
-				int bulkSize = 1000;
-				List<String> bulk = new ArrayList<>(bulkSize);
-				int i = 0;
-
-				while ((line = reader.readLine()) != null) {
-					if (!line.isEmpty()) {
-						bulk.add(line);
-					}
-
-					if (++i >= bulkSize) {
-						oracleRepository.insertCampaignTargetingCsvTmp(campaignId, bulk);
-						i = 0;
-						bulk = new ArrayList<>(bulkSize);
-					}
-				}
-
-				if (!bulk.isEmpty()) {
-					oracleRepository.insertCampaignTargetingCsvTmp(campaignId, bulk);
-				}
-			}
+			importCsv(file, params, campaignId, username);
 
 			oracleRepository.migrateCampaignTargetingCsv(params);
 
@@ -148,13 +129,21 @@ public class ApiController {
 
 	}
 
-	private void prepareTemporaryTable(Map<String, Object> params) {
-		if (oracleRepository.countCampaignTargetingCsvTable(params) <= 0) {
-			oracleRepository.createCampaignTargetingCsvTable(params);
-		}
-		oracleRepository.truncateCampaignTargetingCsvTable(params);
+	public void importCsv(MultipartFile file, Map<String, Object> params, String campaignId, String username) {
+		String columnName = (String) params.get("columnName");
+		JobExecution execution = uploadService
+				.beginImport(uploadService.readyToImport(file, campaignId, username, columnName));
 
-		params.put("temp", true);
+		while (execution.isRunning()) {
+			try {
+				Thread.sleep(1000L);
+			} catch (InterruptedException e) {
+				throw new BizException("", e);
+			}
+		}
+	}
+
+	private void prepareTargetingCsvTable(Map<String, Object> params) {
 		if (oracleRepository.countCampaignTargetingCsvTable(params) <= 0) {
 			oracleRepository.createCampaignTargetingCsvTable(params);
 		}

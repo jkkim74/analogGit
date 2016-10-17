@@ -140,7 +140,9 @@
 	</insert>
 
 	<delete id="deleteCampaignDetail" parameterType="map">
-		DELETE FROM WEB_CMPGN_DTL WHERE CELL_ID = #{cellId} AND CMPGN_ID = #{cmpgnId}
+		DELETE FROM WEB_CMPGN_DTL
+		WHERE CMPGN_ID = #{cmpgnId}
+		<if test="cellId != null and cellId != ''">AND CELL_ID = #{cellId} </if>
 	</delete>
 	
 	<update id="balanceCellExtrctCnt" parameterType="map">

@@ -84,6 +84,8 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             apiSvc.deleteCampaign(selectedRow).then(function () {
                 var index = $scope.gridOptionsList.data.indexOf(selectedRow);
                 $scope.gridOptionsList.data.splice(index, 1);
+
+                $scope.clearDetail();
             });
         };
 

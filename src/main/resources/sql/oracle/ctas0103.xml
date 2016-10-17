@@ -30,33 +30,14 @@
 	</delete>
 
 	<select id="countCampaignTargetingCsvTable" parameterType="map" resultType="int">
-		SELECT COUNT(*) FROM USER_TABLES
-		WHERE
-		<if test="temp == true">
-			TABLE_NAME = 'WEB_TRGT_${cmpgnId}_TMP'
-		</if>
-		<if test="temp == null or temp == false">
-			TABLE_NAME = 'WEB_TRGT_${cmpgnId}'
-		</if>
+		SELECT COUNT(*) FROM USER_TABLES WHERE TABLE_NAME = 'WEB_TRGT_${cmpgnId}'
 	</select>
 	<select id="countCampaignTargetingCsvTable" parameterType="map" resultType="int" databaseId="hsql">
-		SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES
-		WHERE
-		<if test="temp == true">
-			TABLE_NAME = 'WEB_TRGT_' || #{cmpgnId} || '_TMP'
-		</if>
-		<if test="temp == null or temp == false">
-			TABLE_NAME = 'WEB_TRGT_' || #{cmpgnId}
-		</if>
+		SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'WEB_TRGT_' || #{cmpgnId}
 	</select>
 
 	<update id="createCampaignTargetingCsvTable" parameterType="map">
-		<if test="temp == true">
-			CREATE TABLE WEB_TRGT_${cmpgnId}_TMP
-		</if>
-		<if test="temp == null or temp == false">
-			CREATE TABLE WEB_TRGT_${cmpgnId}
-		</if>
+		CREATE TABLE WEB_TRGT_${cmpgnId}
 		(
 			MBR_ID VARCHAR2 (9)
 		)
@@ -76,24 +57,14 @@
 		NOLOGGING
 	</update>
 	<update id="createCampaignTargetingCsvTable" parameterType="map" databaseId="hsql">
-		<if test="temp == true">
-			CREATE TABLE WEB_TRGT_${cmpgnId}_TMP
-		</if>
-		<if test="temp == null or temp == false">
-			CREATE TABLE WEB_TRGT_${cmpgnId}
-		</if>
+		CREATE TABLE WEB_TRGT_${cmpgnId}
 		(
 			MBR_ID VARCHAR2 (9)
 		)
 	</update>
 
 	<update id="truncateCampaignTargetingCsvTable" parameterType="map">
-		<if test="temp == true">
-			TRUNCATE TABLE WEB_TRGT_${cmpgnId}_TMP
-		</if>
-		<if test="temp == null or temp == false">
-			TRUNCATE TABLE WEB_TRGT_${cmpgnId}
-		</if>
+		TRUNCATE TABLE WEB_TRGT_${cmpgnId}
 	</update>
 	
 	<insert id="insertCampaignTargetingCsvTmp" parameterType="map">
@@ -104,23 +75,20 @@
 		SELECT * FROM DUAL
 	</insert>
 	<insert id="insertCampaignTargetingCsvTmp" parameterType="map" databaseId="hsql">
-		INSERT /*+ APPEND_VALUES */
-		INTO WEB_TRGT_${cmpgnId}_TMP
+		INSERT INTO WEB_TRGT_${cmpgnId}_TMP
 		VALUES
-		<foreach collection="mbrIdList" item="item" separator=",">
-			( #{item} )
-		</foreach>
+		<foreach collection="mbrIdList" item="item" separator=",">( #{item} )</foreach>
 	</insert>
 
 	<insert id="migrateCampaignTargetingCsv" parameterType="map">
 		INSERT INTO WEB_TRGT_${cmpgnId}
-		SELECT MBR_ID
-		FROM WEB_TRGT_${cmpgnId}_TMP
-		GROUP BY MBR_ID
+		SELECT COLUMN1
+		FROM TMP_${cmpgnId}_${username}
+		GROUP BY COLUMN1
 	</insert>
 
 	<select id="countCampaignTargetingCsvTmp" parameterType="map" resultType="int">
-		SELECT COUNT(*) FROM WEB_TRGT_${cmpgnId}_TMP
+		SELECT COUNT(*) FROM TMP_${cmpgnId}_${username}
 	</select>
 
 	<select id="countCampaignTargetingCsv" parameterType="map" resultType="int">
