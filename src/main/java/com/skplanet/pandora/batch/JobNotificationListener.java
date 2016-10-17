@@ -19,14 +19,9 @@ public class JobNotificationListener extends JobExecutionListenerSupport {
 	public void afterJob(JobExecution jobExecution) {
 		log.info("Job Execution Status : {}", jobExecution.getStatus());
 
-		switch (jobExecution.getStatus()) {
-		case COMPLETED:
-		case FAILED:
+		if (!jobExecution.isRunning()) {
 			JobParameters parameters = jobExecution.getJobParameters();
 			uploadService.endImport(parameters);
-			break;
-		default:
-			break;
 		}
 	}
 
