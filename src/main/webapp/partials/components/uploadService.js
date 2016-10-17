@@ -74,7 +74,7 @@ angular.module('App').service('uploadSvc', ['$log', '$q', '$http', '$stateParams
             var canceler = $interval(uploadedPreview, 500);
 
             function uploadedPreview() {
-                $http.get('/api/upload', {
+                $http.get('/api/files', {
                     params: { pageId: $stateParams.pageId, countOnly: true },
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
