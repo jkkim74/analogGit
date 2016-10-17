@@ -34,8 +34,8 @@ public class ApiController {
 
 	@GetMapping("/campaigns")
 	public ApiResponse getCampaigns(@RequestParam Map<String, Object> params) {
-		List<AutoMappedMap> list = oracleRepository.selectCampaign(params);
-		int count = oracleRepository.countCampaign(params);
+		List<AutoMappedMap> list = oracleRepository.selectCampaigns(params);
+		int count = oracleRepository.countCampaigns(params);
 		return ApiResponse.builder().value(list).totalItems(count).build();
 	}
 
@@ -107,7 +107,7 @@ public class ApiController {
 
 		oracleRepository.upsertCampaign(map);
 
-		return oracleRepository.selectCampaign(map).get(0);
+		return oracleRepository.selectCampaign(map);
 	}
 
 	private static Map<String, Object> removeUnnecessaryFields(Map<String, Object> map) {
@@ -119,7 +119,7 @@ public class ApiController {
 
 	@GetMapping("/campaigns/detail")
 	public ApiResponse getCampaignDetail(@RequestParam Map<String, Object> params) {
-		List<AutoMappedMap> list = oracleRepository.selectCampaignDetail(params);
+		List<AutoMappedMap> list = oracleRepository.selectCampaignDetails(params);
 		return ApiResponse.builder().value(list).build();
 	}
 

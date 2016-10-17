@@ -92,6 +92,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
 
             $scope.currCampaign = angular.extend({}, selectedRow);
             $scope.currCampaign.mergeDt = uibDateParser.parse(selectedRow.mergeDt, 'yyyy-MM-dd');
+            $scope.currCampaign.sndDt = uibDateParser.parse(selectedRow.sndDt, 'yyyy-MM-dd');
 
             $scope.loadCellList();
             $scope.loadTargeting();
@@ -175,7 +176,10 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
                 modalInstance.result.then(function (item) {
                     $log.debug(item);
                     $scope.currCampaign = item;
+                    $scope.currCampaign.mergeDt = uibDateParser.parse($scope.currCampaign.mergeDt, 'yyyy-MM-dd');
+                    $scope.currCampaign.sndDt = uibDateParser.parse($scope.currCampaign.sndDt, 'yyyy-MM-dd');
 
+                    $scope.searchCampaign();
                     $scope.loadCellList();
                 });
             });

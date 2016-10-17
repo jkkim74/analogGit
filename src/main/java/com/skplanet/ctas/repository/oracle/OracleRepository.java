@@ -11,26 +11,31 @@ import com.skplanet.ocb.util.AutoMappedMap;
 @Repository("ctasOracleRepository")
 public interface OracleRepository {
 
-	List<AutoMappedMap> selectCampaign(Map<String, Object> params);
+	/* Campaign */
+	List<AutoMappedMap> selectCampaigns(Map<String, Object> params);
 
-	int countCampaign(Map<String, Object> params);
+	int countCampaigns(Map<String, Object> params);
 
 	String nextCampaignId();
+
+	AutoMappedMap selectCampaign(Map<String, Object> params);
 
 	int upsertCampaign(Map<String, Object> params);
 
 	int deleteCampaign(Map<String, Object> params);
 
-	List<AutoMappedMap> selectCampaignDetail(Map<String, Object> params);
-	
+	/* Campaign Detail */
+	List<AutoMappedMap> selectCampaignDetails(Map<String, Object> params);
+
 	String nextCellId(Map<String, Object> params);
 
 	int upsertCampaignDetail(Map<String, Object> params);
 
-	int balanceCellExtrctCnt(Map<String, Object> params);
-
 	int deleteCampaignDetail(Map<String, Object> params);
 
+	int balanceCellExtrctCnt(Map<String, Object> params);
+
+	/* Campaign Targeting */
 	List<AutoMappedMap> selectCampaignTargetingInfo(Map<String, Object> params);
 
 	int insertCampaignTargetingInfo(@Param("username") String username, @Param("cmpgnId") String campaignId,

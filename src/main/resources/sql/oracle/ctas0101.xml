@@ -20,12 +20,16 @@
 	</sql>
 
 	<select id="selectCampaign" parameterType="map" resultType="AutoMappedMap">
+		<include refid="selectCampaign_inner" />
+	</select>
+
+	<select id="selectCampaigns" parameterType="map" resultType="AutoMappedMap">
 		<include refid="pagingHead" />
 		<include refid="selectCampaign_inner" />
 		<include refid="pagingFoot" />
 		ORDER BY CMPGN_ID
 	</select>
-	<select id="selectCampaign" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
+	<select id="selectCampaigns" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
 		<include refid="selectCampaign_inner" />
 		<include refid="pagingFoot" />
 	</select>
@@ -49,7 +53,7 @@
 		</where>
 	</sql>
 
-	<select id="countCampaign" parameterType="map" resultType="int">
+	<select id="countCampaigns" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM (
 		<include refid="selectCampaign_inner" />
 		)
@@ -59,7 +63,7 @@
 		SELECT 'CM' || TO_CHAR(SUBSTR(NVL(MAX(CMPGN_ID), 'CM00000'), 3) + 1, 'FM09999') FROM WEB_CMPGN_MST
 	</select>
 	<select id="nextCampaignId" parameterType="map" resultType="string" databaseId="hsql">
-		SELECT ( IFNULL(MAX(CMPGN_ID),'0') + 1 ) || '' FROM WEB_CMPGN_MST
+		SELECT 'CM' || LPAD(CAST(SUBSTR(IFNULL(MAX(CMPGN_ID),'CM00000'), 3) AS INTEGER) + 1, 5, '0') FROM WEB_CMPGN_MST
 	</select>
 
 	<update id="upsertCampaign" parameterType="map">
@@ -88,7 +92,7 @@
 		DELETE FROM WEB_CMPGN_MST WHERE CMPGN_ID = #{cmpgnId}
 	</delete>
 	
-	<select id="selectCampaignDetail" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectCampaignDetails" parameterType="map" resultType="AutoMappedMap">
 		SELECT A.CELL_ID
 			, CMPGN_ID
 			, A.CELL_DESC
@@ -128,6 +132,10 @@
 			INSERT ( CELL_ID, CMPGN_ID, EXTRCT_CNT, MERGE_DT, CELL_DESC, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
 			VALUES ( #{cellId}, #{cmpgnId}, #{extrctCnt, jdbcType=INTEGER}, #{mergeDt, jdbcType=VARCHAR}, #{cellDesc, jdbcType=VARCHAR}, '02', #{username}, SYSDATE, #{username}, SYSDATE )
 	</insert>
+
+	<delete id="deleteCampaignDetail" parameterType="map">
+		DELETE FROM WEB_CMPGN_DTL WHERE CELL_ID = #{cellId} AND CMPGN_ID = #{cmpgnId}
+	</delete>
 	
 	<update id="balanceCellExtrctCnt" parameterType="map">
 		UPDATE WEB_CMPGN_DTL A
@@ -151,9 +159,5 @@
 		)
 		WHERE CMPGN_ID = #{cmpgnId}
 	</update>
-
-	<delete id="deleteCampaignDetail" parameterType="map">
-		DELETE FROM WEB_CMPGN_DTL WHERE CELL_ID = #{cellId} AND CMPGN_ID = #{cmpgnId}
-	</delete>
 
 </mapper>
