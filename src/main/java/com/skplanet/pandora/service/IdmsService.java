@@ -36,7 +36,7 @@ public class IdmsService {
 	public static final int BIZ_USER_STATUS_DIASABLED = 2;
 
 	@Autowired
-	private FtpService ftpService;
+	private ForwardService ftpService;
 
 	private static void writeToFileAsCsv(String filename, Object... values) {
 		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR, filename);

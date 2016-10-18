@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.skplanet.ocb.service.MailService;
+import com.skplanet.ocb.service.SmsService;
 import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
-import com.skplanet.pandora.service.MailService;
-import com.skplanet.pandora.service.SmsService;
 
 @RestController
 public class TestController {

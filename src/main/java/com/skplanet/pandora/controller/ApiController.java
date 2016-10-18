@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.skplanet.ocb.exception.BizException;
 import com.skplanet.ocb.security.UserInfo;
+import com.skplanet.ocb.service.SshService;
 import com.skplanet.ocb.util.ApiResponse;
 import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.pandora.model.TransmissionType;
@@ -19,8 +20,7 @@ import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.pandora.service.NoticeService;
-import com.skplanet.pandora.service.PtsService;
-import com.skplanet.pandora.service.SshService;
+import com.skplanet.pandora.service.RequestService;
 import com.skplanet.pandora.service.UploadService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,7 @@ public class ApiController {
 	private UploadService uploadService;
 
 	@Autowired
-	private PtsService ptsService;
+	private RequestService ptsService;
 
 	@Autowired
 	private SshService sshService;
@@ -173,7 +173,7 @@ public class ApiController {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
-		ptsService.send(ptsUsername, ptsMasking, uploadProgress);
+		ptsService.sendToPts(ptsUsername, ptsMasking, uploadProgress);
 
 		return ApiResponse.builder().message("PTS 전송 성공").build();
 	}

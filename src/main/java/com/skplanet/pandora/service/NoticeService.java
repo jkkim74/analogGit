@@ -10,6 +10,7 @@ import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.skplanet.ocb.service.SmsService;
 import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.ocb.util.CsvCreatorTemplate;
 import com.skplanet.ocb.util.Helper;
@@ -30,20 +31,11 @@ public class NoticeService {
 	private SmsService smsService;
 
 	@Autowired
-	private FtpService ftpService;
+	private ForwardService ftpService;
 
-	public void noticeUsingFtp(final Map<String, Object> params, final TransmissionType notiType) {
+	public void noticeUsingFtp(final Map<String, Object> params, final TransmissionType transmissionType) {
 
-		log.info("notice using ftp: {}, {}", params, notiType);
-
-		String remotePath = "";
-		if (notiType == TransmissionType.OCBCOM) {
-			remotePath = "pointExEmail/extinction_" + Helper.nowDateString() + ".txt";
-		} else if (notiType == TransmissionType.EM) {
-			remotePath = "pointExEmail/extinction_em_" + Helper.nowDateString() + ".txt";
-		}
-
-		log.info("remotePath={}", remotePath);
+		log.info("notice using ftp: {}, {}", params, transmissionType);
 
 		CsvCreatorTemplate<AutoMappedMap> csvCreator = new CsvCreatorTemplate<AutoMappedMap>() {
 
@@ -63,11 +55,11 @@ public class NoticeService {
 			public void printRecord(CSVPrinter printer, AutoMappedMap map) throws IOException {
 				String extnctObjDt = (String) map.get("extnctObjDt");
 
-				if (notiType == TransmissionType.OCBCOM) {
+				if (transmissionType == TransmissionType.OCBCOM) {
 					// 소명예정년,소멸예정월,소멸예정일,EC_USER_ID
 					printer.printRecord(extnctObjDt.substring(0, 4), extnctObjDt.substring(4, 6),
 							extnctObjDt.substring(6, 8), map.get("unitedId"));
-				} else if (notiType == TransmissionType.EM) {
+				} else if (transmissionType == TransmissionType.EM) {
 					String mbrId = (String) map.get("mbrId");
 					String unitedId = (String) map.get("unitedId");
 					String encrypted = Helper.skpEncrypt(mbrId + "," + unitedId);
@@ -80,10 +72,12 @@ public class NoticeService {
 
 		};
 
-		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR, Helper.uniqueCsvFilename(notiType.name().toLowerCase())); 
+		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR,
+				Helper.uniqueCsvFilename(transmissionType.name().toLowerCase()));
+
 		csvCreator.create(filePath);
 
-		ftpService.sendForNotification(filePath, remotePath);
+		ftpService.sendForNotification(filePath, transmissionType);
 	}
 
 	public void noticeUsingSms(final Map<String, Object> params) {

@@ -1,4 +1,4 @@
-package com.skplanet.pandora.service;
+package com.skplanet.ocb.service;
 
 import java.io.IOException;
 import java.util.ArrayList;

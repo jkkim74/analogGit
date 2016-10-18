@@ -52,7 +52,7 @@ public class UploadService {
 	private Job importJob;
 
 	@Autowired
-	private FtpService ftpService;
+	private ForwardService fowardService;
 
 	@Transactional("mysqlTxManager")
 	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
@@ -188,8 +188,7 @@ public class UploadService {
 
 		markRunning(pageId, username, columnName, filePath.getFileName().toString());
 
-		String remotePath = "web/" + filePath.getFileName().toString();
-		ftpService.sendForExtraction(filePath, remotePath);
+		fowardService.sendForExtraction(filePath);
 
 		markFinish(pageId, username);
 
