@@ -7,8 +7,6 @@ import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.skplanet.ocb.security.UserInfo;
 import com.skplanet.ocb.util.ApiResponse;
+import com.skplanet.ocb.util.Helper;
 import com.skplanet.pandora.service.UserService;
 
 @RestController
@@ -27,10 +26,6 @@ public class AuthController {
 
 	@Autowired
 	private UserService userService;
-
-	public static UserDetails getUserInfo() {
-		return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	}
 
 	@PostMapping
 	@RolesAllowed("ROLE_ADMIN")
@@ -48,8 +43,8 @@ public class AuthController {
 	}
 
 	@GetMapping("/me")
-	public UserDetails me() {
-		return getUserInfo();
+	public UserInfo me() {
+		return Helper.currentUser();
 	}
 
 	@PostMapping("/info")

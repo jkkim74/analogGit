@@ -23,13 +23,11 @@ import com.skplanet.ctas.repository.oracle.OracleRepository;
 import com.skplanet.ctas.repository.querycache.QueryCacheRepository;
 import com.skplanet.ctas.service.TransmissionService;
 import com.skplanet.ocb.exception.BizException;
-import com.skplanet.ocb.security.UserInfo;
 import com.skplanet.ocb.service.MailService;
 import com.skplanet.ocb.util.ApiResponse;
 import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.ocb.util.CsvCreatorTemplate;
 import com.skplanet.ocb.util.Helper;
-import com.skplanet.pandora.controller.AuthController;
 import com.skplanet.pandora.service.UploadService;
 import com.skplanet.pandora.util.Constant;
 
@@ -70,7 +68,7 @@ public class ApiController {
 			params.put("cmpgnId", campaignId);
 		}
 
-		String username = AuthController.getUserInfo().getUsername();
+		String username = Helper.currentUser().getUsername();
 		params.put("username", username);
 
 		oracleRepository.upsertCampaign(params);
@@ -102,7 +100,7 @@ public class ApiController {
 			campaignId = oracleRepository.nextCampaignId();
 			params.put("cmpgnId", campaignId);
 		}
-		String username = AuthController.getUserInfo().getUsername();
+		String username = Helper.currentUser().getUsername();
 		params.put("username", username);
 
 		// 타겟팅 추출
@@ -142,7 +140,7 @@ public class ApiController {
 			campaignId = oracleRepository.nextCampaignId();
 			params.put("cmpgnId", campaignId);
 		}
-		String username = AuthController.getUserInfo().getUsername();
+		String username = Helper.currentUser().getUsername();
 		params.put("username", username);
 
 		prepareTargetingCsvTable(params);
@@ -219,7 +217,7 @@ public class ApiController {
 			cellAdd = true;
 		}
 
-		String username = AuthController.getUserInfo().getUsername();
+		String username = Helper.currentUser().getUsername();
 		params.put("username", username);
 
 		oracleRepository.upsertCampaignDetail(params);
@@ -287,13 +285,13 @@ public class ApiController {
 		if ("MAIL".equals(params.get("cmpgnSndChnlFgCd"))) {
 			transmissionService.sendToFtp(filePath);
 		} else {
-			String ptsUsername = ((UserInfo) AuthController.getUserInfo()).getPtsUsername();
+			String ptsUsername = Helper.currentUser().getPtsUsername();
 
 			transmissionService.sendToPts(filePath, ptsUsername);
 		}
 
 		// 전송 상태 업데이트
-		String username = ((UserInfo) AuthController.getUserInfo()).getUsername();
+		String username = Helper.currentUser().getUsername();
 		Map<String, Object> map = new HashMap<>();
 		map.put("stsFgCd", "04");
 		map.put("username", username);

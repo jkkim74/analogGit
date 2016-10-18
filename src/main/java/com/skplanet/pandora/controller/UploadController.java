@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.skplanet.ocb.exception.BizException;
 import com.skplanet.ocb.util.ApiResponse;
 import com.skplanet.ocb.util.AutoMappedMap;
+import com.skplanet.ocb.util.Helper;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.model.UploadStatus;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
@@ -42,7 +43,7 @@ public class UploadController {
 	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String pageId,
 			@RequestParam String columnName) throws IOException {
 
-		String username = AuthController.getUserInfo().getUsername();
+		String username = Helper.currentUser().getUsername();
 
 		log.info("Uploading file... pageId={}, username={}, columnName={}", pageId, username, columnName);
 
@@ -65,7 +66,7 @@ public class UploadController {
 	public ApiResponse getUploadedPreview(@RequestParam String pageId,
 			@RequestParam(defaultValue = "false") boolean countOnly) {
 
-		String username = AuthController.getUserInfo().getUsername();
+		String username = Helper.currentUser().getUsername();
 
 		if (countOnly) {
 			// 업로드 진행상태 체크 용도
