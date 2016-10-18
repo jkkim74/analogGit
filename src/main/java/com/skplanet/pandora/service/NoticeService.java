@@ -31,7 +31,7 @@ public class NoticeService {
 	private SmsService smsService;
 
 	@Autowired
-	private ForwardService ftpService;
+	private ForwardService forwardService;
 
 	public void noticeUsingFtp(final Map<String, Object> params, final TransmissionType transmissionType) {
 
@@ -77,7 +77,7 @@ public class NoticeService {
 
 		csvCreator.create(filePath);
 
-		ftpService.sendForNotification(filePath, transmissionType);
+		forwardService.sendForNotification(filePath, transmissionType);
 	}
 
 	public void noticeUsingSms(final Map<String, Object> params) {
