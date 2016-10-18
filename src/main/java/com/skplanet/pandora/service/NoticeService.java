@@ -2,6 +2,7 @@ package com.skplanet.pandora.service;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.skplanet.ocb.util.AutoMappedMap;
+import com.skplanet.ocb.util.CsvCreatorTemplate;
 import com.skplanet.ocb.util.Helper;
 import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
-import com.skplanet.pandora.util.CsvCreatorTemplate;
+import com.skplanet.pandora.util.Constant;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -78,7 +80,8 @@ public class NoticeService {
 
 		};
 
-		Path filePath = csvCreator.create(Helper.uniqueCsvFilename(notiType.name().toLowerCase()));
+		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR, Helper.uniqueCsvFilename(notiType.name().toLowerCase())); 
+		csvCreator.create(filePath);
 
 		ftpService.sendForNotification(filePath, remotePath);
 	}

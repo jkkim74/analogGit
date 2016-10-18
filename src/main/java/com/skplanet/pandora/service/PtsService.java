@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +18,11 @@ import com.google.common.io.Resources;
 import com.ptsapi.client.ApiClient;
 import com.skplanet.ocb.exception.BizException;
 import com.skplanet.ocb.util.AutoMappedMap;
+import com.skplanet.ocb.util.CsvCreatorTemplate;
 import com.skplanet.ocb.util.Helper;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
-import com.skplanet.pandora.util.CsvCreatorTemplate;
+import com.skplanet.pandora.util.Constant;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -508,7 +510,8 @@ public class PtsService {
 
 		};
 
-	Path filePath = csvCreator.create(Helper.uniqueCsvFilename("P140802BKhub_" + ptsUsername));
+	Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR,Helper.uniqueCsvFilename("P140802BKhub_" + ptsUsername));
+	csvCreator.create(filePath);
 
 	return filePath.toFile().getAbsolutePath();
 	}
@@ -519,8 +522,6 @@ public class PtsService {
 		String ptsProperties = Resources.getResource("config/PTS.properties").getPath();
 
 		log.debug("PTS.properties location={}", ptsProperties);
-
-		String theFilename = filename;
 
 		BufferedReader in = null;
 		FileWriter fw = null;

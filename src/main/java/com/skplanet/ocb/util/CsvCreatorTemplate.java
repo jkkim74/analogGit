@@ -1,10 +1,9 @@
-package com.skplanet.pandora.util;
+package com.skplanet.ocb.util;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
@@ -18,11 +17,15 @@ import com.skplanet.ocb.exception.BizException;
  */
 public abstract class CsvCreatorTemplate<T> {
 
-	public final Path create(String filename) {
-		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR, filename);
+	public final Path create(Path filePath) {
+		return create(filePath, ',');
+	}
 
-		try (CSVPrinter printer = CSVFormat.DEFAULT.print(Files.newBufferedWriter(filePath, StandardCharsets.UTF_8,
-				StandardOpenOption.CREATE, StandardOpenOption.APPEND))) {
+	public final Path create(Path filePath, char delimiter) {
+
+		try (CSVPrinter printer = CSVFormat.RFC4180.withDelimiter(delimiter).withQuote(null)
+				.print(Files.newBufferedWriter(filePath, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
+						StandardOpenOption.APPEND))) {
 
 			List<T> list = nextList();
 
