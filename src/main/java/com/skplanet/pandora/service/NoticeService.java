@@ -1,6 +1,7 @@
 package com.skplanet.pandora.service;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -75,7 +76,7 @@ public class NoticeService {
 		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR,
 				Helper.uniqueCsvFilename(transmissionType.name().toLowerCase()));
 
-		csvCreator.create(filePath);
+		csvCreator.create(filePath, Charset.forName("x-IBM949"));
 
 		forwardService.sendForNotification(filePath, transmissionType);
 	}

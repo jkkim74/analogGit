@@ -1,6 +1,7 @@
 package com.skplanet.ctas.controller;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -277,7 +278,7 @@ public class ApiController {
 				Helper.nowMonthDayString() + '_' + cellId + '_' + fnlExtrctCnt + "_O.dat");
 
 		if ("MAIL".equals(params.get("cmpgnSndChnlFgCd"))) {
-			csvCreator.create(filePath, '▦');
+			csvCreator.create(filePath, '▦', Charset.forName("x-IBM949"));
 		} else {
 			csvCreator.create(filePath);
 		}
