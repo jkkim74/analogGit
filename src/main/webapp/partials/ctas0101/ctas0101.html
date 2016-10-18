@@ -94,7 +94,7 @@
 					<button type="button" class="btn btn-success" ng-click="addCell()" ng-disabled="campaignForm.$invalid">셀 추가</button>
 					<button type="button" class="btn btn-danger" mwl-confirm on-confirm="deleteCell()" title="셀 삭제" message="선택된 셀을 삭제하시겠습니까?"
 						confirm-text="삭제" confirm-button-type="danger" placement="left" ng-disabled="gridApi2.selection.getSelectedCount() <= 0">셀 삭제</button>
-					<button type="button" class="btn btn-warning" ng-click="requestTransmission()" ng-disabled="gridApi2.selection.getSelectedCount() <= 0 || gridApi2.selection.getSelectedRows()[0].stsFgCd != '03'">전송요청</button>
+					<button type="button" class="btn btn-warning" ng-click="requestTransmission()" ng-disabled="gridApi2.selection.getSelectedCount() <= 0">전송요청</button>
 				</div>
 			</div>
 

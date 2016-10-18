@@ -24,6 +24,7 @@ import com.skplanet.ctas.repository.querycache.QueryCacheRepository;
 import com.skplanet.ctas.service.TransmissionService;
 import com.skplanet.ocb.exception.BizException;
 import com.skplanet.ocb.security.UserInfo;
+import com.skplanet.ocb.service.MailService;
 import com.skplanet.ocb.util.ApiResponse;
 import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.ocb.util.CsvCreatorTemplate;
@@ -50,6 +51,9 @@ public class ApiController {
 
 	@Autowired
 	private TransmissionService transmissionService;
+
+	@Autowired
+	private MailService mailService;
 
 	@GetMapping("/campaigns")
 	public ApiResponse getCampaigns(@RequestParam Map<String, Object> params) {
@@ -298,6 +302,11 @@ public class ApiController {
 
 		oracleRepository.upsertCampaign(map);
 		oracleRepository.upsertCampaignDetail(map);
+
+		// 메일 발송
+		if ("MAIL".equals(params.get("cmpgnSndChnlFgCd"))) {
+			mailService.send("전송요청서 테스트", "ctas0104.vm", params);
+		}
 
 		return ApiResponse.builder().message("전송 요청 완료").build();
 	}

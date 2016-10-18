@@ -29,6 +29,9 @@ public class MailService {
 	@Value("${mail.from}")
 	private String from;
 
+	@Value("${mail.to}")
+	private String to;
+
 	@Async
 	public void send(String to, String subject, String templateName, Map<String, Object> model) {
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -49,7 +52,9 @@ public class MailService {
 		}
 	}
 
-	public void send(String[] toList, String subject, String templateName, Map<String, Object> model) {
+	public void send(String subject, String templateName, Map<String, Object> model) {
+		String[] toList = to.split("[,;]");
+
 		for (String to : toList) {
 			send(to, subject, templateName, model);
 		}

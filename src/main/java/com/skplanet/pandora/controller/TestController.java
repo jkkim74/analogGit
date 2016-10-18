@@ -58,7 +58,7 @@ public class TestController {
 		model.put("mbrKorNm", "테스트");
 		model.put("mm", "00");
 		model.put("dd", "00");
-		mailService.send((String) params.get("to"), "TEST BOSS", "pan0104.vm", model);
+		mailService.send((String) params.get("to"), "TEST MAIL", "test.vm", model);
 	}
 
 	@Autowired
