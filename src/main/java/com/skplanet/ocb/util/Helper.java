@@ -16,6 +16,7 @@ public final class Helper {
 
 	private static DateFormatter dfAsDate = new DateFormatter("yyyyMMdd");
 	private static DateFormatter dfAsDatetime = new DateFormatter("yyyyMMddHHmmss");
+	private static DateFormatter dfAsMonthDay = new DateFormatter("MMdd");
 
 	public static String nowDateString() {
 		return dfAsDate.print(new Date(), Locale.getDefault());
@@ -23,6 +24,10 @@ public final class Helper {
 
 	public static String nowDateTimeString() {
 		return dfAsDatetime.print(new Date(), Locale.getDefault());
+	}
+
+	public static String nowMonthDayString() {
+		return dfAsMonthDay.print(new Date(), Locale.getDefault());
 	}
 
 	public static String yesterdayDateString() {

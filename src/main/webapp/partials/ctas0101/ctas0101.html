@@ -11,7 +11,7 @@
 				<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup2.opened=true"><i class="fa fa-calendar"></i></button></span>
 			</div>
 			<button type="button" class="btn btn-info" ng-click="searchCampaign()">조회</button>
-			<button type="button" class="btn btn-default" ng-click="detailCampaign()">상세보기</button>
+			<button type="button" class="btn btn-default" ng-click="detailCampaign()" ng-disabled="gridApi.selection.getSelectedCount() <= 0">상세보기</button>
 		</form>
 		<div cg-busy="searchPromise">
 			<div class="grid-div" ui-grid="gridOptionsList" ui-grid-pagination ui-grid-resize-columns ui-grid-selection></div>

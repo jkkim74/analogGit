@@ -57,4 +57,6 @@ public interface OracleRepository {
 
 	int countCampaignTargetingCsv(Map<String, Object> params);
 
+	List<AutoMappedMap> selectCell(Map<String, Object> params);
+
 }
