@@ -1,7 +1,6 @@
 package com.skplanet.ctas.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -104,6 +103,8 @@ public class ApiController {
 
 		oracleRepository.upsertCampaign(params);
 
+		saveCampaignDetail(params);
+
 		AutoMappedMap campaign = oracleRepository.selectCampaign(params);
 
 		// 타겟팅 조건 저장
@@ -143,12 +144,14 @@ public class ApiController {
 
 		oracleRepository.upsertCampaign(params);
 
+		saveCampaignDetail(params);
+
 		AutoMappedMap campaign = oracleRepository.selectCampaign(params);
 
 		return ApiResponse.builder().message("CSV 타게팅 정보 업로드 완료").value(campaign).build();
 	}
 
-	public void importCsv(MultipartFile file, Map<String, Object> params, String campaignId, String username) {
+	private void importCsv(MultipartFile file, Map<String, Object> params, String campaignId, String username) {
 		String columnName = (String) params.get("columnName");
 		JobExecution execution = uploadService
 				.beginImport(uploadService.readyToImport(file, campaignId, username, columnName));
@@ -207,6 +210,7 @@ public class ApiController {
 		if (cellAdd) {
 			oracleRepository.balanceCellExtrctCnt(params);
 		}
+
 		return ApiResponse.builder().message("셀 저장 완료").build();
 	}
 

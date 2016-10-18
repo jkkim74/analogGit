@@ -59,7 +59,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
         };
 
         $scope.saveCampaign = function () {
-            var campaign = angular.extend({}, $scope.currCampaign);
+            var campaign = angular.extend({ stsFgCd: '01' }, $scope.currCampaign);
             angular.extend(campaign, {
                 mergeDt: $filter('date')(campaign.mergeDt, 'yyyyMMdd')
             });
@@ -149,7 +149,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             apiSvc.saveCampaignDetail(params);
         };
 
-        $scope.upload = function (file) {
+        $scope.uploadCsv = function (file) {
             var params = {
                 url: '/api/campaigns/targeting/csv',
                 file: file,
@@ -165,6 +165,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
                 $scope.currCampaign.mergeDt = uibDateParser.parse($scope.currCampaign.mergeDt, 'yyyy-MM-dd');
 
                 $scope.searchCampaign();
+                $scope.loadCellList();
             });
         };
 
