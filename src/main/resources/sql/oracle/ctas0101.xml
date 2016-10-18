@@ -106,6 +106,7 @@
 		FROM WEB_CMPGN_DTL A
 		JOIN WEB_CMPGN_MST B USING(CMPGN_ID)
 		WHERE CMPGN_ID = #{cmpgnId}
+		ORDER BY CELL_ID
 	</select>
 
 	<select id="nextCellId" parameterType="map" resultType="string">

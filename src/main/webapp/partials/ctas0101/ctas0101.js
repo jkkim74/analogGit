@@ -204,7 +204,8 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
 
         $scope.addCell = function () {
             var params = {
-                cmpgnId: $scope.currCampaign.cmpgnId
+                cmpgnId: $scope.currCampaign.cmpgnId,
+                mergeDt: $filter('date')($scope.currCampaign.mergeDt, 'yyyyMMdd')
             };
             $scope.cellListPromise = apiSvc.saveCampaignDetail(params);
             $scope.cellListPromise.then(function () {
