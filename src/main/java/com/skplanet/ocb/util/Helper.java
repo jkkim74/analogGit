@@ -16,6 +16,7 @@ public final class Helper {
 
 	private static final String EMREJECT_PW = "9gPXBD95qbDedk5PaRLE";
 
+	private static DateFormatter dfAsISODate = new DateFormatter("yyyy-MM-dd");
 	private static DateFormatter dfAsDate = new DateFormatter("yyyyMMdd");
 	private static DateFormatter dfAsDatetime = new DateFormatter("yyyyMMddHHmmss");
 	private static DateFormatter dfAsMonthDay = new DateFormatter("MMdd");
@@ -44,6 +45,10 @@ public final class Helper {
 
 	public static String toDatetimeString(Date date) {
 		return dfAsDatetime.print(date, Locale.getDefault());
+	}
+
+	public static String nowISODateString() {
+		return dfAsISODate.print(new Date(), Locale.getDefault());
 	}
 
 	public static String uniqueCsvFilename(String prefix) {
