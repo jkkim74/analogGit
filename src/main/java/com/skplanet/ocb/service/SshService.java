@@ -28,6 +28,9 @@ public class SshService {
 	@Value("${pandora.ssh.password}")
 	private String sshPassword;
 
+	@Value("${app.ssh.enabled}")
+	private boolean enabled;
+
 	public void execute(String username, String inputDataType, String periodType, String periodFrom, String periodTo,
 			String filename) {
 
@@ -36,6 +39,11 @@ public class SshService {
 				.append(' ').append(periodFrom).append(' ').append(periodTo).append(" 1 ").append(filename).toString();
 
 		log.info("execute ssh command: {}", command);
+
+		if (!enabled) {
+			log.debug("disabled");
+			return;
+		}
 
 		JSch sshClient = new JSch();
 		ChannelExec execChannel = null;

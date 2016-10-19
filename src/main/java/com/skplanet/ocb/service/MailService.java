@@ -16,7 +16,10 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.skplanet.ocb.exception.BizException;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 @SuppressWarnings("deprecation")
 public class MailService {
 
@@ -32,8 +35,16 @@ public class MailService {
 	@Value("${mail.to}")
 	private String to;
 
+	@Value("${app.mail.enabled}")
+	private boolean enabled;
+
 	@Async
 	public void send(String to, String subject, String templateName, Map<String, Object> model) {
+		if (!enabled) {
+			log.debug("disabled");
+			return;
+		}
+
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
 

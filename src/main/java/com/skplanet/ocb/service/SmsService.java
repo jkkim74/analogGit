@@ -42,9 +42,12 @@ public class SmsService {
 	@Value("${sms.sender}")
 	private String sender;
 
+	@Value("${app.sms.enabled}")
+	private boolean enabled;
+
 	public void send(List<AutoMappedMap> receivers) {
 		log.info("Send to SMS");
-		
+
 		for (AutoMappedMap m : receivers) {
 			String extnctObjDt = (String) m.get("extnctObjDt");
 
@@ -61,6 +64,11 @@ public class SmsService {
 
 	@Async
 	public void send(List<String> receiverPhoneNumbers, String templateName, Map<String, Object> model) {
+		if (!enabled) {
+			log.debug("disabled");
+			return;
+		}
+
 		MultiRequestVo multiRequest = new MultiRequestVo();
 		multiRequest.setOcallPhonNum(sender); /* 발신전화번호 */
 

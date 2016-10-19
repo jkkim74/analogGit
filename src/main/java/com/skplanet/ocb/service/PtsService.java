@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.common.io.Resources;
@@ -18,12 +19,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PtsService {
 
+	@Value("${app.pts.enabled}")
+	private boolean enabled;
+
 	public void send(String filename, String ptsUsername) {
 		log.info("Sending file [{}]", filename);
 
 		String ptsProperties = Resources.getResource("config/PTS.properties").getPath();
 
 		log.debug("PTS.properties location={}", ptsProperties);
+
+		if (!enabled) {
+			log.debug("disabled");
+			return;
+		}
 
 		BufferedReader in = null;
 		FileWriter fw = null;

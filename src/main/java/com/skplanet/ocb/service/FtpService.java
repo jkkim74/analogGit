@@ -7,6 +7,7 @@ import java.nio.file.Path;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.skplanet.ocb.exception.BizException;
@@ -17,8 +18,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FtpService {
 
+	@Value("${app.ftp.enabled}")
+	private boolean enabled;
+
 	public void send(Path localPath, String remotePath, String host, int port, String username, String password) {
 		log.info("Sending file from [{}] to [{}/{}]", localPath, host, remotePath);
+
+		if (!enabled) {
+			log.debug("disabled");
+			return;
+		}
 
 		FTPClient ftpClient = new FTPClient();
 
