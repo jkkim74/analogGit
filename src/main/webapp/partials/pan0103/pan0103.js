@@ -5,7 +5,6 @@ angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$time
 
         var self = this;
         $scope.title = '배치 적립 파일 검증';
-        $scope.enablePreview = true;
 
         $scope.selectOptions = [
             { label: '회원ID', value: 'mbrId' },
@@ -57,7 +56,6 @@ angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         $scope.upload = function (file) {
-            $scope.uploadRecords = 0;
             $scope.uploadProgressLoadingMessage = 'Uploading...';
 
             $scope.uploadPromise = uploadSvc.upload({ file: file, columnName: $scope.selectedOption.value });

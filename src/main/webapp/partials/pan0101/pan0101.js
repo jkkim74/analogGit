@@ -15,16 +15,6 @@ angular.module('App').controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$time
             { label: '11번가 회원ID', value: 'evsMbrId' }
         ];
 
-        $scope.gridOptionsPreview = {
-            enableSorting: false,
-            enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-            minRowsToShow: 7,
-            columnDefs: [
-                { field: 'no', displayName: 'No.', width: 100, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
-                { field: 'column1', displayName: 'Uploaded Data' }
-            ]
-        };
-
         $scope.gridOptionsMembers = {
             enableRowSelection: true,
             enableRowHeaderSelection: false,
@@ -49,19 +39,18 @@ angular.module('App').controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         $scope.upload = function (file) {
-            $scope.uploadRecords = 0;
-            $scope.uploadProgressLoadingMessage = 'Uploading...';
-
             $scope.uploadPromise = uploadSvc.upload({ file: file, columnName: $scope.selectedOption.value });
             $scope.uploadPromise.then(function () {
                 self.checkUploadProgress();
-                $scope.uploadProgressLoadingMessage = 'Loading...';
+            });
+        };
 
-                return uploadSvc.getUploadedPreview();
-            }, null, function (progressPercentage) {
-                $scope.uploadProgressLoadingMessage = 'Uploading...' + progressPercentage + '%';
-            }).then(function (data) {
-                $scope.gridOptionsPreview.data = data.value;
+        self.checkUploadProgress = function () {
+            uploadSvc.getUploadProgress().finally(function () {
+                $scope.uploadProgress = false;
+            }, function (totalItems) {
+                $scope.uploadProgress = true;
+                $scope.uploadedItems = totalItems;
             });
         };
 
@@ -77,19 +66,6 @@ angular.module('App').controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$time
                 $scope.gridOptionsMembers.totalItems = data.totalItems;
             });
         };
-
-        self.checkUploadProgress = function () {
-            uploadSvc.getUploadProgress().finally(function (data) {
-                $scope.uploadProgress = false;
-            }, function (totalItems) {
-                $scope.uploadProgress = true;
-                $scope.uploadedItems = totalItems;
-            });
-        };
-
-        // 이전 업로드가 진행중이라면 표시.
-        // self.checkUploadProgress();
-
 
         $scope.sendPts = function () {
             $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: !!$scope.ptsMasking });

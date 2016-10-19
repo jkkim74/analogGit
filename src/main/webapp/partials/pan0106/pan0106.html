@@ -24,16 +24,10 @@
 				<uib-progressbar ng-show="uploadProgress" class="progress-striped active">업로드 적재 중 <strong class="">{{ uploadedItems | number }}</strong> 건</uib-progressbar>
 			</div>
 		</div>
-		<div class="col-md-6" ng-if="enablePreview">
-			<label>업로드 미리보기</label>
-			<div cg-busy="{promise:uploadPromise, message:uploadProgressLoadingMessage}">
-				<div ui-grid="gridOptionsPreview" ui-grid-resize-columns></div>
-			</div>
-		</div>
 	</div>
 	<hr>
 	<div>
-		<button type="button" class="btn btn-info" ng-click="loadMembers()" ng-disabled="!gridOptionsPreview.data.length">조회</button>
+		<button type="button" class="btn btn-info" ng-click="loadMembers()" ng-disabled="uploadedItems <= 0">조회</button>
 		<div cg-busy="membersPromise">
 			<div class="grid-div" ui-grid="gridOptionsMembers" ui-grid-pagination ui-grid-resize-columns ui-grid-selection></div>
 		</div>
