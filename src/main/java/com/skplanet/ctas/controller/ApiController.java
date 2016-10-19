@@ -12,6 +12,7 @@ import org.apache.commons.csv.CSVPrinter;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -252,7 +253,7 @@ public class ApiController {
 				params.put("limit", limit);
 				offset += limit;
 
-				if ("TRGT".equals(params.get("objRegFgCd"))) {
+				if ("TRGT".equals(params.get("objRegFgCd")) && "PUSH".equals(params.get("cmpgnSndChnlFgCd"))) {
 					return querycacheRepository.selectCell(params);
 				} else {
 					return oracleRepository.selectCell(params);
@@ -263,7 +264,9 @@ public class ApiController {
 			public void printRecord(CSVPrinter printer, AutoMappedMap map) throws IOException {
 				if ("MAIL".equals(params.get("cmpgnSndChnlFgCd"))) {
 					String encrypted = Helper.skpEncrypt(map.get("mbrId") + "," + map.get("unitedId"));
-					map.put("unitedId", encrypted);
+					map.remove("unitedId");
+					map.put("aes128", encrypted);
+					map.put("aNull", null); // 마지막에 구분자가 하나 더 들어가야 함
 				}
 
 				printer.printRecord(map.valueList());
@@ -274,11 +277,18 @@ public class ApiController {
 		String cellId = (String) params.get("cellId");
 		String fnlExtrctCnt = (String) params.get("fnlExtrctCnt");
 
-		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR,
-				Helper.nowMonthDayString() + '_' + cellId + '_' + fnlExtrctCnt + "_O.dat");
+		// 테스트 용도 코드 또는 미입력된 경우 에러 대응
+		if (fnlExtrctCnt == null || fnlExtrctCnt.isEmpty()) {
+			fnlExtrctCnt = (String) params.get("extrctCnt");
+		}
+
+		String filename = Helper.nowMonthDayString() + '_' + cellId + '_' + fnlExtrctCnt + "_O.dat";
+		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR, filename);
+
+		char delimiter = '▦';
 
 		if ("MAIL".equals(params.get("cmpgnSndChnlFgCd"))) {
-			csvCreator.create(filePath, '▦', Charset.forName("x-IBM949"));
+			csvCreator.create(filePath, delimiter, Charset.forName("x-IBM949"));
 		} else {
 			csvCreator.create(filePath);
 		}
@@ -304,6 +314,18 @@ public class ApiController {
 
 		// 메일 발송
 		if ("MAIL".equals(params.get("cmpgnSndChnlFgCd"))) {
+			params.put("delimiter", delimiter);
+			params.put("filename", filename);
+			params.put("grpNm", "ADMIN GROUP");
+			params.put("subGrpNm", "ADMIN SUBGROUP");
+			params.put("sndDt", Helper.nowISODateString());
+			
+			String name = Helper.currentUser().getFullname();
+			if (StringUtils.isEmpty(name)) {
+				name = username;
+			}
+			params.put("name", name);
+
 			mailService.send("전송요청서 테스트", "ctas0104.vm", params);
 		}
 

@@ -14,7 +14,7 @@ angular.module('App').component('ctas0105Modal', {
 
         };
 
-        self.requestTransmission = function () {
+        self.ok = function () {
 
             var params = angular.extend(self.resolve.selectedTargeting, {});
 

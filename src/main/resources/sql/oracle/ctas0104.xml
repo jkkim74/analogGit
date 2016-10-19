@@ -4,15 +4,7 @@
 
 	<select id="selectCell" parameterType="map" resultType="AutoMappedMap">
 		<include refid="pagingHead" />
-		<include refid="selectCell_inner" />
-		<include refid="pagingFoot" />
-	</select>
-	<select id="selectCell" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
-		<include refid="selectCell_inner" />
-		<include refid="pagingFoot" />
-	</select>
 
-	<sql id="selectCell_inner">
 		<choose>
 			<when test="cmpgnSndChnlFgCd == 'MAIL'">
 				SELECT MBR_ID
@@ -38,6 +30,36 @@
 				SELECT #{cellId} AS CELL_ID FROM DUAL
 			</otherwise>
 		</choose>
-	</sql>
+
+		<include refid="pagingFoot" />
+	</select>
+	<select id="selectCell" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
+		<choose>
+			<when test="cmpgnSndChnlFgCd == 'MAIL'">
+				SELECT MBR_ID
+					, 'test@email.com' AS EMAIL_ADDR
+					, '테스트' AS MBR_KOR_NM
+					, '999' AS AVL_PNT
+					, '20161130' AS AVL_PNT_BASE_DT
+					, #{cellId} AS CELL_ID
+					, 'ec_user_id' AS UNITED_ID
+				FROM WEB_TRGT_${cmpgnId}
+			</when>
+			<when test="cmpgnSndChnlFgCd == 'PUSH'">
+				SELECT MBR_ID FROM WEB_TRGT_${cmpgnId}
+			</when>
+			<when test="cmpgnSndChnlFgCd == 'SMS'">
+				SELECT MBR_ID
+					, '테스트' AS MBR_KOR_NM
+					, '01012345678' AS CLPHN_NO
+				FROM WEB_TRGT_${cmpgnId}
+			</when>
+			<otherwise>
+				SELECT #{cellId} AS CELL_ID FROM DUAL
+			</otherwise>
+		</choose>
+
+		<include refid="pagingFoot" />
+	</select>
 
 </mapper>

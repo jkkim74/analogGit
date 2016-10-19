@@ -39,7 +39,7 @@ public class TransmissionService {
 	public void sendToPts(Path localPath, String ptsUsername) {
 		String filename = localPath.toFile().getAbsolutePath();
 
-		ptsService.send(filename, ptsUsername);
+		//ptsService.send(filename, ptsUsername);
 	}
 
 }

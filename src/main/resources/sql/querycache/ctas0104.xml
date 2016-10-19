@@ -2,8 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.ctas.repository.querycache.QueryCacheRepository">
 
-	<select id="selectCell" parameterType="map" resultType="int">
+	<select id="selectCell" parameterType="map" resultType="AutoMappedMap">
 		SELECT MBR_ID FROM USER_PS03701.WEB_TRGT_${cmpgnId}
+		LIMIT #{offset}, #{limit}
+	</select>
+	<select id="selectCell" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
+		SELECT MBR_ID FROM WEB_TRGT_${cmpgnId}
 		LIMIT #{offset}, #{limit}
 	</select>
 

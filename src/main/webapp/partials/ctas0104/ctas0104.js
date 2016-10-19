@@ -7,11 +7,17 @@ angular.module('App').component('ctas0104Modal', {
         close: '&',
         dismiss: '&'
     },
-    controller: function () {
+    controller: function (apiSvc) {
         var self = this;
 
         self.$onInit = function () {
+            self.campaignCell = self.resolve.campaignCell;
+        };
 
+        self.ok = function () {
+            apiSvc.requestTransmission(self.campaignCell).then(function () {
+                self.close();
+            });
         };
 
     }

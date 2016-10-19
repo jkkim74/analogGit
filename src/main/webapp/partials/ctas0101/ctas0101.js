@@ -214,14 +214,16 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
         };
 
         $scope.deleteCell = function () {
-            var selectedRow = $scope.gridApi2.selection.getSelectedRows()[0];
+            var campaignCell = $scope.gridApi2.selection.getSelectedRows()[0];
 
-            apiSvc.deleteCampaignDetail(selectedRow).then(function () {
+            apiSvc.deleteCampaignDetail(campaignCell).then(function () {
                 $scope.loadCellList();
             });
         };
 
-        $scope.requestTransmission = function () {
+        $scope.openRequestForm = function () {
+            var campaignCell = $scope.gridApi2.selection.getSelectedRows()[0];
+
             var componentName;
             if ($scope.currCampaign.cmpgnSndChnlFgCd === 'MAIL') {
                 componentName = 'ctas0104Modal';
@@ -229,12 +231,21 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
                 componentName = 'ctas0105Modal';
             }
 
-            $uibModal.open({
+            var selectOption = $scope.selectOptions.filter(function (obj) {
+                return obj.value == $scope.currCampaign.cmpgnSndChnlFgCd;
+            });
+            $scope.currCampaign.cmpgnSndChnlFgNm = selectOption[0].label;
+
+            var modalInstance = $uibModal.open({
                 component: componentName,
                 resolve: {
-                    notiType: function () { return $scope.currCampaign.cmpgnSndChnlFgCd; },
-                    targetingInfo: function () { return $scope.currCampaign.targetingInfo; }
+                    campaignCell: function () { return angular.extend({}, $scope.currCampaign, campaignCell); }
                 }
+            });
+
+            modalInstance.result.then(function () {
+                $scope.searchCampaign();
+                $scope.loadCellList();
             });
         };
 

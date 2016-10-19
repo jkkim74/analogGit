@@ -8,25 +8,7 @@
 <table width="595" border="0" cellspacing="0" cellpadding="0">
 	<tr> 
 		<td height="49">
-<img src="data:image/gif;base64,R0lGODlhUwIwANUAAPxVGv/8+P11J/2fVfxWG//16/xdHv17Kv2gWf7Rrf2XSP2HL/xTG/6z
-e/7dxP7bv/xjIP2QO/6mYvxaHf7Clf7XufxpIv2BLP67iP/p2f6sbv/v4/7Lov/48v2ELf6y
-eP/m0f/k0PxvJf/8+vxuJPxZHP7dw/7In//jzv2UQ/2XSv/kzv/v4v6tb/xpI/7gyf/59/xu
-JfxrI/xsJP7Kov/49PxTGgAAAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAA
-AABTAjAAAAb/QJwQB0IIGLakcslsOp/QqHRKrToB1qx2id16v+AwtZski8/otHrNbrvfVoYA
-ARraPyW43m3e+/98gIKDhIWGX32HbCUfdgEeSSkPI3aVlpeYmZqbnJ2en6ChoqOkpaanqKmq
-q6ytrq+wsagjDylJHgFCAzYyJ7K/wMHCw8TFxsfIycrLoicuNgg4L0gmzNbX2Nna29zd3t92
-DzYMK7sq4Ojp6uvs7e7vpirQMzbV8Pf4+fr7/P2g4jEI2IDhr6DBgwgTKgRWwIaBJAsjSpxI
-saLBJRYzatzIsaOxJAQIeBxJsqTJk5ZCTpiAsqXLlzD9rTRgIKbNmzhzYqMJAYLO/5/JbtwY
-JdSV0KNDhxQVtRSoU0w9LVh4ShUV0qtHcTSthJVrUmFbP4Wt+lSqCBJk054aO1brV7d22nrN
-akqu0rdC7Kq9eVaAgL2AQ7HFC9frXU103RLOi/Vq4UyDAzv1e+CA5MubIhueixTyYr2MLYHW
-jBln5QsXSquOm5hx58eHQ1+yO5pwbdGLV6NEvWCB7tVFt5KODZu158xJuyK2nft3yd4RIjjH
-3LT657fCc9Nurhiv3s7Kp7eMrkCB+MBhl8oNL3v29eXti3PefP5k+QED6qttG5z7cc9ftTaX
-cfFtlp1+J+EngQQIUiUgbrE4hsmDiskX24ENkrSgBi1kqPnaes19551/8LlHoIUeWqSBBg00
-kGJ925VI3HISTshcgS9a1CIGGOQIVGPsnQjhfzO6N+J7JoLmY0I8UkDBkoCBCCSFRYpIJI5D
-QlmRkxxwoOV+2oXIXXpjikkUiV/6wwENCSSQJlkgXpkllkUKKRaab+7TZgUV5OlgmFOSGWhj
-uB1JipJ+6sOnAw4k6lScNsJCaCmIOnoPoyGgYOmmnKqVaQYZdCrqqDqBusEGpKaqakssbFBA
-AavGKitHr9bQway45hpRBx0EkIuuwAbLj6/CFmvsscgmq+yyzDbr7LPQRivttNRWa+212Gar
-7bbcduvtt+CGK65GQQAAOw==" border="0" />
+<img alt="작업요청서" src="https://pandora.skplanet.com/images/title.gif" border="0" />
 		</td>
 	</tr>
 </table>
@@ -34,43 +16,43 @@ AavGKitHr9bQway45hpRBx0EkIuuwAbLj6/CFmvsscgmq+yyzDbr7LPQRivttNRWa+212Gar
 		<table width="595" border="1" cellpadding="5" cellspacing="0" bordercolorlight="#A7BBB5" bordercolordark="#FFFFFF">
 			<tr valign="middle"> 
 				<td width="15%" height="30" bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">단위사업명</td>
-				<td width="33%"             bgcolor="#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;">$GRP_NM$</td>
+				<td width="33%" bgcolor="#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;">$!{grpNm}</td>
 				<td width="13%" rowspan="2" bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">검토</td>
 				<td width="13%" rowspan="2" bgcolor="#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;">&nbsp;</td>
 				<td width="13%" rowspan="2" bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">문서번호</td>
 				<td width="13%" rowspan="2" bgcolor="#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;">&nbsp;</td>
 			</tr>
 			<tr valign="middle" height="30"> 
-				<td                         bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">제휴사이트명</td>
-				<td                         bgcolor="#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;">$SUB_GRP_NM$</td>
+				<td bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">제휴사이트명</td>
+				<td bgcolor="#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;">$!{subGrpNm}</td>
 			</tr>
 			<tr valign="middle" height="30"> 
-				<td                         bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">업무명</td>
-				<td                         bgcolor="#FFFFFF" style="padding-top:5px; color: #002319; text-align:left;  font-size:12px;">$CAMP_NM$</td>
-				<td                         bgcolor="#F6F6F6" style="padding-top:5px; color: #002319; text-align:right; font-size:12px;">구분</td>
-				<td colspan="3"             bgcolor="#FFFFFF" style="padding-top:5px; color: #002319; text-align:left;  font-size:12px;">$CHAN_NM$</td>
+				<td bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">업무명</td>
+				<td bgcolor="#FFFFFF" style="padding-top:5px; color: #002319; text-align:left;  font-size:12px;">$!{cmpgnNm}</td>
+				<td bgcolor="#F6F6F6" style="padding-top:5px; color: #002319; text-align:right; font-size:12px;">구분</td>
+				<td colspan="3" bgcolor="#FFFFFF" style="padding-top:5px; color: #002319; text-align:left;  font-size:12px;">&nbsp;</td>
 			</tr>
 			<tr valign="middle" height="30"> 
-				<td                         bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">요청자<br></td>
-				<td                         bgcolor="#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;">$DMDR_NM$</td>
-				<td                         bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">요청일자</td>
-				<td                         bgcolor="#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;">$DMD_DT$</td>
-				<td                         bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">완료희망일<br /></td>
-				<td                         bgcolor="#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;">$SND_DT$</td>
+				<td bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">요청자<br></td>
+				<td bgcolor="#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;">$!{name}</td>
+				<td bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">요청일자</td>
+				<td bgcolor="#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;">$!{sndDt}</td>
+				<td bgcolor="#F6F6F6" style="color: #002319; text-align:right; font-size:12px;">완료희망일<br /></td>
+				<td bgcolor="#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;">$!{sndDt}</td>
 			</tr>
 			<tr valign="middle" height="30"> 
-				<td                        bgcolor= "#F6F6F6" style="color: #002319; text-align:right; font-size:12px;  height:22px;">실행담당</td>
-				<td                        bgcolor= "#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;  height:22px;">&nbsp;</td>
-				<td                        bgcolor= "#F6F6F6" style="color: #002319; text-align:right; font-size:12px;  height:22px;">접수일자</td>
-				<td                        bgcolor= "#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;  height:22px;">&nbsp;</td>
-				<td                        bgcolor= "#F6F6F6" style="color: #002319; text-align:right; font-size:12px;  height:22px;">완료일자</td>
-				<td                        bgcolor= "#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;  height:22px;">&nbsp;</td>
+				<td bgcolor= "#F6F6F6" style="color: #002319; text-align:right; font-size:12px;  height:22px;">실행담당</td>
+				<td bgcolor= "#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;  height:22px;">&nbsp;</td>
+				<td bgcolor= "#F6F6F6" style="color: #002319; text-align:right; font-size:12px;  height:22px;">접수일자</td>
+				<td bgcolor= "#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;  height:22px;">&nbsp;</td>
+				<td bgcolor= "#F6F6F6" style="color: #002319; text-align:right; font-size:12px;  height:22px;">완료일자</td>
+				<td bgcolor= "#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;  height:22px;">&nbsp;</td>
 			</tr>
 			<tr valign="middle" height="30"> 
-				<td                        bgcolor= "#F6F6F6" style="color: #002319; text-align:right; font-size:12px;  height:22px;">팀장<br></td>
-				<td                        bgcolor= "#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;  height:22px;">&nbsp;</td>
-				<td                        bgcolor= "#F6F6F6" style="color: #002319; text-align:right; font-size:12px;  height:22px;">확인내용</td>
-				<td colspan="3"            bgcolor= "#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;  height:22px;">&nbsp;</td>
+				<td bgcolor= "#F6F6F6" style="color: #002319; text-align:right; font-size:12px;  height:22px;">팀장<br></td>
+				<td bgcolor= "#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;  height:22px;">&nbsp;</td>
+				<td bgcolor= "#F6F6F6" style="color: #002319; text-align:right; font-size:12px;  height:22px;">확인내용</td>
+				<td colspan="3"bgcolor= "#FFFFFF" style="color: #002319; text-align:left;  font-size:12px;  height:22px;">&nbsp;</td>
 			</tr>
 		</table>
 	
@@ -81,14 +63,7 @@ AavGKitHr9bQway45hpRBx0EkIuuwAbLj6/CFmvsscgmq+yyzDbr7LPQRivttNRWa+212Gar
 			<table height="24" border="0" cellpadding="0" cellspacing="0">
 				<tr>
 					<td align="left" valign="top">
-<img src="data:image/gif;base64,R0lGODlhZAAYAMQAAPv7++rq6uPj4/T09Pz8/P7+/v39/fn5+fb29vHx8f25svyro/21rezs
-7PX19eXl5fmelP///+oALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-ACH5BAAAAAAALAAAAABkABgAAAX6YMRIZGmeaKqubOu+C2EUUa28eK7vPHQAtAhvSCzuEgig
-0MhsOgOJg2HprFpzjwaCQG3VSl9VLZwbm8mnL1pyXp8EAQcXR0bXx+m26w4W2rtsgCZwAwCC
-YlR/fYombnl9kIyQKoSGL2YkmIGLXWuOjYmhm6BnLJWHj5t/bZ2An5mtnIJqqCWnXq2SmrKr
-rEt8d76ot0yau5G1o6DIRsS4pZywbrQs07/UpMcoziue17CB1sop1qWS4JQBhcnok+R40r7v
-uOPeK9zdevREr6m8yfiuCBxoS50lgggJBkzIsJlBdg0jvlgoseLEhxYz6qCoseMgjB5DpjgV
-AgA7" height="24" /></td>
+<img alt="상세요구내용" src="https://pandora.skplanet.com/images/sub_title.gif" height="24" /></td>
 				</tr>
 			</table>
 		</td>
@@ -105,22 +80,22 @@ AgA7" height="24" /></td>
 		<td width="85%" height="30"  bgcolor= "#F8F8F8" style="color: #BA1E1E; text-align:left; font-size:12px;">1. 마케팅 목적 </td>
 	</tr>
 	<tr height="30">
-		<td                          bgcolor= "#FFFFFF" style="padding-left:5px; padding-right:5px; padding-top:4px; color: #002319; padding-bottom: 5px; text-align:left; font-size:12px;">$EVENT_PRPS_TXT$</td>
+		<td bgcolor= "#FFFFFF" style="padding-left:5px; padding-right:5px; padding-top:4px; color: #002319; padding-bottom: 5px; text-align:left; font-size:12px;">$!{eventPrpsTxt}</td>
 	</tr>
 	<tr height="30">
-		<td                          bgcolor= "#F8F8F8" style="padding-left:4px; padding-right:5px; padding-top:4px; color: #BA1E1E; text-align:left; font-size:12px;">2. 마케팅 대상 조건 </td>
+		<td bgcolor= "#F8F8F8" style="padding-left:4px; padding-right:5px; padding-top:4px; color: #BA1E1E; text-align:left; font-size:12px;">2. 마케팅 대상 조건 </td>
 	</tr>
 	<tr height="30">
-		<td                          bgcolor= "#FFFFFF" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; color: #002319; text-align:left; font-size:12px;">$EVENT_OBJ_COND_TXT$</td>
+		<td bgcolor= "#FFFFFF" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; color: #002319; text-align:left; font-size:12px;">$!{eventObjCondTxt}</td>
 	</tr>
 	<tr>
-		<td                          bgcolor= "#F8F8F8" style="color: #BA1E1E; padding-left:4px; padding-top:4px; padding-top: 5px; padding-left: 5px; padding-right: 5px; text-align:left; font-size:12px; height:30;">3. 행사코드</td>
+		<td bgcolor= "#F8F8F8" style="color: #BA1E1E; padding-left:4px; padding-top:4px; padding-top: 5px; padding-left: 5px; padding-right: 5px; text-align:left; font-size:12px; height:30;">3. 행사코드</td>
 	</tr>
 	<tr>
-		<td                          bgcolor= "#FFFFFF" style="color: #002319; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; text-align:left; font-size:12px; height:30;">$CAMP_CD$</td>
+		<td bgcolor= "#FFFFFF" style="color: #002319; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; text-align:left; font-size:12px; height:30;">$!{cellId}</td>
 	</tr>
 	<tr>
-		<td                          bgcolor= "#F8F8F8" style="color: #BA1E1E; padding-left:4px; padding-top:4px; padding-top: 5px; padding-left: 5px; padding-right: 5px; text-align:left; font-size:12px; height:30;">4. 발송 대상 수 (총 $CELL_CNT$ 건) </td>
+		<td bgcolor= "#F8F8F8" style="color: #BA1E1E; padding-left:4px; padding-top:4px; padding-top: 5px; padding-left: 5px; padding-right: 5px; text-align:left; font-size:12px; height:30;">4. 발송 대상 수 (총 1 건) </td>
 	</tr>
 	<tr>
 
@@ -182,30 +157,30 @@ AgA7" height="24" /></td>
  
 	</tr>
 	<tr>
-		<td                          bgcolor= "#F8F8F8" style="color: #BA1E1E; padding-left:4px; padding-top:4px; padding-top: 5px; padding-left: 5px; padding-right: 5px; text-align:left; font-size:12px; height:30;">5. 발송 예정일 </td>
+		<td bgcolor= "#F8F8F8" style="color: #BA1E1E; padding-left:4px; padding-top:4px; padding-top: 5px; padding-left: 5px; padding-right: 5px; text-align:left; font-size:12px; height:30;">5. 발송 예정일 </td>
 	</tr>
 	<tr>
-		<td                          bgcolor= "#FFFFFF" style="color: #002319; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; text-align:left; font-size:12px; height:30;">$SND_DT$</td>
+		<td bgcolor= "#FFFFFF" style="color: #002319; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; text-align:left; font-size:12px; height:30;">$!{sndDt}</td>
 	</tr>
 	<tr>
-		<td                          bgcolor= "#F8F8F8" style=" color: #BA1E1E; padding-left:4px; padding-top:4px; padding-top: 5px; padding-left: 5px; padding-right: 5px; text-align:left; font-size:12px; height:30;">6. 구분자 </td>
+		<td bgcolor= "#F8F8F8" style=" color: #BA1E1E; padding-left:4px; padding-top:4px; padding-top: 5px; padding-left: 5px; padding-right: 5px; text-align:left; font-size:12px; height:30;">6. 구분자 </td>
 	</tr>
 	<tr>
-		<td                          bgcolor= "#FFFFFF" style="color: #002319; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; text-align:left; font-size:12px; height:30;">$IND_CD$</td>
+		<td bgcolor= "#FFFFFF" style="color: #002319; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; text-align:left; font-size:12px; height:30;">$!{delimiter}</td>
 	</tr>
 	<tr>
-		<td                          bgcolor= "#F8F8F8" style="color: #BA1E1E; padding-left:4px; padding-top:4px; padding-top: 5px; padding-left: 5px; padding-right: 5px; text-align:left; font-size:12px; height:30;">7. 고객 리스트 파일명 </td>
+		<td bgcolor= "#F8F8F8" style="color: #BA1E1E; padding-left:4px; padding-top:4px; padding-top: 5px; padding-left: 5px; padding-right: 5px; text-align:left; font-size:12px; height:30;">7. 고객 리스트 파일명 </td>
 	</tr>
 	<tr>
-		<td                          bgcolor= "#FFFFFF" style="color: #002319; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; text-align:left; font-size:12px; height:30;">
-			$FILES$
+		<td bgcolor= "#FFFFFF" style="color: #002319; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; text-align:left; font-size:12px; height:30;">
+			TOTAL_0 : $!{filename}
 		</td>
 	</tr>
 	<tr>
-		<td                          bgcolor= "#F8F8F8" style="color: #BA1E1E; padding-left:4px; padding-top:4px; padding-top: 5px; padding-left: 5px; padding-right: 5px; text-align:left; font-size:12px; height:30;">8. 참고 사항 </td>
+		<td bgcolor= "#F8F8F8" style="color: #BA1E1E; padding-left:4px; padding-top:4px; padding-top: 5px; padding-left: 5px; padding-right: 5px; text-align:left; font-size:12px; height:30;">8. 참고 사항 </td>
 	</tr>
 	<tr>
-		<td                          bgcolor= "#FFFFFF" style="color: #002319; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; text-align:left; font-size:12px; height:30;">$REF_DESC$</td>
+		<td bgcolor= "#FFFFFF" style="color: #002319; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; text-align:left; font-size:12px; height:30;">$!{refDesc}</td>
 	</tr>
 </table>
 <br/>
