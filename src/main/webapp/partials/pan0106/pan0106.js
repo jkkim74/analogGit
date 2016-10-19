@@ -86,9 +86,9 @@ angular.module('App').controller('Pan0106Ctrl', ['$scope', '$q', '$http', '$time
 
         self.checkUploadProgress = function () {
             uploadSvc.getUploadProgress().finally(function () {
-                $scope.uploadProgress = false;
+                $scope.uploadStatusIsRunning = false;
             }, function (totalItems) {
-                $scope.uploadProgress = true;
+                $scope.uploadStatusIsRunning = true;
                 $scope.uploadedItems = totalItems;
             });
         };

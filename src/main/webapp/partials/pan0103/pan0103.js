@@ -56,18 +56,21 @@ angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         $scope.upload = function (file) {
-            $scope.uploadProgressLoadingMessage = 'Uploading...';
-
             $scope.uploadPromise = uploadSvc.upload({ file: file, columnName: $scope.selectedOption.value });
             $scope.uploadPromise.then(function () {
                 self.checkUploadProgress();
-                $scope.uploadProgressLoadingMessage = 'Loading...';
-
                 return uploadSvc.getUploadedPreview();
-            }, null, function (progressPercentage) {
-                $scope.uploadProgressLoadingMessage = 'Uploading...' + progressPercentage + '%';
             }).then(function (data) {
                 $scope.gridOptionsPreview.data = data.value;
+            });
+        };
+
+        self.checkUploadProgress = function () {
+            uploadSvc.getUploadProgress().finally(function () {
+                $scope.uploadStatusIsRunning = false;
+            }, function (totalItems) {
+                $scope.uploadStatusIsRunning = true;
+                $scope.uploadedItems = totalItems;
             });
         };
 
@@ -83,19 +86,6 @@ angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$time
                 $scope.gridOptionsMembers.totalItems = data.totalItems;
             });
         };
-
-        self.checkUploadProgress = function () {
-            uploadSvc.getUploadProgress().finally(function (data) {
-                $scope.uploadProgress = false;
-            }, function (totalItems) {
-                $scope.uploadProgress = true;
-                $scope.uploadedItems = totalItems;
-            });
-        };
-
-        // 이전 업로드가 진행중이라면 표시.
-        // self.checkUploadProgress();
-
 
         $scope.sendPts = function () {
             $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: !!$scope.ptsMasking });

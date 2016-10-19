@@ -19,9 +19,9 @@
 			</div>
 			<br>
 			<div>
-				<uib-progressbar ng-show="!uploadProgress && uploadedItems" animate="false" type="success">업로드 완료 <strong class="text-danger">{{ uploadedItems | number }}</strong> 건</uib-progressbar>
-				<uib-progressbar ng-show="!uploadProgress && !uploadedItems" animate="false" type="warning">업로드 대기</uib-progressbar>
-				<uib-progressbar ng-show="uploadProgress" class="progress-striped active">업로드 적재 중 <strong class="">{{ uploadedItems | number }}</strong> 건</uib-progressbar>
+				<uib-progressbar ng-show="!uploadStatusIsRunning && uploadedItems" animate="false" type="success">업로드 완료 <strong class="text-danger">{{ uploadedItems | number }}</strong> 건</uib-progressbar>
+				<uib-progressbar ng-show="!uploadStatusIsRunning && !uploadedItems" animate="false" type="warning">업로드 대기</uib-progressbar>
+				<uib-progressbar ng-show="uploadStatusIsRunning" class="progress-striped active">업로드 적재 중 <strong class="">{{ uploadedItems | number }}</strong> 건</uib-progressbar>
 			</div>
 		</div>
 	</div>
