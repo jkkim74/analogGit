@@ -23,10 +23,12 @@ import com.skplanet.ocb.exception.BizException;
 import com.skplanet.ocb.security.CustomUserDetailsContextMapper;
 import com.skplanet.ocb.security.UserInfo;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
-import com.skplanet.pandora.util.Constant;
 
 @Service
 public class UserService implements UserDetailsService {
+
+	static final String USER_ACCESSES = "PAN0101,PAN0102,PAN0103,PAN0104,PAN0105,PAN0106";
+	static final String ADMIN_ACCESSES = "PAN0002,PAN0003";
 
 	@Autowired
 	private LdapTemplate ldapTemplate;
@@ -118,7 +120,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	public void updateAccesses(String username, String pageList) {
-		mysqlRepository.deleteAccesses(username, Constant.USER_ACCESSES);
+		mysqlRepository.deleteAccesses(username, USER_ACCESSES);
 
 		if (!StringUtils.isEmpty(pageList)) {
 			mysqlRepository.insertAccesses(username, pageList);
@@ -128,10 +130,10 @@ public class UserService implements UserDetailsService {
 	public void updateAdmin(String username, boolean isAdmin) {
 		if (isAdmin) {
 			mysqlRepository.insertAuthorities(username, "ROLE_ADMIN");
-			mysqlRepository.insertAccesses(username, Constant.ADMIN_ACCESSES);
+			mysqlRepository.insertAccesses(username, ADMIN_ACCESSES);
 		} else {
 			mysqlRepository.deleteAuthorities(username, "ROLE_ADMIN");
-			mysqlRepository.deleteAccesses(username, Constant.ADMIN_ACCESSES);
+			mysqlRepository.deleteAccesses(username, ADMIN_ACCESSES);
 		}
 	}
 

@@ -17,16 +17,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.util.StringUtils;
 
-import com.google.common.base.Strings;
-import com.skplanet.pandora.util.Constant;
-
 public class CsvCreatorTemplateTest {
 
 	private Path file;
 
 	@Before
 	public void setUp() throws Exception {
-		file = Paths.get(Constant.UPLOADED_FILE_DIR, "test.csv");
+		file = Paths.get(Constant.APP_FILE_DIR, "test.csv");
 	}
 
 	@After
@@ -71,7 +68,7 @@ public class CsvCreatorTemplateTest {
 			String line = reader.readLine();
 
 			System.out.println(line);
-			
+
 			Assert.assertEquals(5, StringUtils.countOccurrencesOf(line, ","));
 			Assert.assertEquals("string,,  ,1,false,", line);
 		}

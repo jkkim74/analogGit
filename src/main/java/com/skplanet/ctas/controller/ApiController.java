@@ -28,10 +28,10 @@ import com.skplanet.ocb.exception.BizException;
 import com.skplanet.ocb.service.MailService;
 import com.skplanet.ocb.util.ApiResponse;
 import com.skplanet.ocb.util.AutoMappedMap;
+import com.skplanet.ocb.util.Constant;
 import com.skplanet.ocb.util.CsvCreatorTemplate;
 import com.skplanet.ocb.util.Helper;
 import com.skplanet.pandora.service.UploadService;
-import com.skplanet.pandora.util.Constant;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -283,7 +283,7 @@ public class ApiController {
 		}
 
 		String filename = Helper.nowMonthDayString() + '_' + cellId + '_' + fnlExtrctCnt + "_O.dat";
-		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR, filename);
+		Path filePath = Paths.get(Constant.APP_FILE_DIR, filename);
 
 		char delimiter = '▦';
 
@@ -319,7 +319,7 @@ public class ApiController {
 			params.put("grpNm", "ADMIN GROUP");
 			params.put("subGrpNm", "ADMIN SUBGROUP");
 			params.put("sndDt", Helper.nowISODateString());
-			
+
 			String name = Helper.currentUser().getFullname();
 			if (StringUtils.isEmpty(name)) {
 				name = username;

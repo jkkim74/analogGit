@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 
 import com.skplanet.ocb.service.SmsService;
 import com.skplanet.ocb.util.AutoMappedMap;
+import com.skplanet.ocb.util.Constant;
 import com.skplanet.ocb.util.CsvCreatorTemplate;
 import com.skplanet.ocb.util.Helper;
 import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
-import com.skplanet.pandora.util.Constant;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,7 +73,7 @@ public class NoticeService {
 
 		};
 
-		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR,
+		Path filePath = Paths.get(Constant.APP_FILE_DIR,
 				Helper.uniqueCsvFilename(transmissionType.name().toLowerCase()));
 
 		csvCreator.create(filePath, Charset.forName("x-IBM949"));

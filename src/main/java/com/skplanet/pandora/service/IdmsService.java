@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.util.Constant;
 import com.skplanet.ocb.util.Helper;
-import com.skplanet.pandora.util.Constant;
 
 @Service
 public class IdmsService {
@@ -39,7 +39,7 @@ public class IdmsService {
 	private ForwardService ftpService;
 
 	private static void writeToFileAsCsv(String filename, Object... values) {
-		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR, filename);
+		Path filePath = Paths.get(Constant.APP_FILE_DIR, filename);
 
 		try (CSVPrinter printer = CSVFormat.DEFAULT.print(Files.newBufferedWriter(filePath, StandardCharsets.UTF_8,
 				StandardOpenOption.CREATE, StandardOpenOption.APPEND))) {
@@ -106,23 +106,23 @@ public class IdmsService {
 		// 로그 작성 시간 정보 수집
 		Date begin = new Date();
 		String jobInfoFilename = logForJobInfo(Helper.toDatetimeString(begin), null);
-		Path jobInfoPath = Paths.get(Constant.UPLOADED_FILE_DIR, jobInfoFilename);
+		Path jobInfoPath = Paths.get(Constant.APP_FILE_DIR, jobInfoFilename);
 		ftpService.sendForLogging(jobInfoPath, null);
 
 		// 고객정보조회 로그 수집
 		String searchMemberInfoFilename = IDMS_BIZ_SITE_ID + "_CUS_" + Helper.yesterdayDateString() + ".log";
-		Path searchMemberInfoPath = Paths.get(Constant.UPLOADED_FILE_DIR, searchMemberInfoFilename);
+		Path searchMemberInfoPath = Paths.get(Constant.APP_FILE_DIR, searchMemberInfoFilename);
 		ftpService.sendForLogging(searchMemberInfoPath, null);
 
 		// 사용자 계정 정보 수집
 		// create user info log
 		String userInfoFilename = IDMS_BIZ_SITE_ID + "_ID_" + Helper.yesterdayDateString() + ".log";
-		Path userInfoPath = Paths.get(Constant.UPLOADED_FILE_DIR, userInfoFilename);
+		Path userInfoPath = Paths.get(Constant.APP_FILE_DIR, userInfoFilename);
 		ftpService.sendForLogging(userInfoPath, null);
 
 		// 로그인/로그아웃 로그 수집
 		String logInOutFilename = IDMS_BIZ_SITE_ID + "_LOGIN_" + Helper.yesterdayDateString() + ".log";
-		Path logInOutPath = Paths.get(Constant.UPLOADED_FILE_DIR, logInOutFilename);
+		Path logInOutPath = Paths.get(Constant.APP_FILE_DIR, logInOutFilename);
 		ftpService.sendForLogging(logInOutPath, null);
 
 		// 로그 작성 시간 정보 수집 종료시간 포함하여 덮어쓰기

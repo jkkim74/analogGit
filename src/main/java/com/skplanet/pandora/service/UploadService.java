@@ -27,11 +27,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.CaseFormat;
 import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.util.Constant;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.model.UploadStatus;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
-import com.skplanet.pandora.util.Constant;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -64,9 +64,9 @@ public class UploadService {
 
 		long numberOfColumns = getNumberOfColumnsAndValidate(pageId, filePath);
 
-		JobParameters jobParameters = new JobParametersBuilder().addString(Constant.PAGE_ID, pageId)
-				.addString(Constant.USERNAME, username).addString(Constant.FILE_PATH, filePath.toString())
-				.addLong(Constant.NUMBER_OF_COLUMNS, numberOfColumns).toJobParameters();
+		JobParameters jobParameters = new JobParametersBuilder().addString("pageId", pageId)
+				.addString("username", username).addString("filePath", filePath.toString())
+				.addLong("numberOfColumns", numberOfColumns).toJobParameters();
 
 		return jobParameters;
 	}
@@ -82,8 +82,8 @@ public class UploadService {
 	}
 
 	public void endImport(JobParameters parameters) {
-		markFinish(parameters.getString(Constant.PAGE_ID), parameters.getString(Constant.USERNAME));
-		removeUploadedFile(parameters.getString(Constant.FILE_PATH));
+		markFinish(parameters.getString("pageId"), parameters.getString("username"));
+		removeUploadedFile(parameters.getString("filePath"));
 	}
 
 	private void markRunning(String pageId, String username, String columnName, String filename) {
@@ -111,7 +111,7 @@ public class UploadService {
 
 	private long getNumberOfColumnsAndValidate(String pageId, Path uploadPath) {
 		long numberOfColumns = 1;
-		if (Constant.PAN0103.equalsIgnoreCase(pageId)) {
+		if ("PAN0103".equalsIgnoreCase(pageId)) {
 			numberOfColumns = 6;
 		}
 
@@ -135,12 +135,12 @@ public class UploadService {
 	}
 
 	private Path saveUploadFile(MultipartFile file) {
-		File uploadDirectory = new File(Constant.UPLOADED_FILE_DIR);
+		File uploadDirectory = new File(Constant.APP_FILE_DIR);
 		if (!uploadDirectory.exists()) {
 			uploadDirectory.mkdir();
 		}
 
-		Path uploadPath = Paths.get(Constant.UPLOADED_FILE_DIR, UUID.randomUUID() + "-" + file.getOriginalFilename());
+		Path uploadPath = Paths.get(Constant.APP_FILE_DIR, UUID.randomUUID() + "-" + file.getOriginalFilename());
 
 		try (InputStream in = file.getInputStream()) {
 			Files.copy(in, uploadPath);

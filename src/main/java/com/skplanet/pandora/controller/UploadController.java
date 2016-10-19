@@ -21,7 +21,6 @@ import com.skplanet.pandora.model.UploadStatus;
 import com.skplanet.pandora.repository.mysql.MysqlRepository;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.service.UploadService;
-import com.skplanet.pandora.util.Constant;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,7 +50,7 @@ public class UploadController {
 			throw new BizException("빈 파일입니다");
 		}
 
-		if (Constant.PAN0105.equalsIgnoreCase(pageId)) {
+		if ("PAN0105".equalsIgnoreCase(pageId)) {
 			uploadService.forwardToFtpServer(file, pageId, username, columnName);
 		} else {
 			JobParameters jobParameters = uploadService.readyToImport(file, pageId, username, columnName);
