@@ -15,7 +15,9 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.util.StringUtils;
 
+import com.google.common.base.Strings;
 import com.skplanet.pandora.util.Constant;
 
 public class CsvCreatorTemplateTest {
@@ -43,9 +45,9 @@ public class CsvCreatorTemplateTest {
 				m.put("aString", "string");
 				m.put("aEmptyString", "");
 				m.put("aBlankString", "  ");
-				m.put("aNull", null);
 				m.put("aInt", 1);
 				m.put("aBoolean", false);
+				m.put("aNull", null);
 
 				List<AutoMappedMap> list = new ArrayList<>();
 				list.add(m);
@@ -68,8 +70,10 @@ public class CsvCreatorTemplateTest {
 		try (BufferedReader reader = Files.newBufferedReader(testCsv, StandardCharsets.UTF_8)) {
 			String line = reader.readLine();
 
-			Assert.assertEquals(6, line.split(",").length);
-			Assert.assertEquals("string,,  ,,1,false", line);
+			System.out.println(line);
+			
+			Assert.assertEquals(5, StringUtils.countOccurrencesOf(line, ","));
+			Assert.assertEquals("string,,  ,1,false,", line);
 		}
 	}
 
