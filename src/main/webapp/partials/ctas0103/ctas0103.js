@@ -31,8 +31,8 @@ angular.module('App').component('ctas0103Modal', {
             var params = angular.extend({}, self.campaign, self.options);
             params.mergeDt = $filter('date')(params.mergeDt, 'yyyyMMdd');
 
-            self.savePromise = apiSvc.saveCampaignTargetingInfo(params);
-            self.savePromise.then(function (data) {
+            self.okPromise = apiSvc.saveCampaignTargetingInfo(params);
+            self.okPromise.then(function (data) {
                 self.close({ $value: data.value });
             });
         };

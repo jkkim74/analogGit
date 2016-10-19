@@ -7,18 +7,20 @@ angular.module('App').component('ctas0105Modal', {
         close: '&',
         dismiss: '&'
     },
-    controller: function (apiSvc) {
+    controller: function (apiSvc, authSvc) {
         var self = this;
 
         self.$onInit = function () {
+            self.campaignCell = self.resolve.campaignCell;
 
+            authSvc.getUserInfo().then(function (userInfo) {
+                self.ptsUsername = userInfo.ptsUsername;
+            });
         };
 
         self.ok = function () {
-
-            var params = angular.extend(self.resolve.selectedTargeting, {});
-
-            apiSvc.requestTransmission(params).then(function () {
+            self.okPromise = apiSvc.requestTransmission(self.campaignCell);
+            self.okPromise.then(function () {
                 self.close();
             });
         };

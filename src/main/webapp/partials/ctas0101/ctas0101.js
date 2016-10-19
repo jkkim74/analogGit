@@ -238,6 +238,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
 
             var modalInstance = $uibModal.open({
                 component: componentName,
+                backdrop: 'static',
                 resolve: {
                     campaignCell: function () { return angular.extend({}, $scope.currCampaign, campaignCell); }
                 }
