@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.ctas.repository.querycache.QueryCacheRepository">
+
+	<select id="selectCell" parameterType="map" resultType="int">
+		SELECT MBR_ID FROM USER_PS03701.WEB_TRGT_${cmpgnId}
+		LIMIT #{offset}, #{limit}
+	</select>
+
+</mapper>

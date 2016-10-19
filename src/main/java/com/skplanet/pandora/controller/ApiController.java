@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skplanet.ocb.exception.BizException;
-import com.skplanet.ocb.security.UserInfo;
 import com.skplanet.ocb.service.SshService;
 import com.skplanet.ocb.util.ApiResponse;
 import com.skplanet.ocb.util.AutoMappedMap;
+import com.skplanet.ocb.util.Helper;
 import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
@@ -52,7 +52,7 @@ public class ApiController {
 	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam(defaultValue = "0") int offset,
 			@RequestParam(defaultValue = "20") int limit) {
 
-		String username = AuthController.getUserInfo().getUsername();
+		String username = Helper.currentUser().getUsername();
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 		List<AutoMappedMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, true);
@@ -168,8 +168,8 @@ public class ApiController {
 	@PostMapping("/sendPts")
 	public ApiResponse sendPts(@RequestParam boolean ptsMasking, @RequestParam String pageId) {
 
-		String username = AuthController.getUserInfo().getUsername();
-		String ptsUsername = ((UserInfo) AuthController.getUserInfo()).getPtsUsername();
+		String username = Helper.currentUser().getUsername();
+		String ptsUsername = Helper.currentUser().getPtsUsername();
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
@@ -182,7 +182,7 @@ public class ApiController {
 	public ApiResponse extractMemberInfo(@RequestParam String pageId, @RequestParam String inputDataType,
 			@RequestParam String periodType, @RequestParam String periodFrom, @RequestParam String periodTo) {
 
-		String username = AuthController.getUserInfo().getUsername();
+		String username = Helper.currentUser().getUsername();
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 

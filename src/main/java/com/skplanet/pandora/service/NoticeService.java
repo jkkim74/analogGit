@@ -1,6 +1,7 @@
 package com.skplanet.pandora.service;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -31,7 +32,7 @@ public class NoticeService {
 	private SmsService smsService;
 
 	@Autowired
-	private ForwardService ftpService;
+	private ForwardService forwardService;
 
 	public void noticeUsingFtp(final Map<String, Object> params, final TransmissionType transmissionType) {
 
@@ -75,9 +76,9 @@ public class NoticeService {
 		Path filePath = Paths.get(Constant.UPLOADED_FILE_DIR,
 				Helper.uniqueCsvFilename(transmissionType.name().toLowerCase()));
 
-		csvCreator.create(filePath);
+		csvCreator.create(filePath, Charset.forName("x-IBM949"));
 
-		ftpService.sendForNotification(filePath, transmissionType);
+		forwardService.sendForNotification(filePath, transmissionType);
 	}
 
 	public void noticeUsingSms(final Map<String, Object> params) {

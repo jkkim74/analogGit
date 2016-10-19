@@ -5,8 +5,10 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.springframework.format.datetime.DateFormatter;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.google.common.io.Resources;
+import com.skplanet.ocb.security.UserInfo;
 
 import kr.co.skplanet.crypto.EncryptCustomerInfo;
 
@@ -16,6 +18,7 @@ public final class Helper {
 
 	private static DateFormatter dfAsDate = new DateFormatter("yyyyMMdd");
 	private static DateFormatter dfAsDatetime = new DateFormatter("yyyyMMddHHmmss");
+	private static DateFormatter dfAsMonthDay = new DateFormatter("MMdd");
 
 	public static String nowDateString() {
 		return dfAsDate.print(new Date(), Locale.getDefault());
@@ -23,6 +26,10 @@ public final class Helper {
 
 	public static String nowDateTimeString() {
 		return dfAsDatetime.print(new Date(), Locale.getDefault());
+	}
+
+	public static String nowMonthDayString() {
+		return dfAsMonthDay.print(new Date(), Locale.getDefault());
 	}
 
 	public static String yesterdayDateString() {
@@ -59,6 +66,10 @@ public final class Helper {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static UserInfo currentUser() {
+		return (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
 }

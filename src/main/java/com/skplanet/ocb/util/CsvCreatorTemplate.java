@@ -1,6 +1,7 @@
 package com.skplanet.ocb.util;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,14 +19,17 @@ import com.skplanet.ocb.exception.BizException;
 public abstract class CsvCreatorTemplate<T> {
 
 	public final Path create(Path filePath) {
-		return create(filePath, ',');
+		return create(filePath, ',', StandardCharsets.UTF_8);
 	}
 
-	public final Path create(Path filePath, char delimiter) {
+	public final Path create(Path filePath, Charset charset) {
+		return create(filePath, ',', charset);
+	}
 
-		try (CSVPrinter printer = CSVFormat.RFC4180.withDelimiter(delimiter).withQuote(null)
-				.print(Files.newBufferedWriter(filePath, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
-						StandardOpenOption.APPEND))) {
+	public final Path create(Path filePath, char delimiter, Charset charset) {
+
+		try (CSVPrinter printer = CSVFormat.RFC4180.withDelimiter(delimiter).withQuote(null).print(
+				Files.newBufferedWriter(filePath, charset, StandardOpenOption.CREATE, StandardOpenOption.APPEND))) {
 
 			List<T> list = nextList();
 
