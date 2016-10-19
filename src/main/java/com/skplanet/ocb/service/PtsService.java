@@ -23,16 +23,15 @@ public class PtsService {
 	private boolean enabled;
 
 	public void send(String filename, String ptsUsername) {
-		log.info("Sending file [{}]", filename);
-
-		String ptsProperties = Resources.getResource("config/PTS.properties").getPath();
-
-		log.debug("PTS.properties location={}", ptsProperties);
+		log.info("{} Sending file [{}]", ptsUsername, filename);
 
 		if (!enabled) {
 			log.debug("disabled");
 			return;
 		}
+
+		String ptsProperties = Resources.getResource("config/PTS.properties").getPath();
+		log.debug("PTS.properties location={}", ptsProperties);
 
 		BufferedReader in = null;
 		FileWriter fw = null;
