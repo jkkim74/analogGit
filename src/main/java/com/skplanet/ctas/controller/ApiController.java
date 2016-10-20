@@ -164,10 +164,6 @@ public class ApiController {
 		int totCnt = oracleRepository.countCampaignTargetingCsvTmp(params);
 		int dupDelCnt = oracleRepository.countCampaignTargetingCsv(params);
 
-		// TODO test
-		totCnt = 500001;
-		dupDelCnt = 500001;
-
 		params.put("totCnt", String.valueOf(totCnt));
 		params.put("dupDelCnt", String.valueOf(dupDelCnt));
 		params.put("objRegFgCd", "CSV");
