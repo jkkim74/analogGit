@@ -97,6 +97,7 @@ angular.module('App').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
         this.deleteCampaign = new ApiPost('campaigns', 'delete');
         this.getCampaignTargetingInfo = new ApiGet('campaigns/targeting');
         this.saveCampaignTargetingInfo = new ApiPost('campaigns/targeting/trgt');
+        this.downloadCampaignTargeting = new ApiGet('campaigns/targeting/download');
         this.getCampaignDetail = new ApiGet('campaigns/detail');
         this.saveCampaignDetail = new ApiPost('campaigns/detail');
         this.deleteCampaignDetail = new ApiPost('campaigns/detail', 'delete');

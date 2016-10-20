@@ -71,8 +71,9 @@
 					<label class="col-sm-5 control-label">캠페인 대상자 등록</label>
 					<div class="col-sm-7">
 						<button type="button" class="btn btn-default" ngf-select="uploadCsv($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'"
-							ngf-max-size="1GB" ng-disabled="campaignForm.$invalid || (currCampaign.stsFgCd && currCampaign.stsFgCd != '01')">CSV 파일 등록</button>
-						<button type="button" class="btn btn-default" ng-click="openTargeting()" ng-disabled="campaignForm.$invalid || (currCampaign.stsFgCd && currCampaign.stsFgCd != '01')">타겟팅 조건 선택</button>
+							ngf-max-size="1GB" ng-hide="currCampaign.stsFgCd && currCampaign.stsFgCd != '01'" ng-disabled="campaignForm.$invalid || (currCampaign.stsFgCd && currCampaign.stsFgCd != '01')">CSV 파일 등록</button>
+						<button type="button" class="btn btn-default" ng-click="openTargeting()" ng-hide="currCampaign.stsFgCd && currCampaign.stsFgCd != '01'" ng-disabled="campaignForm.$invalid || (currCampaign.stsFgCd && currCampaign.stsFgCd != '01')">타겟팅 조건 선택</button>
+						<a class="btn btn-default" ng-href="api/campaigns/{{currCampaign.cmpgnId}}/download/{{currCampaign.objRegFgCd}}" download="캠페인대상자.csv" uib-tooltip="대상 회원ID 다운로드" ng-show="currCampaign.stsFgCd && currCampaign.stsFgCd != '01'"><i class="fa fa-download fa-lg"></i></a>
 					</div>
 				</div>
 				<div class="form-group">

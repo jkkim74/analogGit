@@ -84,7 +84,7 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
                 // $scope.gridOptionsList.data.splice(index, 1);
 
                 var limit = $scope.gridOptionsList.paginationPageSize;
-                var offset =  ($scope.gridApi.pagination.getPage() - 1) * limit;
+                var offset = ($scope.gridApi.pagination.getPage() - 1) * limit;
                 $scope.searchCampaign(offset, limit);
                 $scope.clearDetail();
             });
@@ -258,6 +258,10 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
                 $scope.searchCampaign();
                 $scope.loadCellList();
             });
+        };
+
+        $scope.downloadTargeting = function () {
+            apiSvc.downloadCampaignTargeting($scope.currCampaign);
         };
 
     }]);

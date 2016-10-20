@@ -1,6 +1,8 @@
 package com.skplanet.ctas.controller;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
@@ -9,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -219,6 +224,45 @@ public class ApiController {
 		map.remove("stsFgCd");
 		map.remove("objRegFgCd");
 		return map;
+	}
+
+	@GetMapping("/campaigns/{campaignId}/download/{objRegFgCd}")
+	public void downloadCampaignTargeting(@PathVariable String campaignId, @PathVariable String objRegFgCd,
+			HttpServletResponse response) {
+
+		response.setContentType("text/csv");
+
+		try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream(), "UTF-8"))) {
+			int offset = 0;
+			int limit = 10000;
+			List<String> list = null;
+			Map<String, Object> map = new HashMap<>();
+			map.put("cmpgnId", campaignId);
+
+			do {
+				map.put("offset", offset);
+				map.put("limit", limit);
+				offset += limit;
+
+				if ("TRGT".equalsIgnoreCase(objRegFgCd)) {
+					list = oracleRepository.selectTargeting(map);
+				} else if ("CSV".equalsIgnoreCase(objRegFgCd)) {
+					list = querycacheRepository.selectTargeting(map);
+				} else {
+					throw new BizException("unknown objRegFgCd");
+				}
+
+				if (list != null) {
+					for (String s : list) {
+						writer.write(s + "\r\n");
+					}
+				}
+			} while (list != null && !list.isEmpty());
+
+		} catch (IOException e) {
+			throw new BizException("Failed to download campaign targeting as csv", e);
+		}
+
 	}
 
 	@GetMapping("/campaigns/detail")

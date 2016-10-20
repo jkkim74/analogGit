@@ -59,4 +59,6 @@ public interface OracleRepository {
 
 	List<AutoMappedMap> selectCell(Map<String, Object> params);
 
+	List<String> selectTargeting(Map<String, Object> params);
+
 }

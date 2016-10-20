@@ -101,5 +101,14 @@
 	<select id="countTargeting" parameterType="map" resultType="int" databaseId="hsql">
 		SELECT COUNT(*) FROM WEB_TRGT_${cmpgnId}
 	</select>
-
+	
+	<select id="selectTargeting" parameterType="map" resultType="string">
+		SELECT MBR_ID FROM USER_PS03701.WEB_TRGT_${cmpgnId}
+		LIMIT #{offset}, #{limit}
+	</select>
+	<select id="selectTargeting" parameterType="map" resultType="string" databaseId="hsql">
+		SELECT MBR_ID FROM WEB_TRGT_${cmpgnId}
+		LIMIT #{offset}, #{limit}
+	</select>
+	
 </mapper>

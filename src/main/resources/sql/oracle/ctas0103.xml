@@ -94,5 +94,15 @@
 	<select id="countCampaignTargetingCsv" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM WEB_TRGT_${cmpgnId}
 	</select>
+	
+	<select id="selectTargeting" parameterType="map" resultType="string">
+		<include refid="pagingHaed"/>
+		SELECT MBR_ID FROM WEB_TRGT_${cmpgnId}
+		<include refid="pagingFoot" />
+	</select>
+	<select id="selectTargeting" parameterType="map" resultType="string" databaseId="hsql">
+		SELECT MBR_ID FROM WEB_TRGT_${cmpgnId}
+		<include refid="pagingFoot" />
+	</select>
 
 </mapper>
