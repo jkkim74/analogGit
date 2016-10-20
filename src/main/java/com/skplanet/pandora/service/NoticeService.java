@@ -54,15 +54,15 @@ public class NoticeService {
 
 			@Override
 			public void printRecord(CSVPrinter printer, AutoMappedMap map) throws IOException {
-				String extnctObjDt = (String) map.get("extnctObjDt");
+				String extnctObjDt = String.valueOf(map.get("extnctObjDt"));
 
 				if (transmissionType == TransmissionType.OCBCOM) {
 					// 소명예정년,소멸예정월,소멸예정일,EC_USER_ID
 					printer.printRecord(extnctObjDt.substring(0, 4), extnctObjDt.substring(4, 6),
 							extnctObjDt.substring(6, 8), map.get("unitedId"));
 				} else if (transmissionType == TransmissionType.EM) {
-					String mbrId = (String) map.get("mbrId");
-					String unitedId = (String) map.get("unitedId");
+					String mbrId = String.valueOf(map.get("mbrId"));
+					String unitedId = String.valueOf(map.get("unitedId"));
 					String encrypted = Helper.skpEncrypt(mbrId + "," + unitedId);
 
 					// 소명예정년,소멸예정월,소멸예정일,고객성명,이메일주소,암호화값

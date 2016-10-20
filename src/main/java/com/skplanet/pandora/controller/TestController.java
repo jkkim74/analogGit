@@ -58,7 +58,7 @@ public class TestController {
 		model.put("mbrKorNm", "테스트");
 		model.put("mm", "00");
 		model.put("dd", "00");
-		mailService.send((String) params.get("to"), "TEST MAIL", "test.vm", model);
+		mailService.send(String.valueOf(params.get("to")), "TEST MAIL", "test.vm", model);
 	}
 
 	@Autowired
@@ -70,7 +70,7 @@ public class TestController {
 		model.put("mbrKorNm", "테스트");
 		model.put("mm", "00");
 		model.put("dd", "00");
-		smsService.send(Arrays.asList((String) params.get("to")), "pan0104.vm", model);
+		smsService.send(Arrays.asList(String.valueOf(params.get("to"))), "pan0104.vm", model);
 	}
 
 	@GetMapping("/testClientIp")
