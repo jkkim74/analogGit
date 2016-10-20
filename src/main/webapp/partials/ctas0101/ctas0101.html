@@ -92,7 +92,7 @@
 				<div class="btn-group btn-group-sm" role="group">
 					<button type="button" class="btn btn-success" ng-click="addCell()" ng-disabled="campaignForm.$invalid || !currCampaign.cmpgnId || currCampaign.stsFgCd == '03' || currCampaign.stsFgCd == '04' || (currCampaign.stsFgCd == '02' && currCampagin.cmpgnSndChnlFgCd == 'PUSH')">셀 추가</button>
 					<button type="button" class="btn btn-danger" mwl-confirm on-confirm="deleteCell()" title="셀 삭제" message="선택된 셀을 삭제하시겠습니까?"
-						confirm-text="삭제" placement="left" ng-disabled="campaignForm.$invalid || gridApi2.selection.getSelectedCount() <= 0 || currCampaign.stsFgCd == '03' || currCampaign.stsFgCd == '04' || (currCampaign.stsFgCd == '02' && currCampagin.cmpgnSndChnlFgCd == 'PUSH')">셀 삭제</button>
+						confirm-text="삭제" placement="left" ng-disabled="campaignForm.$invalid || gridApi2.selection.getSelectedCount() <= 0 || gridOptionsCellList.data.length <= 1 || currCampaign.stsFgCd == '03' || currCampaign.stsFgCd == '04' || (currCampaign.stsFgCd == '02' && currCampagin.cmpgnSndChnlFgCd == 'PUSH')">셀 삭제</button>
 					<button type="button" class="btn btn-warning" ng-click="openRequestForm()" ng-disabled="gridApi2.selection.getSelectedCount() <= 0 || gridApi2.selection.getSelectedRows()[0].stsFgCd != '03'">전송요청</button>
 				</div>
 			</div>

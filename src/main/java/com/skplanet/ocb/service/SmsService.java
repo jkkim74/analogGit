@@ -49,14 +49,14 @@ public class SmsService {
 		log.info("Send to SMS");
 
 		for (AutoMappedMap m : receivers) {
-			String extnctObjDt = String.valueOf(m.get("extnctObjDt"));
+			String extnctObjDt = (String) m.get("extnctObjDt");
 
 			HashMap<String, Object> model = new HashMap<>();
 			model.put("mbrKorNm", m.get("mbrKorNm"));
 			model.put("mm", extnctObjDt.substring(4, 6));
 			model.put("dd", extnctObjDt.substring(6, 8));
 
-			String clphnNo = String.valueOf(m.get("clphnNo"));
+			String clphnNo = (String) m.get("clphnNo");
 
 			send(Arrays.asList(clphnNo), "pan0104.vm", model);
 		}

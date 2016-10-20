@@ -67,11 +67,11 @@ public class UserService implements UserDetailsService {
 			throw new BizException("이미 존재하는 사용자입니다");
 		}
 
-		throwIfNotExistInLdap(String.valueOf(params.get("username")));
+		throwIfNotExistInLdap((String) params.get("username"));
 
 		mysqlRepository.upsertUser(params);
 
-		mysqlRepository.insertAuthorities(String.valueOf(params.get("username")), "ROLE_USER");
+		mysqlRepository.insertAuthorities((String) params.get("username"), "ROLE_USER");
 	}
 
 	/**

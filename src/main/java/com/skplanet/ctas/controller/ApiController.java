@@ -1,6 +1,7 @@
 package com.skplanet.ctas.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,6 +40,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("api")
 @Slf4j
 public class ApiController {
+
+	static final int MAX_CELL_SIZE = 500000;
 
 	@Autowired
 	private OracleRepository oracleRepository;
@@ -109,22 +112,25 @@ public class ApiController {
 		querycacheRepository.createTargetingTable(params);
 		querycacheRepository.insertTargeting(params);
 
-		int extrctCnt = querycacheRepository.countTargeting(params);
+		int totCnt = querycacheRepository.countTargeting(params);
 
-		log.debug("extrctCnt={}", extrctCnt);
+		log.debug("extrctCnt={}", totCnt);
 
-		params.put("totCnt", String.valueOf(extrctCnt));
-		params.put("dupDelCnt", String.valueOf(extrctCnt));
+		params.put("totCnt", String.valueOf(totCnt));
+		params.put("dupDelCnt", String.valueOf(totCnt));
 		params.put("objRegFgCd", "TRGT");
 		params.put("stsFgCd", "PUSH".equals(params.get("cmpgnSndChnlFgCd")) ? "03" : "02");
 		if ("PUSH".equals(params.get("cmpgnSndChnlFgCd"))) {
-			params.put("extrctCnt", String.valueOf(extrctCnt));
-			params.put("fnlExtrctCnt", String.valueOf(extrctCnt));
+			params.put("extrctCnt", String.valueOf(totCnt));
+			params.put("fnlExtrctCnt", String.valueOf(totCnt));
 		}
 
 		oracleRepository.upsertCampaign(params);
 
-		saveCampaignDetail(params);
+		for (int i = 0, n = totCnt / MAX_CELL_SIZE + 1; i < n; i++) {
+			params.remove("cellId");
+			saveCampaignDetail(params);
+		}
 
 		AutoMappedMap campaign = oracleRepository.selectCampaign(params);
 
@@ -158,6 +164,10 @@ public class ApiController {
 		int totCnt = oracleRepository.countCampaignTargetingCsvTmp(params);
 		int dupDelCnt = oracleRepository.countCampaignTargetingCsv(params);
 
+		// TODO test
+		totCnt = 500001;
+		dupDelCnt = 500001;
+
 		params.put("totCnt", String.valueOf(totCnt));
 		params.put("dupDelCnt", String.valueOf(dupDelCnt));
 		params.put("objRegFgCd", "CSV");
@@ -169,7 +179,10 @@ public class ApiController {
 
 		oracleRepository.upsertCampaign(params);
 
-		saveCampaignDetail(params);
+		for (int i = 0, n = dupDelCnt / MAX_CELL_SIZE + 1; i < n; i++) {
+			params.remove("cellId");
+			saveCampaignDetail(params);
+		}
 
 		AutoMappedMap campaign = oracleRepository.selectCampaign(params);
 
@@ -227,6 +240,14 @@ public class ApiController {
 			cellAdd = true;
 		}
 
+		if (!cellAdd && !"PUSH".equals(params.get("cmpgnSndChnlFgCd"))) {
+			// 셀 개수 검증
+			int extrctCnt = Integer.parseInt((String) params.get("extrctCnt"));
+			if (extrctCnt <= 0 || extrctCnt > MAX_CELL_SIZE) {
+				throw new BizException("하나의 셀은 50만건 이하여야 합니다.");
+			}
+		}
+
 		String username = Helper.currentUser().getUsername();
 		params.put("username", username);
 
@@ -241,6 +262,14 @@ public class ApiController {
 
 	@DeleteMapping("/campaigns/detail")
 	public ApiResponse deleteCampaignDetail(@RequestParam Map<String, Object> params) {
+		// 셀 개수 검증
+		AutoMappedMap campaign = oracleRepository.selectCampaign(params);
+		int total = ((BigDecimal) campaign.get("dupDelCnt")).intValue();
+		List<AutoMappedMap> cells = oracleRepository.selectCampaignDetails(params);
+		if (total / (cells.size() - 1) > MAX_CELL_SIZE) {
+			throw new BizException("하나의 셀은 50만건 이하여야 합니다.");
+		}
+
 		oracleRepository.deleteCampaignDetail(params);
 		oracleRepository.balanceCellExtrctCnt(params);
 		return ApiResponse.builder().message("셀 삭제 완료").build();
