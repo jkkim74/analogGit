@@ -80,9 +80,12 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
 
         $scope.deleteCampaign = function () {
             apiSvc.deleteCampaign($scope.currCampaign).then(function () {
-                var index = $scope.gridOptionsList.data.indexOf($scope.currCampaign);
-                $scope.gridOptionsList.data.splice(index, 1);
+                // var index = $scope.gridOptionsList.data.indexOf($scope.currCampaign);
+                // $scope.gridOptionsList.data.splice(index, 1);
 
+                var limit = $scope.gridOptionsList.paginationPageSize;
+                var offset =  ($scope.gridApi.pagination.getPage() - 1) * limit;
+                $scope.searchCampaign(offset, limit);
                 $scope.clearDetail();
             });
         };
