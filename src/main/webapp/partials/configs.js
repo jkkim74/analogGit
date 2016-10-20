@@ -92,6 +92,7 @@ angular.module('App').value('cgBusyDefaults', {
         // angular-bootstrap-confirm default
         confirmationPopoverDefaults.confirmText = '확인';
         confirmationPopoverDefaults.cancelText = '취소';
+        confirmationPopoverDefaults.confirmButtonType = 'primary';
 
     }
 ]);

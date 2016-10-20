@@ -141,8 +141,8 @@
 			UPT_DTTM = SYSDATE,
 		</trim>
 		WHEN NOT MATCHED THEN
-			INSERT ( CELL_ID, CMPGN_ID, EXTRCT_CNT, MERGE_DT, CELL_DESC, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
-			VALUES ( #{cellId}, #{cmpgnId}, #{extrctCnt, jdbcType=INTEGER}, #{mergeDt, jdbcType=VARCHAR}, #{cellDesc, jdbcType=VARCHAR}, #{stsFgCd, jdbcType=VARCHAR}, #{username}, SYSDATE, #{username}, SYSDATE )
+			INSERT ( CELL_ID, CMPGN_ID, EXTRCT_CNT, FNL_EXTRCT_CNT, MERGE_DT, CELL_DESC, STS_FG_CD, UPD_ID, UPT_DTTM, CRT_ID, CRT_DTTM )
+			VALUES ( #{cellId}, #{cmpgnId}, #{extrctCnt, jdbcType=INTEGER}, #{fnlExtrctCnt, jdbcType=INTEGER},#{mergeDt, jdbcType=VARCHAR}, #{cellDesc, jdbcType=VARCHAR}, #{stsFgCd, jdbcType=VARCHAR}, #{username}, SYSDATE, #{username}, SYSDATE )
 	</insert>
 
 	<delete id="deleteCampaignDetail" parameterType="map">

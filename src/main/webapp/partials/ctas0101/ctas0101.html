@@ -30,11 +30,10 @@
 							</div>
 							<div class="btn-group" role="group">
 								<button type="button" class="btn btn-danger" mwl-confirm on-confirm="deleteCampaign()" title="캠페인 삭제" message="선택된 캠페인을 삭제하시겠습니까?"
-									confirm-text="삭제" confirm-button-type="danger" placement="top" ng-disabled="!currCampaign.cmpgnId">삭제</button>
+									confirm-text="삭제" placement="top" ng-disabled="!currCampaign.cmpgnId">삭제</button>
 							</div>
 							<div class="btn-group" role="group">
-								<button type="button" class="btn btn-warning" mwl-confirm on-confirm="clearDetail()" message="캠페인 정보 입력을 취소하시겠습니까?" confirm-button-type="warning"
-									placement="top">취소/신규</button>
+								<button type="button" class="btn btn-warning" mwl-confirm on-confirm="clearDetail()" message="캠페인 정보 입력을 취소하시겠습니까?" placement="top">취소/신규</button>
 							</div>
 						</div>
 					</div>
@@ -91,9 +90,9 @@
 		<div class="col-md-7">
 			<div class="text-right">
 				<div class="btn-group btn-group-sm" role="group">
-					<button type="button" class="btn btn-success" ng-click="addCell()" ng-disabled="campaignForm.$invalid">셀 추가</button>
+					<button type="button" class="btn btn-success" ng-click="addCell()" ng-disabled="campaignForm.$invalid || !currCampaign.cmpgnId || currCampaign.stsFgCd == '03' || currCampaign.stsFgCd == '04' || (currCampaign.stsFgCd == '02' && currCampagin.cmpgnSndChnlFgCd == 'PUSH')">셀 추가</button>
 					<button type="button" class="btn btn-danger" mwl-confirm on-confirm="deleteCell()" title="셀 삭제" message="선택된 셀을 삭제하시겠습니까?"
-						confirm-text="삭제" confirm-button-type="danger" placement="left" ng-disabled="gridApi2.selection.getSelectedCount() <= 0">셀 삭제</button>
+						confirm-text="삭제" placement="left" ng-disabled="campaignForm.$invalid || gridApi2.selection.getSelectedCount() <= 0 || currCampaign.stsFgCd == '03' || currCampaign.stsFgCd == '04' || (currCampaign.stsFgCd == '02' && currCampagin.cmpgnSndChnlFgCd == 'PUSH')">셀 삭제</button>
 					<button type="button" class="btn btn-warning" ng-click="openRequestForm()" ng-disabled="gridApi2.selection.getSelectedCount() <= 0 || gridApi2.selection.getSelectedRows()[0].stsFgCd != '03'">전송요청</button>
 				</div>
 			</div>

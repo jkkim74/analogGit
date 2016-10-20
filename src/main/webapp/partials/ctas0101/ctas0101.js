@@ -104,6 +104,11 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             };
 
             $scope.gridOptionsCellList.data = [];
+            $scope.gridApi2.selection.clearSelectedRows();
+        };
+
+        $scope.canEdit = function (cellScope) {
+            return cellScope.row.entity.stsFgCd == '02';
         };
 
         $scope.gridOptionsCellList = {
@@ -116,13 +121,13 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             columnDefs: [
                 { field: 'cellId', displayName: '셀ID', cellTooltip: true, headerTooltip: true },
                 {
-                    field: 'cellDesc', displayName: '설명', cellTooltip: true, headerTooltip: true, enableCellEdit: true,
-                    cellTemplate: '<div class="ui-grid-cell-contents"><span title="TOOLTIP">{{ COL_FIELD CUSTOM_FILTERS }}</span> <i class="fa fa-pencil" aria-hidden="true" title="수정하려면 더블클릭"></i></div>'
+                    field: 'cellDesc', displayName: '설명', cellTooltip: true, headerTooltip: true, enableCellEdit: true, cellEditableCondition: $scope.canEdit,
+                    cellTemplate: '<div class="ui-grid-cell-contents"><span title="TOOLTIP">{{ COL_FIELD CUSTOM_FILTERS }}</span> <i ng-show="row.entity.stsFgCd == \'02\'" class="fa fa-pencil" aria-hidden="true" title="수정하려면 더블클릭"></i></div>'
                 },
                 { field: 'cellPrcntg', displayName: '백분율(%)', width: 100, cellTooltip: true, headerTooltip: true },
                 {
-                    field: 'extrctCnt', displayName: '추출수', cellTooltip: true, headerTooltip: true, enableCellEdit: true, cellFilter: 'number',
-                    cellTemplate: '<div class="ui-grid-cell-contents"><span title="TOOLTIP">{{ COL_FIELD CUSTOM_FILTERS }}</span> <i class="fa fa-pencil" aria-hidden="true" title="수정하려면 더블클릭"></i></div>'
+                    field: 'extrctCnt', displayName: '추출수', cellTooltip: true, headerTooltip: true, enableCellEdit: true, cellEditableCondition: $scope.canEdit, cellFilter: 'number',
+                    cellTemplate: '<div class="ui-grid-cell-contents"><span title="TOOLTIP">{{ COL_FIELD CUSTOM_FILTERS }}</span> <i ng-show="row.entity.stsFgCd == \'02\'" class="fa fa-pencil" aria-hidden="true" title="수정하려면 더블클릭"></i></div>'
                 },
                 { field: 'fnlExtrctCnt', displayName: '최종추출수', cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
                 { field: 'mergeDt', displayName: '머지일자', cellTooltip: true, headerTooltip: true },
@@ -199,13 +204,15 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             $scope.cellListPromise.then(function (data) {
                 $scope.gridOptionsCellList.data = data.value;
                 $scope.gridApi2.selection.clearSelectedRows();
+                // $scope.gridApi2.core.notifyDataChange(uiGridConstants.dataChange.ALL);
             });
         };
 
         $scope.addCell = function () {
             var params = {
                 cmpgnId: $scope.currCampaign.cmpgnId,
-                mergeDt: $filter('date')($scope.currCampaign.mergeDt, 'yyyyMMdd')
+                mergeDt: $filter('date')($scope.currCampaign.mergeDt, 'yyyyMMdd'),
+                stsFgCd: '02'
             };
             $scope.cellListPromise = apiSvc.saveCampaignDetail(params);
             $scope.cellListPromise.then(function () {

@@ -115,8 +115,12 @@ public class ApiController {
 
 		params.put("totCnt", String.valueOf(extrctCnt));
 		params.put("dupDelCnt", String.valueOf(extrctCnt));
-		params.put("stsFgCd", "PUSH".equals(params.get("cmpgnSndChnlFgCd")) ? "03" : "02");
 		params.put("objRegFgCd", "TRGT");
+		params.put("stsFgCd", "PUSH".equals(params.get("cmpgnSndChnlFgCd")) ? "03" : "02");
+		if ("PUSH".equals(params.get("cmpgnSndChnlFgCd"))) {
+			params.put("extrctCnt", String.valueOf(extrctCnt));
+			params.put("fnlExtrctCnt", String.valueOf(extrctCnt));
+		}
 
 		oracleRepository.upsertCampaign(params);
 
@@ -156,8 +160,12 @@ public class ApiController {
 
 		params.put("totCnt", String.valueOf(totCnt));
 		params.put("dupDelCnt", String.valueOf(dupDelCnt));
-		params.put("stsFgCd", "PUSH".equals(params.get("cmpgnSndChnlFgCd")) ? "03" : "02");
 		params.put("objRegFgCd", "CSV");
+		params.put("stsFgCd", "PUSH".equals(params.get("cmpgnSndChnlFgCd")) ? "03" : "02");
+		if ("PUSH".equals(params.get("cmpgnSndChnlFgCd"))) {
+			params.put("extrctCnt", dupDelCnt);
+			params.put("fnlExtrctCnt", dupDelCnt);
+		}
 
 		oracleRepository.upsertCampaign(params);
 
