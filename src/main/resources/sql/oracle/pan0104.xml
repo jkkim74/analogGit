@@ -21,7 +21,7 @@
 		ORDER BY A.EXTNCT_MBR_FG_CD
 	</select>
 	
-	<sql id="selectExtinctionTargets_inner">
+	<sql id="selectExtinctionTargets_mas">
 		SELECT BASE_YM
 			, UNITED_ID
 			, MBR_ID
@@ -71,7 +71,7 @@
 		ORDER BY BASE_YM DESC
 	</sql>
 
-	<sql id="selectExtinctionTargets_send">
+	<sql id="selectExtinctionTargets_inner">
 		SELECT BASE_YM
 			, UNITED_ID
 			, MBR_ID
@@ -124,7 +124,7 @@
 	<select id="selectExtinctionTargets" parameterType="map" resultType="AutoMappedMap">
 		<choose>
 			<when test="noPaging != null and noPaging == true">
-				<include refid="selectExtinctionTargets_send" />
+				<include refid="selectExtinctionTargets_inner" />
 			</when>
 			<otherwise>
 				<include refid="pagingHead" />
@@ -134,6 +134,20 @@
 		</choose>
 	
 	</select>
+	
+	<select id="selectExtinctionTargetsMas" parameterType="map" resultType="AutoMappedMap">
+		<choose>
+			<when test="noPaging != null and noPaging == true">
+				<include refid="selectExtinctionTargets_mas" />
+			</when>
+			<otherwise>
+				<include refid="pagingHead" />
+				<include refid="selectExtinctionTargets_mas" />
+				<include refid="pagingFoot" />
+			</otherwise>
+		</choose>
+	
+	</select>	
 	
 	<select id="countExtinctionTargets" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM (

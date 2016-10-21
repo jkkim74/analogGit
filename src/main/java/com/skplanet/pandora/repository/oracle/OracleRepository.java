@@ -52,6 +52,8 @@ public interface OracleRepository {
 	List<AutoMappedMap> selectExtinctionSummary(Map<String, Object> params);
 
 	List<AutoMappedMap> selectExtinctionTargets(Map<String, Object> params);
+	
+	List<AutoMappedMap> selectExtinctionTargetsMas(Map<String, Object> params);
 
 	int countExtinctionTargets(Map<String, Object> params);
 
