@@ -42,7 +42,7 @@ public class SmsService {
 	@Value("${sms.sender}")
 	private String sender;
 
-	@Value("${app.sms.enabled}")
+	@Value("${app.enable.sms}")
 	private boolean enabled;
 
 	public void send(List<AutoMappedMap> receivers) {

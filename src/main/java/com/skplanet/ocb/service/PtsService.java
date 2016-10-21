@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PtsService {
 
-	@Value("${app.pts.enabled}")
+	@Value("${app.enable.pts}")
 	private boolean enabled;
 
 	public void send(String filename, String ptsUsername) {

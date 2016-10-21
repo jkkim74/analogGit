@@ -35,7 +35,7 @@ public class MailService {
 	@Value("${mail.to}")
 	private String to;
 
-	@Value("${app.mail.enabled}")
+	@Value("${app.enable.mail}")
 	private boolean enabled;
 
 	@Async

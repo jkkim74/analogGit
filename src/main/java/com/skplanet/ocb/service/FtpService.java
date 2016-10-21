@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FtpService {
 
-	@Value("${app.ftp.enabled}")
+	@Value("${app.enable.ftp}")
 	private boolean enabled;
 
 	public void send(Path localPath, String remotePath, String host, int port, String username, String password) {
