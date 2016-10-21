@@ -31,6 +31,7 @@ import com.skplanet.ctas.repository.oracle.OracleRepository;
 import com.skplanet.ctas.repository.querycache.QueryCacheRepository;
 import com.skplanet.ctas.service.TransmissionService;
 import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.security.UserInfo;
 import com.skplanet.ocb.service.MailService;
 import com.skplanet.ocb.util.ApiResponse;
 import com.skplanet.ocb.util.AutoMappedMap;
@@ -65,6 +66,11 @@ public class ApiController {
 
 	@GetMapping("/campaigns")
 	public ApiResponse getCampaigns(@RequestParam Map<String, Object> params) {
+		UserInfo user = Helper.currentUser();
+		if (!user.hasRole("ROLE_ADMIN")) {
+			params.put("username", user.getUsername());
+		}
+
 		List<AutoMappedMap> list = oracleRepository.selectCampaigns(params);
 		int count = oracleRepository.countCampaigns(params);
 		return ApiResponse.builder().value(list).totalItems(count).build();

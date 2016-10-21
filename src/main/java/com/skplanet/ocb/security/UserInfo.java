@@ -3,6 +3,7 @@ package com.skplanet.ocb.security;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -66,6 +67,10 @@ public class UserInfo implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return enabled;
+	}
+
+	public boolean hasRole(String roleName) {
+		return authorities.contains(new SimpleGrantedAuthority(roleName));
 	}
 
 }

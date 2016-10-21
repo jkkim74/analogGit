@@ -49,6 +49,7 @@
 		FROM WEB_CMPGN_MST
 		<where>
 			<if test="cmpgnId != null and cmpgnId != ''">AND CMPGN_ID = #{cmpgnId} </if>
+			<if test="username != null and username != ''">AND UPD_ID = #{username} </if>
 			<if test="periodFrom != null and periodFrom != ''">AND SND_DT &gt;= #{periodFrom} </if>
 			<if test="periodTo != null and periodTo != ''">AND SND_DT &lt;= #{periodTo} </if>
 		</where>
