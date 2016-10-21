@@ -33,7 +33,7 @@ public class TransmissionService {
 	public void sendToFtp(Path localPath) {
 		String remotePath = localPath.getFileName().toString();
 
-		ftpService.send(localPath, remotePath, ftpHost, ftpPort, ftpUsername, ftpPassword);
+		//ftpService.send(localPath, remotePath, ftpHost, ftpPort, ftpUsername, ftpPassword);
 	}
 
 	public void sendToPts(Path localPath, String ptsUsername) {
