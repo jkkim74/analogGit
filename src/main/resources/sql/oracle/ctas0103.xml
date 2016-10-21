@@ -96,7 +96,7 @@
 	</select>
 	
 	<select id="selectTargeting" parameterType="map" resultType="string">
-		<include refid="pagingHaed"/>
+		<include refid="pagingHead"/>
 		SELECT MBR_ID FROM WEB_TRGT_${cmpgnId}
 		<include refid="pagingFoot" />
 	</select>
