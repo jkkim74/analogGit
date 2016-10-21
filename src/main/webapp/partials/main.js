@@ -6,6 +6,7 @@ angular.module('App', [
     'ngResource',
     'ngSanitize',
     'ngFileUpload',
+    'ngFileSaver',
     'ui.bootstrap',
     'ui.grid',
     'ui.grid.autoResize',

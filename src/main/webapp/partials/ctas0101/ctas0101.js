@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal', 'uibDateParser', 'uploadSvc',
-    function ($scope, $log, $q, $http, $timeout, $filter, uiGridConstants, toastr, apiSvc, $uibModal, uibDateParser, uploadSvc) {
+angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal', 'uibDateParser', 'uploadSvc', 'FileSaver',
+    function ($scope, $log, $q, $http, $timeout, $filter, uiGridConstants, toastr, apiSvc, $uibModal, uibDateParser, uploadSvc, FileSaver) {
 
         var self = this;
         $scope.title = '이메일 발송 관리';
@@ -261,7 +261,14 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
         };
 
         $scope.downloadTargeting = function () {
-            apiSvc.downloadCampaignTargeting($scope.currCampaign);
+            var params = {
+                url: 'api/campaigns/' + $scope.currCampaign.cmpgnId + '/download/' + $scope.currCampaign.objRegFgCd
+            };
+
+            apiSvc.downloadCampaignTargeting(params).then(function (text) {
+                var data = new Blob([text], { type: 'text/csv;charset=utf-8' });
+                FileSaver.saveAs(data, '캠페인대상자.csv');
+            });
         };
 
     }]);

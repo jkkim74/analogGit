@@ -7,7 +7,7 @@ angular.module('App').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
             return function (params) {
                 var deferred = $q.defer();
 
-                $http.get('/api/' + command, {
+                $http.get(params.url || '/api/' + command, {
                     params: angular.extend({ pageId: $stateParams.pageId }, params),
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
@@ -97,7 +97,7 @@ angular.module('App').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
         this.deleteCampaign = new ApiPost('campaigns', 'delete');
         this.getCampaignTargetingInfo = new ApiGet('campaigns/targeting');
         this.saveCampaignTargetingInfo = new ApiPost('campaigns/targeting/trgt');
-        this.downloadCampaignTargeting = new ApiGet('campaigns/targeting/download');
+        this.downloadCampaignTargeting = new ApiGet('campaigns/{campaignId}/download/{objRegFgCd}');
         this.getCampaignDetail = new ApiGet('campaigns/detail');
         this.saveCampaignDetail = new ApiPost('campaigns/detail');
         this.deleteCampaignDetail = new ApiPost('campaigns/detail', 'delete');

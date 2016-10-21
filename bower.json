@@ -9,6 +9,7 @@
     "angular-bootstrap": "^2.1.3",
     "angular-bootstrap-confirm": "^2.4.1",
     "angular-busy": "^4.1.3",
+    "angular-file-saver": "^1.1.2",
     "angular-i18n": "^1.5.8",
     "angular-messages": "^1.5.8",
     "angular-resource": "^1.5.8",
@@ -47,6 +48,11 @@
     "angular-bootstrap-confirm": {
       "main": [
         "dist/angular-bootstrap-confirm.min.js"
+      ]
+    },
+    "angular-file-saver": {
+      "main": [
+        "dist/angular-file-saver.min.js"
       ]
     },
     "angular-i18n": {

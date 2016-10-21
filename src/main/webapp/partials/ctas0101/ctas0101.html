@@ -71,9 +71,12 @@
 					<label class="col-sm-5 control-label">캠페인 대상자 등록</label>
 					<div class="col-sm-7">
 						<button type="button" class="btn btn-default" ngf-select="uploadCsv($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'"
-							ngf-max-size="1GB" ng-hide="currCampaign.stsFgCd && currCampaign.stsFgCd != '01'" ng-disabled="campaignForm.$invalid || (currCampaign.stsFgCd && currCampaign.stsFgCd != '01')">CSV 파일 등록</button>
-						<button type="button" class="btn btn-default" ng-click="openTargeting()" ng-hide="currCampaign.stsFgCd && currCampaign.stsFgCd != '01'" ng-disabled="campaignForm.$invalid || (currCampaign.stsFgCd && currCampaign.stsFgCd != '01')">타겟팅 조건 선택</button>
-						<a class="btn btn-default" ng-href="api/campaigns/{{currCampaign.cmpgnId}}/download/{{currCampaign.objRegFgCd}}" download="캠페인대상자.csv" uib-tooltip="대상 회원ID 다운로드" ng-show="currCampaign.stsFgCd && currCampaign.stsFgCd != '01'"><i class="fa fa-download fa-lg"></i></a>
+							ngf-max-size="1GB" ng-hide="currCampaign.stsFgCd && currCampaign.stsFgCd != '01'" ng-disabled="campaignForm.$invalid || (currCampaign.stsFgCd && currCampaign.stsFgCd != '01')"
+							uib-tooltip="CSV 파일 등록"><i class="fa fa-upload fa-lg hidden-sm hidden-md hidden-lg"></i><span class="hidden-xs">CSV 파일 등록</span></button>
+						<button type="button" class="btn btn-default" ng-click="openTargeting()" ng-hide="currCampaign.stsFgCd && currCampaign.stsFgCd != '01'"
+							ng-disabled="campaignForm.$invalid || (currCampaign.stsFgCd && currCampaign.stsFgCd != '01')" uib-tooltip="타겟팅 조건 선택"><i class="fa fa-check-square fa-lg hidden-sm hidden-md hidden-lg"></i><span class="hidden-xs">타겟팅 조건 선택</span></button>
+						<button type="button" class="btn btn-default" ng-click="downloadTargeting()" ng-show="currCampaign.stsFgCd && currCampaign.stsFgCd != '01'"
+							uib-tooltip="대상 회원ID 다운로드"><i class="fa fa-download fa-lg hidden-sm hidden-md hidden-lg"></i><span class="hidden-xs">대상 회원ID 다운로드</span></button>
 					</div>
 				</div>
 				<div class="form-group">
