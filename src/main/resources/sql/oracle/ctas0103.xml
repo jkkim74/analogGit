@@ -105,4 +105,24 @@
 		<include refid="pagingFoot" />
 	</select>
 
+	<select id="selectRegions" parameterType="map" resultType="AutoMappedMap">
+		<choose>
+			<when test="hrnkDtlCd != null and hrnkDtlCd != ''">
+				SELECT DTL_CD, DTL_CD_NM
+				FROM DW_OCB_INTG_CD
+				WHERE DOMN_ID = 'HJD_MGRP_CD'
+				AND HRNK_DTL_CD = #{hrnkDtlCd}
+				AND SUBSTR(DTL_CD,3,6) NOT IN ('000')
+				ORDER BY DTL_CD
+			</when>
+			<otherwise>
+				SELECT DTL_CD, DTL_CD_NM
+				FROM DW_OCB_INTG_CD
+				WHERE DOMN_ID = 'HJD_LGRP_CD'
+				AND TRIM(DTL_CD) NOT IN ('X','Y','Z')
+				ORDER BY DTL_CD
+			</otherwise>
+		</choose>
+	</select>
+	
 </mapper>

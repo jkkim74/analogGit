@@ -6,6 +6,9 @@ angular.module('App').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
         function ApiGet(command) {
             return function (params) {
                 var deferred = $q.defer();
+                if (!params) {
+                    params = {};
+                }
 
                 $http.get(params.url || '/api/' + command, {
                     params: angular.extend({ pageId: $stateParams.pageId }, params),
@@ -102,5 +105,6 @@ angular.module('App').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
         this.saveCampaignDetail = new ApiPost('campaigns/detail');
         this.deleteCampaignDetail = new ApiPost('campaigns/detail', 'delete');
         this.requestTransmission = new ApiPost('requestTransmission');
+        this.getRegions = new ApiGet('regions');
 
     }]);

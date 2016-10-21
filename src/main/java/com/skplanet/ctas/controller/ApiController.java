@@ -415,4 +415,9 @@ public class ApiController {
 		return ApiResponse.builder().message("전송 요청 완료").build();
 	}
 
+	@GetMapping("/regions")
+	public List<AutoMappedMap> getRegions(@RequestParam Map<String, Object> params) {
+		return oracleRepository.selectRegions(params);
+	}
+
 }

@@ -10,6 +10,7 @@ angular.module('App').component('ctas0103Modal', {
     controller: function (apiSvc, $filter) {
         var self = this;
 
+
         self.$onInit = function () {
             self.campaign = self.resolve.campaign;
             self.options = angular.extend({ ocbMktngAgrmtYn: '1' }, self.campaign.targetingInfo);
@@ -25,6 +26,10 @@ angular.module('App').component('ctas0103Modal', {
 
                 self.months.push(year + ('0' + month).slice(-2) + ('0' + day).slice(-2));
             }
+            
+            apiSvc.getRegions().then(function (data) {
+                self.regions = data;
+            });
         };
 
         self.ok = function () {
@@ -36,5 +41,16 @@ angular.module('App').component('ctas0103Modal', {
                 self.close({ $value: data.value });
             });
         };
+
+        self.selectRegion = function (prefix) {
+            var params = {
+                hrnkDtlCd: self.options[prefix + 'HjdLgrpCd']
+            };
+
+            apiSvc.getRegions(params).then(function (data) {
+                self[prefix + 'HjdMgrpCdList'] = data;
+            });
+        };
+
     }
 });

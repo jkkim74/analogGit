@@ -61,4 +61,8 @@ public interface OracleRepository {
 
 	List<String> selectTargeting(Map<String, Object> params);
 
+	List<AutoMappedMap> selectRegions(Map<String, Object> params);
+
+	List<AutoMappedMap> selectDistricts(Map<String, Object> params);
+
 }
