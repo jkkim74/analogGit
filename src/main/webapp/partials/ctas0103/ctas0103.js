@@ -26,7 +26,7 @@ angular.module('App').component('ctas0103Modal', {
 
                 self.months.push(year + ('0' + month).slice(-2) + ('0' + day).slice(-2));
             }
-            
+
             apiSvc.getRegions().then(function (data) {
                 self.regions = data;
             });
