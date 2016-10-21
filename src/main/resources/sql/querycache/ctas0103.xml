@@ -103,8 +103,12 @@
 	</select>
 	
 	<select id="selectTargeting" parameterType="map" resultType="string">
-		SELECT MBR_ID FROM USER_PS03701.WEB_TRGT_${cmpgnId}
-		LIMIT #{offset}, #{limit}
+		SELECT MBR_ID
+		FROM (
+			SELECT MBR_ID, ROW_NUMBER() OVER(ORDER BY MBR_ID) AS RNUM
+			FROM USER_PS03701.WEB_TRGT_${cmpgnId}
+		) SQ
+		WHERE RNUM &gt; #{offset} AND RNUM &lt;= #{offset} + #{limit}
 	</select>
 	<select id="selectTargeting" parameterType="map" resultType="string" databaseId="hsql">
 		SELECT MBR_ID FROM WEB_TRGT_${cmpgnId}
