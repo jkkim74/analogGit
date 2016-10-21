@@ -1,4 +1,4 @@
-package com.skplanet.pandora.configuration;
+package com.skplanet.ocb.configuration;
 
 import java.util.ArrayList;
 
