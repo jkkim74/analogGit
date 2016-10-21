@@ -376,7 +376,7 @@ public class ApiController {
 		char delimiter = '▦';
 
 		if ("MAIL".equals(params.get("cmpgnSndChnlFgCd"))) {
-			csvCreator.create(filePath, delimiter, Charset.forName("x-IBM949"));
+			csvCreator.create(filePath, delimiter, Charset.forName("CP949"));
 		} else {
 			csvCreator.create(filePath);
 		}
