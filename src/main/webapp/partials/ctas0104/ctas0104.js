@@ -15,7 +15,8 @@ angular.module('App').component('ctas0104Modal', {
         };
 
         self.ok = function () {
-            apiSvc.requestTransmission(self.campaignCell).then(function () {
+            self.okPromise = apiSvc.requestTransmission(self.campaignCell);
+            self.okPromise.then(function () {
                 self.close();
             });
         };
