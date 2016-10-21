@@ -61,8 +61,8 @@ public class ForwardService {
 
 		log.info("remotePath={}", remotePath);
 
-		ftpService.send(localPath, remotePath, notificationHost, notificationPort, notificationUsername,
-				notificationPassword);
+		//ftpService.send(localPath, remotePath, notificationHost, notificationPort, notificationUsername,
+		//		notificationPassword);
 	}
 
 	public void sendForLogging(Path localPath, String remotePath) {
