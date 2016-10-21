@@ -199,7 +199,7 @@ public class ApiController {
 	@GetMapping("/extinctionTargets")
 	public ApiResponse getExtinctionTargets(@RequestParam Map<String, Object> params) {
 
-		List<AutoMappedMap> list = oracleRepository.selectExtinctionTargets(params);
+		List<AutoMappedMap> list = oracleRepository.selectExtinctionTargetsMas(params);
 		int count = oracleRepository.countExtinctionTargets(params);
 		return ApiResponse.builder().value(list).totalItems(count).build();
 	}

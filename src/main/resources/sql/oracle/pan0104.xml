@@ -21,6 +21,56 @@
 		ORDER BY A.EXTNCT_MBR_FG_CD
 	</select>
 	
+	<sql id="selectExtinctionTargets_mas">
+		SELECT BASE_YM
+			, UNITED_ID
+			, MBR_ID
+			, MBR_KOR_NM
+			, CLPHN_NO
+			, EMAIL_ADDR
+			, EXTNCT_OBJ_DT
+		FROM (
+			SELECT TO_CHAR(TO_DATE(BASE_YM, 'YYYYMM'), 'YYYY-MM') AS BASE_YM
+				, UNITED_ID
+				, MBR_ID /* 회원ID */
+				, DECODE(MBR_KOR_NM,NULL,MBR_KOR_NM,SUBSTR(MBR_KOR_NM,1,LENGTH(MBR_KOR_NM)-2)||'*'||SUBSTR(MBR_KOR_NM,LENGTH(MBR_KOR_NM),1)) AS MBR_KOR_NM /* 고객성명 */
+				, DECODE(CLPHN_NO,NULL,CLPHN_NO,SUBSTR(CLPHN_NO,1,LENGTH(CLPHN_NO)-8)||'****'||SUBSTR(CLPHN_NO,LENGTH(CLPHN_NO)-3,4)) AS CLPHN_NO /* 핸드폰 */
+				, DECODE(EMAIL_ADDR,NULL,EMAIL_ADDR,SUBSTR(regexp_substr(EMAIL_ADDR, '[^@]+', 1, 1),1,LENGTH(regexp_substr(EMAIL_ADDR, '[^@]+', 1, 1))-2)||'**@'||regexp_substr(EMAIL_ADDR, '[^@]+', 1, 2)) AS EMAIL_ADDR /* 이메일 */
+				, EXTNCT_OBJ_DT /* 소멸대상일자 */
+				, CASE WHEN B.UNITED_ID IS NOT NULL THEN 1 ELSE 2 END AS OCBCOM /* OCB.com 고객 */
+				, CASE WHEN B.EMAIL_ADDR IS NOT NULL THEN 1 ELSE 2 END AS EM /* EM 고객 */
+				, CASE WHEN B.CLPHN_NO IS NOT NULL AND B.CLPHN_CORCT_FG_CD IN ('1','3') THEN 1 ELSE 2 END AS SMS /* SMS고객 */
+				, CASE WHEN (B.CLPHN_NO IS NOT NULL AND B.CLPHN_CORCT_FG_CD IN ('1','3'))
+					OR B.JOBP_TEL_NO IS NOT NULL
+					OR B.HOME_TEL_NO IS NOT NULL THEN 1 ELSE 2 END AS TM /* TM고객 */
+			FROM MART_EXTNCT_MBR_NOTI_MST B
+			<where>
+				<if test="baseYm != null and baseYm != ''">
+					AND B.BASE_YM = #{baseYm} /* 조회년월 */
+				</if>
+				<if test="unitedId != null and unitedId != ''">
+					AND B.UNITED_ID = #{unitedId}
+				</if>
+				<if test="mbrKorNm != null and mbrKorNm != ''">
+					AND B.MBR_KOR_NM = #{mbrKorNm}
+				</if>
+				<if test="clphnNo != null and clphnNo != ''">
+					AND B.CLPHN_NO = #{clphnNo}
+				</if>
+				<if test="emailAddr != null and emailAddr != ''">
+					AND B.EMAIL_ADDR = #{emailAddr}
+				</if>
+			</where>
+		) T
+		<where>
+			<if test="notiType == 'ocbcom'">AND OCBCOM = 1</if>
+			<if test="notiType == 'em'">AND EM = 1</if>
+			<if test="notiType == 'sms'">AND SMS = 1</if>
+			<if test="notiType == 'tm'">AND TM = 1</if>
+		</where>
+		ORDER BY BASE_YM DESC
+	</sql>
+
 	<sql id="selectExtinctionTargets_inner">
 		SELECT BASE_YM
 			, UNITED_ID
@@ -84,6 +134,20 @@
 		</choose>
 	
 	</select>
+	
+	<select id="selectExtinctionTargetsMas" parameterType="map" resultType="AutoMappedMap">
+		<choose>
+			<when test="noPaging != null and noPaging == true">
+				<include refid="selectExtinctionTargets_mas" />
+			</when>
+			<otherwise>
+				<include refid="pagingHead" />
+				<include refid="selectExtinctionTargets_mas" />
+				<include refid="pagingFoot" />
+			</otherwise>
+		</choose>
+	
+	</select>	
 	
 	<select id="countExtinctionTargets" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM (
