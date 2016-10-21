@@ -145,6 +145,19 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
                 return;
             }
 
+            if (colDef.name === 'extrctCnt') {
+                var sum = 0;
+                $scope.gridOptionsCellList.data.forEach(function (obj) {
+                    sum += obj.extrctCnt;
+                });
+
+                if (sum > $scope.currCampaign.dupDelCnt) {
+                    toastr.error('전체 셀 추출수가 캠페인 대상자 중복제거건수보다 많습니다');
+                    rowEntity[colDef.name] = oldValue;
+                    return false;
+                }
+            }
+
             var params = {
                 cellId: rowEntity.cellId,
                 cmpgnId: rowEntity.cmpgnId
