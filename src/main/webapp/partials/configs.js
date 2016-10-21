@@ -37,7 +37,7 @@ angular.module('App').value('cgBusyDefaults', {
 
         // 화면 전환 시 스크롤 초기화
         $provide.decorator('$uiViewScroll', function () {
-            return function (uiViewElement) {
+            return function (/*uiViewElement*/) {
                 window.scrollTo(0, 0);
             };
         });
@@ -69,7 +69,7 @@ angular.module('App').value('cgBusyDefaults', {
     function ($rootScope, $state, authSvc, confirmationPopoverDefaults) {
 
         $rootScope.$on('$stateChangeStart',
-            function (event, toState, toParams, fromState, fromParams, options) {
+            function (event, toState, toParams/*, fromState, fromParams, options*/) {
                 var needAuth = true;
                 if (toState.name === 'index.home') {
                     needAuth = false;

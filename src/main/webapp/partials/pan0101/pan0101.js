@@ -4,7 +4,6 @@ angular.module('App').controller('Pan0101Ctrl', ['$scope', '$q', '$http', '$time
     function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadSvc, authSvc) {
 
         var self = this;
-        $scope.title = '멤버 ID 일괄 전환';
 
         $scope.selectOptions = [
             { label: '회원ID', value: 'mbrId' },

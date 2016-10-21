@@ -3,9 +3,6 @@
 angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'toastr', 'apiSvc', '$uibModal', 'uibDateParser', 'uploadSvc', 'FileSaver',
     function ($scope, $log, $q, $http, $timeout, $filter, uiGridConstants, toastr, apiSvc, $uibModal, uibDateParser, uploadSvc, FileSaver) {
 
-        var self = this;
-        $scope.title = '이메일 발송 관리';
-
         $scope.currCampaign = {};
 
         $scope.selectOptions = [

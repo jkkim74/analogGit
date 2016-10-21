@@ -3,9 +3,6 @@
 angular.module('App').controller('Pan0105Ctrl', ['$scope', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'apiSvc', 'uploadSvc', 'authSvc',
     function ($scope, $q, $http, $timeout, $filter, uiGridConstants, apiSvc, uploadSvc, authSvc) {
 
-        var self = this;
-        $scope.title = '거래 실적 및 유실적 고객 추출';
-
         $scope.selectOptions = [
             { label: '회원ID', value: 'mbr_id' },
             { label: '카드번호', value: 'card_no' },

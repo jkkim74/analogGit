@@ -5,8 +5,6 @@ angular.module('App').controller('Pan0104Ctrl', ['$scope', '$q', '$http', '$time
 
         var self = this;
 
-        $scope.title = '시효 만료 포인트 사전 고지';
-
         self.setYearMonthOption = function (options) {
             var now = new Date();
             var year = now.getFullYear();

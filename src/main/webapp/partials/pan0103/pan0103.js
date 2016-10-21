@@ -4,7 +4,6 @@ angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$time
     function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadSvc, authSvc) {
 
         var self = this;
-        $scope.title = '배치 적립 파일 검증';
 
         $scope.selectOptions = [
             { label: '회원ID', value: 'mbrId' },

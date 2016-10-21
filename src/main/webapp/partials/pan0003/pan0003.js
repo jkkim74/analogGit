@@ -1,11 +1,10 @@
 'use strict';
 
-angular.module('App').controller('Pan0003Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadSvc',
-    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadSvc) {
+angular.module('App').controller('Pan0003Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc) {
 
         var self = this;
 
-        $scope.title = '화면 권한 관리';
         $scope.checkPageId = {};
         $scope.checkResults = [];
 

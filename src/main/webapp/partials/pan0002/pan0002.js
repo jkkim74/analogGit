@@ -5,8 +5,6 @@ angular.module('App').controller('Pan0002Ctrl', ['$scope', '$q', '$http', '$time
 
         var self = this;
 
-        $scope.title = '사용자 등록 관리';
-
         $scope.gridOptionsUserList = {
             enableCellEdit: false,
             multiSelect: false,
