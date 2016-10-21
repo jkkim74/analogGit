@@ -251,9 +251,9 @@ public class ApiController {
 				offset += limit;
 
 				if ("TRGT".equalsIgnoreCase(objRegFgCd)) {
-					list = oracleRepository.selectTargeting(map);
-				} else if ("CSV".equalsIgnoreCase(objRegFgCd)) {
 					list = querycacheRepository.selectTargeting(map);
+				} else if ("CSV".equalsIgnoreCase(objRegFgCd)) {
+					list = oracleRepository.selectTargeting(map);
 				} else {
 					throw new BizException("unknown objRegFgCd");
 				}
@@ -365,7 +365,12 @@ public class ApiController {
 			fnlExtrctCnt = (String) params.get("extrctCnt");
 		}
 
-		String filename = Helper.nowMonthDayString() + '_' + cellId + '_' + fnlExtrctCnt + "_O.dat";
+		String filename;
+		if ("MAIL".equals(params.get("cmpgnSndChnlFgCd"))) {
+			filename = Helper.nowMonthDayString() + '_' + cellId + '_' + fnlExtrctCnt + "_O.dat";
+		} else {
+			filename = Helper.uniqueCsvFilename("P140802BKhub_" + Helper.currentUser().getPtsUsername());
+		}
 		Path filePath = Paths.get(Constant.APP_FILE_DIR, filename);
 
 		char delimiter = '▦';
