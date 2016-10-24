@@ -177,8 +177,8 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
             params = angular.extend(params, $scope.currCampaign);
             params.mergeDt = $filter('date')(params.mergeDt, 'yyyyMMdd');
 
-            $scope.uploadPromise = uploadSvc.upload(params);
-            $scope.uploadPromise.then(function (data) {
+            $scope.detailPromise = uploadSvc.upload(params);
+            $scope.detailPromise.then(function (data) {
                 $scope.currCampaign = data.value;
                 $scope.currCampaign.mergeDt = uibDateParser.parse($scope.currCampaign.mergeDt, 'yyyy-MM-dd');
 
@@ -275,7 +275,8 @@ angular.module('App').controller('Ctas0101Ctrl', ['$scope', '$log', '$q', '$http
                 url: 'api/campaigns/' + $scope.currCampaign.cmpgnId + '/download/' + $scope.currCampaign.objRegFgCd
             };
 
-            apiSvc.downloadCampaignTargeting(params).then(function (text) {
+            $scope.detailPromise = apiSvc.downloadCampaignTargeting(params);
+            $scope.detailPromise.then(function (text) {
                 var data = new Blob([text], { type: 'text/csv;charset=utf-8' });
                 FileSaver.saveAs(data, '캠페인대상자.csv');
             });
