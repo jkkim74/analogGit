@@ -6,23 +6,11 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.skplanet.ocb.util.AutoMappedMap;
-import com.skplanet.pandora.model.UploadProgress;
+import com.skplanet.ocb.model.AutoMappedMap;
+import com.skplanet.ocb.model.UploadProgress;
 
-@Repository("pandoraOracleRepository")
+@Repository
 public interface OracleRepository {
-
-	AutoMappedMap selectTest(Map<String, Object> params);
-
-	int countTable(@Param("pageId") String pageId, @Param("username") String username);
-
-	int createTable(@Param("pageId") String pageId, @Param("username") String username);
-
-	void truncateTable(@Param("pageId") String pageId, @Param("username") String username);
-
-	List<AutoMappedMap> selectUploadedPreview(@Param("pageId") String pageId, @Param("username") String username);
-
-	int countUploadedPreview(@Param("pageId") String pageId, @Param("username") String username);
 
 	List<AutoMappedMap> selectMembers(@Param("uploadProgress") UploadProgress uploadProgress,
 			@Param("offset") int offset, @Param("limit") int limit, @Param("masking") boolean masking);
@@ -52,7 +40,7 @@ public interface OracleRepository {
 	List<AutoMappedMap> selectExtinctionSummary(Map<String, Object> params);
 
 	List<AutoMappedMap> selectExtinctionTargets(Map<String, Object> params);
-	
+
 	List<AutoMappedMap> selectExtinctionTargetsMas(Map<String, Object> params);
 
 	int countExtinctionTargets(Map<String, Object> params);

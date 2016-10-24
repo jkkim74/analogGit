@@ -10,12 +10,12 @@ import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.skplanet.ocb.model.AutoMappedMap;
+import com.skplanet.ocb.model.UploadProgress;
 import com.skplanet.ocb.service.PtsService;
-import com.skplanet.ocb.util.AutoMappedMap;
 import com.skplanet.ocb.util.Constant;
 import com.skplanet.ocb.util.CsvCreatorTemplate;
 import com.skplanet.ocb.util.Helper;
-import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 
 @Service

@@ -18,6 +18,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.util.StringUtils;
 
+import com.skplanet.ocb.model.AutoMappedMap;
+
 public class CsvCreatorTemplateTest {
 
 	private Path file;

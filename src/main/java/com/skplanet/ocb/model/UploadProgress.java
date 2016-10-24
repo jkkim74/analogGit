@@ -1,4 +1,4 @@
-package com.skplanet.pandora.model;
+package com.skplanet.ocb.model;
 
 import lombok.Data;
 

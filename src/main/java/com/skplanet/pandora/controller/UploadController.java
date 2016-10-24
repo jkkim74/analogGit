@@ -13,14 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.ocb.exception.BizException;
-import com.skplanet.ocb.util.ApiResponse;
-import com.skplanet.ocb.util.AutoMappedMap;
+import com.skplanet.ocb.model.ApiResponse;
+import com.skplanet.ocb.model.AutoMappedMap;
+import com.skplanet.ocb.model.UploadProgress;
+import com.skplanet.ocb.model.UploadStatus;
+import com.skplanet.ocb.repository.UploadMetaRepository;
+import com.skplanet.ocb.repository.UploadTempRepository;
+import com.skplanet.ocb.service.UploadService;
 import com.skplanet.ocb.util.Helper;
-import com.skplanet.pandora.model.UploadProgress;
-import com.skplanet.pandora.model.UploadStatus;
-import com.skplanet.pandora.repository.mysql.MysqlRepository;
-import com.skplanet.pandora.repository.oracle.OracleRepository;
-import com.skplanet.pandora.service.UploadService;
+import com.skplanet.pandora.service.ForwardService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,13 +31,16 @@ import lombok.extern.slf4j.Slf4j;
 public class UploadController {
 
 	@Autowired
-	private MysqlRepository mysqlRepository;
+	private UploadMetaRepository metaRepository;
 
 	@Autowired
-	private OracleRepository oracleRepository;
+	private UploadTempRepository tempRepository;
 
 	@Autowired
 	private UploadService uploadService;
+
+	@Autowired
+	private ForwardService forwardService;
 
 	@PostMapping
 	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String pageId,
@@ -51,7 +55,7 @@ public class UploadController {
 		}
 
 		if ("PAN0105".equalsIgnoreCase(pageId)) {
-			uploadService.forwardToFtpServer(file, pageId, username, columnName);
+			forwardService.forwardToFtpServer(file, pageId, username, columnName);
 		} else {
 			JobParameters jobParameters = uploadService.readyToImport(file, pageId, username, columnName);
 
@@ -69,13 +73,13 @@ public class UploadController {
 
 		if (countOnly) {
 			// 업로드 진행상태 체크 용도
-			UploadProgress uploadProgress = mysqlRepository.selectUploadProgress(pageId, username);
+			UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
 
 			if (uploadProgress == null) {
 				return ApiResponse.builder().code(910).message("업로드를 먼저 해주세요").build();
 			}
 
-			int count = oracleRepository.countUploadedPreview(pageId, username);
+			int count = tempRepository.countUploadedPreview(pageId, username);
 
 			if (uploadProgress.getUploadStatus() == UploadStatus.FINISH) {
 				return ApiResponse.builder().code(910).message(UploadStatus.FINISH.toString()).totalItems(count)
@@ -83,7 +87,7 @@ public class UploadController {
 			}
 			return ApiResponse.builder().totalItems(count).build();
 		} else {
-			List<AutoMappedMap> list = oracleRepository.selectUploadedPreview(pageId, username);
+			List<AutoMappedMap> list = tempRepository.selectUploadedPreview(pageId, username);
 			return ApiResponse.builder().value(list).build();
 		}
 	}

@@ -1,17 +1,14 @@
 package com.skplanet.pandora.repository.querycache;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.skplanet.ocb.util.AutoMappedMap;
+import com.skplanet.ocb.model.AutoMappedMap;
 
-@Repository("pandoraQueryCacheRepository")
+@Repository
 public interface QueryCacheRepository {
-
-	List<AutoMappedMap> selectTest(Map<String, Object> params);
 
 	List<AutoMappedMap> selectAgreementInfo(@Param("mbrId") String mbrId);
 

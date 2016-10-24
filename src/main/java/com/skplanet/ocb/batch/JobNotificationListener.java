@@ -1,11 +1,11 @@
-package com.skplanet.pandora.batch;
+package com.skplanet.ocb.batch;
 
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.listener.JobExecutionListenerSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.skplanet.pandora.service.UploadService;
+import com.skplanet.ocb.service.UploadService;
 
 import lombok.extern.slf4j.Slf4j;
 

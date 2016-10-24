@@ -5,10 +5,12 @@ import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.skplanet.ocb.model.TransmissionType;
 import com.skplanet.ocb.service.FtpService;
+import com.skplanet.ocb.service.UploadService;
 import com.skplanet.ocb.util.Helper;
-import com.skplanet.pandora.model.TransmissionType;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +20,9 @@ public class ForwardService {
 
 	@Autowired
 	private FtpService ftpService;
+	
+	@Autowired
+	private UploadService uploadService;
 
 	@Value("${pandora.ftp.extraction.host}")
 	private String extractionHost;
@@ -61,12 +66,29 @@ public class ForwardService {
 
 		log.info("remotePath={}", remotePath);
 
-		//ftpService.send(localPath, remotePath, notificationHost, notificationPort, notificationUsername,
-		//		notificationPassword);
+		// ftpService.send(localPath, remotePath, notificationHost,
+		// notificationPort, notificationUsername,
+		// notificationPassword);
 	}
 
 	public void sendForLogging(Path localPath, String remotePath) {
 
+	}
+
+	public void forwardToFtpServer(MultipartFile file, String pageId, String username, String columnName) {
+		Path filePath = uploadService.saveUploadFile(file);
+
+		uploadService.prepareTemporaryTable(pageId, username);
+
+		uploadService.getNumberOfColumnsAndValidate(pageId, filePath);
+
+		uploadService.markRunning(pageId, username, columnName, filePath.getFileName().toString());
+
+		sendForExtraction(filePath);
+
+		uploadService.markFinish(pageId, username);
+
+		uploadService.removeUploadedFile(filePath);
 	}
 
 }

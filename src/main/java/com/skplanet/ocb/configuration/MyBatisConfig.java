@@ -18,8 +18,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Repository;
 
+import com.skplanet.ocb.model.AutoMappedMap;
 import com.skplanet.ocb.security.UserInfo;
-import com.skplanet.ocb.util.AutoMappedMap;
 
 @Configuration
 public class MyBatisConfig {
@@ -33,7 +33,7 @@ public class MyBatisConfig {
 		registry.registerAlias(AutoMappedMap.class);
 		registry.registerAlias(UserInfo.class);
 
-		String aliasPackages = "com.skplanet.ctas.model;com.skplanet.pandora.model";
+		String aliasPackages = "com.skplanet.ocb.model;com.skplanet.ctas.model;com.skplanet.pandora.model";
 		for (String aliases : aliasPackages.split(";")) {
 			registry.registerAliases(aliases);
 		}

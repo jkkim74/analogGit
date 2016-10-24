@@ -11,21 +11,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.model.ApiResponse;
+import com.skplanet.ocb.model.AutoMappedMap;
+import com.skplanet.ocb.model.TransmissionType;
+import com.skplanet.ocb.model.UploadProgress;
 import com.skplanet.ocb.service.SshService;
-import com.skplanet.ocb.util.ApiResponse;
-import com.skplanet.ocb.util.AutoMappedMap;
+import com.skplanet.ocb.service.UploadService;
 import com.skplanet.ocb.util.Helper;
-import com.skplanet.pandora.model.TransmissionType;
-import com.skplanet.pandora.model.UploadProgress;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.pandora.service.NoticeService;
 import com.skplanet.pandora.service.RequestService;
-import com.skplanet.pandora.service.UploadService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@RestController("pandoraApiController")
+@RestController
 @RequestMapping("api")
 @Slf4j
 public class ApiController {

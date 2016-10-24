@@ -1,4 +1,4 @@
-package com.skplanet.pandora.service;
+package com.skplanet.ocb.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,15 +20,12 @@ import org.springframework.util.StringUtils;
 
 import com.skplanet.ocb.configuration.SecurityConfig;
 import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.repository.UserRepository;
 import com.skplanet.ocb.security.CustomUserDetailsContextMapper;
 import com.skplanet.ocb.security.UserInfo;
-import com.skplanet.pandora.repository.mysql.MysqlRepository;
 
 @Service
 public class UserService implements UserDetailsService {
-
-	static final String USER_ACCESSES = "PAN0101,PAN0102,PAN0103,PAN0104,PAN0105,PAN0106";
-	static final String ADMIN_ACCESSES = "PAN0002,PAN0003";
 
 	@Autowired
 	private LdapTemplate ldapTemplate;
@@ -37,10 +34,16 @@ public class UserService implements UserDetailsService {
 	private CustomUserDetailsContextMapper userDetailsContextMapper;
 
 	@Autowired
-	private MysqlRepository mysqlRepository;
+	private UserRepository userRepository;
 
 	@Value("${ldap.baseDn}")
 	private String ldapBaseDn;
+
+	@Value("${app.accesses.user}")
+	private String userAccesses;
+
+	@Value("${app.accesses.admin}")
+	private String adminAccesses;
 
 	private ContextMapper<UserInfo> nullContextMapper = new AbstractContextMapper<UserInfo>() {
 		public UserInfo doMapFromContext(DirContextOperations ctx) {
@@ -53,7 +56,7 @@ public class UserService implements UserDetailsService {
 		Map<String, Object> params = new HashMap<>();
 		params.put("username", username);
 
-		List<UserInfo> users = mysqlRepository.selectUsers(params);
+		List<UserInfo> users = userRepository.selectUsers(params);
 
 		if (users.size() <= 0) {
 			throw new UsernameNotFoundException("존재하지 않는 사용자입니다");
@@ -63,15 +66,15 @@ public class UserService implements UserDetailsService {
 	}
 
 	public void createUser(Map<String, Object> params) {
-		if (mysqlRepository.selectUsers(params).size() > 1) {
+		if (userRepository.selectUsers(params).size() > 1) {
 			throw new BizException("이미 존재하는 사용자입니다");
 		}
 
 		throwIfNotExistInLdap((String) params.get("username"));
 
-		mysqlRepository.upsertUser(params);
+		userRepository.upsertUser(params);
 
-		mysqlRepository.insertAuthorities((String) params.get("username"), "ROLE_USER");
+		userRepository.insertAuthorities((String) params.get("username"), "ROLE_USER");
 	}
 
 	/**
@@ -102,7 +105,7 @@ public class UserService implements UserDetailsService {
 
 	public List<UserInfo> getUsers(Map<String, Object> params) {
 		params.put("onlyUsername", true);
-		List<UserInfo> usernames = mysqlRepository.selectUsers(params);
+		List<UserInfo> usernames = userRepository.selectUsers(params);
 		List<UserInfo> users = new ArrayList<>(usernames.size());
 
 		for (UserInfo u : usernames) {
@@ -113,27 +116,27 @@ public class UserService implements UserDetailsService {
 	}
 
 	public UserInfo updateUser(Map<String, Object> params) {
-		mysqlRepository.upsertUser(params);
+		userRepository.upsertUser(params);
 
-		List<UserInfo> users = mysqlRepository.selectUsers(params);
+		List<UserInfo> users = userRepository.selectUsers(params);
 		return users.get(0);
 	}
 
 	public void updateAccesses(String username, String pageList) {
-		mysqlRepository.deleteAccesses(username, USER_ACCESSES);
+		userRepository.deleteAccesses(username, userAccesses);
 
 		if (!StringUtils.isEmpty(pageList)) {
-			mysqlRepository.insertAccesses(username, pageList);
+			userRepository.insertAccesses(username, pageList);
 		}
 	}
 
 	public void updateAdmin(String username, boolean isAdmin) {
 		if (isAdmin) {
-			mysqlRepository.insertAuthorities(username, "ROLE_ADMIN");
-			mysqlRepository.insertAccesses(username, ADMIN_ACCESSES);
+			userRepository.insertAuthorities(username, "ROLE_ADMIN");
+			userRepository.insertAccesses(username, adminAccesses);
 		} else {
-			mysqlRepository.deleteAuthorities(username, "ROLE_ADMIN");
-			mysqlRepository.deleteAccesses(username, ADMIN_ACCESSES);
+			userRepository.deleteAuthorities(username, "ROLE_ADMIN");
+			userRepository.deleteAccesses(username, adminAccesses);
 		}
 	}
 

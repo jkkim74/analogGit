@@ -1,4 +1,4 @@
-package com.skplanet.pandora.service;
+package com.skplanet.ocb.service;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,11 +27,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.CaseFormat;
 import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.model.UploadProgress;
+import com.skplanet.ocb.model.UploadStatus;
+import com.skplanet.ocb.repository.UploadMetaRepository;
+import com.skplanet.ocb.repository.UploadTempRepository;
 import com.skplanet.ocb.util.Constant;
-import com.skplanet.pandora.model.UploadProgress;
-import com.skplanet.pandora.model.UploadStatus;
-import com.skplanet.pandora.repository.mysql.MysqlRepository;
-import com.skplanet.pandora.repository.oracle.OracleRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,19 +40,16 @@ import lombok.extern.slf4j.Slf4j;
 public class UploadService {
 
 	@Autowired
-	private MysqlRepository mysqlRepository;
+	private UploadMetaRepository metaRepository;
 
 	@Autowired
-	private OracleRepository oracleRepository;
+	private UploadTempRepository tempRepository;
 
 	@Autowired
 	private JobLauncher jobLauncher;
 
 	@Autowired
 	private Job importJob;
-
-	@Autowired
-	private ForwardService fowardService;
 
 	@Transactional("mysqlTxManager")
 	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
@@ -86,8 +83,8 @@ public class UploadService {
 		removeUploadedFile(parameters.getString("filePath"));
 	}
 
-	private void markRunning(String pageId, String username, String columnName, String filename) {
-		UploadProgress uploadProgress = mysqlRepository.selectUploadProgress(pageId, username);
+	public void markRunning(String pageId, String username, String columnName, String filename) {
+		UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
 
 		if (uploadProgress != null && uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
 			throw new BizException("업로드 중입니다");
@@ -95,21 +92,21 @@ public class UploadService {
 
 		String underScoredColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
 
-		mysqlRepository.upsertUploadProgress(pageId, username, underScoredColumnName, filename, UploadStatus.RUNNING);
+		metaRepository.upsertUploadProgress(pageId, username, underScoredColumnName, filename, UploadStatus.RUNNING);
 	}
 
-	private void markFinish(String pageId, String username) {
-		mysqlRepository.upsertUploadProgress(pageId, username, null, null, UploadStatus.FINISH);
+	public void markFinish(String pageId, String username) {
+		metaRepository.upsertUploadProgress(pageId, username, null, null, UploadStatus.FINISH);
 	}
 
-	private void prepareTemporaryTable(String pageId, String username) {
-		if (oracleRepository.countTable(pageId, username) <= 0) {
-			oracleRepository.createTable(pageId, username);
+	public void prepareTemporaryTable(String pageId, String username) {
+		if (tempRepository.countTable(pageId, username) <= 0) {
+			tempRepository.createTable(pageId, username);
 		}
-		oracleRepository.truncateTable(pageId, username);
+		tempRepository.truncateTable(pageId, username);
 	}
 
-	private long getNumberOfColumnsAndValidate(String pageId, Path uploadPath) {
+	public long getNumberOfColumnsAndValidate(String pageId, Path uploadPath) {
 		long numberOfColumns = 1;
 		if ("PAN0103".equalsIgnoreCase(pageId)) {
 			numberOfColumns = 6;
@@ -134,7 +131,7 @@ public class UploadService {
 		return numberOfColumns;
 	}
 
-	private Path saveUploadFile(MultipartFile file) {
+	public Path saveUploadFile(MultipartFile file) {
 		File uploadDirectory = new File(Constant.APP_FILE_DIR);
 		if (!uploadDirectory.exists()) {
 			uploadDirectory.mkdir();
@@ -155,7 +152,7 @@ public class UploadService {
 		removeUploadedFile(Paths.get(filePath));
 	}
 
-	private void removeUploadedFile(Path filePath) {
+	public void removeUploadedFile(Path filePath) {
 		try {
 			if (!Files.deleteIfExists(filePath)) {
 				log.warn("Failed to delete [{}] because it did not exist", filePath);
@@ -166,7 +163,7 @@ public class UploadService {
 	}
 
 	public UploadProgress getFinishedUploadProgress(String pageId, String username) {
-		UploadProgress uploadProgress = mysqlRepository.selectUploadProgress(pageId, username);
+		UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
 
 		if (uploadProgress == null) {
 			throw new BizException("업로드를 먼저 해주세요");
@@ -177,22 +174,6 @@ public class UploadService {
 		}
 
 		return uploadProgress;
-	}
-
-	public void forwardToFtpServer(MultipartFile file, String pageId, String username, String columnName) {
-		Path filePath = saveUploadFile(file);
-
-		prepareTemporaryTable(pageId, username);
-
-		getNumberOfColumnsAndValidate(pageId, filePath);
-
-		markRunning(pageId, username, columnName, filePath.getFileName().toString());
-
-		fowardService.sendForExtraction(filePath);
-
-		markFinish(pageId, username);
-
-		removeUploadedFile(filePath);
 	}
 
 }

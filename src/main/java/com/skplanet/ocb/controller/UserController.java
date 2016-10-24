@@ -1,4 +1,4 @@
-package com.skplanet.pandora.controller;
+package com.skplanet.ocb.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.skplanet.ocb.model.ApiResponse;
 import com.skplanet.ocb.security.UserInfo;
-import com.skplanet.ocb.util.ApiResponse;
+import com.skplanet.ocb.service.UserService;
 import com.skplanet.ocb.util.Helper;
-import com.skplanet.pandora.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
-public class AuthController {
+public class UserController {
 
 	@Autowired
 	private UserService userService;

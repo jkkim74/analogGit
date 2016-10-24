@@ -1,4 +1,4 @@
-package com.skplanet.ocb.util;
+package com.skplanet.ocb.model;
 
 import lombok.Builder;
 import lombok.Value;

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.skplanet.ocb.exception.BizException;
-import com.skplanet.ocb.util.AutoMappedMap;
+import com.skplanet.ocb.model.AutoMappedMap;
 
 import lombok.extern.slf4j.Slf4j;
 import skp.bss.msg.rms.front.HttpMessageApi;
