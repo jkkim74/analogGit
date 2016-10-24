@@ -1,11 +1,14 @@
 package com.skplanet.ocb.util;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
@@ -27,9 +30,12 @@ public abstract class CsvCreatorTemplate<T> {
 	}
 
 	public final Path create(Path filePath, char delimiter, Charset charset) {
+		// UTF-8 -> CP949 변환등 문자셋에 존재하지 않는 문자는 무시하도록 설정.
+		CharsetEncoder encoder = charset.newEncoder().onUnmappableCharacter(CodingErrorAction.IGNORE);
 
-		try (CSVPrinter printer = CSVFormat.RFC4180.withDelimiter(delimiter).withQuote(null).print(
-				Files.newBufferedWriter(filePath, charset, StandardOpenOption.CREATE, StandardOpenOption.APPEND))) {
+		try (BufferedWriter writer = new BufferedWriter(
+				new OutputStreamWriter(Files.newOutputStream(filePath), encoder));
+				CSVPrinter printer = CSVFormat.RFC4180.withDelimiter(delimiter).withQuote(null).print(writer)) {
 
 			List<T> list = nextList();
 
