@@ -62,19 +62,19 @@ class LocalDataSourceConfig extends DataSourceConfig {
 	@Primary
 	public DataSource mysqlDataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		return builder.addScripts("sql/schema-mysql.sql", "sql/testdata-mysql.sql").build();
+		return builder.addScripts("sql/test/schema-mysql.sql", "sql/test/data-mysql.sql").build();
 	}
 
 	@Bean
 	public DataSource oracleDataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		return builder.addScripts("sql/schema-oracle.sql", "sql/testdata-oracle.sql").build();
+		return builder.addScripts("sql/test/schema-oracle.sql", "sql/test/data-oracle.sql").build();
 	}
 
 	@Bean
 	public DataSource querycacheDataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		return builder.addScripts("sql/schema-querycache.sql").build();
+		return builder.addScripts("sql/test/schema-querycache.sql").build();
 	}
 
 }

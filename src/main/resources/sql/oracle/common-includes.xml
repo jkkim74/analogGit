@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
+
+	<sql id="pagingHead">
+		SELECT *
+		FROM (
+			SELECT IN_SQ.*, ROWNUM AS RNUM
+			FROM (
+	</sql>
+
+	<sql id="pagingFoot">
+			) IN_SQ
+			WHERE ROWNUM &lt;= #{offset} + #{limit}
+		)
+		WHERE RNUM &gt; #{offset}
+	</sql>
+	<sql id="pagingFoot" databaseId="hsql">
+		LIMIT #{offset}, #{limit}
+	</sql>
+
+</mapper>
