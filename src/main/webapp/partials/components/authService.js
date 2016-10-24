@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$timeout', '$window', '$state', 'toastr', '$uibModalStack',
-    function ($log, $q, $http, $httpParamSerializer, $timeout, $window, $state, toastr, $uibModalStack) {
+angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$timeout', '$window', '$state', 'toastr', '$uibModalStack', 'appInfo',
+    function ($log, $q, $http, $httpParamSerializer, $timeout, $window, $state, toastr, $uibModalStack, appInfo) {
 
         var self = this;
 
@@ -29,7 +29,12 @@ angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
                 sessionStorage.setItem('access_token', resp.data.access_token);
                 return self.userInfo();
             }).then(function () {
-                $state.reload();
+                if (appInfo.entryPage) {
+                    $state.go('index.page', { pageId: appInfo.entryPage });
+                } else {
+                    $state.reload();
+                }
+
                 deferred.resolve();
             }).catch(function (resp) {
                 $log.error(resp);
