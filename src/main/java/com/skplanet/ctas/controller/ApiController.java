@@ -328,7 +328,7 @@ public class ApiController {
 		CsvCreatorTemplate<AutoMappedMap> csvCreator = new CsvCreatorTemplate<AutoMappedMap>() {
 
 			int offset = 0;
-			int limit = 10000;
+			int limit = 100000;
 
 			@Override
 			public List<AutoMappedMap> nextList() {
