@@ -30,7 +30,7 @@ angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
                 return self.userInfo();
             }).then(function () {
                 if (appInfo.entryPage) {
-                    $state.go('index.page', { pageId: appInfo.entryPage });
+                    $state.go('index.page', { pageId: appInfo.entryPage }, { reload: true });
                 } else {
                     $state.reload();
                 }
@@ -51,10 +51,11 @@ angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
         };
 
         this.logout = function () {
+            $uibModalStack.dismissAll();
             $window.sessionStorage.removeItem('access_token');
             $window.sessionStorage.removeItem('user_info');
-            $state.go('index.home', null, { reload: true });
-            $uibModalStack.dismissAll();
+            // $state.go('index.home', null, { reload: true });
+            $window.location.url = '/';
         };
 
         this.isAuthenticated = function () {
