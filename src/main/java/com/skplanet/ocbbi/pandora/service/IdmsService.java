@@ -1,4 +1,4 @@
-package com.skplanet.pandora.service;
+package com.skplanet.ocbbi.pandora.service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

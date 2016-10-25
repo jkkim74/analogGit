@@ -1,4 +1,4 @@
-package com.skplanet.pandora.service;
+package com.skplanet.ocbbi.pandora.service;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -16,7 +16,7 @@ import com.skplanet.ocb.service.PtsService;
 import com.skplanet.ocb.util.Constant;
 import com.skplanet.ocb.util.CsvCreatorTemplate;
 import com.skplanet.ocb.util.Helper;
-import com.skplanet.pandora.repository.oracle.OracleRepository;
+import com.skplanet.ocbbi.pandora.repository.oracle.OracleRepository;
 
 @Service
 public class RequestService {

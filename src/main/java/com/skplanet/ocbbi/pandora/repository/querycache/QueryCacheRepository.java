@@ -1,4 +1,4 @@
-package com.skplanet.pandora.repository.querycache;
+package com.skplanet.ocbbi.pandora.repository.querycache;
 
 import java.util.List;
 

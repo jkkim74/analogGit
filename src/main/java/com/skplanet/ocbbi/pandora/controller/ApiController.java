@@ -1,4 +1,4 @@
-package com.skplanet.pandora.controller;
+package com.skplanet.ocbbi.pandora.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -18,10 +18,10 @@ import com.skplanet.ocb.model.UploadProgress;
 import com.skplanet.ocb.service.SshService;
 import com.skplanet.ocb.service.UploadService;
 import com.skplanet.ocb.util.Helper;
-import com.skplanet.pandora.repository.oracle.OracleRepository;
-import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
-import com.skplanet.pandora.service.NoticeService;
-import com.skplanet.pandora.service.RequestService;
+import com.skplanet.ocbbi.pandora.repository.oracle.OracleRepository;
+import com.skplanet.ocbbi.pandora.repository.querycache.QueryCacheRepository;
+import com.skplanet.ocbbi.pandora.service.NoticeService;
+import com.skplanet.ocbbi.pandora.service.RequestService;
 
 import lombok.extern.slf4j.Slf4j;
 

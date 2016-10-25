@@ -1,4 +1,4 @@
-package com.skplanet.pandora.repository.oracle;
+package com.skplanet.ocbbi.pandora.repository.oracle;
 
 import java.util.List;
 import java.util.Map;

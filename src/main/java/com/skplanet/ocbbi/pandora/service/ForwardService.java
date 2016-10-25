@@ -1,4 +1,4 @@
-package com.skplanet.pandora.service;
+package com.skplanet.ocbbi.pandora.service;
 
 import java.nio.file.Path;
 

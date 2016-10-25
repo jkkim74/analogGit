@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
+<mapper namespace="com.skplanet.ocbbi.pandora.repository.oracle.OracleRepository">
 
 	<sql id="selectMembers_pan0106">
 		SELECT A.MBR_ID /* 회원ID */

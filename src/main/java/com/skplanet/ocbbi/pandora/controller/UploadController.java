@@ -1,4 +1,4 @@
-package com.skplanet.pandora.controller;
+package com.skplanet.ocbbi.pandora.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +21,7 @@ import com.skplanet.ocb.repository.mysql.UploadMetaRepository;
 import com.skplanet.ocb.repository.oracle.UploadTempRepository;
 import com.skplanet.ocb.service.UploadService;
 import com.skplanet.ocb.util.Helper;
-import com.skplanet.pandora.service.ForwardService;
+import com.skplanet.ocbbi.pandora.service.ForwardService;
 
 import lombok.extern.slf4j.Slf4j;
 
