@@ -27,9 +27,9 @@ angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
                 }
             ).then(function (resp) {
                 sessionStorage.setItem('access_token', resp.data.access_token);
-                return self.userInfo();
+                return self.userInfo(true);
             }).then(function () {
-                if (appInfo.entryPage) {
+                if (appInfo.entryPage && !self.isAdmin()) {
                     $state.go('index.page', { pageId: appInfo.entryPage }, { reload: true });
                 } else {
                     $state.reload();
@@ -52,10 +52,15 @@ angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
 
         this.logout = function () {
             $uibModalStack.dismissAll();
+
+            $http.get('/api/users/logout', {
+                headers: { 'Authorization': 'Bearer ' + self.getAccessToken() }
+            });
+
             $window.sessionStorage.removeItem('access_token');
             $window.sessionStorage.removeItem('user_info');
-            // $state.go('index.home', null, { reload: true });
-            $window.location.url = '/';
+
+            $state.go('index.home', null, { reload: true });
         };
 
         this.isAuthenticated = function () {
@@ -66,7 +71,7 @@ angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
             return $window.sessionStorage.getItem('access_token');
         };
 
-        this.userInfo = function () {
+        this.userInfo = function (login) {
             if (!self.isAuthenticated()) {
                 return;
             }
@@ -74,6 +79,7 @@ angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
             var deferred = $q.defer();
 
             $http.get('/api/users/me', {
+                params: { login: login },
                 headers: { 'Authorization': 'Bearer ' + self.getAccessToken() }
             }).then(function (resp) {
                 $window.sessionStorage.setItem('user_info', JSON.stringify(resp.data));

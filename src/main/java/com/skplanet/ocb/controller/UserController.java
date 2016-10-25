@@ -19,6 +19,7 @@ import com.skplanet.ocb.model.ApiResponse;
 import com.skplanet.ocb.security.UserInfo;
 import com.skplanet.ocb.service.UserService;
 import com.skplanet.ocb.util.Helper;
+import com.skplanet.ocbbi.pandora.service.IdmsService;
 
 @RestController
 @RequestMapping("/api/users")
@@ -27,10 +28,13 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private IdmsService idmsService;
+
 	@PostMapping
 	@RolesAllowed("ROLE_ADMIN")
-	@Transactional("mysqlTxManager")
 	@ResponseStatus(HttpStatus.CREATED)
+	@Transactional("mysqlTxManager")
 	public ApiResponse createUser(@RequestParam Map<String, Object> params) {
 		userService.createUser(params);
 		return ApiResponse.builder().message("사용자 등록 성공").build();
@@ -43,8 +47,25 @@ public class UserController {
 	}
 
 	@GetMapping("/me")
-	public UserInfo me() {
-		return Helper.currentUser();
+	public UserInfo me(@RequestParam(defaultValue = "false") boolean login) {
+		UserInfo user = Helper.currentUser();
+		if (login) {
+			System.out.println("Login: " + user.getUsername() + " | " + Helper.currentClientIp() + " | "
+					+ Helper.nowDateTimeString());
+			// idmsService.logForLogInOut(user.getUsername(),
+			// Helper.currentClientIp(), Helper.nowDateTimeString(), null);
+		}
+		return user;
+	}
+
+	@GetMapping("/logout")
+	public void logout() {
+		UserInfo user = Helper.currentUser();
+		System.out.println("Logout: " + user.getUsername() + " | " + Helper.currentClientIp() + " | "
+				+ Helper.nowDateTimeString());
+		// idmsService.logForLogInOut(user.getUsername(),
+		// Helper.currentClientIp(), Helper.nowDateTimeString(),
+		// Helper.nowDateTimeString());
 	}
 
 	@PostMapping("/info")

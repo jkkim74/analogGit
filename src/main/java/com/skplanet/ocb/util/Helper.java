@@ -4,14 +4,20 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.google.common.io.Resources;
 import com.skplanet.ocb.security.UserInfo;
 
 import kr.co.skplanet.crypto.EncryptCustomerInfo;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public final class Helper {
 
 	private static final String EMREJECT_PW = "9gPXBD95qbDedk5PaRLE";
@@ -75,6 +81,20 @@ public final class Helper {
 
 	public static UserInfo currentUser() {
 		return (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	}
+
+	public static String currentClientIp() {
+		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+				.getRequest();
+
+		log.debug("X-Forwarded-For: {}", req.getHeader("X-Forwarded-For"));
+		log.debug("Proxy-Client-IP: {}", req.getHeader("Proxy-Client-IP"));
+		log.debug("WL-Proxy-Client-IP: {}", req.getHeader("WL-Proxy-Client-IP"));
+		log.debug("HTTP_CLIENT_IP: {}", req.getHeader("HTTP_CLIENT_IP"));
+		log.debug("HTTP_X_FORWARDED_FOR: {}", req.getHeader("HTTP_X_FORWARDED_FOR"));
+		log.debug("getRemoteAddr(): {}", req.getRemoteAddr());
+
+		return req.getRemoteAddr();
 	}
 
 }

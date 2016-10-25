@@ -67,26 +67,30 @@ angular.module('App').constant('appInfo', {
         uibDatepickerPopupConfig.currentText = '오늘';
 
     }
-]).run(['$rootScope', '$state', 'authSvc', 'confirmationPopoverDefaults',
-    function ($rootScope, $state, authSvc, confirmationPopoverDefaults) {
+]).run(['$rootScope', '$state', 'authSvc', 'confirmationPopoverDefaults', '$window',
+    function ($rootScope, $state, authSvc, confirmationPopoverDefaults, $window) {
 
-        $rootScope.$on('$stateChangeStart',
-            function (event, toState, toParams/*, fromState, fromParams, options*/) {
-                var needAuth = true;
-                if (toState.name === 'index.home') {
-                    needAuth = false;
-                }
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams/*, fromState, fromParams, options*/) {
+            var needAuth = true;
+            if (toState.name === 'index.home') {
+                needAuth = false;
+            }
 
-                if (needAuth && !authSvc.isAuthenticated()) {
-                    $state.transitionTo('index.home');
-                    event.preventDefault();
-                }
+            if (needAuth && !authSvc.isAuthenticated()) {
+                $state.transitionTo('index.home');
+                event.preventDefault();
+            }
 
-                if (needAuth && toState.name === 'index.page' && !authSvc.isAllowedPage(toParams.pageId)) {
-                    $state.transitionTo('index.home');
-                    event.preventDefault();
-                }
-            });
+            if (needAuth && toState.name === 'index.page' && !authSvc.isAllowedPage(toParams.pageId)) {
+                $state.transitionTo('index.home');
+                event.preventDefault();
+            }
+        });
+
+        // logout event log
+        $window.onbeforeunload = function () {
+            authSvc.logout();
+        };
 
         // check token validity when application started
         authSvc.userInfo();
