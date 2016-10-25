@@ -6,19 +6,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.model.AutoMappedMap;
 import com.skplanet.ocb.repository.mysql.IdmsRepository;
 import com.skplanet.ocb.util.Constant;
+import com.skplanet.ocb.util.CsvCreatorTemplate;
 import com.skplanet.ocb.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -124,8 +129,7 @@ public class IdmsService {
 		return filename;
 	}
 
-	// 0시 ~ 0시 30분경 FTP 전송
-	// @Scheduled
+	@Scheduled(cron = "0 0 1 * * ?")
 	public void send() {
 		if (!enabled) {
 			log.debug("disabled");
@@ -140,22 +144,16 @@ public class IdmsService {
 		ftpService.send(jobInfoPath, "/" + jobInfoPath.getFileName(), idmsHost, idmsPort, idmsUsername, idmsPassword);
 
 		// 고객정보조회 로그 수집
-		String searchMemberInfoFilename = IDMS_BIZ_SITE_ID + "_CUS_" + Helper.yesterdayDateString() + ".log";
-		Path searchMemberInfoPath = Paths.get(Constant.APP_FILE_DIR, searchMemberInfoFilename);
-
+		Path searchMemberInfoPath = aggregateSearchMemberInfo();
 		ftpService.send(searchMemberInfoPath, "/" + searchMemberInfoPath.getFileName(), idmsHost, idmsPort,
 				idmsUsername, idmsPassword);
 
 		// 사용자 계정 정보 수집
-		String userInfoFilename = IDMS_BIZ_SITE_ID + "_ID_" + Helper.yesterdayDateString() + ".log";
-		Path userInfoPath = Paths.get(Constant.APP_FILE_DIR, userInfoFilename);
-
+		Path userInfoPath = aggregateUserInfo();
 		ftpService.send(userInfoPath, "/" + userInfoPath.getFileName(), idmsHost, idmsPort, idmsUsername, idmsPassword);
 
 		// 로그인/아웃 로그 수집
-		String logInOutFilename = IDMS_BIZ_SITE_ID + "_LOGIN_" + Helper.yesterdayDateString() + ".log";
-		Path logInOutPath = Paths.get(Constant.APP_FILE_DIR, logInOutFilename);
-
+		Path logInOutPath = aggregateLoginout();
 		ftpService.send(logInOutPath, "/" + logInOutPath.getFileName(), idmsHost, idmsPort, idmsUsername, idmsPassword);
 
 		// 로그 작성 시간 정보 수집 종료시간 포함하여 덮어쓰기
@@ -166,12 +164,46 @@ public class IdmsService {
 
 	@Async
 	public void login(String username, String userIp, String loginDttm) {
-		idmsRepository.login(username, userIp, loginDttm);
+		idmsRepository.insertLogin(username, userIp, loginDttm);
 	}
 
 	@Async
 	public void logout(String username, String userIp, String logoutDttm) {
-		idmsRepository.logout(username, userIp, logoutDttm);
+		idmsRepository.updateLogout(username, userIp, logoutDttm);
+	}
+
+	private Path aggregateSearchMemberInfo() {
+		String searchMemberInfoFilename = IDMS_BIZ_SITE_ID + "_CUS_" + Helper.yesterdayDateString() + ".log";
+		Path searchMemberInfoPath = Paths.get(Constant.APP_FILE_DIR, searchMemberInfoFilename);
+		return searchMemberInfoPath;
+	}
+
+	private Path aggregateUserInfo() {
+		String userInfoFilename = IDMS_BIZ_SITE_ID + "_ID_" + Helper.yesterdayDateString() + ".log";
+		Path userInfoPath = Paths.get(Constant.APP_FILE_DIR, userInfoFilename);
+		return userInfoPath;
+	}
+
+	private Path aggregateLoginout() {
+		Path logInOutPath = Paths.get(Constant.APP_FILE_DIR,
+				IDMS_BIZ_SITE_ID + "_LOGIN_" + Helper.yesterdayDateString() + ".log");
+
+		new CsvCreatorTemplate<AutoMappedMap>() {
+			boolean done;
+
+			protected List<AutoMappedMap> nextList() {
+				List<AutoMappedMap> list = done ? Collections.<AutoMappedMap> emptyList()
+						: idmsRepository.selectYesterdayLoginout();
+				done = true;
+				return list;
+			}
+
+			protected void printRecord(CSVPrinter printer, AutoMappedMap t) throws IOException {
+				printer.printRecord(t);
+			}
+		}.create(logInOutPath);
+
+		return logInOutPath;
 	}
 
 }

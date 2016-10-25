@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.ocb.repository.mysql.IdmsRepository">
 
-	<insert id="login" parameterType="map">
+	<insert id="insertLogin" parameterType="map">
 		INSERT INTO IDMS_LOGINOUT ( USERNAME, USER_IP, LOGIN_DTTM )
 		VALUES ( #{username}, #{userIp}, #{loginDttm} )
 	</insert>
 
-	<update id="logout" parameterType="map">
+	<update id="updateLogout" parameterType="map">
 		UPDATE IDMS_LOGINOUT
 		SET LOGOUT_DTTM = #{logoutDttm}
 		WHERE USERNAME = #{username}
@@ -17,5 +17,13 @@
 		ORDER BY LOGIN_DTTM DESC
 		LIMIT 1
 	</update>
+	
+	<select id="selectYesterdayLoginout" parameterType="map" resultType="AutoMappedMap">
+		SELECT USERNAME, USER_IP, LOGIN_DTTM, LOGOUT_DTTM
+		FROM IDMS_LOGINOUT
+		WHERE LOGIN_DTTM BETWEEN CONCAT(DATE_FORMAT(CAST(NOW() - INTERVAL 1 DAY AS DATE), '%Y%m%d'), '000000')
+			AND CONCAT(DATE_FORMAT(CAST(NOW() - INTERVAL 1 DAY AS DATE), '%Y%m%d'), '235959')
+		ORDER BY LOGIN_DTTM
+	</select>
 
 </mapper>

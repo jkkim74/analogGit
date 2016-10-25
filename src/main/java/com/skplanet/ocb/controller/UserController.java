@@ -58,9 +58,6 @@ public class UserController {
 	@GetMapping("/logout")
 	public void logout() {
 		UserInfo user = Helper.currentUser();
-		System.out.println("Logout: " + user.getUsername() + " | " + Helper.currentClientIp() + " | "
-				+ Helper.nowDateTimeString());
-
 		idmsService.logout(user.getUsername(), Helper.currentClientIp(), Helper.nowDateTimeString());
 	}
 
