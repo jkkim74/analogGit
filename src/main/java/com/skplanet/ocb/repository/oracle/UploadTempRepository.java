@@ -1,4 +1,4 @@
-package com.skplanet.pandora.repository.oracle;
+package com.skplanet.ocb.repository.oracle;
 
 import java.util.List;
 
@@ -6,10 +6,9 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.skplanet.ocb.model.AutoMappedMap;
-import com.skplanet.ocb.repository.UploadTempRepository;
 
 @Repository
-public interface OracleUploadTempRepository extends UploadTempRepository {
+public interface UploadTempRepository {
 
 	int countTable(@Param("pageId") String pageId, @Param("username") String username);
 

@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
 
 import com.skplanet.ocb.configuration.SecurityConfig;
 import com.skplanet.ocb.exception.BizException;
-import com.skplanet.ocb.repository.UserRepository;
+import com.skplanet.ocb.repository.mysql.UserRepository;
 import com.skplanet.ocb.security.CustomUserDetailsContextMapper;
 import com.skplanet.ocb.security.UserInfo;
 

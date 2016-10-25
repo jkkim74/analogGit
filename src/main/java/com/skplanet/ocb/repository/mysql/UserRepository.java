@@ -1,4 +1,4 @@
-package com.skplanet.pandora.repository.mysql;
+package com.skplanet.ocb.repository.mysql;
 
 import java.util.List;
 import java.util.Map;
@@ -6,11 +6,10 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.skplanet.ocb.repository.UserRepository;
 import com.skplanet.ocb.security.UserInfo;
 
 @Repository
-public interface MysqlUserRepository extends UserRepository {
+public interface UserRepository {
 
 	List<UserInfo> selectUsers(Map<String, Object> params);
 

@@ -1,14 +1,13 @@
-package com.skplanet.pandora.repository.mysql;
+package com.skplanet.ocb.repository.mysql;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.skplanet.ocb.model.UploadProgress;
 import com.skplanet.ocb.model.UploadStatus;
-import com.skplanet.ocb.repository.UploadMetaRepository;
 
 @Repository
-public interface MysqlUploadMetaRepository extends UploadMetaRepository {
+public interface UploadMetaRepository {
 
 	UploadProgress selectUploadProgress(@Param("pageId") String pageId, @Param("username") String username);
 

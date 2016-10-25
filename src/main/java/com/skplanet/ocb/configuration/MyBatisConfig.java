@@ -80,7 +80,7 @@ public class MyBatisConfig {
 	public MapperScannerConfigurer mysqlMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
 		configurer.setAnnotationClass(Repository.class);
-		configurer.setBasePackage("com.skplanet.ctas.repository.mysql;com.skplanet.pandora.repository.mysql");
+		configurer.setBasePackage("com.skplanet.ocb.repository.mysql;com.skplanet.ctas.repository.mysql;com.skplanet.pandora.repository.mysql");
 		configurer.setSqlSessionFactoryBeanName("mysqlSqlSessionFactory");
 		return configurer;
 	}
@@ -96,7 +96,7 @@ public class MyBatisConfig {
 	public MapperScannerConfigurer oracleMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
 		configurer.setAnnotationClass(Repository.class);
-		configurer.setBasePackage("com.skplanet.ctas.repository.oracle;com.skplanet.pandora.repository.oracle");
+		configurer.setBasePackage("com.skplanet.ocb.repository.oracle;com.skplanet.ctas.repository.oracle;com.skplanet.pandora.repository.oracle");
 		configurer.setSqlSessionFactoryBeanName("oracleSqlSessionFactory");
 		return configurer;
 	}

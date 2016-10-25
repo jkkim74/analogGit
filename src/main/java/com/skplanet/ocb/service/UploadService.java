@@ -29,8 +29,8 @@ import com.google.common.base.CaseFormat;
 import com.skplanet.ocb.exception.BizException;
 import com.skplanet.ocb.model.UploadProgress;
 import com.skplanet.ocb.model.UploadStatus;
-import com.skplanet.ocb.repository.UploadMetaRepository;
-import com.skplanet.ocb.repository.UploadTempRepository;
+import com.skplanet.ocb.repository.mysql.UploadMetaRepository;
+import com.skplanet.ocb.repository.oracle.UploadTempRepository;
 import com.skplanet.ocb.util.Constant;
 
 import lombok.extern.slf4j.Slf4j;
