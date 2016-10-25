@@ -87,6 +87,7 @@ public final class Helper {
 		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest();
 
+		// 프록시에서 remote ip address를 얻기위한 가능한 방법들.
 		log.debug("X-Forwarded-For: {}", req.getHeader("X-Forwarded-For"));
 		log.debug("Proxy-Client-IP: {}", req.getHeader("Proxy-Client-IP"));
 		log.debug("WL-Proxy-Client-IP: {}", req.getHeader("WL-Proxy-Client-IP"));

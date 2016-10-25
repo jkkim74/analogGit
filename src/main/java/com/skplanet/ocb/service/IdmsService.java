@@ -1,4 +1,4 @@
-package com.skplanet.ocbbi.pandora.service;
+package com.skplanet.ocb.service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -11,17 +11,23 @@ import java.util.Date;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.skplanet.ocb.exception.BizException;
+import com.skplanet.ocb.repository.mysql.IdmsRepository;
 import com.skplanet.ocb.util.Constant;
 import com.skplanet.ocb.util.Helper;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class IdmsService {
 
-	private static final String IDMS_BIZ_SITE_ID = "PANDORA";
+	private static final String IDMS_BIZ_SITE_ID = "ctas";
 
 	/*
 	 * Biz 사용자ID 발급 시 IDMS를 통하는 계정(1,2)과 Biz 사용자가 직접 발급하는 계정을 구분하기 위한 항목. 1:관리자,
@@ -36,7 +42,25 @@ public class IdmsService {
 	public static final int BIZ_USER_STATUS_DIASABLED = 2;
 
 	@Autowired
-	private ForwardService ftpService;
+	private IdmsRepository idmsRepository;
+
+	@Autowired
+	private FtpService ftpService;
+
+	@Value("${app.enable.idms}")
+	private boolean enabled;
+
+	@Value("${ftp.idms.host}")
+	private String idmsHost;
+
+	@Value("${ftp.idms.port}")
+	private int idmsPort;
+
+	@Value("${ftp.idms.username}")
+	private String idmsUsername;
+
+	@Value("${ftp.idms.password}")
+	private String idmsPassword;
 
 	private static void writeToFileAsCsv(String filename, Object... values) {
 		Path filePath = Paths.get(Constant.APP_FILE_DIR, filename);
@@ -78,7 +102,7 @@ public class IdmsService {
 	/*
 	 * 이벤트 발생 시마다 기록 (파일명이 오늘)
 	 */
-	// @Async
+	@Async
 	public void logForLogInOut(String bizUserId, String bizUserIp, String loginDttm, String logoutDttm) {
 		String filename = IDMS_BIZ_SITE_ID + "_LOGIN_" + Helper.nowDateString() + ".log";
 
@@ -103,31 +127,51 @@ public class IdmsService {
 	// 0시 ~ 0시 30분경 FTP 전송
 	// @Scheduled
 	public void send() {
+		if (!enabled) {
+			log.debug("disabled");
+			return;
+		}
+
 		// 로그 작성 시간 정보 수집
 		Date begin = new Date();
 		String jobInfoFilename = logForJobInfo(Helper.toDatetimeString(begin), null);
 		Path jobInfoPath = Paths.get(Constant.APP_FILE_DIR, jobInfoFilename);
-		ftpService.sendForLogging(jobInfoPath, null);
+
+		ftpService.send(jobInfoPath, "/" + jobInfoPath.getFileName(), idmsHost, idmsPort, idmsUsername, idmsPassword);
 
 		// 고객정보조회 로그 수집
 		String searchMemberInfoFilename = IDMS_BIZ_SITE_ID + "_CUS_" + Helper.yesterdayDateString() + ".log";
 		Path searchMemberInfoPath = Paths.get(Constant.APP_FILE_DIR, searchMemberInfoFilename);
-		ftpService.sendForLogging(searchMemberInfoPath, null);
+
+		ftpService.send(searchMemberInfoPath, "/" + searchMemberInfoPath.getFileName(), idmsHost, idmsPort,
+				idmsUsername, idmsPassword);
 
 		// 사용자 계정 정보 수집
-		// create user info log
 		String userInfoFilename = IDMS_BIZ_SITE_ID + "_ID_" + Helper.yesterdayDateString() + ".log";
 		Path userInfoPath = Paths.get(Constant.APP_FILE_DIR, userInfoFilename);
-		ftpService.sendForLogging(userInfoPath, null);
 
-		// 로그인/로그아웃 로그 수집
+		ftpService.send(userInfoPath, "/" + userInfoPath.getFileName(), idmsHost, idmsPort, idmsUsername, idmsPassword);
+
+		// 로그인/아웃 로그 수집
 		String logInOutFilename = IDMS_BIZ_SITE_ID + "_LOGIN_" + Helper.yesterdayDateString() + ".log";
 		Path logInOutPath = Paths.get(Constant.APP_FILE_DIR, logInOutFilename);
-		ftpService.sendForLogging(logInOutPath, null);
+
+		ftpService.send(logInOutPath, "/" + logInOutPath.getFileName(), idmsHost, idmsPort, idmsUsername, idmsPassword);
 
 		// 로그 작성 시간 정보 수집 종료시간 포함하여 덮어쓰기
 		logForJobInfo(Helper.toDatetimeString(begin), Helper.toDatetimeString(new Date()));
-		ftpService.sendForLogging(jobInfoPath, null);
+
+		ftpService.send(jobInfoPath, "/" + jobInfoPath.getFileName(), idmsHost, idmsPort, idmsUsername, idmsPassword);
+	}
+
+	@Async
+	public void login(String username, String userIp, String loginDttm) {
+		idmsRepository.login(username, userIp, loginDttm);
+	}
+
+	@Async
+	public void logout(String username, String userIp, String logoutDttm) {
+		idmsRepository.logout(username, userIp, logoutDttm);
 	}
 
 }

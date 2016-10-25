@@ -24,32 +24,32 @@ public class ForwardService {
 	@Autowired
 	private UploadService uploadService;
 
-	@Value("${pandora.ftp.extraction.host}")
+	@Value("${ftp.extraction.host}")
 	private String extractionHost;
 
-	@Value("${pandora.ftp.extraction.port}")
+	@Value("${ftp.extraction.port}")
 	private int extractionPort;
 
-	@Value("${pandora.ftp.extraction.username}")
+	@Value("${ftp.extraction.username}")
 	private String extractionUsername;
 
-	@Value("${pandora.ftp.extraction.password}")
+	@Value("${ftp.extraction.password}")
 	private String extractionPassword;
 
-	@Value("${pandora.ftp.notification.host}")
-	private String notificationHost;
+	@Value("${ftp.extinction.host}")
+	private String extinctionHost;
 
-	@Value("${pandora.ftp.notification.port}")
-	private int notificationPort;
+	@Value("${ftp.extinction.port}")
+	private int extinctionPort;
 
-	@Value("${pandora.ftp.notification.username}")
-	private String notificationUsername;
+	@Value("${ftp.extinction.username}")
+	private String extinctionUsername;
 
-	@Value("${pandora.ftp.notification.password}")
-	private String notificationPassword;
+	@Value("${ftp.extinction.password}")
+	private String extinctionPassword;
 
 	public void sendForExtraction(Path localPath) {
-		String remotePath = "web/" + localPath.getFileName().toString();
+		String remotePath = "web/" + localPath.getFileName();
 
 		log.info("remotePath={}", remotePath);
 
@@ -69,10 +69,6 @@ public class ForwardService {
 		// ftpService.send(localPath, remotePath, notificationHost,
 		// notificationPort, notificationUsername,
 		// notificationPassword);
-	}
-
-	public void sendForLogging(Path localPath, String remotePath) {
-
 	}
 
 	public void forwardToFtpServer(MultipartFile file, String pageId, String username, String columnName) {

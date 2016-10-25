@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.skplanet.ocb.model.ApiResponse;
 import com.skplanet.ocb.security.UserInfo;
+import com.skplanet.ocb.service.IdmsService;
 import com.skplanet.ocb.service.UserService;
 import com.skplanet.ocb.util.Helper;
-import com.skplanet.ocbbi.pandora.service.IdmsService;
 
 @RestController
 @RequestMapping("/api/users")
@@ -50,10 +50,7 @@ public class UserController {
 	public UserInfo me(@RequestParam(defaultValue = "false") boolean login) {
 		UserInfo user = Helper.currentUser();
 		if (login) {
-			System.out.println("Login: " + user.getUsername() + " | " + Helper.currentClientIp() + " | "
-					+ Helper.nowDateTimeString());
-			// idmsService.logForLogInOut(user.getUsername(),
-			// Helper.currentClientIp(), Helper.nowDateTimeString(), null);
+			idmsService.login(user.getUsername(), Helper.currentClientIp(), Helper.nowDateTimeString());
 		}
 		return user;
 	}
@@ -63,9 +60,8 @@ public class UserController {
 		UserInfo user = Helper.currentUser();
 		System.out.println("Logout: " + user.getUsername() + " | " + Helper.currentClientIp() + " | "
 				+ Helper.nowDateTimeString());
-		// idmsService.logForLogInOut(user.getUsername(),
-		// Helper.currentClientIp(), Helper.nowDateTimeString(),
-		// Helper.nowDateTimeString());
+
+		idmsService.logout(user.getUsername(), Helper.currentClientIp(), Helper.nowDateTimeString());
 	}
 
 	@PostMapping("/info")

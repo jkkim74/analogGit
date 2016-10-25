@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.ocb.repository.mysql.IdmsRepository">
+
+	<insert id="login" parameterType="map">
+		INSERT INTO IDMS_LOGINOUT ( USERNAME, USER_IP, LOGIN_DTTM )
+		VALUES ( #{username}, #{userIp}, #{loginDttm} )
+	</insert>
+
+	<update id="logout" parameterType="map">
+		UPDATE IDMS_LOGINOUT
+		SET LOGOUT_DTTM = #{logoutDttm}
+		WHERE USERNAME = #{username}
+		AND USER_IP = #{userIp}
+		AND LOGIN_DTTM &lt;= #{logoutDttm}
+		AND LOGOUT_DTTM IS NULL
+		ORDER BY LOGIN_DTTM DESC
+		LIMIT 1
+	</update>
+
+</mapper>
