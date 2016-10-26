@@ -18,7 +18,7 @@ angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
                 scope: 'all'
             };
 
-            $http.post('/oauth/token', $httpParamSerializer(params),
+            $http.post('oauth/token', $httpParamSerializer(params),
                 {
                     headers: {
                         'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
