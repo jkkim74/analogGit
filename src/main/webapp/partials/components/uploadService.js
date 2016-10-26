@@ -8,7 +8,7 @@ angular.module('App').service('uploadSvc', ['$log', '$q', '$http', '$stateParams
 
             if (params.file) {
                 Upload.upload({
-                    url: params.url || '/api/files',
+                    url: params.url || 'api/files',
                     data: angular.extend({ pageId: $stateParams.pageId }, params),
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
@@ -43,7 +43,7 @@ angular.module('App').service('uploadSvc', ['$log', '$q', '$http', '$stateParams
             var canceler = $interval(uploadedPreview, 500);
 
             function uploadedPreview() {
-                $http.get('/api/files', {
+                $http.get('api/files', {
                     params: { pageId: $stateParams.pageId },
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
@@ -74,7 +74,7 @@ angular.module('App').service('uploadSvc', ['$log', '$q', '$http', '$stateParams
             var canceler = $interval(uploadedPreview, 500);
 
             function uploadedPreview() {
-                $http.get('/api/files', {
+                $http.get('api/files', {
                     params: { pageId: $stateParams.pageId, countOnly: true },
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {

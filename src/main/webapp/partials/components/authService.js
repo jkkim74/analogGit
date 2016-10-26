@@ -53,7 +53,7 @@ angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
         this.logout = function () {
             $uibModalStack.dismissAll();
 
-            $http.get('/api/users/logout', {
+            $http.get('api/users/logout', {
                 headers: { 'Authorization': 'Bearer ' + self.getAccessToken() }
             });
 
@@ -78,7 +78,7 @@ angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
 
             var deferred = $q.defer();
 
-            $http.get('/api/users/me', {
+            $http.get('api/users/me', {
                 params: { login: login },
                 headers: { 'Authorization': 'Bearer ' + self.getAccessToken() }
             }).then(function (resp) {

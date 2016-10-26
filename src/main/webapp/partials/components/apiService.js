@@ -10,7 +10,7 @@ angular.module('App').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
                     params = {};
                 }
 
-                $http.get(params.url || '/api/' + command, {
+                $http.get(params.url || 'api/' + command, {
                     params: angular.extend({ pageId: $stateParams.pageId }, params),
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
@@ -41,7 +41,7 @@ angular.module('App').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
                     args._method = hiddenMethod;
                 }
 
-                $http.post('/api/' + command, $httpParamSerializer(args), {
+                $http.post('api/' + command, $httpParamSerializer(args), {
                     headers: {
                         'Authorization': 'Bearer ' + authSvc.getAccessToken(),
                         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
