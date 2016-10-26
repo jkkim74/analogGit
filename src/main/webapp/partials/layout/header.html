@@ -12,7 +12,7 @@
 		</div>
 
 		<div class="collapse navbar-collapse" uib-collapse="isNavCollapsed" ng-hide="isNavCollapsed">
-			<ul class="nav navbar-nav">
+			<ul class="nav navbar-nav" ng-show="isAuthenticated">
 				<li ng-show="isAllowedPage('pan0101')" ui-sref-active="active" uib-tooltip="멤버 ID 일괄 전환" tooltip-placement="bottom"><a ui-sref="index.page({pageId: 'pan0101'})">멤버 ID 일괄 전환</a></li>
 				<li ng-show="isAllowedPage('pan0102')" ui-sref-active="active" uib-tooltip="고객 정보 및 장기 거래 실적 조회" tooltip-placement="bottom"><a ui-sref="index.page({pageId: 'pan0102'})">고객 정보 및 장기 거래 실적 조회</a></li>
 				<li ng-show="isAllowedPage('pan0103')" ui-sref-active="active" uib-tooltip="배치 적립 파일 검증" tooltip-placement="bottom"><a ui-sref="index.page({pageId: 'pan0103'})">배치 적립 파일 검증</a></li>
