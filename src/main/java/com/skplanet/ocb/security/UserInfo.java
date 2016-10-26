@@ -31,6 +31,7 @@ public class UserInfo implements UserDetails {
 	private String ptsUsername;
 	private String beginDttm;
 	private String endDttm;
+	private String createDttm;
 	private String pageList;
 	private Collection<? extends GrantedAuthority> authorities;
 

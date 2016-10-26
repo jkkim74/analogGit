@@ -39,8 +39,8 @@
 
 	<update id="upsertUser" parameterType="map">
 		INSERT
-		INTO USERS ( USERNAME, ENABLED, BEGIN_DTTM )
-		VALUES ( #{username}, 1, DATE_FORMAT(NOW(),'%Y%m%d%H%i%s') )
+		INTO USERS ( USERNAME, ENABLED, BEGIN_DTTM, CREATE_DTTM )
+		VALUES ( #{username}, 1, DATE_FORMAT(NOW(),'%Y%m%d%H%i%s'), DATE_FORMAT(NOW(),'%Y%m%d%H%i%s') )
 		ON DUPLICATE KEY
 		<trim prefix="UPDATE" suffixOverrides=",">
 			<if test="username != null and username != ''">USERNAME = #{username},</if>

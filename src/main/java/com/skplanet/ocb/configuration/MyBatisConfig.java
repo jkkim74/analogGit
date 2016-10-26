@@ -1,6 +1,7 @@
 package com.skplanet.ocb.configuration;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -8,6 +9,7 @@ import javax.sql.DataSource;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeAliasRegistry;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -28,8 +30,11 @@ public class MyBatisConfig {
 	public org.apache.ibatis.session.Configuration configuration() {
 		org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
 		config.setMapUnderscoreToCamelCase(true);
+		config.setCallSettersOnNulls(true);
+		config.setJdbcTypeForNull(JdbcType.VARCHAR);
 
 		TypeAliasRegistry registry = config.getTypeAliasRegistry();
+		registry.registerAlias(LinkedHashMap.class);
 		registry.registerAlias(AutoMappedMap.class);
 		registry.registerAlias(UserInfo.class);
 
@@ -96,7 +101,8 @@ public class MyBatisConfig {
 	public MapperScannerConfigurer oracleMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
 		configurer.setAnnotationClass(Repository.class);
-		configurer.setBasePackage("com.skplanet.ocb.repository.oracle;com.skplanet.ocbbi.ctas.repository.oracle;com.skplanet.ocbbi.pandora.repository.oracle");
+		configurer.setBasePackage(
+				"com.skplanet.ocb.repository.oracle;com.skplanet.ocbbi.ctas.repository.oracle;com.skplanet.ocbbi.pandora.repository.oracle");
 		configurer.setSqlSessionFactoryBeanName("oracleSqlSessionFactory");
 		return configurer;
 	}
@@ -112,7 +118,8 @@ public class MyBatisConfig {
 	public MapperScannerConfigurer querycacheMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
 		configurer.setAnnotationClass(Repository.class);
-		configurer.setBasePackage("com.skplanet.ocbbi.ctas.repository.querycache;com.skplanet.ocbbi.pandora.repository.querycache");
+		configurer.setBasePackage(
+				"com.skplanet.ocbbi.ctas.repository.querycache;com.skplanet.ocbbi.pandora.repository.querycache");
 		configurer.setSqlSessionFactoryBeanName("querycacheSqlSessionFactory");
 		return configurer;
 	}

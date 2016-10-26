@@ -15,6 +15,7 @@ import com.skplanet.ocb.model.ApiResponse;
 import com.skplanet.ocb.model.AutoMappedMap;
 import com.skplanet.ocb.model.TransmissionType;
 import com.skplanet.ocb.model.UploadProgress;
+import com.skplanet.ocb.service.IdmsService;
 import com.skplanet.ocb.service.SshService;
 import com.skplanet.ocb.service.UploadService;
 import com.skplanet.ocb.util.Helper;
@@ -48,6 +49,9 @@ public class ApiController {
 	@Autowired
 	private NoticeService noticeService;
 
+	@Autowired
+	private IdmsService idmsService;
+
 	@GetMapping("/members")
 	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam(defaultValue = "0") int offset,
 			@RequestParam(defaultValue = "20") int limit) {
@@ -57,6 +61,10 @@ public class ApiController {
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 		List<AutoMappedMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, true);
 		int count = oracleRepository.countMembers(uploadProgress);
+
+		idmsService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, pageId,
+				null, list.size());
+
 		return ApiResponse.builder().value(list).totalItems(count).build();
 	}
 
@@ -67,7 +75,15 @@ public class ApiController {
 		params.put("searchType", "mbrId");
 		params.put("searchKeyword", mbrId);
 
-		return oracleRepository.selectMemberInfo(params);
+		List<AutoMappedMap> list = oracleRepository.selectMemberInfo(params);
+
+		String username = Helper.currentUser().getUsername();
+		String mbrKorNm = list.isEmpty() ? null : (String) list.get(0).get("mbrKorNm");
+
+		idmsService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
+				(String) params.get("pageId"), null, 1);
+
+		return list;
 	}
 
 	@GetMapping("/agreementInfo")

@@ -1,12 +1,14 @@
 package com.skplanet.ocb.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.DirContextOperations;
@@ -26,6 +28,9 @@ import com.skplanet.ocb.security.UserInfo;
 
 @Service
 public class UserService implements UserDetailsService {
+
+	@Autowired
+	private Environment env;
 
 	@Autowired
 	private LdapTemplate ldapTemplate;
@@ -81,6 +86,10 @@ public class UserService implements UserDetailsService {
 	 * check a user exist in LDAP
 	 */
 	private void throwIfNotExistInLdap(final String username) {
+		// local test only
+		if (Arrays.asList(env.getActiveProfiles()).contains("local")) {
+			return;
+		}
 		try {
 			ldapTemplate.searchForObject(ldapBaseDn, SecurityConfig.LDAP_USER_SEARCH_FILTER.replace("{0}", username),
 					nullContextMapper);
@@ -104,6 +113,10 @@ public class UserService implements UserDetailsService {
 	}
 
 	public List<UserInfo> getUsers(Map<String, Object> params) {
+		// local test only
+		if (Arrays.asList(env.getActiveProfiles()).contains("local")) {
+			return userRepository.selectUsers(params);
+		}
 		params.put("onlyUsername", true);
 		List<UserInfo> usernames = userRepository.selectUsers(params);
 		List<UserInfo> users = new ArrayList<>(usernames.size());

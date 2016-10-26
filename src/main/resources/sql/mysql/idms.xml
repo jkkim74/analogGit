@@ -3,27 +3,81 @@
 <mapper namespace="com.skplanet.ocb.repository.mysql.IdmsRepository">
 
 	<insert id="insertLogin" parameterType="map">
-		INSERT INTO IDMS_LOGINOUT ( USERNAME, USER_IP, LOGIN_DTTM )
+		INSERT INTO IDMS_ACCESS_LOG ( USERNAME, USER_IP, LOGIN_DTTM )
 		VALUES ( #{username}, #{userIp}, #{loginDttm} )
 	</insert>
 
 	<update id="updateLogout" parameterType="map">
-		UPDATE IDMS_LOGINOUT
+		UPDATE IDMS_ACCESS_LOG
 		SET LOGOUT_DTTM = #{logoutDttm}
 		WHERE USERNAME = #{username}
 		AND USER_IP = #{userIp}
-		AND LOGIN_DTTM &lt;= #{logoutDttm}
+		AND LOGIN_DTTM &lt; #{logoutDttm}
 		AND LOGOUT_DTTM IS NULL
 		ORDER BY LOGIN_DTTM DESC
 		LIMIT 1
 	</update>
-	
-	<select id="selectYesterdayLoginout" parameterType="map" resultType="AutoMappedMap">
+	<update id="updateLogout" parameterType="map" databaseId="hsql">
+		UPDATE IDMS_ACCESS_LOG
+		SET LOGOUT_DTTM = #{logoutDttm}
+		WHERE USERNAME = #{username}
+		AND USER_IP = #{userIp}
+		AND LOGIN_DTTM &lt; #{logoutDttm}
+		AND LOGOUT_DTTM IS NULL
+	</update>
+
+	<select id="selectAccessLogAtYesterday" parameterType="map" resultType="LinkedHashMap">
 		SELECT USERNAME, USER_IP, LOGIN_DTTM, LOGOUT_DTTM
-		FROM IDMS_LOGINOUT
+		FROM IDMS_ACCESS_LOG
 		WHERE LOGIN_DTTM BETWEEN CONCAT(DATE_FORMAT(CAST(NOW() - INTERVAL 1 DAY AS DATE), '%Y%m%d'), '000000')
-			AND CONCAT(DATE_FORMAT(CAST(NOW() - INTERVAL 1 DAY AS DATE), '%Y%m%d'), '235959')
+							 AND CONCAT(DATE_FORMAT(CAST(NOW() - INTERVAL 1 DAY AS DATE), '%Y%m%d'), '235959')
 		ORDER BY LOGIN_DTTM
+	</select>
+	<select id="selectAccessLogAtYesterday" parameterType="map" resultType="LinkedHashMap" databaseId="hsql">
+		SELECT USERNAME
+			, USER_IP
+			, LOGIN_DTTM
+			, LOGOUT_DTTM
+		FROM IDMS_ACCESS_LOG
+		WHERE LOGIN_DTTM BETWEEN CONCAT(TO_CHAR(CAST(NOW() - INTERVAL 1 DAY AS DATE), 'YYYYMMDD'), '000000')
+							 AND TO_CHAR(NOW(), 'YYYYMMDDHH24MISS') /* now for test */
+		ORDER BY LOGIN_DTTM
+	</select>
+
+	<insert id="insertMemberSearch" parameterType="map">
+		INSERT INTO IDMS_MEMBER_SEARCH_LOG ( SEL_DTTM, WAS_IP, USERNAME, USER_IP, MBR_ID, MBR_KOR_NM, PAGE_ID, FUNC_CD, MBR_CNT )
+		VALUES ( #{selDttm}, #{wasIp}, #{username}, #{userIp}, #{mbrId}, #{mbrKorNm}, #{pageId}, #{funcCd}, #{mbrCnt} )
+	</insert>
+
+	<select id="selectMemberSearchLogAtYesterday" parameterType="map" resultType="LinkedHashMap">
+		SELECT SEL_DTTM
+			, WAS_IP
+			, USERNAME
+			, USER_IP
+			, MBR_ID
+			, MBR_KOR_NM
+			, PAGE_ID
+			, FUNC_CD
+			, MBR_CNT
+		FROM IDMS_MEMBER_SEARCH_LOG
+		WHERE SEL_DTTM BETWEEN CONCAT(DATE_FORMAT(CAST(NOW() - INTERVAL 1 DAY AS DATE), '%Y%m%d'), '000000')
+						   AND CONCAT(DATE_FORMAT(CAST(NOW() - INTERVAL 1 DAY AS DATE), '%Y%m%d'), '235959')
+		ORDER BY SEL_DTTM
+	</select>
+	<select id="selectMemberSearchLogAtYesterday" parameterType="map" resultType="LinkedHashMap" databaseId="hsql">
+		SELECT SEL_DTTM
+			, WAS_IP
+			, USERNAME
+			, USER_IP
+			, MBR_ID
+			, MBR_KOR_NM
+			, PAGE_ID
+			, FUNC_CD
+			, MBR_CNT
+		FROM IDMS_MEMBER_SEARCH_LOG
+		WHERE SEL_DTTM BETWEEN CONCAT(TO_CHAR(CAST(NOW() - INTERVAL 1 DAY AS DATE), 'YYYYMMDD'), '000000')
+						   AND TO_CHAR(NOW(), 'YYYYMMDDHH24MISS') /* now for test */
+		ORDER BY SEL_DTTM
 	</select>
 
 </mapper>

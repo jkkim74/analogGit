@@ -1,5 +1,7 @@
 package com.skplanet.ocb.util;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -96,6 +98,15 @@ public final class Helper {
 		log.debug("getRemoteAddr(): {}", req.getRemoteAddr());
 
 		return req.getRemoteAddr();
+	}
+
+	public static String serverIp() {
+		try {
+			return InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			return "0.0.0.0";
+		}
 	}
 
 }
