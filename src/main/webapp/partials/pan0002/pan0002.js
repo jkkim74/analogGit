@@ -3,8 +3,6 @@
 angular.module('App').controller('Pan0002Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'toastr', 'apiSvc',
     function ($scope, $q, $http, $timeout, uiGridConstants, toastr, apiSvc) {
 
-        var self = this;
-
         $scope.gridOptionsUserList = {
             enableCellEdit: false,
             multiSelect: false,
@@ -66,24 +64,25 @@ angular.module('App').controller('Pan0002Ctrl', ['$scope', '$q', '$http', '$time
             }
         };
 
-        self.saveRow = function (rowEntity) {
-            var promise = apiSvc.saveUser({ username: rowEntity.username, ptsUsername: rowEntity.ptsUsername });
-            $scope.gridApi.rowEdit.setSavePromise(rowEntity, promise);
-        };
+        // $scope.saveRow = function (rowEntity) {
+        //     var promise = apiSvc.saveUser({ username: rowEntity.username, ptsUsername: rowEntity.ptsUsername });
+        //     $scope.gridApi.rowEdit.setSavePromise(rowEntity, promise);
+        // };
 
-        $scope.createUser = function (username) {
-            apiSvc.createUser({ username: username.toUpperCase() }).then(function () {
-                self.loadUsers();
+        $scope.createUser = function () {
+            $scope.formPromise = apiSvc.createUser({ username: $scope.newUsername.toUpperCase() });
+            $scope.formPromise.then(function () {
+                $scope.loadUsers();
             });
         };
 
-        self.loadUsers = function () {
+        $scope.loadUsers = function () {
             $scope.usersPromise = apiSvc.getUsers();
             $scope.usersPromise.then(function (data) {
                 $scope.gridOptionsUserList.data = data;
             });
         };
-        self.loadUsers();
+        $scope.loadUsers();
 
         $scope.initAdmin = function (rowEntity) {
             var roleAdmin = rowEntity.authorities.filter(function (obj) {

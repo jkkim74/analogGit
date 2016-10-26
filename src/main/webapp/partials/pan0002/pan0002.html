@@ -1,10 +1,12 @@
 <div class="section-content">
 	<div class="row">
-		<div class="col-md-3">
-			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Pnet ID" ng-model="newUsername" required>
-				<span class="input-group-btn"><button type="button" class="btn btn-primary" ng-click="createUser(newUsername)">사용자 등록</button></span>
-			</div>
+		<div class="col-md-3" cg-busy="formPromise">
+			<form name="form">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Pnet ID" ng-model="newUsername" ng-required="true">
+					<span class="input-group-btn"><button type="button" class="btn btn-primary" ng-click="createUser()" ng-disabled="form.$invalid">사용자 등록</button></span>
+				</div>
+			</form>
 		</div>
 
 		<div class="col-md-9">
