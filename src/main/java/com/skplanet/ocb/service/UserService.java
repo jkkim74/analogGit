@@ -44,11 +44,11 @@ public class UserService implements UserDetailsService {
 	@Value("${ldap.baseDn}")
 	private String ldapBaseDn;
 
-	@Value("${app.accesses.user}")
-	private String userAccesses;
+	@Value("${app.pageIds.user}")
+	private String userPageIds;
 
-	@Value("${app.accesses.admin}")
-	private String adminAccesses;
+	@Value("${app.pageIds.admin}")
+	private String adminPageIds;
 
 	private ContextMapper<UserInfo> nullContextMapper = new AbstractContextMapper<UserInfo>() {
 		public UserInfo doMapFromContext(DirContextOperations ctx) {
@@ -136,7 +136,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	public void updateAccesses(String username, String pageList) {
-		userRepository.deleteAccesses(username, userAccesses);
+		userRepository.deleteAccesses(username, userPageIds);
 
 		if (!StringUtils.isEmpty(pageList)) {
 			userRepository.insertAccesses(username, pageList);
@@ -146,10 +146,10 @@ public class UserService implements UserDetailsService {
 	public void updateAdmin(String username, boolean isAdmin) {
 		if (isAdmin) {
 			userRepository.insertAuthorities(username, "ROLE_ADMIN");
-			userRepository.insertAccesses(username, adminAccesses);
+			userRepository.insertAccesses(username, adminPageIds);
 		} else {
 			userRepository.deleteAuthorities(username, "ROLE_ADMIN");
-			userRepository.deleteAccesses(username, adminAccesses);
+			userRepository.deleteAccesses(username, adminPageIds);
 		}
 	}
 
