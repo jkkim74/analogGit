@@ -50,11 +50,6 @@ public class BatchConfig extends DefaultBatchConfigurer {
 	protected DataSource oracleDataSource;
 
 	@Override
-	public void setDataSource(DataSource dataSource) {
-		// avoid No qualifying bean of type. use memory job repository.
-	}
-
-	@Override
 	protected JobLauncher createJobLauncher() throws Exception {
 		SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
 		jobLauncher.setJobRepository(getJobRepository());
