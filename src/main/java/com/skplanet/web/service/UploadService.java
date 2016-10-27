@@ -20,6 +20,7 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -51,6 +52,9 @@ public class UploadService {
 	@Autowired
 	private Job importJob;
 
+	@Value("${app.files.autoRemove}")
+	private boolean autoRemove;
+
 	@Transactional("mysqlTxManager")
 	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
 		Path filePath = saveUploadFile(file);
@@ -80,7 +84,7 @@ public class UploadService {
 
 	public void endImport(JobParameters parameters) {
 		markFinish(parameters.getString("pageId"), parameters.getString("username"));
-		removeUploadedFile(parameters.getString("filePath"));
+		removeUploadedFile(Paths.get(parameters.getString("filePath")));
 	}
 
 	public void markRunning(String pageId, String username, String columnName, String filename) {
@@ -148,17 +152,15 @@ public class UploadService {
 		return uploadPath;
 	}
 
-	private void removeUploadedFile(String filePath) {
-		removeUploadedFile(Paths.get(filePath));
-	}
-
 	public void removeUploadedFile(Path filePath) {
-		try {
-			if (!Files.deleteIfExists(filePath)) {
-				log.warn("Failed to delete [{}] because it did not exist", filePath);
+		if (autoRemove) {
+			try {
+				if (!Files.deleteIfExists(filePath)) {
+					log.warn("Failed to delete [{}] because it did not exist", filePath);
+				}
+			} catch (IOException e) {
+				log.error("Failed to remove uploaded file", e);
 			}
-		} catch (IOException e) {
-			log.error("Failed to remove uploaded file", e);
 		}
 	}
 
