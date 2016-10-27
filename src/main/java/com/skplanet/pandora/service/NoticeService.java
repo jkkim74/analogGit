@@ -1,4 +1,4 @@
-package com.skplanet.ocbbi.pandora.service;
+package com.skplanet.pandora.service;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -17,7 +17,7 @@ import com.skplanet.ocb.service.SmsService;
 import com.skplanet.ocb.util.Constant;
 import com.skplanet.ocb.util.CsvCreatorTemplate;
 import com.skplanet.ocb.util.Helper;
-import com.skplanet.ocbbi.pandora.repository.oracle.OracleRepository;
+import com.skplanet.pandora.repository.oracle.OracleRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

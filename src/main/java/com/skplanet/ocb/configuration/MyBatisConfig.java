@@ -35,10 +35,10 @@ public class MyBatisConfig {
 
 		TypeAliasRegistry registry = config.getTypeAliasRegistry();
 		registry.registerAlias(LinkedHashMap.class);
-		registry.registerAlias(AutoMap.class);
 		registry.registerAlias(UserInfo.class);
 
-		String aliasPackages = "com.skplanet.ocb.model;com.skplanet.ocbbi.ctas.model;com.skplanet.ocbbi.pandora.model";
+		String aliasPackages = AutoMap.class.getPackage().getName()
+				+ ";com.skplanet.ctas.model;com.skplanet.pandora.model";
 		for (String aliases : aliasPackages.split(";")) {
 			registry.registerAliases(aliases);
 		}
@@ -102,7 +102,7 @@ public class MyBatisConfig {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
 		configurer.setAnnotationClass(Repository.class);
 		configurer.setBasePackage(
-				"com.skplanet.ocb.repository.oracle;com.skplanet.ocbbi.ctas.repository.oracle;com.skplanet.ocbbi.pandora.repository.oracle");
+				"com.skplanet.ocb.repository.oracle;com.skplanet.ctas.repository.oracle;com.skplanet.pandora.repository.oracle");
 		configurer.setSqlSessionFactoryBeanName("oracleSqlSessionFactory");
 		return configurer;
 	}
@@ -118,8 +118,7 @@ public class MyBatisConfig {
 	public MapperScannerConfigurer querycacheMapperScannerConfigurer() {
 		MapperScannerConfigurer configurer = new MapperScannerConfigurer();
 		configurer.setAnnotationClass(Repository.class);
-		configurer.setBasePackage(
-				"com.skplanet.ocbbi.ctas.repository.querycache;com.skplanet.ocbbi.pandora.repository.querycache");
+		configurer.setBasePackage("com.skplanet.ctas.repository.querycache;com.skplanet.pandora.repository.querycache");
 		configurer.setSqlSessionFactoryBeanName("querycacheSqlSessionFactory");
 		return configurer;
 	}

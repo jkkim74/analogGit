@@ -1,4 +1,4 @@
-package com.skplanet.ocbbi.pandora.controller;
+package com.skplanet.pandora.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

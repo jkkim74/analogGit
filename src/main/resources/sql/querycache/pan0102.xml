@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.skplanet.ocbbi.pandora.repository.querycache.QueryCacheRepository">
+<mapper namespace="com.skplanet.pandora.repository.querycache.QueryCacheRepository">
 
 	<select id="selectAgreementInfo" parameterType="map" resultType="AutoMap">
 		SELECT IF(A.OCB_MKTNG_AGRMT_YN='1','Y',IF(A.OCB_MKTNG_AGRMT_YN='2','N',IF(A.OCB_MKTNG_AGRMT_YN='X','미상','미입력'))) AS OCB_MKTNG_AGRMT_YN
