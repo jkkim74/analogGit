@@ -89,7 +89,7 @@ angular.module('App').constant('appInfo', {
 
         // logout event log
         $window.onbeforeunload = function () {
-            authSvc.logout();
+            // authSvc.logout();
         };
 
         // check token validity when application started
