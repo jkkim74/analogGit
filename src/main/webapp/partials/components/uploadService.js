@@ -27,7 +27,7 @@ angular.module('App').service('uploadSvc', ['$log', '$q', '$http', '$stateParams
                     deferred.reject(resp.data);
                 }, function (event) {
                     var progressPercentage = parseInt(100.0 * event.loaded / event.total);
-                    $log.debug('progress: ' + progressPercentage + '% ' + event.config.data.file.name);
+                    // $log.debug('progress: ' + progressPercentage + '% ' + event.config.data.file.name);
                     deferred.notify(progressPercentage);
                 });
             } else {
