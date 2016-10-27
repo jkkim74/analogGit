@@ -51,7 +51,7 @@ public class RequestService {
 			@Override
 			protected void printHeader(CSVPrinter printer, List<AutoMap> list) throws IOException {
 
-				if ((uploadProgress.getPageId()).equals("pan0101")) {
+				if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0101")) {
 					List<String> keyList = new ArrayList<String>();
 					keyList.add("회원ID");
 					keyList.add("OCB닷컴 로그인ID");
@@ -62,7 +62,7 @@ public class RequestService {
 					keyList.add("11번가회원ID");
 					keyList.add("NO");
 					printer.printRecord(keyList);
-				} else if ((uploadProgress.getPageId()).equals("pan0103")) {
+				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0103")) {
 					List<String> keyList = new ArrayList<String>();
 					keyList.add("회원ID");
 					keyList.add("카드번호");
@@ -78,7 +78,7 @@ public class RequestService {
 					keyList.add("불일치항목포함여부");
 					keyList.add("NO");
 					printer.printRecord(keyList);
-				} else if ((uploadProgress.getPageId()).equals("pan0105")) {
+				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0105")) {
 					List<String> keyList = new ArrayList<String>();
 					keyList.add("접수일시");
 					keyList.add("접수번호");
@@ -106,7 +106,7 @@ public class RequestService {
 					keyList.add("회원한글명");
 					keyList.add("NO");
 					printer.printRecord(keyList);
-				} else if ((uploadProgress.getPageId()).equals("pan0106")) {
+				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0106")) {
 					List<String> keyList = new ArrayList<String>();
 					keyList.add("회원ID");
 					keyList.add("OCB닷컴 United ID");
@@ -171,7 +171,7 @@ public class RequestService {
 			@Override
 			protected void printRecord(CSVPrinter printer, AutoMap map) throws IOException {
 
-				if ((uploadProgress.getPageId()).equals("pan0101")) {
+				if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0101")) {
 
 					List<String> dataList = new ArrayList<String>();
 
@@ -225,7 +225,7 @@ public class RequestService {
 
 					printer.printRecord(dataList);
 
-				} else if ((uploadProgress.getPageId()).equals("pan0103")) {
+				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0103")) {
 
 					List<String> dataList = new ArrayList<String>();
 
@@ -309,7 +309,7 @@ public class RequestService {
 
 					printer.printRecord(dataList);
 
-				} else if ((uploadProgress.getPageId()).equals("pan0105")) {
+				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0105")) {
 
 					List<String> dataList = new ArrayList<String>();
 
@@ -441,7 +441,7 @@ public class RequestService {
 
 					printer.printRecord(dataList);
 
-				} else if ((uploadProgress.getPageId()).equals("pan0106")) {
+				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0106")) {
 					List<String> dataList = new ArrayList<String>();
 
 					if (map.get("mbrId") == null) {

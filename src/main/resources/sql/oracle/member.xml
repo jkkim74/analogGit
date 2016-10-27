@@ -5,53 +5,53 @@
 	<select id="selectMembers" parameterType="map" resultType="AutoMap">
 		<include refid="com.skplanet.ocb.repository.pagingHead" />
 
-		<if test="uploadProgress.pageId == 'pan0101'">
+		<if test="uploadProgress.pageId == 'PAN0101'">
 			<if test="masking == true">
-				<include refid="selectMembers_pan0101" />
+				<include refid="selectMembers_PAN0101" />
 			</if>
 			<if test="masking == false">
-				<include refid="selectMembers_pan0101_nomas" />
+				<include refid="selectMembers_PAN0101_nomas" />
 			</if>
 		</if>
-		<if test="uploadProgress.pageId == 'pan0103'">
+		<if test="uploadProgress.pageId == 'PAN0103'">
 			<if test="masking == true">
-				<include refid="selectMembers_pan0103" />
+				<include refid="selectMembers_PAN0103" />
 			</if>
 			<if test="masking == false">
-				<include refid="selectMembers_pan0103_nomas" />
+				<include refid="selectMembers_PAN0103_nomas" />
 			</if>
 		</if>
-		<if test="uploadProgress.pageId == 'pan0105'">
+		<if test="uploadProgress.pageId == 'PAN0105'">
 			<if test="masking == true">
-				<include refid="selectMembers_pan0105" />
+				<include refid="selectMembers_PAN0105" />
 			</if>
 			<if test="masking == false">
-				<include refid="selectMembers_pan0105_nomas" />
+				<include refid="selectMembers_PAN0105_nomas" />
 			</if>
 		</if>
-		<if test="uploadProgress.pageId == 'pan0106'">
+		<if test="uploadProgress.pageId == 'PAN0106'">
 			<if test="masking == true">
-				<include refid="selectMembers_pan0106" />
+				<include refid="selectMembers_PAN0106" />
 			</if>
 			<if test="masking == false">
-				<include refid="selectMembers_pan0106_nomas" />
+				<include refid="selectMembers_PAN0106_nomas" />
 			</if>
 		</if>
 
 		<include refid="com.skplanet.ocb.repository.pagingFoot" />
 	</select>
 	<select id="selectMembers" parameterType="map" resultType="AutoMap" databaseId="hsql">
-		<if test="uploadProgress.pageId == 'pan0101'">
-			<include refid="selectMembers_pan0101" />
+		<if test="uploadProgress.pageId == 'PAN0101'">
+			<include refid="selectMembers_PAN0101" />
 		</if>
-		<if test="uploadProgress.pageId == 'pan0103'">
-			<include refid="selectMembers_pan0103" />
+		<if test="uploadProgress.pageId == 'PAN0103'">
+			<include refid="selectMembers_PAN0103" />
 		</if>
-		<if test="uploadProgress.pageId == 'pan0105'">
-			<include refid="selectMembers_pan0105" />
+		<if test="uploadProgress.pageId == 'PAN0105'">
+			<include refid="selectMembers_PAN0105" />
 		</if>
-		<if test="uploadProgress.pageId == 'pan0106'">
-			<include refid="selectMembers_pan0106" />
+		<if test="uploadProgress.pageId == 'PAN0106'">
+			<include refid="selectMembers_PAN0106" />
 		</if>
 
 		<include refid="com.skplanet.ocb.repository.pagingFoot" />
@@ -59,17 +59,17 @@
 
 	<select id="countMembers" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM (
-		<if test="uploadProgress.pageId == 'pan0101'">
-			<include refid="selectMembers_pan0101" />
+		<if test="uploadProgress.pageId == 'PAN0101'">
+			<include refid="selectMembers_PAN0101" />
 		</if>
-		<if test="uploadProgress.pageId == 'pan0103'">
-			<include refid="selectMembers_pan0103" />
+		<if test="uploadProgress.pageId == 'PAN0103'">
+			<include refid="selectMembers_PAN0103" />
 		</if>
-		<if test="uploadProgress.pageId == 'pan0105'">
-			<include refid="selectMembers_pan0105" />
+		<if test="uploadProgress.pageId == 'PAN0105'">
+			<include refid="selectMembers_PAN0105" />
 		</if>
-		<if test="uploadProgress.pageId == 'pan0106'">
-			<include refid="selectMembers_pan0106" />
+		<if test="uploadProgress.pageId == 'PAN0106'">
+			<include refid="selectMembers_PAN0106" />
 		</if>
 		)
 	</select>

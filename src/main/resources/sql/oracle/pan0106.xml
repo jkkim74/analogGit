@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.ocbbi.pandora.repository.oracle.OracleRepository">
 
-	<sql id="selectMembers_pan0106">
+	<sql id="selectMembers_PAN0106">
 		SELECT A.MBR_ID /* 회원ID */
 			, A.UNITED_ID /* UNITEDID */
 			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'GNDR_FG_CD' AND DTL_CD = A.GNDR_FG_CD) AS GNDR /* 성별 */
@@ -58,7 +58,7 @@
 		WHERE A.${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 	</sql>
 
-	<sql id="selectMembers_pan0106_nomas">
+	<sql id="selectMembers_PAN0106_nomas">
 		SELECT A.MBR_ID /* 회원ID */
 			, A.UNITED_ID /* UNITEDID */
 			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'GNDR_FG_CD' AND DTL_CD = A.GNDR_FG_CD) AS GNDR /* 성별 */

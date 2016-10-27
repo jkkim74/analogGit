@@ -11,7 +11,7 @@ angular.module('App').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
                 }
 
                 $http.get(params.url || 'api/' + command, {
-                    params: angular.extend({ pageId: $stateParams.pageId }, params),
+                    params: angular.extend({ pageId: $stateParams.pageId.toUpperCase() }, params),
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
                     deferred.resolve(resp.data);
@@ -36,7 +36,7 @@ angular.module('App').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
             return function (params) {
                 var deferred = $q.defer();
 
-                var args = angular.extend({ pageId: $stateParams.pageId }, params);
+                var args = angular.extend({ pageId: $stateParams.pageId.toUpperCase() }, params);
                 if (hiddenMethod) {
                     args._method = hiddenMethod;
                 }

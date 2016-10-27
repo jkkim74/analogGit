@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadSvc', 'authSvc', 'FileSaver',
+angular.module('App').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadSvc', 'authSvc', 'FileSaver',
     function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadSvc, authSvc, FileSaver) {
 
         var self = this;

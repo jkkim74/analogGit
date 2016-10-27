@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.ocbbi.pandora.repository.oracle.OracleRepository">
 
-	<sql id="selectMembers_pan0103">
+	<sql id="selectMembers_PAN0103">
 		<choose>
 			<when test="uploadProgress.columnName == 'CI_NO'">
 				SELECT A.MBR_ID /* MBR_ID */
@@ -91,7 +91,7 @@
 		</choose>
 	</sql>
 
-	<sql id="selectMembers_pan0103_nomas">
+	<sql id="selectMembers_PAN0103_nomas">
 		<choose>
 			<when test="uploadProgress.columnName == 'CI_NO'">
 				SELECT A.MBR_ID /* MBR_ID */

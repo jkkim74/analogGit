@@ -1,13 +1,19 @@
 'use strict';
 
 angular.module('App').constant('appInfo', {
-    entryPage: 'pan0101'
+    entryPage: 'PAN0101'
 }).value('cgBusyDefaults', {
     message: 'Waiting...'
 }).config(['$stateProvider', '$urlRouterProvider', '$provide', '$translateProvider', 'uibDatepickerConfig', 'uibDatepickerPopupConfig',
     function ($stateProvider, $urlRouterProvider, $provide, $translateProvider, uibDatepickerConfig, uibDatepickerPopupConfig) {
 
         $urlRouterProvider.otherwise('/');
+
+        $urlRouterProvider.rule(function ($i, $location) {
+            var path = $location.path()
+            var normalized = path.toLowerCase();
+            if (path != normalized) return normalized;
+        });
 
         $stateProvider
             .state('index', {
@@ -31,12 +37,11 @@ angular.module('App').constant('appInfo', {
                 },
                 templateUrl: function ($stateParams) {
                     // 화면ID로 디렉터리, .html, .js 만들어서 하나의 페이지를 구성하는 구조.
-                    return 'partials/' + $stateParams.pageId + '/' + $stateParams.pageId + '.html';
+                    var pageId = $stateParams.pageId.toLowerCase();
+                    return 'partials/' + pageId + '/' + pageId + '.html';
                 },
                 controllerProvider: function ($stateParams) {
-                    // First letter of Controller's name must be capitalized. (expect CamelCase)
-                    var ctrlName = $stateParams.pageId.charAt(0).toUpperCase() + $stateParams.pageId.substr(1) + "Ctrl";
-                    return ctrlName;
+                    return $stateParams.pageId.toUpperCase() + "Ctrl";
                 }
             });
 

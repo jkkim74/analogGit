@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App').controller('Pan0002Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'toastr', 'apiSvc',
+angular.module('App').controller('PAN0002Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'toastr', 'apiSvc',
     function ($scope, $q, $http, $timeout, uiGridConstants, toastr, apiSvc) {
 
         $scope.gridOptionsUserList = {

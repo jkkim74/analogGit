@@ -11,7 +11,7 @@
 
 	<update id="createTable" parameterType="map">
 		<choose>
-			<when test="pageId != null and pageId == 'pan0103'">
+			<when test="pageId != null and pageId == 'PAN0103'">
 				CREATE TABLE TMP_${pageId}_${username} (
 					COLUMN1 VARCHAR2(4000),
 					COLUMN2 VARCHAR2(4000),
@@ -38,7 +38,7 @@
 	<update id="createTable" parameterType="map" databaseId="hsql">
 
 		<choose>
-			<when test="pageId != null and pageId == 'pan0103'">
+			<when test="pageId != null and pageId == 'PAN0103'">
 				CREATE TABLE IF NOT EXISTS TMP_${pageId}_${username} (
 					COLUMN1 VARCHAR2(4000),
 					COLUMN2 VARCHAR2(4000),
@@ -62,7 +62,7 @@
 
 	<select id="selectUploadedPreview" parameterType="map" resultType="AutoMap">
 		<choose>
-			<when test="pageId != null and pageId == 'pan0103'">
+			<when test="pageId != null and pageId == 'PAN0103'">
 				SELECT *
 				FROM (
 					SELECT IN_SQ.*, ROWNUM AS RNUM

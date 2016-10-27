@@ -9,7 +9,7 @@ angular.module('App').service('uploadSvc', ['$log', '$q', '$http', '$stateParams
             if (params.file) {
                 Upload.upload({
                     url: params.url || 'api/files',
-                    data: angular.extend({ pageId: $stateParams.pageId }, params),
+                    data: angular.extend({ pageId: $stateParams.pageId.toUpperCase() }, params),
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
                     toastr.success(resp.config.data.file.name, resp.data.message);
@@ -44,7 +44,7 @@ angular.module('App').service('uploadSvc', ['$log', '$q', '$http', '$stateParams
 
             function uploadedPreview() {
                 $http.get('api/files', {
-                    params: { pageId: $stateParams.pageId },
+                    params: { pageId: $stateParams.pageId.toUpperCase() },
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
                     if (resp.data.value.length > 0) {
@@ -75,7 +75,7 @@ angular.module('App').service('uploadSvc', ['$log', '$q', '$http', '$stateParams
 
             function uploadedPreview() {
                 $http.get('api/files', {
-                    params: { pageId: $stateParams.pageId, countOnly: true },
+                    params: { pageId: $stateParams.pageId.toUpperCase(), countOnly: true },
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
                     deferred.notify(resp.data.totalItems);
