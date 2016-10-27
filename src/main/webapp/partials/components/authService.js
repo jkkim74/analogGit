@@ -30,7 +30,7 @@ angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
                 return self.userInfo(true);
             }).then(function () {
                 if (appInfo.entryPage && !self.isAdmin()) {
-                    $state.go('index.page', { pageId: appInfo.entryPage }, { reload: true });
+                    $state.go('index.page', { pageId: appInfo.entryPage.toLowerCase() }, { reload: true });
                 } else {
                     $state.reload();
                 }
