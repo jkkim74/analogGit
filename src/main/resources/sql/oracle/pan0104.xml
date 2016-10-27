@@ -127,9 +127,9 @@
 				<include refid="selectExtinctionTargets_inner" />
 			</when>
 			<otherwise>
-				<include refid="com.skplanet.ocb.repository.pagingHead" />
+				<include refid="com.skplanet.web.repository.pagingHead" />
 				<include refid="selectExtinctionTargets_inner" />
-				<include refid="com.skplanet.ocb.repository.pagingFoot" />
+				<include refid="com.skplanet.web.repository.pagingFoot" />
 			</otherwise>
 		</choose>
 	
@@ -141,9 +141,9 @@
 				<include refid="selectExtinctionTargets_mas" />
 			</when>
 			<otherwise>
-				<include refid="com.skplanet.ocb.repository.pagingHead" />
+				<include refid="com.skplanet.web.repository.pagingHead" />
 				<include refid="selectExtinctionTargets_mas" />
-				<include refid="com.skplanet.ocb.repository.pagingFoot" />
+				<include refid="com.skplanet.web.repository.pagingFoot" />
 			</otherwise>
 		</choose>
 	

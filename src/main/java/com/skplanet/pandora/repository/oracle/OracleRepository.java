@@ -6,8 +6,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.skplanet.ocb.model.AutoMap;
-import com.skplanet.ocb.model.UploadProgress;
+import com.skplanet.web.model.AutoMap;
+import com.skplanet.web.model.UploadProgress;
 
 @Repository
 public interface OracleRepository {

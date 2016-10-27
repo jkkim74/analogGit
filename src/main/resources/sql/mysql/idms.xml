@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.skplanet.ocb.repository.mysql.IdmsRepository">
+<mapper namespace="com.skplanet.web.repository.mysql.IdmsRepository">
 
 	<insert id="insertLogin" parameterType="map">
 		INSERT INTO IDMS_ACCESS_LOG ( USERNAME, USER_IP, LOGIN_DTTM )

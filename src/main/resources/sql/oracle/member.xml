@@ -3,7 +3,7 @@
 <mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
 
 	<select id="selectMembers" parameterType="map" resultType="AutoMap">
-		<include refid="com.skplanet.ocb.repository.pagingHead" />
+		<include refid="com.skplanet.web.repository.pagingHead" />
 
 		<if test="uploadProgress.pageId == 'PAN0101'">
 			<if test="masking == true">
@@ -38,7 +38,7 @@
 			</if>
 		</if>
 
-		<include refid="com.skplanet.ocb.repository.pagingFoot" />
+		<include refid="com.skplanet.web.repository.pagingFoot" />
 	</select>
 	<select id="selectMembers" parameterType="map" resultType="AutoMap" databaseId="hsql">
 		<if test="uploadProgress.pageId == 'PAN0101'">
@@ -54,7 +54,7 @@
 			<include refid="selectMembers_PAN0106" />
 		</if>
 
-		<include refid="com.skplanet.ocb.repository.pagingFoot" />
+		<include refid="com.skplanet.web.repository.pagingFoot" />
 	</select>
 
 	<select id="countMembers" parameterType="map" resultType="int">

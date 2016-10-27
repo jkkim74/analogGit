@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.skplanet.ocb.exception.BizException;
-import com.skplanet.ocb.model.ApiResponse;
-import com.skplanet.ocb.model.AutoMap;
-import com.skplanet.ocb.model.TransmissionType;
-import com.skplanet.ocb.model.UploadProgress;
-import com.skplanet.ocb.service.IdmsService;
-import com.skplanet.ocb.service.SshService;
-import com.skplanet.ocb.service.UploadService;
-import com.skplanet.ocb.util.Helper;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.pandora.service.NoticeService;
 import com.skplanet.pandora.service.RequestService;
+import com.skplanet.web.exception.BizException;
+import com.skplanet.web.model.ApiResponse;
+import com.skplanet.web.model.AutoMap;
+import com.skplanet.web.model.TransmissionType;
+import com.skplanet.web.model.UploadProgress;
+import com.skplanet.web.service.IdmsService;
+import com.skplanet.web.service.SshService;
+import com.skplanet.web.service.UploadService;
+import com.skplanet.web.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
 

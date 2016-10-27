@@ -11,13 +11,13 @@ import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.skplanet.ocb.model.AutoMap;
-import com.skplanet.ocb.model.TransmissionType;
-import com.skplanet.ocb.service.SmsService;
-import com.skplanet.ocb.util.Constant;
-import com.skplanet.ocb.util.CsvCreatorTemplate;
-import com.skplanet.ocb.util.Helper;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
+import com.skplanet.web.model.AutoMap;
+import com.skplanet.web.model.TransmissionType;
+import com.skplanet.web.service.SmsService;
+import com.skplanet.web.util.Constant;
+import com.skplanet.web.util.CsvCreatorTemplate;
+import com.skplanet.web.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
 

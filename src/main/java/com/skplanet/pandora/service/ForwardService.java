@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.skplanet.ocb.model.TransmissionType;
-import com.skplanet.ocb.service.FtpService;
-import com.skplanet.ocb.service.UploadService;
-import com.skplanet.ocb.util.Helper;
+import com.skplanet.web.model.TransmissionType;
+import com.skplanet.web.service.FtpService;
+import com.skplanet.web.service.UploadService;
+import com.skplanet.web.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.skplanet.ocb.model.AutoMap;
+import com.skplanet.web.model.AutoMap;
 
 @Repository
 public interface QueryCacheRepository {
