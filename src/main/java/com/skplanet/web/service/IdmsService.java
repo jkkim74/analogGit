@@ -67,6 +67,12 @@ public class IdmsService {
 	@Value("${app.idms.bizSiteId}")
 	private String bizSiteId;
 
+	/**
+	 * 기능 코드 - 화면에서 발생한 기능 코드 (IDMS 연동_정보요청양식.xlsx의 3.sample시트 참조)
+	 */
+	@Value("${app.idms.funcCd}")
+	private String funcCd;
+
 	@Scheduled(cron = "0 0 1 * * ?")
 	public void send() {
 		if (!enabled) {
@@ -81,8 +87,8 @@ public class IdmsService {
 
 		// 고객정보조회 로그 수집
 		Path memberSearchLogPath = createMemberSearchLogFile();
-		ftpService.send(memberSearchLogPath, "/" + memberSearchLogPath.getFileName(), idmsHost, idmsPort,
-				idmsUsername, idmsPassword);
+		ftpService.send(memberSearchLogPath, "/" + memberSearchLogPath.getFileName(), idmsHost, idmsPort, idmsUsername,
+				idmsPassword);
 
 		// 사용자 계정 정보 수집
 		Path userInfoPath = createUserInfoFile();
@@ -126,15 +132,13 @@ public class IdmsService {
 	 * @param pageId
 	 *            Biz 사이트 화면 ID -사용자가 조회 또는 처리한 화면 ID (IDMS 연동_정보요청양식.xlsx의
 	 *            3.화면정보 시트 참조)
-	 * @param funcCd
-	 *            기능 코드 - 화면에서 발생한 기능 코드 (IDMS 연동_정보요청양식.xlsx의 3.sample시트 참조)
 	 * @param mbrCnt
 	 *            고객 리스트 건수 - 고객을 출력(화면,인쇄,다운로드)하는 경우 대상 고객 수를 기록. 예) 고객정보조회가
 	 *            아닌경우 0, 한명을 조회하는 경우 1, 다수를 조회하는 경우 고객수로 기록
 	 */
 	@Async
 	public void memberSearch(String selDttm, String username, String userIp, String mbrId, String mbrKorNm,
-			String pageId, String funcCd, int mbrCnt) {
+			String pageId, int mbrCnt) {
 		/*
 		 * Biz 사이트 IP - Biz 사이트 서버 IP(WAS IP)
 		 */

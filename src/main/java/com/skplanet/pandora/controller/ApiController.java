@@ -63,7 +63,7 @@ public class ApiController {
 		int count = oracleRepository.countMembers(uploadProgress);
 
 		idmsService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, pageId,
-				null, list.size());
+				list.size());
 
 		return ApiResponse.builder().value(list).totalItems(count).build();
 	}
@@ -81,7 +81,7 @@ public class ApiController {
 		String mbrKorNm = list.isEmpty() ? null : (String) list.get(0).get("mbrKorNm");
 
 		idmsService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
-				(String) params.get("pageId"), null, 1);
+				(String) params.get("pageId"), 1);
 
 		return list;
 	}
