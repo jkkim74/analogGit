@@ -20,6 +20,10 @@ angular.module('App').controller('PAN0101Ctrl', ['$scope', '$q', '$http', '$time
             multiSelect: false,
             useExternalPagination: true,
             columnDefs: [
+                {
+                    field: 'no', displayName: 'No.', width: 100,
+                    cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1 + (grid.api.pagination.getPage() - 1) * grid.options.paginationPageSize}}</div>'
+                },
                 { field: 'mbrId', displayName: '회원ID', cellTooltip: true, headerTooltip: true },
                 { field: 'ocbcomLgnId', displayName: 'OCB닷컴 로그인ID', cellTooltip: true, headerTooltip: true },
                 { field: 'ciNo', displayName: 'CI번호', cellTooltip: true, headerTooltip: true },

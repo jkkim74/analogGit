@@ -61,6 +61,10 @@ angular.module('App').controller('PAN0104Ctrl', ['$scope', '$q', '$http', '$time
             useExternalPagination: true,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             columnDefs: [
+                {
+                    field: 'no', displayName: 'No.', width: 100,
+                    cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1 + (grid.api.pagination.getPage() - 1) * grid.options.paginationPageSize}}</div>'
+                },
                 { field: 'baseYm', displayName: '기준년월', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'unitedId', displayName: 'OCB닷컴 United ID', cellTooltip: true, headerTooltip: true },
                 { field: 'mbrId', displayName: '회원ID', cellTooltip: true, headerTooltip: true },
