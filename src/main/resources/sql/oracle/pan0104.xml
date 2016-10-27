@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.ocbbi.pandora.repository.oracle.OracleRepository">
 
-	<select id="selectExtinctionSummary" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectExtinctionSummary" parameterType="map" resultType="AutoMap">
 		SELECT A.EXTNCT_MBR_FG_CD
 			, A.MBR_FG_NM /* 회원구분 */
 			, A.EXTNCT_MBR_FG_NM /* 항목 */
@@ -121,7 +121,7 @@
 		ORDER BY BASE_YM DESC
 	</sql>
 
-	<select id="selectExtinctionTargets" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectExtinctionTargets" parameterType="map" resultType="AutoMap">
 		<choose>
 			<when test="noPaging != null and noPaging == true">
 				<include refid="selectExtinctionTargets_inner" />
@@ -135,7 +135,7 @@
 	
 	</select>
 	
-	<select id="selectExtinctionTargetsMas" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectExtinctionTargetsMas" parameterType="map" resultType="AutoMap">
 		<choose>
 			<when test="noPaging != null and noPaging == true">
 				<include refid="selectExtinctionTargets_mas" />

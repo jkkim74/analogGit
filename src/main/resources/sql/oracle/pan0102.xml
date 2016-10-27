@@ -33,7 +33,7 @@
 		</where>
 	</sql>
 
-	<select id="selectMemberInfo" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectMemberInfo" parameterType="map" resultType="AutoMap">
        SELECT (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'MBR_FG_CD' AND DTL_CD = A.MBR_FG_CD) AS MBR_FG_CD /* 회원구분 */
 			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'MBR_STS_CD' AND DTL_CD = A.MBR_STS_CD) AS MBR_STS_CD /* 회원상태 */
 			, A.MBR_ID /* MBR_ID */
@@ -94,7 +94,7 @@
 		<include refid="whereMbrId" />
 	</select>
 
-	<select id="selectJoinInfo" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectJoinInfo" parameterType="map" resultType="AutoMap">
 		SELECT UNITED_ID /* okcashbag.com United ID */
 		    , DECODE(LGN_ID,NULL,LGN_ID,SUBSTR(LGN_ID,1,LENGTH(LGN_ID)-2)||'**') AS LGN_ID /* okcashbag.com 로그인 ID 목록 */
 			, TO_CHAR(TO_DATE(ENTR_DTTM, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS ENTR_DTTM /* okcashbag.com 로그인 ID 별 가입 일자 */
@@ -104,7 +104,7 @@
 		<include refid="whereMbrId" />
 	</select>
 
-	<select id="selectLastestUsageInfo" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectLastestUsageInfo" parameterType="map" resultType="AutoMap">
 		SELECT TO_CHAR(TO_DATE(FNL_ERNG_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS FNL_ERNG_DT /* OCB 적립/사용/할인/현금환급 */
 			, TO_CHAR(TO_DATE(FNL_CARD_RREG_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS FNL_CARD_RREG_DT /* OCB 카드 본등록 */
 			, TO_CHAR(TO_DATE(FNL_CNSOF_ENQ_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS FNL_CNSOF_ENQ_DT /* 상담실 문의 */
@@ -115,7 +115,7 @@
 		<include refid="whereMbrId" />
 	</select>
 
-	<select id="selectMarketingMemberInfo" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectMarketingMemberInfo" parameterType="map" resultType="AutoMap">
 		SELECT A.MBR_ID
 			, A.MBR_KOR_NM /* 한글성명 */
 			, DECODE(A.CLPHN_NO,NULL,A.CLPHN_NO,SUBSTR(A.CLPHN_NO,1,LENGTH(A.CLPHN_NO)-8)||'****'||SUBSTR(A.CLPHN_NO,LENGTH(A.CLPHN_NO)-3,4)) AS CLPHN_NO /* 휴대전화번호 */
@@ -177,7 +177,7 @@
 		<include refid="whereMbrId" /> 
 	</select>
 
-	<select id="selectMarketingMemberInfoHistory" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectMarketingMemberInfoHistory" parameterType="map" resultType="AutoMap">
 		SELECT A.DATA_SRC_ORG_CD /* 유입기관코드 */
 			, A.AGRMT_VER_CD /* 동의버전 */
 			, TO_CHAR(TO_DATE(A.AGRMT_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS AGRMT_DT /* 동의일자 */
@@ -197,7 +197,7 @@
 		ORDER BY A.AGRMT_DT, A.AGRMT_TM
 	</select>
 
-	<select id="selectThirdPartyProvideHistory" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectThirdPartyProvideHistory" parameterType="map" resultType="AutoMap">
 		SELECT '' AS DATA_DST_ORG_CD /* 제공대상기관 */
 			, A.DATA_SRC_ORG_CD /* 유입기관코드 */
 			, A.AGRMT_VER_CD /* 동의버전 */
@@ -218,7 +218,7 @@
 		ORDER BY A.AGRMT_DT, A.AGRMT_TM
 	</select>
 
-	<select id="selectCardList" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectCardList" parameterType="map" resultType="AutoMap">
 		SELECT CARD_DTL_GRP_CD /* 카드코드 */
 			, CARD_DTL_GRP_CD || ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_DTL_GRP_CD' AND DTL_CD = A.CARD_DTL_GRP_CD) AS CARD_DTL_GRP
 			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_STS_CD' AND DTL_CD = A.CARD_STS_CD) AS CARD_STS_CD /* 카드상태 */
@@ -232,13 +232,13 @@
 		ORDER BY CARD_RREG_DT
 	</select>
 
-	<select id="selectClphnNoDup" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectClphnNoDup" parameterType="map" resultType="AutoMap">
 		SELECT MBR_ID
 		FROM MART_CLPHN_NO_DUP_INFO
 		WHERE CLPHN_NO = (SELECT CLPHN_NO FROM MART_CLPHN_NO_DUP_INFO WHERE MBR_ID = #{mbrId})
 	</select>
 
-	<select id="selectEmailAddrDup" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectEmailAddrDup" parameterType="map" resultType="AutoMap">
 		SELECT MBR_ID
 		FROM MART_EMAIL_ADDR_DUP_INFO
 		WHERE EMAIL_ADDR = (SELECT EMAIL_ADDR FROM MART_EMAIL_ADDR_DUP_INFO WHERE MBR_ID = #{mbrId})

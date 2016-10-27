@@ -5,12 +5,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.skplanet.ocb.model.AutoMappedMap;
+import com.skplanet.ocb.model.AutoMap;
 import com.skplanet.ocb.model.UploadProgress;
 import com.skplanet.ocb.service.PtsService;
 import com.skplanet.ocb.util.Constant;
@@ -35,20 +36,20 @@ public class RequestService {
 
 	private String createCsvFile(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
 
-		CsvCreatorTemplate<AutoMappedMap> csvCreator = new CsvCreatorTemplate<AutoMappedMap>() {
+		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>() {
 
 			int offset = 0;
 			int limit = 10000;
 
 			@Override
-			protected List<AutoMappedMap> nextList() {
-				List<AutoMappedMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, ptsMasking);
+			protected List<AutoMap> nextList() {
+				List<AutoMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, ptsMasking);
 				offset += limit;
 				return list;
 			}
 
 			@Override
-			protected void printHeader(CSVPrinter printer, List<AutoMappedMap> list) throws IOException {
+			protected void printHeader(CSVPrinter printer, List<AutoMap> list) throws IOException {
 
 				if ((uploadProgress.getPageId()).equals("pan0101")) {
 					List<String> keyList = new ArrayList<String>();
@@ -162,13 +163,13 @@ public class RequestService {
 					printer.printRecord(keyList);
 				} else {
 
-					List<?> keyList = list.get(0).keyList();
+					Set<?> keyList = list.get(0).keySet();
 					printer.printRecord(keyList);
 				}
 			}
 
 			@Override
-			protected void printRecord(CSVPrinter printer, AutoMappedMap map) throws IOException {
+			protected void printRecord(CSVPrinter printer, AutoMap map) throws IOException {
 
 				if ((uploadProgress.getPageId()).equals("pan0101")) {
 
@@ -706,7 +707,7 @@ public class RequestService {
 
 					printer.printRecord(dataList);
 				} else {
-					printer.printRecord(map.valueList());
+					printer.printRecord(map.values());
 				}
 			}
 

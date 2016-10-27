@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.skplanet.ocb.exception.BizException;
 import com.skplanet.ocb.model.ApiResponse;
-import com.skplanet.ocb.model.AutoMappedMap;
+import com.skplanet.ocb.model.AutoMap;
 import com.skplanet.ocb.model.TransmissionType;
 import com.skplanet.ocb.model.UploadProgress;
 import com.skplanet.ocb.service.IdmsService;
@@ -59,7 +59,7 @@ public class ApiController {
 		String username = Helper.currentUser().getUsername();
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
-		List<AutoMappedMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, true);
+		List<AutoMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, true);
 		int count = oracleRepository.countMembers(uploadProgress);
 
 		idmsService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, pageId,
@@ -69,13 +69,13 @@ public class ApiController {
 	}
 
 	@GetMapping("/memberInfo")
-	public List<AutoMappedMap> getMemberInfo(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getMemberInfo(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
 		params.put("searchType", "mbrId");
 		params.put("searchKeyword", mbrId);
 
-		List<AutoMappedMap> list = oracleRepository.selectMemberInfo(params);
+		List<AutoMap> list = oracleRepository.selectMemberInfo(params);
 
 		String username = Helper.currentUser().getUsername();
 		String mbrKorNm = list.isEmpty() ? null : (String) list.get(0).get("mbrKorNm");
@@ -87,26 +87,26 @@ public class ApiController {
 	}
 
 	@GetMapping("/agreementInfo")
-	public List<AutoMappedMap> getAgreementInfo(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getAgreementInfo(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
 		return querycacheRepository.selectAgreementInfo(mbrId);
 	}
 
 	@GetMapping("/joinInfoOcbapp")
-	public List<AutoMappedMap> getJoinInfoOcbapp(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getJoinInfoOcbapp(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
-		List<AutoMappedMap> result = querycacheRepository.selectJoinInfo(mbrId);
+		List<AutoMap> result = querycacheRepository.selectJoinInfo(mbrId);
 
 		if (result == null || result.size() <= 0 || result.get(0) == null) {
-			AutoMappedMap m = new AutoMappedMap();
+			AutoMap m = new AutoMap();
 			m.put("OCB_APP_JOIN_YN", "N");
 			result.clear();
 			result.add(m);
 		} else {
 			log.info("{}", result);
-			AutoMappedMap m = result.get(0);
+			AutoMap m = result.get(0);
 
 			m.put("OCB_APP_JOIN_YN", "Y");
 		}
@@ -115,69 +115,69 @@ public class ApiController {
 	}
 
 	@GetMapping("/joinInfoOcbcom")
-	public List<AutoMappedMap> getJoinInfoOcbcom(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getJoinInfoOcbcom(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectJoinInfo(params);
 	}
 
 	@GetMapping("/lastestUsageInfo")
-	public List<AutoMappedMap> getLastestUsageInfo(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getLastestUsageInfo(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectLastestUsageInfo(params);
 	}
 
 	@GetMapping("/marketingMemberInfo")
-	public List<AutoMappedMap> getMarketingMemberInfo(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getMarketingMemberInfo(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectMarketingMemberInfo(params);
 	}
 
 	@GetMapping("/marketingMemberInfoHistory")
-	public List<AutoMappedMap> getMarketingMemberInfoHistory(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getMarketingMemberInfoHistory(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectMarketingMemberInfoHistory(params);
 	}
 
 	@GetMapping("/thirdPartyProvideHistory")
-	public List<AutoMappedMap> getThirdPartyProvideHistory(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getThirdPartyProvideHistory(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectThirdPartyProvideHistory(params);
 	}
 
 	@GetMapping("/cardList")
-	public List<AutoMappedMap> getCardList(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getCardList(@RequestParam Map<String, Object> params) {
 
 		return oracleRepository.selectCardList(params);
 	}
 
 	@GetMapping("/transactionHistory")
-	public List<AutoMappedMap> getTransactionHistory(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getTransactionHistory(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
 		return querycacheRepository.selectTransactionHistory(mbrId);
 	}
 
 	@GetMapping("/emailSendHistory")
-	public List<AutoMappedMap> getEmailSendHistory(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getEmailSendHistory(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
 		return querycacheRepository.selectEmailSendHistory(mbrId);
 	}
 
 	@GetMapping("/appPushHistory")
-	public List<AutoMappedMap> getAppPushHistory(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getAppPushHistory(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
 		return querycacheRepository.selectAppPushHistory(mbrId);
 	}
 
 	@GetMapping("/clphnNoDup")
-	public List<AutoMappedMap> getClphnNoDup(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getClphnNoDup(@RequestParam Map<String, Object> params) {
 		return oracleRepository.selectClphnNoDup(params);
 	}
 
 	@GetMapping("/emailAddrDup")
-	public List<AutoMappedMap> getEmailAddrDup(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getEmailAddrDup(@RequestParam Map<String, Object> params) {
 		return oracleRepository.selectEmailAddrDup(params);
 	}
 
@@ -208,14 +208,14 @@ public class ApiController {
 	}
 
 	@GetMapping("/extinctionSummary")
-	public List<AutoMappedMap> getExtinctionSummary(@RequestParam Map<String, Object> params) {
+	public List<AutoMap> getExtinctionSummary(@RequestParam Map<String, Object> params) {
 		return oracleRepository.selectExtinctionSummary(params);
 	}
 
 	@GetMapping("/extinctionTargets")
 	public ApiResponse getExtinctionTargets(@RequestParam Map<String, Object> params) {
 
-		List<AutoMappedMap> list = oracleRepository.selectExtinctionTargetsMas(params);
+		List<AutoMap> list = oracleRepository.selectExtinctionTargetsMas(params);
 		int count = oracleRepository.countExtinctionTargets(params);
 		return ApiResponse.builder().value(list).totalItems(count).build();
 	}

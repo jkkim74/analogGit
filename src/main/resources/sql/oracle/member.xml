@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.ocbbi.pandora.repository.oracle.OracleRepository">
 
-	<select id="selectMembers" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectMembers" parameterType="map" resultType="AutoMap">
 		<include refid="pagingHead" />
 
 		<if test="uploadProgress.pageId == 'pan0101'">
@@ -40,7 +40,7 @@
 
 		<include refid="pagingFoot" />
 	</select>
-	<select id="selectMembers" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
+	<select id="selectMembers" parameterType="map" resultType="AutoMap" databaseId="hsql">
 		<if test="uploadProgress.pageId == 'pan0101'">
 			<include refid="selectMembers_pan0101" />
 		</if>

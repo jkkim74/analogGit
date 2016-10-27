@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Repository;
 
-import com.skplanet.ocb.model.AutoMappedMap;
+import com.skplanet.ocb.model.AutoMap;
 import com.skplanet.ocb.security.UserInfo;
 
 @Configuration
@@ -35,7 +35,7 @@ public class MyBatisConfig {
 
 		TypeAliasRegistry registry = config.getTypeAliasRegistry();
 		registry.registerAlias(LinkedHashMap.class);
-		registry.registerAlias(AutoMappedMap.class);
+		registry.registerAlias(AutoMap.class);
 		registry.registerAlias(UserInfo.class);
 
 		String aliasPackages = "com.skplanet.ocb.model;com.skplanet.ocbbi.ctas.model;com.skplanet.ocbbi.pandora.model";

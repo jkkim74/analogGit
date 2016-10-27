@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.ocbbi.pandora.repository.querycache.QueryCacheRepository">
 
-	<select id="selectAgreementInfo" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectAgreementInfo" parameterType="map" resultType="AutoMap">
 		SELECT IF(A.OCB_MKTNG_AGRMT_YN='1','Y',IF(A.OCB_MKTNG_AGRMT_YN='2','N',IF(A.OCB_MKTNG_AGRMT_YN='X','미상','미입력'))) AS OCB_MKTNG_AGRMT_YN
 			, A.MKTNG_FNL_AGRMT_SRC_ORG_CD AS MKTNG_FNL_AGRMT_SRC_ORG_CD
 			, B.DTL_CD_NM AS MKTNG_FNL_AGRMT_SRC_ORG_NM
@@ -25,7 +25,7 @@
 		WHERE MBR_ID = #{mbrId}
 	</select>
 
-	<select id="selectJoinInfo" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectJoinInfo" parameterType="map" resultType="AutoMap">
 		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(MAX(A.REG_DTTM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS OCBAPP_FNL_ENTR_DT 
 			, FROM_UNIXTIME(UNIX_TIMESTAMP(MAX(B.LOG_DTTM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') As OCBAPP_FNL_LGN_DT 
 		FROM OCB.DW_TCH_USR_INFO A
@@ -33,7 +33,7 @@
 		WHERE A.MBR_ID = #{mbrId}
 	</select>
 
-	<select id="selectTransactionHistory" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectTransactionHistory" parameterType="map" resultType="AutoMap">
 		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(A.RCV_DT, 'yyyyMMdd'), 'yyyy-MM-dd') AS RCV_DT 
 			, A.RCV_SEQ AS RCV_SEQ
 			, FROM_UNIXTIME(UNIX_TIMESTAMP(CONCAT(A.APPR_DT,A.APPR_TM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS APPR_DTTM 
@@ -118,7 +118,7 @@
 		LEFT OUTER JOIN OCB.DW_CPN_PRD_MST K ON A.CPN_PRD_CD = K.CPN_PRD_CD
 		WHERE A.MBR_ID = #{mbrId}
 	</select>
-	<select id="selectTransactionHistory" parameterType="map" resultType="AutoMappedMap" databaseId="hsql">
+	<select id="selectTransactionHistory" parameterType="map" resultType="AutoMap" databaseId="hsql">
 		SELECT RCV_DT 
 			, RCV_SEQ
 			, APPR_DTTM 
@@ -147,7 +147,7 @@
 		WHERE MBR_ID = #{mbrId}
 	</select>
 
-	<select id="selectEmailSendHistory" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectEmailSendHistory" parameterType="map" resultType="AutoMap">
 		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(A.SND_DT, 'yyyyMMdd'), 'yyyy-MM-dd') AS SND_DT  
 			, B.EMAIL_TITL AS EMAIL_TITL 
 			, A.LCPT_EMAIL_SND_RSLT_CD AS LCPT_EMAIL_SND_RSLT_CD
@@ -160,7 +160,7 @@
 		ORDER BY SND_DT DESC
 	</select>
 
-	<select id="selectAppPushHistory" parameterType="map" resultType="AutoMappedMap">
+	<select id="selectAppPushHistory" parameterType="map" resultType="AutoMap">
 		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(A.SND_DTTM, 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS SND_DTTM 
 			, A.MSG_TITL AS MSG_TITL 
 			, A.PUSH_SND_RSLT_CD AS PUSH_SND_RSLT_CD

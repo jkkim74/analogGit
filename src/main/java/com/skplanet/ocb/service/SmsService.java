@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.skplanet.ocb.exception.BizException;
-import com.skplanet.ocb.model.AutoMappedMap;
+import com.skplanet.ocb.model.AutoMap;
 
 import lombok.extern.slf4j.Slf4j;
 import skp.bss.msg.rms.front.HttpMessageApi;
@@ -45,10 +45,10 @@ public class SmsService {
 	@Value("${app.enable.sms}")
 	private boolean enabled;
 
-	public void send(List<AutoMappedMap> receivers) {
+	public void send(List<AutoMap> receivers) {
 		log.info("Send to SMS");
 
-		for (AutoMappedMap m : receivers) {
+		for (AutoMap m : receivers) {
 			String extnctObjDt = (String) m.get("extnctObjDt");
 
 			HashMap<String, Object> model = new HashMap<>();

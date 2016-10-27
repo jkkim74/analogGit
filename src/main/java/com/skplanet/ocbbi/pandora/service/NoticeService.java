@@ -11,7 +11,7 @@ import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.skplanet.ocb.model.AutoMappedMap;
+import com.skplanet.ocb.model.AutoMap;
 import com.skplanet.ocb.model.TransmissionType;
 import com.skplanet.ocb.service.SmsService;
 import com.skplanet.ocb.util.Constant;
@@ -38,13 +38,13 @@ public class NoticeService {
 
 		log.info("notice using ftp: {}, {}", params, transmissionType);
 
-		CsvCreatorTemplate<AutoMappedMap> csvCreator = new CsvCreatorTemplate<AutoMappedMap>() {
+		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>() {
 
 			int offset = 0;
 			int limit = 10000;
 
 			@Override
-			public List<AutoMappedMap> nextList() {
+			public List<AutoMap> nextList() {
 				params.put("offset", offset);
 				params.put("limit", limit);
 				offset += limit;
@@ -53,7 +53,7 @@ public class NoticeService {
 			}
 
 			@Override
-			public void printRecord(CSVPrinter printer, AutoMappedMap map) throws IOException {
+			public void printRecord(CSVPrinter printer, AutoMap map) throws IOException {
 				String extnctObjDt = (String ) map.get("extnctObjDt");
 
 				if (transmissionType == TransmissionType.OCBCOM) {
@@ -83,7 +83,7 @@ public class NoticeService {
 
 	public void noticeUsingSms(final Map<String, Object> params) {
 		params.put("noPaging", true);
-		List<AutoMappedMap> list = oracleRepository.selectExtinctionTargets(params);
+		List<AutoMap> list = oracleRepository.selectExtinctionTargets(params);
 
 		smsService.send(list);
 	}

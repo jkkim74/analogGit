@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.skplanet.ocb.model.AutoMappedMap;
+import com.skplanet.ocb.model.AutoMap;
 
 @Repository
 public interface UploadTempRepository {
@@ -16,7 +16,7 @@ public interface UploadTempRepository {
 
 	void truncateTable(@Param("pageId") String pageId, @Param("username") String username);
 
-	List<AutoMappedMap> selectUploadedPreview(@Param("pageId") String pageId, @Param("username") String username);
+	List<AutoMap> selectUploadedPreview(@Param("pageId") String pageId, @Param("username") String username);
 
 	int countUploadedPreview(@Param("pageId") String pageId, @Param("username") String username);
 

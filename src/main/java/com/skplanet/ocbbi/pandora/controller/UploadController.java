@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.ocb.exception.BizException;
 import com.skplanet.ocb.model.ApiResponse;
-import com.skplanet.ocb.model.AutoMappedMap;
+import com.skplanet.ocb.model.AutoMap;
 import com.skplanet.ocb.model.UploadProgress;
 import com.skplanet.ocb.model.UploadStatus;
 import com.skplanet.ocb.repository.mysql.UploadMetaRepository;
@@ -87,7 +87,7 @@ public class UploadController {
 			}
 			return ApiResponse.builder().totalItems(count).build();
 		} else {
-			List<AutoMappedMap> list = tempRepository.selectUploadedPreview(pageId, username);
+			List<AutoMap> list = tempRepository.selectUploadedPreview(pageId, username);
 			return ApiResponse.builder().value(list).build();
 		}
 	}

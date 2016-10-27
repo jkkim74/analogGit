@@ -6,42 +6,42 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.skplanet.ocb.model.AutoMappedMap;
+import com.skplanet.ocb.model.AutoMap;
 import com.skplanet.ocb.model.UploadProgress;
 
 @Repository
 public interface OracleRepository {
 
-	List<AutoMappedMap> selectMembers(@Param("uploadProgress") UploadProgress uploadProgress,
+	List<AutoMap> selectMembers(@Param("uploadProgress") UploadProgress uploadProgress,
 			@Param("offset") int offset, @Param("limit") int limit, @Param("masking") boolean masking);
 
 	int countMembers(@Param("uploadProgress") UploadProgress uploadProgress);
 
 	String selectMbrId(Map<String, Object> params);
 
-	List<AutoMappedMap> selectMemberInfo(Map<String, Object> params);
+	List<AutoMap> selectMemberInfo(Map<String, Object> params);
 
-	List<AutoMappedMap> selectJoinInfo(Map<String, Object> params);
+	List<AutoMap> selectJoinInfo(Map<String, Object> params);
 
-	List<AutoMappedMap> selectLastestUsageInfo(Map<String, Object> params);
+	List<AutoMap> selectLastestUsageInfo(Map<String, Object> params);
 
-	List<AutoMappedMap> selectMarketingMemberInfo(Map<String, Object> params);
+	List<AutoMap> selectMarketingMemberInfo(Map<String, Object> params);
 
-	List<AutoMappedMap> selectMarketingMemberInfoHistory(Map<String, Object> params);
+	List<AutoMap> selectMarketingMemberInfoHistory(Map<String, Object> params);
 
-	List<AutoMappedMap> selectThirdPartyProvideHistory(Map<String, Object> params);
+	List<AutoMap> selectThirdPartyProvideHistory(Map<String, Object> params);
 
-	List<AutoMappedMap> selectCardList(Map<String, Object> params);
+	List<AutoMap> selectCardList(Map<String, Object> params);
 
-	List<AutoMappedMap> selectClphnNoDup(Map<String, Object> params);
+	List<AutoMap> selectClphnNoDup(Map<String, Object> params);
 
-	List<AutoMappedMap> selectEmailAddrDup(Map<String, Object> params);
+	List<AutoMap> selectEmailAddrDup(Map<String, Object> params);
 
-	List<AutoMappedMap> selectExtinctionSummary(Map<String, Object> params);
+	List<AutoMap> selectExtinctionSummary(Map<String, Object> params);
 
-	List<AutoMappedMap> selectExtinctionTargets(Map<String, Object> params);
+	List<AutoMap> selectExtinctionTargets(Map<String, Object> params);
 
-	List<AutoMappedMap> selectExtinctionTargetsMas(Map<String, Object> params);
+	List<AutoMap> selectExtinctionTargetsMas(Map<String, Object> params);
 
 	int countExtinctionTargets(Map<String, Object> params);
 
