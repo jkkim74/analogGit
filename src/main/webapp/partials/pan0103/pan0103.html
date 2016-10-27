@@ -12,6 +12,7 @@
 			</div>
 			<div class="form-group">
 				<label>업로드( 양식 : 회원ID,카드번호,CI번호,성명,생년월일,성별 )</label>
+				<button type="button" class="btn btn-default btn-xs" ng-click="downloadCsvFormat()">양식 다운로드</button>
 				<div ngf-select="upload($file)" ngf-drop="upload($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'" ngf-max-size="1GB"
 					class="drop-box" ngf-drag-over-class="'drop-box-dragover'">
 					<i class="fa fa-upload fa-5x" aria-hidden="true"></i><br><br>파일 선택 또는 끌어놓기

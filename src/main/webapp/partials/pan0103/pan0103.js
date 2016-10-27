@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadSvc', 'authSvc',
-    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadSvc, authSvc) {
+angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadSvc', 'authSvc', 'FileSaver',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadSvc, authSvc, FileSaver) {
 
         var self = this;
 
@@ -91,6 +91,12 @@ angular.module('App').controller('Pan0103Ctrl', ['$scope', '$q', '$http', '$time
             $scope.sendPtsPromise.finally(function () {
 
             });
+        };
+
+        $scope.downloadCsvFormat = function () {
+            var text = '회원ID,카드번호,CI번호,성명,생년월일,성별';
+            var data = new Blob([text], { type: 'text/csv;charset=utf-8' });
+            FileSaver.saveAs(data, '배치적립파일검증 업로드 양식.csv');
         };
 
         authSvc.getUserInfo().then(function (userInfo) {
