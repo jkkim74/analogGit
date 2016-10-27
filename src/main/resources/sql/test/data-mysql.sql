@@ -10,3 +10,4 @@ insert into page_access(username, page_id) values('user', 'PAN0106');
 insert into page_access(username, page_id) values('user', 'PAN0002');
 insert into page_access(username, page_id) values('user', 'PAN0003');
 insert into page_access(username, page_id) values('user', 'CTAS0101');
+insert into page_access(username, page_id) values('user', 'CTAS0102');
