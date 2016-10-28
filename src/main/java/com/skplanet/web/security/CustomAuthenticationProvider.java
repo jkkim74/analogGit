@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -89,7 +90,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			if (!"E0".equals(resultCd) && !"E99".equals(resultCd)) {
 				// throw new InternalAuthenticationServiceException(resultMsg);
 			}
-		} catch (IOException e) {
+		} catch (IOException | ResourceAccessException e) {
 			log.info(e.toString());
 			// throw new InternalAuthenticationServiceException("IDMS Error", e);
 		}
