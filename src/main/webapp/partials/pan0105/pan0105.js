@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'apiSvc', 'uploadSvc', 'authSvc',
-    function ($scope, $q, $http, $timeout, $filter, uiGridConstants, apiSvc, uploadSvc, authSvc) {
+angular.module('App').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'apiSvc', 'authSvc',
+    function ($scope, $q, $http, $timeout, $filter, uiGridConstants, apiSvc, authSvc) {
 
         $scope.selectOptions = [
             { label: '회원ID', value: 'mbr_id' },
@@ -74,7 +74,7 @@ angular.module('App').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
             var deferred = $q.defer();
             $scope.uploadPromise = deferred.promise;
 
-            uploadSvc.upload({ file: file, columnName: $scope.selectedOption2.value }).then(function () {
+            apiSvc.upload({ file: file, columnName: $scope.selectedOption2.value }).then(function () {
                 $scope.uploadProgressLoadingMessage = 'Extracting...';
 
                 return apiSvc.extractMemberInfo({

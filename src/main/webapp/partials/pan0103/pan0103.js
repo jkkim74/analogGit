@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadSvc', 'authSvc', 'FileSaver',
-    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadSvc, authSvc, FileSaver) {
+angular.module('App').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'authSvc', 'FileSaver',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, authSvc, FileSaver) {
 
         var self = this;
 
@@ -59,17 +59,17 @@ angular.module('App').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         $scope.upload = function (file) {
-            $scope.uploadPromise = uploadSvc.upload({ file: file, columnName: $scope.selectedOption.value });
+            $scope.uploadPromise = apiSvc.upload({ file: file, columnName: $scope.selectedOption.value });
             $scope.uploadPromise.then(function () {
                 self.checkUploadProgress();
-                return uploadSvc.getUploadedPreview();
+                return apiSvc.getUploadedPreview();
             }).then(function (data) {
                 $scope.gridOptionsPreview.data = data.value;
             });
         };
 
         self.checkUploadProgress = function () {
-            uploadSvc.getUploadProgress().finally(function () {
+            apiSvc.getUploadProgress().finally(function () {
                 $scope.uploadStatusIsRunning = false;
             }, function (totalItems) {
                 $scope.uploadStatusIsRunning = true;

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('App').controller('PAN0106Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'uploadSvc', 'authSvc',
-    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, uploadSvc, authSvc) {
+angular.module('App').controller('PAN0106Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'authSvc',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, authSvc) {
 
         var self = this;
 
@@ -81,14 +81,14 @@ angular.module('App').controller('PAN0106Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         $scope.upload = function (file) {
-            $scope.uploadPromise = uploadSvc.upload({ file: file, columnName: $scope.selectedOption.value });
+            $scope.uploadPromise = apiSvc.upload({ file: file, columnName: $scope.selectedOption.value });
             $scope.uploadPromise.then(function () {
                 self.checkUploadProgress();
             });
         };
 
         self.checkUploadProgress = function () {
-            uploadSvc.getUploadProgress().finally(function () {
+            apiSvc.getUploadProgress().finally(function () {
                 $scope.uploadStatusIsRunning = false;
             }, function (totalItems) {
                 $scope.uploadStatusIsRunning = true;
