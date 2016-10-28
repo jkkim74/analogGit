@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App', [
+angular.module('app', [
     'ngAnimate',
     'ngMessages',
     'ngResource',
