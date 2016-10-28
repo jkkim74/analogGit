@@ -37,11 +37,11 @@ angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
 
                 deferred.resolve();
             }).catch(function (resp) {
-                $log.error(resp);
+                // $log.error(resp);
                 if (resp.status == 401) {
-                    toastr.error('관리자에게 문의해주세요', '등록되지 않은 사용자');
+                    toastr.error((resp.data && resp.data.error_description) || resp.statusText, resp.status);
                 } else {
-                    toastr.error('로그인 정보를 확인해주세요', '로그인 실패');
+                    toastr.error('로그인 정보 확인 또는 관리자에게 문의해주세요');
                 }
 
                 deferred.reject();

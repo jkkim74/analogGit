@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IdmsRepository {
+public interface IdmsLogRepository {
 
 	void insertLogin(@Param("username") String username, @Param("userIp") String userIp,
 			@Param("loginDttm") String loginDttm);

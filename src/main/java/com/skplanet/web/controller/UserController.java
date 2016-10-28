@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.skplanet.web.model.ApiResponse;
 import com.skplanet.web.security.UserInfo;
-import com.skplanet.web.service.IdmsService;
+import com.skplanet.web.service.IdmsLogService;
 import com.skplanet.web.service.UserService;
 import com.skplanet.web.util.Helper;
 
@@ -29,7 +29,7 @@ public class UserController {
 	private UserService userService;
 
 	@Autowired
-	private IdmsService idmsService;
+	private IdmsLogService idmsLogService;
 
 	@PostMapping
 	@RolesAllowed("ROLE_ADMIN")
@@ -50,7 +50,7 @@ public class UserController {
 	public UserInfo me(@RequestParam(defaultValue = "false") boolean login) {
 		UserInfo user = Helper.currentUser();
 		if (login) {
-			idmsService.login(user.getUsername(), Helper.currentClientIp(), Helper.nowDateTimeString());
+			idmsLogService.login(user.getUsername(), Helper.currentClientIp(), Helper.nowDateTimeString());
 		}
 		return user;
 	}
@@ -58,7 +58,7 @@ public class UserController {
 	@GetMapping("/logout")
 	public void logout() {
 		UserInfo user = Helper.currentUser();
-		idmsService.logout(user.getUsername(), Helper.currentClientIp(), Helper.nowDateTimeString());
+		idmsLogService.logout(user.getUsername(), Helper.currentClientIp(), Helper.nowDateTimeString());
 	}
 
 	@PostMapping("/info")

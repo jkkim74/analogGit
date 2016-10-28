@@ -19,7 +19,7 @@ import com.skplanet.web.model.ApiResponse;
 import com.skplanet.web.model.AutoMap;
 import com.skplanet.web.model.TransmissionType;
 import com.skplanet.web.model.UploadProgress;
-import com.skplanet.web.service.IdmsService;
+import com.skplanet.web.service.IdmsLogService;
 import com.skplanet.web.service.SshService;
 import com.skplanet.web.service.UploadService;
 import com.skplanet.web.util.Helper;
@@ -50,7 +50,7 @@ public class ApiController {
 	private NoticeService noticeService;
 
 	@Autowired
-	private IdmsService idmsService;
+	private IdmsLogService idmsLogService;
 
 	@GetMapping("/members")
 	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam(defaultValue = "0") int offset,
@@ -62,7 +62,7 @@ public class ApiController {
 		List<AutoMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, true);
 		int count = oracleRepository.countMembers(uploadProgress);
 
-		idmsService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, pageId,
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, pageId,
 				list.size());
 
 		return ApiResponse.builder().value(list).totalItems(count).build();
@@ -80,7 +80,7 @@ public class ApiController {
 		String username = Helper.currentUser().getUsername();
 		String mbrKorNm = list.isEmpty() ? null : (String) list.get(0).get("mbrKorNm");
 
-		idmsService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
 				(String) params.get("pageId"), 1);
 
 		return list;

@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Maps;
-import com.skplanet.web.repository.mysql.IdmsRepository;
+import com.skplanet.web.repository.mysql.IdmsLogRepository;
 import com.skplanet.web.security.UserInfo;
 import com.skplanet.web.util.Constant;
 import com.skplanet.web.util.CsvCreatorTemplate;
@@ -26,22 +26,23 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class IdmsService {
+public class IdmsLogService {
 
 	/**
-	 * Biz 사용자ID 발급 시 IDMS를 통하는 계정(1,2)과 Biz 사용자가 직접 발급하는 계정을 구분하기 위한 항목. 1:관리자,
-	 * 2:제휴사 관리자, 3:임의발급계정
+	 * Biz 사용자ID 발급 시 IDMS를 통하는 계정(1,2)과 Biz 사용자가 직접 발급하는 계정을 구분하기 위한 항목.<br>
+	 * 1:관리자, 2:제휴사 관리자, 3:임의발급계정
 	 */
 	public static final String USER_ID_TYPE_ADMIN = "1";
 
 	/**
-	 * Biz 사용자 ID의 계정 운용 상태 정보. 1:정상, 2:사용정지/잠금, 3:해지
+	 * Biz 사용자 ID의 계정 운용 상태 정보.<br>
+	 * 1:정상, 2:사용정지/잠금, 3:해지
 	 */
 	public static final String USER_STATUS_ENABLED = "1";
 	public static final String USER_STATUS_DIASABLED = "2";
 
 	@Autowired
-	private IdmsRepository idmsRepository;
+	private IdmsLogRepository idmsLogRepository;
 
 	@Autowired
 	private FtpService ftpService;
@@ -53,24 +54,22 @@ public class IdmsService {
 	private boolean enabled;
 
 	@Value("${ftp.idms.host}")
-	private String idmsHost;
+	private String ftpHost;
 
 	@Value("${ftp.idms.port}")
-	private int idmsPort;
+	private int ftpPort;
 
 	@Value("${ftp.idms.username}")
-	private String idmsUsername;
+	private String ftpUsername;
 
 	@Value("${ftp.idms.password}")
-	private String idmsPassword;
+	private String ftpPassword;
 
-	@Value("${app.idms.bizSiteId}")
-	private String bizSiteId;
+	@Value("${idms.id}")
+	private String idmsId;
 
-	/**
-	 * 기능 코드 - 화면에서 발생한 기능 코드 (IDMS 연동_정보요청양식.xlsx의 3.sample시트 참조)
-	 */
-	@Value("${app.idms.funcCd}")
+	/** 기능 코드 - 화면에서 발생한 기능 코드 (IDMS 연동_정보요청양식.xlsx의 3.sample시트 참조) */
+	@Value("${idms.log.funcCd}")
 	private String funcCd;
 
 	@Scheduled(cron = "0 0 1 * * ?")
@@ -83,36 +82,35 @@ public class IdmsService {
 		// 로그 작성 시간 정보 수집
 		String beginDttm = Helper.nowDateTimeString();
 		Path jobInfoPath = createJobInfoFile(beginDttm);
-		ftpService.send(jobInfoPath, "/" + jobInfoPath.getFileName(), idmsHost, idmsPort, idmsUsername, idmsPassword);
+		ftpService.send(jobInfoPath, "/" + jobInfoPath.getFileName(), ftpHost, ftpPort, ftpUsername, ftpPassword);
 
 		// 고객정보조회 로그 수집
 		Path memberSearchLogPath = createMemberSearchLogFile();
-		ftpService.send(memberSearchLogPath, "/" + memberSearchLogPath.getFileName(), idmsHost, idmsPort, idmsUsername,
-				idmsPassword);
+		ftpService.send(memberSearchLogPath, "/" + memberSearchLogPath.getFileName(), ftpHost, ftpPort, ftpUsername,
+				ftpPassword);
 
 		// 사용자 계정 정보 수집
 		Path userInfoPath = createUserInfoFile();
-		ftpService.send(userInfoPath, "/" + userInfoPath.getFileName(), idmsHost, idmsPort, idmsUsername, idmsPassword);
+		ftpService.send(userInfoPath, "/" + userInfoPath.getFileName(), ftpHost, ftpPort, ftpUsername, ftpPassword);
 
 		// 로그인/아웃 로그 수집
 		Path accessLogPath = createAccessLogFile();
-		ftpService.send(accessLogPath, "/" + accessLogPath.getFileName(), idmsHost, idmsPort, idmsUsername,
-				idmsPassword);
+		ftpService.send(accessLogPath, "/" + accessLogPath.getFileName(), ftpHost, ftpPort, ftpUsername, ftpPassword);
 
 		// 로그 작성 시간 정보 수집 종료시간 포함하여 덮어쓰기
 		String endDttm = Helper.nowDateTimeString();
 		jobInfoPath = createJobInfoFile(beginDttm, endDttm);
-		ftpService.send(jobInfoPath, "/" + jobInfoPath.getFileName(), idmsHost, idmsPort, idmsUsername, idmsPassword);
+		ftpService.send(jobInfoPath, "/" + jobInfoPath.getFileName(), ftpHost, ftpPort, ftpUsername, ftpPassword);
 	}
 
 	@Async
 	public void login(String username, String userIp, String loginDttm) {
-		idmsRepository.insertLogin(username, userIp, loginDttm);
+		idmsLogRepository.insertLogin(username, userIp, loginDttm);
 	}
 
 	@Async
 	public void logout(String username, String userIp, String logoutDttm) {
-		idmsRepository.updateLogout(username, userIp, logoutDttm);
+		idmsLogRepository.updateLogout(username, userIp, logoutDttm);
 	}
 
 	/**
@@ -143,12 +141,11 @@ public class IdmsService {
 		 * Biz 사이트 IP - Biz 사이트 서버 IP(WAS IP)
 		 */
 		String wasIp = Helper.serverIp();
-		idmsRepository.insertMemberSearch(selDttm, wasIp, username, userIp, mbrId, mbrKorNm, pageId, funcCd, mbrCnt);
+		idmsLogRepository.insertMemberSearch(selDttm, wasIp, username, userIp, mbrId, mbrKorNm, pageId, funcCd, mbrCnt);
 	}
 
 	private Path createJobInfoFile(final String... dttm) {
-		Path jobInfoPath = Paths.get(Constant.APP_FILE_DIR,
-				bizSiteId + "_JOB_" + Helper.yesterdayDateString() + ".log");
+		Path jobInfoPath = Paths.get(Constant.APP_FILE_DIR, idmsId + "_JOB_" + Helper.yesterdayDateString() + ".log");
 
 		new CsvCreatorTemplate<String>() {
 			boolean done;
@@ -171,7 +168,7 @@ public class IdmsService {
 
 	private Path createMemberSearchLogFile() {
 		Path memberSearchLogPath = Paths.get(Constant.APP_FILE_DIR,
-				bizSiteId + "_CUS_" + Helper.yesterdayDateString() + ".log");
+				idmsId + "_CUS_" + Helper.yesterdayDateString() + ".log");
 
 		new CsvCreatorTemplate<Map<String, Object>>() {
 			boolean done;
@@ -181,7 +178,7 @@ public class IdmsService {
 					return Collections.emptyList();
 				}
 				done = true;
-				return idmsRepository.selectMemberSearchLogAtYesterday();
+				return idmsLogRepository.selectMemberSearchLogAtYesterday();
 			}
 
 			protected void printRecord(CSVPrinter printer, Map<String, Object> t) throws IOException {
@@ -193,8 +190,7 @@ public class IdmsService {
 	}
 
 	private Path createUserInfoFile() {
-		Path userInfoPath = Paths.get(Constant.APP_FILE_DIR,
-				bizSiteId + "_ID_" + Helper.yesterdayDateString() + ".log");
+		Path userInfoPath = Paths.get(Constant.APP_FILE_DIR, idmsId + "_ID_" + Helper.yesterdayDateString() + ".log");
 
 		new CsvCreatorTemplate<UserInfo>() {
 			boolean done;
@@ -220,7 +216,7 @@ public class IdmsService {
 
 	private Path createAccessLogFile() {
 		Path accessLogPath = Paths.get(Constant.APP_FILE_DIR,
-				bizSiteId + "_LOGIN_" + Helper.yesterdayDateString() + ".log");
+				idmsId + "_LOGIN_" + Helper.yesterdayDateString() + ".log");
 
 		new CsvCreatorTemplate<Map<String, Object>>() {
 			boolean done;
@@ -230,7 +226,7 @@ public class IdmsService {
 					return Collections.emptyList();
 				}
 				done = true;
-				return idmsRepository.selectAccessLogAtYesterday();
+				return idmsLogRepository.selectAccessLogAtYesterday();
 			}
 
 			protected void printRecord(CSVPrinter printer, Map<String, Object> t) throws IOException {

@@ -5,18 +5,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.skplanet.web.service.IdmsService;
+import com.skplanet.web.service.IdmsLogService;
 
 @RestController
 @RequestMapping("test")
 public class TestController {
 
 	@Autowired
-	private IdmsService idmsService;
+	private IdmsLogService idmsLogService;
 
 	@GetMapping("triggerIdms")
 	public void idms() {
-		idmsService.send();
+		idmsLogService.send();
 	}
 
 }
