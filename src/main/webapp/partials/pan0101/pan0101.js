@@ -75,11 +75,8 @@ angular.module('app').controller('PAN0101Ctrl', ['$scope', '$q', '$http', '$time
             });
         };
 
-        $scope.sendPts = function () {
-            $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: !!$scope.ptsMasking });
-            $scope.sendPtsPromise.finally(function () {
-
-            });
+        $scope.sendPts = function (ptsMasking) {
+            $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
         };
 
         authSvc.getUserInfo().then(function (userInfo) {
