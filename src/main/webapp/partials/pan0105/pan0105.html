@@ -65,16 +65,5 @@
 			<div class="grid-div" ui-grid="gridOptionsMembers" ui-grid-pagination ui-grid-resize-columns></div>
 		</div>
 	</div>
-	<div class="text-right bg-danger pts-form" cg-busy="{promise:sendPtsPromise, message:'Sending...'}">
-		<form class="form-inline">
-			<div class="form-group">
-				<label>PTS 계정</label>
-				<input type="text" class="form-control" ng-value="ptsUsername" size="10" readonly>
-			</div>
-			<div class="checkbox">
-				<label><strong>개인정보 마스킹 여부</strong> <input type="checkbox" ng-model="ptsMasking"></label>
-			</div>
-			<button type="button" class="btn btn-danger" ng-click="sendPts()" ng-disabled="!gridOptionsMembers.data.length">PTS 전송</button>
-		</form>
-	</div>
+	<div ng-include="'partials/common/pts-form-tpl.html'"></div>
 </div>

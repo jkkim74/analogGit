@@ -1,0 +1,16 @@
+<div class="text-right bg-danger pts-form" cg-busy="sendPtsPromise">
+	<form class="form-inline">
+		<div class="input-group">
+			<span class="input-group-addon">PTS 계정</span>
+			<input type="text" class="form-control" ng-value="ptsUsername" size="10" readonly>
+		</div>
+		<div class="input-group">
+			<span class="input-group-addon"><i class="fa fa-asterisk"></i> 개인정보 마스킹</span>
+			<div class="input-group-btn" ng-init="ptsMasking = true">
+				<button class="btn btn-default" ng-class="{'btn-info': ptsMasking}" ng-model="ptsMasking" uib-btn-radio="true">함</button>
+				<button class="btn btn-default" ng-class="{'btn-info': !ptsMasking}" ng-model="ptsMasking" uib-btn-radio="false">안함</button>
+			</div>
+		</div>
+		<button type="button" class="btn btn-danger" ng-click="sendPts()" ng-disabled="!gridOptionsMembers.data.length">PTS 전송</button>
+	</form>
+</div>
