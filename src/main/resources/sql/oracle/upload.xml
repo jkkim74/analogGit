@@ -60,7 +60,7 @@
 		TRUNCATE TABLE TMP_${pageId}_${username}
 	</update>
 
-	<select id="selectUploadedPreview" parameterType="map" resultType="AutoMap">
+	<select id="selectUploaded" parameterType="map" resultType="AutoMap">
 		<choose>
 			<when test="pageId != null and pageId == 'PAN0103'">
 				SELECT *
@@ -90,11 +90,11 @@
 			</otherwise>
 		</choose>
 	</select>
-	<select id="selectUploadedPreview" parameterType="map" resultType="AutoMap" databaseId="hsql">
+	<select id="selectUploaded" parameterType="map" resultType="AutoMap" databaseId="hsql">
 		SELECT * FROM TMP_${pageId}_${username} LIMIT 0, 100
 	</select>
 
-	<select id="countUploadedPreview" parameterType="map" resultType="int">
+	<select id="countUploaded" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM TMP_${pageId}_${username}
 	</select>
 

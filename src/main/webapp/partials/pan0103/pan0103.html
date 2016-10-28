@@ -27,7 +27,9 @@
 		</div>
 		<div class="col-md-6">
 			<label>업로드 미리보기</label>
-			<div ui-grid="gridOptionsPreview" ui-grid-resize-columns></div>
+			<div cg-busy="previewPromise">
+				<div ui-grid="gridOptionsPreview" ui-grid-resize-columns></div>
+			</div>
 		</div>
 	</div>
 	<hr>

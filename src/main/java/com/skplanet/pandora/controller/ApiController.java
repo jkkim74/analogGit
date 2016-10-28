@@ -23,8 +23,6 @@ import com.skplanet.web.model.ApiResponse;
 import com.skplanet.web.model.AutoMap;
 import com.skplanet.web.model.TransmissionType;
 import com.skplanet.web.model.UploadProgress;
-import com.skplanet.web.model.UploadStatus;
-import com.skplanet.web.repository.mysql.UploadMetaRepository;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.service.IdmsLogService;
 import com.skplanet.web.service.SshService;
@@ -45,10 +43,7 @@ public class ApiController {
 	private QueryCacheRepository querycacheRepository;
 
 	@Autowired
-	private UploadMetaRepository metaRepository;
-
-	@Autowired
-	private UploadTempRepository tempRepository;
+	private UploadTempRepository uploadTempRepository;
 
 	@Autowired
 	private UploadService uploadService;
@@ -92,28 +87,19 @@ public class ApiController {
 	}
 
 	@GetMapping("files")
-	public ApiResponse getUploadedPreview(@RequestParam String pageId,
+	public ApiResponse getUploaded(@RequestParam String pageId,
 			@RequestParam(defaultValue = "false") boolean countOnly) {
 
 		String username = Helper.currentUser().getUsername();
 
 		if (countOnly) {
-			// 업로드 진행상태 체크 용도
-			UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
+			UploadProgress uploadProgress = uploadService.getUploadProgress(pageId, username);
 
-			if (uploadProgress == null) {
-				return ApiResponse.builder().code(910).message("업로드를 먼저 해주세요").build();
-			}
+			int count = uploadTempRepository.countUploaded(pageId, username);
 
-			int count = tempRepository.countUploadedPreview(pageId, username);
-
-			if (uploadProgress.getUploadStatus() == UploadStatus.FINISH) {
-				return ApiResponse.builder().code(910).message(UploadStatus.FINISH.toString()).totalItems(count)
-						.build();
-			}
-			return ApiResponse.builder().totalItems(count).build();
+			return ApiResponse.builder().message(uploadProgress.getUploadStatus().toString()).totalItems(count).build();
 		} else {
-			List<AutoMap> list = tempRepository.selectUploadedPreview(pageId, username);
+			List<AutoMap> list = uploadTempRepository.selectUploaded(pageId, username);
 			return ApiResponse.builder().value(list).build();
 		}
 	}

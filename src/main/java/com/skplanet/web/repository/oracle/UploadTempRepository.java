@@ -16,8 +16,8 @@ public interface UploadTempRepository {
 
 	void truncateTable(@Param("pageId") String pageId, @Param("username") String username);
 
-	List<AutoMap> selectUploadedPreview(@Param("pageId") String pageId, @Param("username") String username);
+	List<AutoMap> selectUploaded(@Param("pageId") String pageId, @Param("username") String username);
 
-	int countUploadedPreview(@Param("pageId") String pageId, @Param("username") String username);
+	int countUploaded(@Param("pageId") String pageId, @Param("username") String username);
 
 }

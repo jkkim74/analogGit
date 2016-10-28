@@ -3,8 +3,6 @@
 angular.module('App').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'authSvc', 'FileSaver',
     function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, authSvc, FileSaver) {
 
-        var self = this;
-
         $scope.selectOptions = [
             { label: '회원ID', value: 'mbrId' },
             { label: '카드번호', value: 'cardNo' },
@@ -61,20 +59,38 @@ angular.module('App').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$time
         $scope.upload = function (file) {
             $scope.uploadPromise = apiSvc.upload({ file: file, columnName: $scope.selectedOption.value });
             $scope.uploadPromise.then(function () {
-                self.checkUploadProgress();
-                return apiSvc.getUploadedPreview();
-            }).then(function (data) {
-                $scope.gridOptionsPreview.data = data.value;
+                $scope.checkUploadProgress();
+                $scope.getUploadedPreview();
             });
         };
 
-        self.checkUploadProgress = function () {
-            apiSvc.getUploadProgress().finally(function () {
-                $scope.uploadStatusIsRunning = false;
-            }, function (totalItems) {
-                $scope.uploadStatusIsRunning = true;
-                $scope.uploadedItems = totalItems;
-            });
+        $scope.checkUploadProgress = function () {
+            // 업로드 끝 flag 까지 재귀반복
+            $timeout(function () {
+                apiSvc.getUploaded({ countOnly: true }).then(function (data) {
+                    $scope.uploadedItems = data.totalItems;
+
+                    if (data.message === 'FINISH') {
+                        $scope.uploadStatusIsRunning = false;
+                    } else {
+                        $scope.uploadStatusIsRunning = true;
+                        $scope.checkUploadProgress();
+                    }
+                });
+            }, 1000);
+        };
+
+        $scope.getUploadedPreview = function () {
+            // 1건 이상 가져올 때까지 재귀반복
+            $scope.previewPromise = $timeout(function () {
+                apiSvc.getUploaded().then(function (data) {
+                    if (data.value.length > 0) {
+                        $scope.gridOptionsPreview.data = data.value;
+                    } else {
+                        $scope.getUploadedPreview();
+                    }
+                });
+            }, 1000);
         };
 
         $scope.loadMembers = function (offset, limit) {

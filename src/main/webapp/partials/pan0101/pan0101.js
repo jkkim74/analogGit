@@ -3,8 +3,6 @@
 angular.module('App').controller('PAN0101Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'authSvc',
     function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, authSvc) {
 
-        var self = this;
-
         $scope.selectOptions = [
             { label: '회원ID', value: 'mbrId' },
             { label: 'OCB닷컴 로그인ID', value: 'ocbcomLgnId' },
@@ -44,17 +42,24 @@ angular.module('App').controller('PAN0101Ctrl', ['$scope', '$q', '$http', '$time
         $scope.upload = function (file) {
             $scope.uploadPromise = apiSvc.upload({ file: file, columnName: $scope.selectedOption.value });
             $scope.uploadPromise.then(function () {
-                self.checkUploadProgress();
+                $scope.checkUploadProgress();
             });
         };
 
-        self.checkUploadProgress = function () {
-            apiSvc.getUploadProgress().finally(function () {
-                $scope.uploadStatusIsRunning = false;
-            }, function (totalItems) {
-                $scope.uploadStatusIsRunning = true;
-                $scope.uploadedItems = totalItems;
-            });
+        $scope.checkUploadProgress = function () {
+            // 업로드 끝 flag 까지 재귀반복
+            $timeout(function () {
+                apiSvc.getUploaded({ countOnly: true }).then(function (data) {
+                    $scope.uploadedItems = data.totalItems;
+
+                    if (data.message === 'FINISH') {
+                        $scope.uploadStatusIsRunning = false;
+                    } else {
+                        $scope.uploadStatusIsRunning = true;
+                        $scope.checkUploadProgress();
+                    }
+                });
+            }, 1000);
         };
 
         $scope.loadMembers = function (offset, limit) {

@@ -165,14 +165,20 @@ public class UploadService {
 	}
 
 	public UploadProgress getFinishedUploadProgress(String pageId, String username) {
+		UploadProgress uploadProgress = getUploadProgress(pageId, username);
+
+		if (uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
+			throw new BizException("업로드 중입니다");
+		}
+
+		return uploadProgress;
+	}
+
+	public UploadProgress getUploadProgress(String pageId, String username) {
 		UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
 
 		if (uploadProgress == null) {
 			throw new BizException("업로드를 먼저 해주세요");
-		}
-
-		if (uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
-			throw new BizException("업로드 중입니다");
 		}
 
 		return uploadProgress;
