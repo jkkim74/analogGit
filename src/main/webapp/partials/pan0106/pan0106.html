@@ -27,7 +27,7 @@
 	</div>
 	<hr>
 	<div>
-		<button type="button" class="btn btn-info" ng-click="loadMembers()" ng-disabled="uploadedItems <= 0">조회</button>
+		<button type="button" class="btn btn-primary" ng-click="loadMembers()" ng-disabled="uploadedItems <= 0">조회</button>
 		<div cg-busy="membersPromise">
 			<div class="grid-div" ui-grid="gridOptionsMembers" ui-grid-pagination ui-grid-resize-columns ui-grid-selection></div>
 		</div>

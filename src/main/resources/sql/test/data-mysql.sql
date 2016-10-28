@@ -1,4 +1,4 @@
-insert into users(username, password, enabled, create_dttm, begin_dttm) values('user', 'user', 1, '20160801090000', '20160801090000');
+insert into users(username, password, enabled, pts_username, create_dttm, begin_dttm) values('user', 'user', 1, 'co23835', '20160801090000', '20160801090000');
 insert into authorities(username, authority) values('user', 'ROLE_USER');
 insert into authorities(username, authority) values('user', 'ROLE_ADMIN');
 insert into page_access(username, page_id) values('user', 'PAN0101');
