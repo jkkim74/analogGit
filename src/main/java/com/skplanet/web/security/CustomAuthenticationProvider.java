@@ -90,7 +90,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 				// throw new InternalAuthenticationServiceException(resultMsg);
 			}
 		} catch (IOException e) {
-			throw new InternalAuthenticationServiceException("IDMS Error", e);
+			log.info(e.toString());
+			// throw new InternalAuthenticationServiceException("IDMS Error", e);
 		}
 	}
 
