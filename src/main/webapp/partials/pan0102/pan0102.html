@@ -1,11 +1,11 @@
 <div class="section-content">
 	<div class="upload-form">
 		<label>조회조건</label>
-		<form class="form-inline">
+		<form class="form-inline" name="form">
 			<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
 				ng-model="selectedOption"></select>
-			<input type="text" class="form-control" ng-model="searchKeyword" ng-required>
-			<button type="button" class="btn btn-primary" ng-click="searchAll(selectedOption.value, searchKeyword)">조회</button>
+			<input type="text" class="form-control" ng-model="searchKeyword" ng-required="true">
+			<button type="button" class="btn btn-primary" ng-click="searchAll()" ng-disabled="form.$invalid">조회</button>
 		</form>
 	</div>
 

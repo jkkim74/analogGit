@@ -286,8 +286,11 @@ angular.module('App').controller('PAN0102Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         // 조회
-        $scope.searchAll = function (searchType, searchKeyword) {
-            var params = { searchType: searchType, searchKeyword: searchKeyword };
+        $scope.searchAll = function () {
+            var params = {
+                searchType: $scope.selectedOption.value,
+                searchKeyword: $scope.searchKeyword
+            };
 
             $scope.memberInfoPromise = apiSvc.getMemberInfo(params);
             $scope.memberInfoPromise.then(function (data) {
