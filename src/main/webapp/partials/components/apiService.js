@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App').service('apiSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$stateParams', 'toastr', 'authSvc', 'Upload',
+angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$stateParams', 'toastr', 'authSvc', 'Upload',
     function ($log, $q, $http, $httpParamSerializer, $stateParams, toastr, authSvc, Upload) {
 
         function ApiGet(command) {

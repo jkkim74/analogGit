@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App').service('authSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$timeout', '$window', '$state', 'toastr', '$uibModalStack', 'appInfo',
+angular.module('app').service('authSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$timeout', '$window', '$state', 'toastr', '$uibModalStack', 'appInfo',
     function ($log, $q, $http, $httpParamSerializer, $timeout, $window, $state, toastr, $uibModalStack, appInfo) {
 
         var self = this;

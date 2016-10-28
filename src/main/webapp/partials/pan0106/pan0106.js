@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App').controller('PAN0106Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'authSvc',
+angular.module('app').controller('PAN0106Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'authSvc',
     function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, authSvc) {
 
         $scope.selectOptions = [

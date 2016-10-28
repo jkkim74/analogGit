@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App').component('clphnNoDupModal', {
+angular.module('app').component('clphnNoDupModal', {
     templateUrl: 'partials/common/grid-modal-tpl.html',
     bindings: {
         resolve: '<',

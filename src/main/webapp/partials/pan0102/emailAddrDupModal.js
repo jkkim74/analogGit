@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App').component('emailAddrDupModal', {
+angular.module('app').component('emailAddrDupModal', {
     templateUrl: 'partials/common/grid-modal-tpl.html',
     bindings: {
         resolve: '<',

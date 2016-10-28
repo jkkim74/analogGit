@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App').constant('appInfo', {
+angular.module('app').constant('appInfo', {
     entryPage: 'PAN0101'
 }).value('cgBusyDefaults', {
     message: 'Waiting...'

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App').controller('PAN0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', '$uibModal',
+angular.module('app').controller('PAN0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', '$uibModal',
     function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, $uibModal) {
 
         // 조회 조건
