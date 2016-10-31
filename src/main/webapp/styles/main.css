@@ -35,7 +35,7 @@ a {
 
 .section-login {
     padding-top: 40vh;
-    width: 60vw;
+    /*width: 60vw;*/
 }
 
 .drop-box {
@@ -68,4 +68,8 @@ a {
     color: white;
     background-color: #2b2f3a;
     cursor: pointer;
+}
+
+.bg-white {
+    background-color: white;
 }

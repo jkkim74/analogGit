@@ -5,4 +5,10 @@
 }
 .navbar-default .navbar-nav > li > a:hover {
     color: #f25053;
-} 
+}
+
+.table-hover tbody tr:hover {
+    cursor: pointer;
+    background-color: #2b2f3a;
+    color: white;
+}
