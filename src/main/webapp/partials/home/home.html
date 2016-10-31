@@ -1,83 +1,81 @@
-<div class="section-login center-block">
-	<div ng-show="!isAuthenticated">
-		<form name="loginForm" ng-submit="authenticate()" cg-busy="loginPromise">
-			<div class="col-md-5">
-				<div class="input-group input-group-lg">
-					<span class="input-group-addon">아이디</span>
-					<input type="text" class="form-control" placeholder="Pnet ID" name="username" ng-model="username" ng-required="true" autofocus>
-				</div>
+<div ng-show="!isAuthenticated" class="container section-login">
+	<form name="loginForm" ng-submit="authenticate()" cg-busy="loginPromise">
+		<div class="col-md-5">
+			<div class="input-group input-group-lg">
+				<span class="input-group-addon">아이디</span>
+				<input type="text" class="form-control" placeholder="Pnet ID" name="username" ng-model="username" ng-required="true" autofocus>
 			</div>
-			<div class="col-md-5">
-				<div class="input-group input-group-lg">
-					<span class="input-group-addon">비밀번호</span>
-					<input type="password" class="form-control" placeholder="Pnet Password" name="password" ng-model="password" ng-required="true"
-						ng-minlength="4">
-				</div>
-			</div>
-			<div class="col-md-2">
-				<button type="submit" class="btn btn-lg btn-danger" ng-disabled="loginForm.$invalid">로그인</button>
-			</div>
-		</form>
-	</div>
-
-	<div ng-show="isAuthenticated" class="container">
-		<table class="table table-bordered table-hover bg-white">
-			<thead>
-				<th class="text-center" style="width:200px;">메뉴</th>
-				<th class="text-center">관련 업무 설명</th>
-				<th class="text-center" style="width:400px;">주 사용자</th>
-				<th class="text-center" style="width:100px;">내 권한 유무</th>
-			</thead>
-			<tbody class="text-center">
-				<tr ui-sref="index.page({pageId: 'pan0101'})" uib-tooltip="이동하기" tooltip-placement="bottom">
-					<td>멤버 ID 일괄 전환</td>
-					<td class="text-left">OCB회원의 서비스 별 고객 키에 대한 빠른 변환 작업</td>
-					<td>현업 및 분석지원인력</td>
-					<td>{{isAllowedPage('PAN0101') ? 'Y' : ''}}</td>
-				</tr>
-				<tr ui-sref="index.page({pageId: 'pan0103'})" uib-tooltip="이동하기" tooltip-placement="bottom">
-					<td>배치 적립 파일 검증</td>
-					<td class="text-left">배치 적립 전 정상 OCB 카드 여부와<br> 카드번호기준 CI / 성명 등이 일치하는지를 사전 검증</td>
-					<td>현업 매니저</td>
-					<td>{{isAllowedPage('PAN0103') ? 'Y' : ''}}</td>
-				</tr>
-				<tr ui-sref="index.page({pageId: 'pan0104'})" uib-tooltip="이동하기" tooltip-placement="bottom">
-					<td>시효 만료 포인트 사전 고지</td>
-					<td class="text-left">포인트 시효 만료 (소멸) 모수 조회 및 포인트 실효 사전 안내 자동화</td>
-					<td>현업 매니저</td>
-					<td>{{isAllowedPage('PAN0104') ? 'Y' : ''}}</td>
-				</tr>
-				<tr ui-sref="index.page({pageId: 'pan0106'})" uib-tooltip="이동하기" tooltip-placement="bottom">
-					<td>회원 프로파일 분석</td>
-					<td class="text-left">다수의 MBR_ID별 회원 기본 정보에 대한 정보 확인<br> - 캠페인 성과 분석<br> - 제휴사/가맹점 고객 분석 리포팅</td>
-					<td>현업 매니저</td>
-					<td>{{isAllowedPage('PAN0106') ? 'Y' : ''}}</td>
-				</tr>
-				<tr ui-sref="index.page({pageId: 'pan0102'})" uib-tooltip="이동하기" tooltip-placement="bottom">
-					<td>고객 정보 기본 조회</td>
-					<td class="text-left">회원ID/OCB카드번호/OCB닷컴로그인ID 조건으로 회원의 기본적인 상태 및 회원 원장 정보 확인 필요시</td>
-					<td>CS팀 및 민원 관련 대응 현업 매니저</td>
-					<td>{{isAllowedPage('PAN0102') ? 'Y' : ''}}</td>
-				</tr>
-				<tr ui-sref="index.page({pageId: 'pan0102'})" uib-tooltip="이동하기" tooltip-placement="bottom">
-					<td>고객 정보 상세 조회</td>
-					<td class="text-left">회원ID/OCB카드번호/OCB닷컴로그인ID 조건으로 장기 거래 실적, 동의 이력 및 메일 발송 이력 조회 필요시</td>
-					<td>CS팀 및 미원 관련 대응<br> NXCUS에서 응대할 수 없는 6개월 이상 실적 조회시</td>
-					<td>{{isAllowedPage('PAN0102') ? 'Y' : ''}}</td>
-				</tr>
-				<tr ui-sref="index.page({pageId: 'pan0105'})" uib-tooltip="이동하기" tooltip-placement="bottom">
-					<td>거래 실적 및 유실적 고객 추출</td>
-					<td class="text-left">다수의 회원ID/카드번호/가맹점 코드를 조건으로 단순한 TR정보를 추출하는 업무<br> - 단체 카드 정산 증빙 (TR)<br> - 주유소 등의 정상 증빙 (TR)<br> - KFC PGP 적립 대상 선정을
-						위해 특정 기간동안 유실적 고객 추출 (MBR_ID 추출)<br> - 특정 제휴사 / 가맹점 유실적 고객 대상 타겟팅 (MBR_ID 추출)</td>
-					<td>특정 회원들의 TR전체 추출(요약없는 단순 조건 추출)<br> 또는 특정 조건으로 리스트 추출 대상 업무</td>
-					<td>{{isAllowedPage('PAN0105') ? 'Y' : ''}}</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<div class="text-center">
-			<button ng-show="isAllowedPage('PAN0002')" ui-sref="index.page({pageId: 'pan0002'})" type="button" class="btn btn-default btn-lg">사용자 등록 관리 바로가기</button>
-			<button ng-show="isAllowedPage('PAN0003')" ui-sref="index.page({pageId: 'pan0003'})" type="button" class="btn btn-default btn-lg">화면 권한 관리 바로가기</button>
 		</div>
+		<div class="col-md-5">
+			<div class="input-group input-group-lg">
+				<span class="input-group-addon">비밀번호</span>
+				<input type="password" class="form-control" placeholder="Pnet Password" name="password" ng-model="password" ng-required="true"
+					ng-minlength="4">
+			</div>
+		</div>
+		<div class="col-md-2">
+			<button type="submit" class="btn btn-lg btn-danger" ng-disabled="loginForm.$invalid">로그인</button>
+		</div>
+	</form>
+</div>
+
+<div ng-show="isAuthenticated" class="section-home container">
+	<table class="table table-bordered table-hover bg-white">
+		<thead>
+			<th class="text-center" style="width:200px;">메뉴</th>
+			<th class="text-center">관련 업무 설명</th>
+			<th class="text-center" style="width:400px;">주 사용자</th>
+			<th class="text-center" style="width:100px;">내 권한 유무</th>
+		</thead>
+		<tbody class="text-center">
+			<tr ui-sref="index.page({pageId: 'pan0101'})">
+				<td>멤버 ID 일괄 전환</td>
+				<td class="text-left">OCB회원의 서비스 별 고객 키에 대한 빠른 변환 작업</td>
+				<td>현업 및 분석지원인력</td>
+				<td>{{isAllowedPage('PAN0101') ? 'Y' : ''}}</td>
+			</tr>
+			<tr ui-sref="index.page({pageId: 'pan0103'})">
+				<td>배치 적립 파일 검증</td>
+				<td class="text-left">배치 적립 전 정상 OCB 카드 여부와<br> 카드번호기준 CI / 성명 등이 일치하는지를 사전 검증</td>
+				<td>현업 매니저</td>
+				<td>{{isAllowedPage('PAN0103') ? 'Y' : ''}}</td>
+			</tr>
+			<tr ui-sref="index.page({pageId: 'pan0104'})">
+				<td>시효 만료 포인트 사전 고지</td>
+				<td class="text-left">포인트 시효 만료 (소멸) 모수 조회 및 포인트 실효 사전 안내 자동화</td>
+				<td>현업 매니저</td>
+				<td>{{isAllowedPage('PAN0104') ? 'Y' : ''}}</td>
+			</tr>
+			<tr ui-sref="index.page({pageId: 'pan0106'})">
+				<td>회원 프로파일 분석</td>
+				<td class="text-left">다수의 MBR_ID별 회원 기본 정보에 대한 정보 확인<br> - 캠페인 성과 분석<br> - 제휴사/가맹점 고객 분석 리포팅</td>
+				<td>현업 매니저</td>
+				<td>{{isAllowedPage('PAN0106') ? 'Y' : ''}}</td>
+			</tr>
+			<tr ui-sref="index.page({pageId: 'pan0102'})">
+				<td>고객 정보 기본 조회</td>
+				<td class="text-left">회원ID/OCB카드번호/OCB닷컴로그인ID 조건으로 회원의 기본적인 상태 및 회원 원장 정보 확인 필요시</td>
+				<td>CS팀 및 민원 관련 대응 현업 매니저</td>
+				<td>{{isAllowedPage('PAN0102') ? 'Y' : ''}}</td>
+			</tr>
+			<tr ui-sref="index.page({pageId: 'pan0102'})">
+				<td>고객 정보 상세 조회</td>
+				<td class="text-left">회원ID/OCB카드번호/OCB닷컴로그인ID 조건으로 장기 거래 실적, 동의 이력 및 메일 발송 이력 조회 필요시</td>
+				<td>CS팀 및 미원 관련 대응<br> NXCUS에서 응대할 수 없는 6개월 이상 실적 조회시</td>
+				<td>{{isAllowedPage('PAN0102') ? 'Y' : ''}}</td>
+			</tr>
+			<tr ui-sref="index.page({pageId: 'pan0105'})">
+				<td>거래 실적 및 유실적 고객 추출</td>
+				<td class="text-left">다수의 회원ID/카드번호/가맹점 코드를 조건으로 단순한 TR정보를 추출하는 업무<br> - 단체 카드 정산 증빙 (TR)<br> - 주유소 등의 정상 증빙 (TR)<br> - KFC PGP 적립 대상 선정을 위해
+					특정 기간동안 유실적 고객 추출 (MBR_ID 추출)<br> - 특정 제휴사 / 가맹점 유실적 고객 대상 타겟팅 (MBR_ID 추출)</td>
+				<td>특정 회원들의 TR전체 추출(요약없는 단순 조건 추출)<br> 또는 특정 조건으로 리스트 추출 대상 업무</td>
+				<td>{{isAllowedPage('PAN0105') ? 'Y' : ''}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="text-center">
+		<button ng-show="isAllowedPage('PAN0002')" ui-sref="index.page({pageId: 'pan0002'})" type="button" class="btn btn-default btn-lg">사용자 등록 관리 바로가기</button>
+		<button ng-show="isAllowedPage('PAN0003')" ui-sref="index.page({pageId: 'pan0003'})" type="button" class="btn btn-default btn-lg">화면 권한 관리 바로가기</button>
 	</div>
 </div>
