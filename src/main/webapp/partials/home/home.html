@@ -2,13 +2,13 @@
 	<form name="loginForm" ng-submit="authenticate()" cg-busy="loginPromise">
 		<div class="col-md-5">
 			<div class="input-group input-group-lg">
-				<span class="input-group-addon">아이디</span>
+				<span class="input-group-addon"><i class="fa fa-user-circle-o"></i> 아이디</span>
 				<input type="text" class="form-control" placeholder="Pnet ID" name="username" ng-model="username" ng-required="true" autofocus>
 			</div>
 		</div>
 		<div class="col-md-5">
 			<div class="input-group input-group-lg">
-				<span class="input-group-addon">비밀번호</span>
+				<span class="input-group-addon"><i class="fa fa-asterisk"></i> 비밀번호</span>
 				<input type="password" class="form-control" placeholder="Pnet Password" name="password" ng-model="password" ng-required="true"
 					ng-minlength="4">
 			</div>
