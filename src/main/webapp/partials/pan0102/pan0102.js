@@ -40,7 +40,7 @@ angular.module('app').controller('PAN0102Ctrl', ['$scope', '$q', '$http', '$time
                 { field: 'clphnNoDt', displayName: '휴대전화번호 최종 유입 출처/일자', width: 100, cellTooltip: true, headerTooltip: true },
                 {
                     field: 'clphnNoDupYn', displayName: '휴대전화번호 중복 여부', width: 100, cellTooltip: true, headerTooltip: true,
-                    cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'popup-cell\': row.entity.clphnNoDupYn === \'Y\'}" title="TOOLTIP" ng-click="row.entity.clphnNoDupYn === \'Y\' && grid.appScope.openDupModal(\'clphnNoDup\', row.entity.mbrId)">{{ COL_FIELD CUSTOM_FILTERS }}</div>'
+                    cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'popup-cell\': row.entity.clphnNoDupYn === \'Y\'}" title="TOOLTIP" ng-click="row.entity.clphnNoDupYn === \'Y\' && grid.appScope.openDupModal(\'clphnNoDupModal\', row.entity.mbrId)">{{ COL_FIELD CUSTOM_FILTERS }}</div>'
                 },
                 { field: 'homeTelNo', displayName: '자택전화번호', width: 150, cellTooltip: true, headerTooltip: true },
                 { field: 'homeTelNoDt', displayName: '자택전화번호 최종 유입 출처/일자', width: 100, cellTooltip: true, headerTooltip: true },
@@ -184,8 +184,8 @@ angular.module('app').controller('PAN0102Ctrl', ['$scope', '$q', '$http', '$time
                 $scope.gridOptionsMarketingMemberInfo.data = data;
             });
 
-            $scope.memberInfoHistoryPromise = apiSvc.getMarketingMemberInfoHistory(params);
-            $scope.memberInfoHistoryPromise.then(function (data) {
+            $scope.marketingMemberInfoHistoryPromise = apiSvc.getMarketingMemberInfoHistory(params);
+            $scope.marketingMemberInfoHistoryPromise.then(function (data) {
                 $scope.gridOptionsMarketingMemberInfoHistory.data = data;
             });
 
