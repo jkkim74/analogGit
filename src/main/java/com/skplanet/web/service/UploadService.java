@@ -122,12 +122,6 @@ public class UploadService {
 			if (numberOfColumns - 1 != StringUtils.countOccurrencesOf(firstLine, ",")) {
 				throw new BizException("파일 양식을 확인해 주세요. " + numberOfColumns + "개의 열이 필요합니다");
 			}
-
-			// 혹시 모르니 2번째 줄도 확인.
-			String secondLine = reader.readLine();
-			if (numberOfColumns - 1 != StringUtils.countOccurrencesOf(secondLine, ",")) {
-				throw new BizException("파일 양식을 확인해 주세요. " + numberOfColumns + "개의 열이 필요합니다");
-			}
 		} catch (IOException e) {
 			throw new BizException("Failed to read a file while the uploaded one validating", e);
 		}
