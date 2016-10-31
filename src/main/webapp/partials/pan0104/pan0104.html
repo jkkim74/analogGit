@@ -29,61 +29,55 @@
 			</div>
 		</div>
 	</div>
-	<hr>
+	<br>
 	<div>
-		<div class="row">
-			<div class="col-md-6">
-				<label>전송 대상 조회</label>
-				<div class="row">
-					<div class="col-md-6">
-						<form class="form-horizontal">
-							<div class="form-group">
-								<label class="col-sm-4 control-label">기준년월</label>
-								<div class="col-sm-8">
-									<select class="form-control" ng-init="selectedOption2 = selectOptions2[0]" ng-options="option.label for option in selectOptions2"
-										ng-model="selectedOption2"></select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-4 control-label">고객성명</label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" placeholder="ex) 홍길동" ng-model="mbrKorNm">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-4 control-label">OCB닷컴 United ID</label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" ng-model="unitedId">
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class="col-md-6">
-						<form class="form-horizontal">
-							<div class="form-group">
-								<label class="col-sm-4 control-label">전송 주체</label>
-								<div class="col-sm-8">
-									<select class="form-control" ng-init="selectedOption3 = selectOptions3[0]" ng-options="option.label for option in selectOptions3"
-										ng-model="selectedOption3"></select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-4 control-label">휴대폰번호</label>
-								<div class="col-sm-8">
-									<input type="tel" class="form-control" placeholder="ex) 01012345678 ('-' 없이)" ng-model="clphnNo">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-4 control-label">이메일주소</label>
-								<div class="col-sm-8">
-									<input type="email" class="form-control" placeholder="ex) user@email.com" ng-model="emailAddr">
-								</div>
-							</div>
-						</form>
-					</div>
+		<legend>전송 대상 조회</legend>
+		<form class="form-inline">
+			<div class="form-group">
+				<div class="input-group">
+					<label class="input-group-addon">기준년월</label>
+					<select class="form-control" ng-init="selectedOption2 = selectOptions2[0]" ng-options="option.label for option in selectOptions2"
+						ng-model="selectedOption2"></select>
 				</div>
 			</div>
-		</div>
+			<div class="form-group">
+				<div class="input-group">
+					<label class="input-group-addon">전송 주체</label>
+					<select class="form-control" ng-init="selectedOption3 = selectOptions3[0]" ng-options="option.label for option in selectOptions3"
+						ng-model="selectedOption3"></select>
+				</div>
+			</div>
+			<br>
+		</form>
+		<br>
+		<form class="form-inline">
+			<div class="form-group">
+				<div class="input-group">
+					<label class="input-group-addon">고객성명</label>
+					<input type="text" class="form-control" placeholder="ex) 홍길동" ng-model="mbrKorNm">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="input-group">
+					<label class="input-group-addon">OCB닷컴 United ID</label>
+					<input type="text" class="form-control" ng-model="unitedId">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="input-group">
+					<label class="input-group-addon">휴대폰번호</label>
+					<input type="tel" class="form-control" placeholder="ex) 01012345678" ng-model="clphnNo">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="input-group">
+					<label class="input-group-addon">이메일주소</label>
+					<input type="email" class="form-control" placeholder="ex) user@email.com" ng-model="emailAddr">
+				</div>
+			</div>
+		</form>
+		<br>
+
 		<button type="button" class="btn btn-primary" ng-click="searchTargets()"><i class="fa fa-search"></i> 조회</button>
 		<div cg-busy="targetsPromise">
 			<div class="grid-div" ui-grid="gridOptionsTargets" ui-grid-pagination ui-grid-resize-columns ui-grid-selection></div>
