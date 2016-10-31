@@ -7,6 +7,7 @@ insert into page_access(username, page_id) values('user', 'PAN0103');
 insert into page_access(username, page_id) values('user', 'PAN0104');
 insert into page_access(username, page_id) values('user', 'PAN0105');
 insert into page_access(username, page_id) values('user', 'PAN0106');
+insert into page_access(username, page_id) values('user', 'PAN0107');
 insert into page_access(username, page_id) values('user', 'PAN0002');
 insert into page_access(username, page_id) values('user', 'PAN0003');
 insert into page_access(username, page_id) values('user', 'CTAS0101');

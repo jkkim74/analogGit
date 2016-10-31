@@ -1,11 +1,21 @@
 <div class="section-content">
 	<div class="upload-form">
-		<label>조회조건</label>
 		<form class="form-inline" name="form">
-			<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
-				ng-model="selectedOption"></select>
-			<input type="text" class="form-control" ng-model="searchKeyword" ng-required="true">
-			<button type="button" class="btn btn-primary" ng-click="searchAll()" ng-disabled="form.$invalid">조회</button>
+			<div class="form-group">
+				<div class="input-group">
+					<div class="input-group-addon">조회조건</div>
+					<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
+						ng-model="selectedOption"></select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="input-group">
+					<input type="text" class="form-control" ng-model="searchKeyword" ng-required="true">
+					<div class="input-group-btn">
+						<button type="button" class="btn btn-primary" ng-click="searchAll()" ng-disabled="form.$invalid"><i class="fa fa-search"></i> 조회</button>
+					</div>
+				</div>
+			</div>
 		</form>
 	</div>
 
@@ -20,25 +30,6 @@
 		<div class="panel-heading"><strong>회원 원장</strong></div>
 		<div cg-busy="memberInfoPromise">
 			<div ui-grid="gridOptionsMemberInfo" ui-grid-resize-columns></div>
-		</div>
-	</div>
-
-	<div class="panel panel-info">
-		<div class="panel-heading"><strong>마케팅 동의 내역</strong></div>
-		<div cg-busy="agreementInfoPromise">
-			<div ui-grid="gridOptionsAgreementInfo" ui-grid-resize-columns></div>
-		</div>
-	</div>
-
-	<div class="panel panel-info">
-		<div class="panel-heading"><strong>채널 가입 현황</strong></div>
-		<div class="row">
-			<div class="col-md-6" cg-busy="joinInfoOcbappPromise">
-				<div ui-grid="gridOptionsJoinInfoOcbapp"></div>
-			</div>
-			<div class="col-md-6" cg-busy="joinInfoOcbcomPromise">
-				<div ui-grid="gridOptionsJoinInfoOcbcom"></div>
-			</div>
 		</div>
 	</div>
 
@@ -77,37 +68,4 @@
 		</div>
 	</div>
 
-	<div class="panel panel-info">
-		<div class="panel-heading form-inline">
-			<strong>거래 내역</strong>
-			<select class="form-control input-sm" ng-model="trxType" ng-change="changeTrxType()">
-				<option value="">전체</option>
-				<option value="01">일반</option>
-				<option value="02">주유</option>
-			</select>
-		</div>
-		<div cg-busy="transactionHistoryPromise">
-			<div ui-grid="gridOptionsTransactionHistory" ui-grid-resize-columns></div>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-md-6">
-			<div class="panel panel-info">
-				<div class="panel-heading"><strong>이메일 발송 이력</strong></div>
-				<div cg-busy="emailSendHistoryPromise">
-					<div ui-grid="gridOptionsEmailSendHistory" ui-grid-resize-columns></div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-md-6">
-			<div class="panel panel-info">
-				<div class="panel-heading"><strong>앱 푸시 이력</strong></div>
-				<div cg-busy="appPushHistoryPromise">
-					<div ui-grid="gridOptionsAppPushHistory" ui-grid-resize-columns></div>
-				</div>
-			</div>
-		</div>
-	</div>
 </div>

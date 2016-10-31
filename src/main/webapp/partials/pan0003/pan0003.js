@@ -50,6 +50,7 @@ angular.module('app').controller('PAN0003Ctrl', ['$scope', '$q', '$http', '$time
             $scope.checkPageId.PAN0104 = entity.pageList.indexOf('PAN0104') !== -1;
             $scope.checkPageId.PAN0105 = entity.pageList.indexOf('PAN0105') !== -1;
             $scope.checkPageId.PAN0106 = entity.pageList.indexOf('PAN0106') !== -1;
+            $scope.checkPageId.PAN0107 = entity.pageList.indexOf('PAN0107') !== -1;
         };
 
         $scope.saveAccess = function () {

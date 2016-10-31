@@ -22,9 +22,9 @@
 <div ng-show="isAuthenticated" class="section-home container">
 	<table class="table table-bordered table-hover bg-white">
 		<thead>
-			<th class="text-center" style="width:200px;">메뉴</th>
+			<th class="text-center" style="width:180px;">메뉴</th>
 			<th class="text-center">관련 업무 설명</th>
-			<th class="text-center" style="width:400px;">주 사용자</th>
+			<th class="text-center" style="width:350px;">주 사용자</th>
 			<th class="text-center" style="width:100px;">내 권한 유무</th>
 		</thead>
 		<tbody class="text-center">
@@ -41,7 +41,7 @@
 				<td>{{isAllowedPage('PAN0103') ? 'Y' : ''}}</td>
 			</tr>
 			<tr ui-sref="index.page({pageId: 'pan0104'})">
-				<td>시효 만료 포인트 사전 고지</td>
+				<td>시효 만료 포인트<br> 사전 고지</td>
 				<td class="text-left">포인트 시효 만료 (소멸) 모수 조회 및 포인트 실효 사전 안내 자동화</td>
 				<td>현업 매니저</td>
 				<td>{{isAllowedPage('PAN0104') ? 'Y' : ''}}</td>
@@ -58,14 +58,14 @@
 				<td>CS팀 및 민원 관련 대응 현업 매니저</td>
 				<td>{{isAllowedPage('PAN0102') ? 'Y' : ''}}</td>
 			</tr>
-			<tr ui-sref="index.page({pageId: 'pan0102'})">
+			<tr ui-sref="index.page({pageId: 'pan0107'})">
 				<td>고객 정보 상세 조회</td>
 				<td class="text-left">회원ID/OCB카드번호/OCB닷컴로그인ID 조건으로 장기 거래 실적, 동의 이력 및 메일 발송 이력 조회 필요시</td>
 				<td>CS팀 및 미원 관련 대응<br> NXCUS에서 응대할 수 없는 6개월 이상 실적 조회시</td>
-				<td>{{isAllowedPage('PAN0102') ? 'Y' : ''}}</td>
+				<td>{{isAllowedPage('PAN0107') ? 'Y' : ''}}</td>
 			</tr>
 			<tr ui-sref="index.page({pageId: 'pan0105'})">
-				<td>거래 실적 및 유실적 고객 추출</td>
+				<td>거래 실적 및<br> 유실적 고객 추출</td>
 				<td class="text-left">다수의 회원ID/카드번호/가맹점 코드를 조건으로 단순한 TR정보를 추출하는 업무<br> - 단체 카드 정산 증빙 (TR)<br> - 주유소 등의 정상 증빙 (TR)<br> - KFC PGP 적립 대상 선정을 위해
 					특정 기간동안 유실적 고객 추출 (MBR_ID 추출)<br> - 특정 제휴사 / 가맹점 유실적 고객 대상 타겟팅 (MBR_ID 추출)</td>
 				<td>특정 회원들의 TR전체 추출(요약없는 단순 조건 추출)<br> 또는 특정 조건으로 리스트 추출 대상 업무</td>
