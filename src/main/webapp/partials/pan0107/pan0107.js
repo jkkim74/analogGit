@@ -157,11 +157,6 @@ angular.module('app').controller('PAN0107Ctrl', ['$scope', '$q', '$http', '$time
                 $scope.gridOptionsJoinInfoOcbcom.data = data;
             });
 
-            $scope.transactionHistoryPromise = apiSvc.getTransactionHistory(params);
-            $scope.transactionHistoryPromise.then(function (data) {
-                $scope.gridOptionsTransactionHistory.data = data;
-            });
-
             $scope.emailSendHistoryPromise = apiSvc.getEmailSendHistory(params);
             $scope.emailSendHistoryPromise.then(function (data) {
                 $scope.gridOptionsEmailSendHistory.data = data;
@@ -172,5 +167,18 @@ angular.module('app').controller('PAN0107Ctrl', ['$scope', '$q', '$http', '$time
                 $scope.gridOptionsAppPushHistory.data = data;
             });
         };
+
+        // 거래내역 조회
+        $scope.searchTransactionHistory = function () {
+            var params = {
+                searchType: $scope.selectedOption2.value,
+                searchKeyword: $scope.searchKeyword2
+            };
+
+            $scope.transactionHistoryPromise = apiSvc.getTransactionHistory(params);
+            $scope.transactionHistoryPromise.then(function (data) {
+                $scope.gridOptionsTransactionHistory.data = data;
+            });
+        }
 
     }]);

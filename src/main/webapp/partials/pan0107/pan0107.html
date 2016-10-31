@@ -1,23 +1,22 @@
 <div class="section-content">
-	<div class="upload-form">
-		<form class="form-inline" name="form">
-			<div class="form-group">
-				<div class="input-group">
-					<label class="input-group-addon">조회조건</label>
-					<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
-						ng-model="selectedOption"></select>
+	<form class="form-inline" name="form">
+		<div class="form-group">
+			<div class="input-group">
+				<label class="input-group-addon">조회조건</label>
+				<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
+					ng-model="selectedOption"></select>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="input-group">
+				<input type="text" class="form-control" ng-model="searchKeyword" ng-required="true">
+				<div class="input-group-btn">
+					<button type="button" class="btn btn-primary" ng-click="searchAll()" ng-disabled="form.$invalid"><i class="fa fa-search"></i> 조회</button>
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="input-group">
-					<input type="text" class="form-control" ng-model="searchKeyword" ng-required="true">
-					<div class="input-group-btn">
-						<button type="button" class="btn btn-primary" ng-click="searchAll()" ng-disabled="form.$invalid"><i class="fa fa-search"></i> 조회</button>
-					</div>
-				</div>
-			</div>
-		</form>
-	</div>
+		</div>
+	</form>
+	<br>
 
 	<div class="panel panel-info">
 		<div class="panel-heading"><strong>마케팅 동의 내역</strong></div>
@@ -58,17 +57,42 @@
 		</div>
 	</div>
 
+	<hr>
+
 	<div class="panel panel-info">
-		<div class="panel-heading form-inline">
-			<strong>거래 내역</strong>
-			<select class="form-control input-sm" ng-model="trxType" ng-change="changeTrxType()">
-				<option value="">전체</option>
-				<option value="01">일반</option>
-				<option value="02">주유</option>
-			</select>
-		</div>
-		<div cg-busy="transactionHistoryPromise">
-			<div ui-grid="gridOptionsTransactionHistory" ui-grid-resize-columns></div>
+		<div class="panel-heading"><strong>거래 내역</strong></div>
+		<div class="panel-body">
+			<form class="form-inline">
+				<div class="form-group">
+					<div class="input-group">
+						<label class="input-group-addon">조회조건</label>
+						<select class="form-control" ng-init="selectedOption2 = selectOptions[0]" ng-options="option.label for option in selectOptions"
+							ng-model="selectedOption2"></select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="input-group">
+						<input type="text" class="form-control" ng-model="searchKeyword2" ng-required="true">
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-primary" ng-click="searchTransactionHistory()" ng-disabled="!searchKeyword2"><i class="fa fa-search"></i> 조회</button>
+						</div>
+					</div>
+				</div>
+				<div class="form-group pull-right">
+					<div class="input-group">
+						<label class="input-group-addon">거래종류</label>
+						<select class="form-control" ng-model="trxType" ng-change="changeTrxType()">
+							<option value="">전체</option>
+							<option value="01">일반</option>
+							<option value="02">주유</option>
+						</select>
+					</div>
+				</div>
+			</form>
+			<br>
+			<div cg-busy="transactionHistoryPromise">
+				<div ui-grid="gridOptionsTransactionHistory" ui-grid-resize-columns></div>
+			</div>
 		</div>
 	</div>
 
