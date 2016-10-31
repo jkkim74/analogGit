@@ -1,10 +1,15 @@
 <div class="section-content">
-	<div class="row upload-form">
+	<div class="row">
 		<div class="col-md-9">
-			<label>조회년월</label>
 			<form class="form-inline">
-				<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
-					ng-model="selectedOption" ng-change="searchSummary()"></select>
+				<div class="form-group">
+					<div class="input-group">
+						<label class="input-group-addon">조회년월</label>
+
+						<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
+							ng-model="selectedOption" ng-change="searchSummary()"></select>
+					</div>
+				</div>
 			</form>
 
 			<div cg-busy="summaryPromise">
@@ -79,7 +84,7 @@
 				</div>
 			</div>
 		</div>
-		<button type="button" class="btn btn-primary" ng-click="searchTargets()">조회</button>
+		<button type="button" class="btn btn-primary" ng-click="searchTargets()"><i class="fa fa-search"></i> 조회</button>
 		<div cg-busy="targetsPromise">
 			<div class="grid-div" ui-grid="gridOptionsTargets" ui-grid-pagination ui-grid-resize-columns ui-grid-selection></div>
 		</div>

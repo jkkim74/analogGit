@@ -12,7 +12,7 @@ angular.module('app').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$time
         $scope.gridOptionsPreview = {
             enableSorting: false,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-            minRowsToShow: 9,
+            minRowsToShow: 8,
             columnDefs: [
                 { field: 'no', displayName: 'No.', width: 100, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
                 { field: 'column1', displayName: '회원ID', cellTooltip: true, headerTooltip: true },

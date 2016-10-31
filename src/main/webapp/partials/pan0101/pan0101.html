@@ -1,16 +1,17 @@
 <div class="section-content">
-	<div class="row upload-form">
+	<div class="row">
 		<div class="col-md-6">
-			<div class="row">
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>입력데이터</label>
+			<form class="form-inline">
+				<div class="form-group">
+					<div class="input-group">
+						<label class="input-group-addon">입력데이터</label>
 						<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
 							ng-model="selectedOption"></select>
 					</div>
 				</div>
-			</div>
-			<div class="form-group" cg-busy="uploadPromise">
+			</form>
+			<br>
+			<div cg-busy="uploadPromise">
 				<label>업로드</label>
 				<div ngf-select="upload($file)" ngf-drop="upload($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'" ngf-max-size="1GB"
 					class="drop-box" ngf-drag-over-class="'drop-box-dragover'">
@@ -27,11 +28,10 @@
 	</div>
 	<hr>
 	<div>
-		<button type="button" class="btn btn-primary" ng-click="loadMembers()" ng-disabled="!uploadedItems">조회</button>
+		<button type="button" class="btn btn-primary" ng-click="loadMembers()" ng-disabled="!uploadedItems"><i class="fa fa-search"></i> 조회</button>
 		<div cg-busy="membersPromise">
 			<div class="grid-div" ui-grid="gridOptionsMembers" ui-grid-pagination ui-grid-resize-columns ui-grid-selection></div>
 		</div>
 	</div>
 	<div ng-include="'partials/common/pts-form-tpl.html'"></div>
-
 </div>
