@@ -68,6 +68,13 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
             };
         }
 
+        // COMMON
+        this.createUser = new ApiPost('users');
+        this.getUsers = new ApiGet('users');
+        this.saveUser = new ApiPost('users/info');
+        this.saveAdmin = new ApiPost('users/admin');
+        this.saveAccess = new ApiPost('users/access');
+
         // PANDORA
         this.getMembers = new ApiGet('members');
         this.getMemberInfo = new ApiGet('memberInfo');
@@ -85,11 +92,6 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
         this.getClphnNoDup = new ApiGet('clphnNoDup');
         this.getEmailAddrDup = new ApiGet('emailAddrDup');
         this.sendPts = new ApiPost('sendPts');
-        this.createUser = new ApiPost('users');
-        this.getUsers = new ApiGet('users');
-        this.saveUser = new ApiPost('users/info');
-        this.saveAdmin = new ApiPost('users/admin');
-        this.saveAccess = new ApiPost('users/access');
         this.extractMemberInfo = new ApiPost('extractMemberInfo');
         this.getExtinctionSummary = new ApiGet('extinctionSummary');
         this.getExtinctionTargets = new ApiGet('extinctionTargets');
