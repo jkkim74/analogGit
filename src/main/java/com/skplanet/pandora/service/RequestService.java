@@ -1,6 +1,7 @@
 package com.skplanet.pandora.service;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -714,7 +715,7 @@ public class RequestService {
 		};
 
 		Path filePath = Paths.get(Constant.APP_FILE_DIR, Helper.uniqueCsvFilename("P140802BKhub_" + ptsUsername));
-		csvCreator.create(filePath);
+		csvCreator.create(filePath, Charset.forName("EUC-KR"));
 
 		return filePath.toFile().getAbsolutePath();
 	}

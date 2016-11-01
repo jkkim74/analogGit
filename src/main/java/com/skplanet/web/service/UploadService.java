@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -117,7 +117,7 @@ public class UploadService {
 		}
 
 		// 업로드에 필요한 열 수가 있는지 검증한다.
-		try (BufferedReader reader = Files.newBufferedReader(uploadPath, StandardCharsets.UTF_8)) {
+		try (BufferedReader reader = Files.newBufferedReader(uploadPath, Charset.forName("EUC-KR"))) {
 			String firstLine = reader.readLine();
 			if (numberOfColumns - 1 != StringUtils.countOccurrencesOf(firstLine, ",")) {
 				throw new BizException("파일 양식을 확인해 주세요. " + numberOfColumns + "개의 열이 필요합니다");
