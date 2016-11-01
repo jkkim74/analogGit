@@ -12,12 +12,14 @@ import com.skplanet.web.model.UploadProgress;
 @Repository
 public interface OracleRepository {
 
-	List<AutoMap> selectMembers(@Param("uploadProgress") UploadProgress uploadProgress,
-			@Param("offset") int offset, @Param("limit") int limit, @Param("masking") boolean masking);
+	List<AutoMap> selectMembers(@Param("uploadProgress") UploadProgress uploadProgress, @Param("offset") int offset,
+			@Param("limit") int limit, @Param("masking") boolean masking);
 
 	int countMembers(@Param("uploadProgress") UploadProgress uploadProgress);
 
 	String selectMbrId(Map<String, Object> params);
+
+	String selectMbrKorNm(String mbrId);
 
 	List<AutoMap> selectMemberInfo(Map<String, Object> params);
 

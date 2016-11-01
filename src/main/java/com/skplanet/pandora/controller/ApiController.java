@@ -114,7 +114,7 @@ public class ApiController {
 		List<AutoMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, true);
 		int count = oracleRepository.countMembers(uploadProgress);
 
-		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, pageId,
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, pageId,
 				list.size());
 
 		return ApiResponse.builder().value(list).totalItems(count).build();
@@ -130,9 +130,8 @@ public class ApiController {
 		List<AutoMap> list = oracleRepository.selectMemberInfo(params);
 
 		String username = Helper.currentUser().getUsername();
-		String mbrKorNm = list.isEmpty() ? null : (String) list.get(0).get("mbrKorNm");
 
-		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId,
 				(String) params.get("pageId"), 1);
 
 		return list;
@@ -142,7 +141,14 @@ public class ApiController {
 	public List<AutoMap> getAgreementInfo(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
-		return querycacheRepository.selectAgreementInfo(mbrId);
+		List<AutoMap> list = querycacheRepository.selectAgreementInfo(mbrId);
+
+		String username = Helper.currentUser().getUsername();
+
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId,
+				(String) params.get("pageId"), 1);
+
+		return list;
 	}
 
 	@GetMapping("/joinInfoOcbapp")
@@ -206,7 +212,14 @@ public class ApiController {
 	public List<AutoMap> getTransactionHistory(@RequestParam Map<String, Object> params) {
 
 		String mbrId = oracleRepository.selectMbrId(params);
-		return querycacheRepository.selectTransactionHistory(mbrId);
+		List<AutoMap> list = querycacheRepository.selectTransactionHistory(mbrId);
+
+		String username = Helper.currentUser().getUsername();
+
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId,
+				(String) params.get("pageId"), 1);
+
+		return list;
 	}
 
 	@GetMapping("/emailSendHistory")

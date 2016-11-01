@@ -33,6 +33,10 @@
 		</where>
 	</sql>
 
+	<select id="selectMbrKorNm" parameterType="map" resultType="string">
+		SELECT MBR_KOR_NM FROM MART_MBR_ID_MST WHERE MBR_ID = #{mbrId}
+	</select>
+
 	<select id="selectMemberInfo" parameterType="map" resultType="AutoMap">
        SELECT (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'MBR_FG_CD' AND DTL_CD = A.MBR_FG_CD) AS MBR_FG_CD /* 회원구분 */
 			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'MBR_STS_CD' AND DTL_CD = A.MBR_STS_CD) AS MBR_STS_CD /* 회원상태 */

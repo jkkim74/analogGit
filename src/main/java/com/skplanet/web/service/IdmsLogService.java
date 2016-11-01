@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Maps;
+import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.web.repository.mysql.IdmsLogRepository;
 import com.skplanet.web.security.UserInfo;
 import com.skplanet.web.util.Constant;
@@ -43,6 +44,9 @@ public class IdmsLogService {
 
 	@Autowired
 	private IdmsLogRepository idmsLogRepository;
+
+	@Autowired
+	private OracleRepository oracleRepository;
 
 	@Autowired
 	private FtpService ftpService;
@@ -125,8 +129,6 @@ public class IdmsLogService {
 	 * @param mbrId
 	 *            고객 ID - Biz 사용자가 조회한 고객의 식별자 (ID나 해당 Biz 사이트에서 관리되고 있는 번호).
 	 *            Null은 고객 리스트를 보여주는 경우와 고객정보와 무관한 업무처리를 하는 경우에만 허용
-	 * @param mbrKorNm
-	 *            고객 명 - Biz 사용자가 조회한 고객 명
 	 * @param pageId
 	 *            Biz 사이트 화면 ID -사용자가 조회 또는 처리한 화면 ID (IDMS 연동_정보요청양식.xlsx의
 	 *            3.화면정보 시트 참조)
@@ -135,12 +137,15 @@ public class IdmsLogService {
 	 *            아닌경우 0, 한명을 조회하는 경우 1, 다수를 조회하는 경우 고객수로 기록
 	 */
 	@Async
-	public void memberSearch(String selDttm, String username, String userIp, String mbrId, String mbrKorNm,
-			String pageId, int mbrCnt) {
+	public void memberSearch(String selDttm, String username, String userIp, String mbrId, String pageId, int mbrCnt) {
 		/*
 		 * Biz 사이트 IP - Biz 사이트 서버 IP(WAS IP)
 		 */
 		String wasIp = Helper.serverIp();
+		String mbrKorNm = null;
+		if (mbrId != null) {
+			mbrKorNm = oracleRepository.selectMbrKorNm(mbrId);
+		}
 		idmsLogRepository.insertMemberSearch(selDttm, wasIp, username, userIp, mbrId, mbrKorNm, pageId, funcCd, mbrCnt);
 	}
 
