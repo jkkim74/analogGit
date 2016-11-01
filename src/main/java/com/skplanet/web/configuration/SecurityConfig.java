@@ -111,9 +111,6 @@ public class SecurityConfig {
 		public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 			endpoints.authenticationManager(authenticationManager);
 		}
-		
-//		@Bean
-		
 
 	}
 
