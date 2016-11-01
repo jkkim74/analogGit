@@ -11,66 +11,107 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.ldap.authentication.NullLdapAuthoritiesPopulator;
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 
 import com.skplanet.web.security.CustomAuthenticationProvider;
 import com.skplanet.web.security.CustomUserDetailsContextMapper;
 
 @Configuration
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
-	public static final String LDAP_USER_SEARCH_FILTER = "(&(objectClass=*)(CN={0}))";
+	@Configuration
+	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+	protected static class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	@Qualifier("mysqlDataSource")
-	private DataSource mysqlDataSource;
+		@Autowired
+		@Qualifier("mysqlDataSource")
+		private DataSource mysqlDataSource;
 
-	@Value("${ldap.url}")
-	private String ldapUrl;
+		@Value("${ldap.url}")
+		private String ldapUrl;
 
-	@Value("${ldap.baseDn}")
-	private String ldapBaseDn;
+		@Value("${ldap.baseDn}")
+		private String ldapBaseDn;
 
-	@Value("${ldap.username}")
-	private String ldapUsername;
+		@Value("${ldap.username}")
+		private String ldapUsername;
 
-	@Value("${ldap.password}")
-	private String ldapPassword;
+		@Value("${ldap.password}")
+		private String ldapPassword;
 
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth, UserDetailsService userDetailsService,
-			CustomUserDetailsContextMapper userDetailsContextMapper,
-			CustomAuthenticationProvider authenticationProvider) throws Exception {
+		@Value("${ldap.userSearchFilter}")
+		private String ldapUserSearchFilter;
 
-		auth.authenticationProvider(authenticationProvider);
+		@Autowired
+		public void configureGlobal(AuthenticationManagerBuilder auth, UserDetailsService userDetailsService,
+				CustomUserDetailsContextMapper userDetailsContextMapper,
+				CustomAuthenticationProvider authenticationProvider) throws Exception {
 
-		auth.ldapAuthentication().userSearchFilter(LDAP_USER_SEARCH_FILTER).userSearchBase(ldapBaseDn)
-				.ldapAuthoritiesPopulator(new NullLdapAuthoritiesPopulator())
-				.userDetailsContextMapper(userDetailsContextMapper).contextSource(ldapContextSource());
+			auth.authenticationProvider(authenticationProvider);
+
+			auth.ldapAuthentication().userSearchFilter(ldapUserSearchFilter).userSearchBase(ldapBaseDn)
+					.ldapAuthoritiesPopulator(new NullLdapAuthoritiesPopulator())
+					.userDetailsContextMapper(userDetailsContextMapper).contextSource(ldapContextSource());
+
+		}
+
+		@Bean
+		public LdapContextSource ldapContextSource() {
+			LdapContextSource contextSource = new LdapContextSource();
+			contextSource.setUrl(ldapUrl);
+			contextSource.setUserDn(ldapUsername);
+			contextSource.setPassword(ldapPassword);
+			return contextSource;
+		}
+
+		// 별도로 사용자 관리 시 사용
+		@Bean
+		public LdapTemplate ldapTemplate() {
+			LdapTemplate template = new LdapTemplate();
+			template.setContextSource(ldapContextSource());
+			return template;
+		}
 
 	}
 
-	@Bean
-	public LdapContextSource ldapContextSource() {
-		LdapContextSource contextSource = new LdapContextSource();
-		contextSource.setUrl(ldapUrl);
-		contextSource.setUserDn(ldapUsername);
-		contextSource.setPassword(ldapPassword);
-		return contextSource;
-	}
+	@Configuration
+	@EnableAuthorizationServer
+	@EnableResourceServer
+	protected static class OAuthServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-	// 별도로 사용자 관리 시 사용
-	@Bean
-	public LdapTemplate ldapTemplate() {
-		LdapTemplate template = new LdapTemplate();
-		template.setContextSource(ldapContextSource());
-		return template;
+		@Value("${security.oauth2.client.client-id}")
+		private String clientId;
+
+		@Value("${security.oauth2.client.client-secret}")
+		private String clientSecret;
+
+		@Autowired
+		private AuthenticationManager authenticationManager;
+
+		@Override
+		public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+			clients.inMemory()
+					.withClient(clientId).secret(clientSecret).authorizedGrantTypes("authorization_code", "password",
+							"client_credentials", "implicit", "refresh_token")
+					.authorities("ROLE_USER").accessTokenValiditySeconds(3600);
+		}
+
+		@Override
+		public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+			endpoints.authenticationManager(authenticationManager);
+		}
+
 	}
 
 }

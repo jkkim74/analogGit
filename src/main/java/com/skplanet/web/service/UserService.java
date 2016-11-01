@@ -20,7 +20,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.skplanet.web.configuration.SecurityConfig;
 import com.skplanet.web.exception.BizException;
 import com.skplanet.web.repository.mysql.UserRepository;
 import com.skplanet.web.security.CustomUserDetailsContextMapper;
@@ -43,6 +42,9 @@ public class UserService implements UserDetailsService {
 
 	@Value("${ldap.baseDn}")
 	private String ldapBaseDn;
+
+	@Value("${ldap.userSearchFilter}")
+	private String ldapUserSearchFilter;
 
 	@Value("${app.pageIds.user}")
 	private String userPageIds;
@@ -91,8 +93,7 @@ public class UserService implements UserDetailsService {
 			return;
 		}
 		try {
-			ldapTemplate.searchForObject(ldapBaseDn, SecurityConfig.LDAP_USER_SEARCH_FILTER.replace("{0}", username),
-					nullContextMapper);
+			ldapTemplate.searchForObject(ldapBaseDn, ldapUserSearchFilter.replace("{0}", username), nullContextMapper);
 		} catch (IncorrectResultSizeDataAccessException e) {
 			throw new BizException("유효하지 않은 Pnet ID입니다");
 		}
@@ -100,8 +101,7 @@ public class UserService implements UserDetailsService {
 
 	private UserInfo getUserFromLdap(final String username) {
 		try {
-			return ldapTemplate.searchForObject(ldapBaseDn,
-					SecurityConfig.LDAP_USER_SEARCH_FILTER.replace("{0}", username),
+			return ldapTemplate.searchForObject(ldapBaseDn, ldapUserSearchFilter.replace("{0}", username),
 					new AbstractContextMapper<UserInfo>() {
 						public UserInfo doMapFromContext(DirContextOperations ctx) {
 							return (UserInfo) userDetailsContextMapper.mapUserFromContext(ctx, username, null);
