@@ -9,14 +9,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
-import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.DirContextOperations;
-import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.core.support.AbstractContextMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.ldap.search.LdapUserSearch;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -25,14 +22,17 @@ import com.skplanet.web.repository.mysql.UserRepository;
 import com.skplanet.web.security.CustomUserDetailsContextMapper;
 import com.skplanet.web.security.UserInfo;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UserService implements UserDetailsService {
 
 	@Autowired
 	private Environment env;
 
 	@Autowired
-	private LdapTemplate ldapTemplate;
+	private LdapUserSearch ldapUserSearch;
 
 	@Autowired
 	private CustomUserDetailsContextMapper userDetailsContextMapper;
@@ -40,23 +40,11 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Value("${ldap.baseDn}")
-	private String ldapBaseDn;
-
-	@Value("${ldap.userSearchFilter}")
-	private String ldapUserSearchFilter;
-
 	@Value("${app.pageIds.user}")
 	private String userPageIds;
 
 	@Value("${app.pageIds.admin}")
 	private String adminPageIds;
-
-	private ContextMapper<UserInfo> nullContextMapper = new AbstractContextMapper<UserInfo>() {
-		public UserInfo doMapFromContext(DirContextOperations ctx) {
-			return null;
-		}
-	};
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -93,22 +81,19 @@ public class UserService implements UserDetailsService {
 			return;
 		}
 		try {
-			ldapTemplate.searchForObject(ldapBaseDn, ldapUserSearchFilter.replace("{0}", username), nullContextMapper);
-		} catch (IncorrectResultSizeDataAccessException e) {
+			ldapUserSearch.searchForUser(username);
+		} catch (UsernameNotFoundException e) {
 			throw new BizException("유효하지 않은 Pnet ID입니다");
 		}
 	}
 
 	private UserInfo getUserFromLdap(final String username) {
 		try {
-			return ldapTemplate.searchForObject(ldapBaseDn, ldapUserSearchFilter.replace("{0}", username),
-					new AbstractContextMapper<UserInfo>() {
-						public UserInfo doMapFromContext(DirContextOperations ctx) {
-							return (UserInfo) userDetailsContextMapper.mapUserFromContext(ctx, username, null);
-						}
-					});
-		} catch (IncorrectResultSizeDataAccessException e) {
-			throw new BizException("유효하지 않은 Pnet ID입니다");
+			DirContextOperations ctx = ldapUserSearch.searchForUser(username);
+			return (UserInfo) userDetailsContextMapper.mapUserFromContext(ctx, username, null);
+		} catch (Exception e) {
+			log.warn("유효하지 않은 Pnet ID입니다 - {}", username);
+			return UserInfo.builder().username(username).build();
 		}
 	}
 
