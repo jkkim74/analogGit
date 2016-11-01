@@ -7,8 +7,7 @@ angular.module('app').controller('PAN0102Ctrl', ['$scope', '$q', '$http', '$time
         $scope.selectOptions = [
             { label: '회원ID', value: 'mbrId' },
             { label: '카드번호', value: 'cardNo' },
-            { label: 'OCB닷컴 로그인ID', value: 'ocbcomLgnId' },
-            { label: '메시지발송ID (검토중)', value: 'msgSndId' }
+            { label: 'OCB닷컴 로그인ID', value: 'ocbcomLgnId' }
         ];
 
         // 기본 정보
