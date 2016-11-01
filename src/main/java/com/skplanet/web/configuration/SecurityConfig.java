@@ -27,10 +27,10 @@ import com.skplanet.web.security.CustomAuthenticationProvider;
 import com.skplanet.web.security.CustomUserDetailsContextMapper;
 
 @Configuration
-@EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class SecurityConfig {
 
 	@Configuration
+	@EnableGlobalMethodSecurity(jsr250Enabled = true)
 	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 	protected static class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -111,6 +111,9 @@ public class SecurityConfig {
 		public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 			endpoints.authenticationManager(authenticationManager);
 		}
+		
+//		@Bean
+		
 
 	}
 
