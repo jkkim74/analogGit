@@ -35,8 +35,8 @@ angular.module('app').controller('PAN0104Ctrl', ['$scope', '$q', '$http', '$time
         $scope.selectOptions3 = [
             { label: 'OCB', value: 'ocbcom' },
             { label: 'EM', value: 'em' },
-            { label: 'SMS', value: 'sms' },
-            { label: 'TM', value: 'tm' }
+            { label: 'SMS', value: 'sms' }
+            // { label: 'TM', value: 'tm' }
         ];
 
         $scope.gridOptionsSummary = {
