@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.skplanet.pandora.repository.oracle.OracleRepository;
@@ -28,6 +29,9 @@ public class RequestService {
 
 	@Autowired
 	private OracleRepository oracleRepository;
+
+	@Value("${app.files.encoding.pts}")
+	private String encoding;
 
 	public void sendToPts(String ptsUsername, boolean ptsMasking, UploadProgress uploadProgress) {
 		String csvFile = createCsvFile(ptsUsername, ptsMasking, uploadProgress);
@@ -715,7 +719,7 @@ public class RequestService {
 		};
 
 		Path filePath = Paths.get(Constant.APP_FILE_DIR, Helper.uniqueCsvFilename("P140802BKhub_" + ptsUsername));
-		csvCreator.create(filePath, Charset.forName("EUC-KR"));
+		csvCreator.create(filePath, Charset.forName(encoding));
 
 		return filePath.toFile().getAbsolutePath();
 	}

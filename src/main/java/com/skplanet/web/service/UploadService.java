@@ -55,6 +55,9 @@ public class UploadService {
 	@Value("${app.files.autoRemove}")
 	private boolean autoRemove;
 
+	@Value("${app.files.encoding.upload}")
+	private String encoding;
+
 	@Transactional("mysqlTxManager")
 	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
 		Path filePath = saveUploadFile(file);
@@ -117,7 +120,7 @@ public class UploadService {
 		}
 
 		// 업로드에 필요한 열 수가 있는지 검증한다.
-		try (BufferedReader reader = Files.newBufferedReader(uploadPath, Charset.forName("EUC-KR"))) {
+		try (BufferedReader reader = Files.newBufferedReader(uploadPath, Charset.forName(encoding))) {
 			String firstLine = reader.readLine();
 			if (numberOfColumns - 1 != StringUtils.countOccurrencesOf(firstLine, ",")) {
 				throw new BizException("파일 양식을 확인해 주세요. " + numberOfColumns + "개의 열이 필요합니다");

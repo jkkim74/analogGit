@@ -49,6 +49,9 @@ public class BatchConfig extends DefaultBatchConfigurer {
 	@Qualifier("oracleDataSource")
 	protected DataSource oracleDataSource;
 
+	@Value("${app.files.encoding.upload}")
+	private String encoding;
+
 	@Override
 	protected JobLauncher createJobLauncher() throws Exception {
 		SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
@@ -65,7 +68,7 @@ public class BatchConfig extends DefaultBatchConfigurer {
 
 		FlatFileItemReader<UploadedPreview> reader = new FlatFileItemReader<>();
 		reader.setResource(new FileSystemResource(filePath));
-		reader.setEncoding("EUC-KR");
+		reader.setEncoding(encoding);
 
 		DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
 		ArrayList<String> names = new ArrayList<>();

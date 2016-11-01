@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.skplanet.pandora.repository.oracle.OracleRepository;
@@ -34,6 +35,9 @@ public class NoticeService {
 	@Autowired
 	private ForwardService forwardService;
 
+	@Value("${app.files.encoding.ftp}")
+	private String encoding;
+
 	public void noticeUsingFtp(final Map<String, Object> params, final TransmissionType transmissionType) {
 
 		log.info("notice using ftp: {}, {}", params, transmissionType);
@@ -54,7 +58,7 @@ public class NoticeService {
 
 			@Override
 			public void printRecord(CSVPrinter printer, AutoMap map) throws IOException {
-				String extnctObjDt = (String ) map.get("extnctObjDt");
+				String extnctObjDt = (String) map.get("extnctObjDt");
 
 				if (transmissionType == TransmissionType.OCBCOM) {
 					// 소명예정년,소멸예정월,소멸예정일,EC_USER_ID
@@ -76,7 +80,7 @@ public class NoticeService {
 		Path filePath = Paths.get(Constant.APP_FILE_DIR,
 				Helper.uniqueCsvFilename(transmissionType.name().toLowerCase()));
 
-		csvCreator.create(filePath, Charset.forName("x-IBM949"));
+		csvCreator.create(filePath, Charset.forName(encoding));
 
 		forwardService.sendForNotification(filePath, transmissionType);
 	}
