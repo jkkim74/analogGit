@@ -59,59 +59,59 @@ angular.module('app').controller('PAN0107Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         // 거래 내역
-        $scope.gridOptionsTransactionHistory = {
-            flatEntityAccess: true,
-            columnDefs: [
-                { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
-                { field: 'rcvDt', displayName: '접수일시', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'rcvSeq', displayName: '접수번호', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'apprDttm', displayName: '승인일시', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'repApprNo', displayName: '대표승인번호', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'apprNo', displayName: '승인번호', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'saleDttm', displayName: '매출일시', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'mbrId', displayName: '회원ID', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'cardDtlGrp', displayName: '카드그룹코드', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'cardNo', displayName: '카드번호', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'alcmpn', displayName: '발생제휴사', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'mcnt', displayName: '발생가맹점', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'stlmtMcnt', displayName: '정산가맹점', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'pntKnd', displayName: '포인트종류', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'slip', displayName: '전표', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'saleAmt', displayName: '매출금액', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
-                { field: 'pnt', displayName: '포인트', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
-                { field: 'csMbrCmmsn', displayName: '제휴사연회비', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
-                { field: 'cmmsn', displayName: '수수료', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
-                { field: 'pmntWay', displayName: '지불수단', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'org', displayName: '기관', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'oilPrdctSgrp', displayName: '유종', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'saleQty', displayName: '주유량', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
-                { field: 'cpnPrd', displayName: '쿠폰', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'trxType', displayName: '거래종류', width: 100, cellTooltip: true, headerTooltip: true }
-            ],
-            onRegisterApi: function (gridApi) {
-                gridApi.grid.registerRowsProcessor($scope.singleFilter, 200);
-                $scope.transactionHistoryGridApi = gridApi;
-            }
-        };
+        // $scope.gridOptionsTransactionHistory = {
+        //     flatEntityAccess: true,
+        //     columnDefs: [
+        //         { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
+        //         { field: 'rcvDt', displayName: '접수일시', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'rcvSeq', displayName: '접수번호', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'apprDttm', displayName: '승인일시', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'repApprNo', displayName: '대표승인번호', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'apprNo', displayName: '승인번호', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'saleDttm', displayName: '매출일시', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'mbrId', displayName: '회원ID', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'cardDtlGrp', displayName: '카드그룹코드', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'cardNo', displayName: '카드번호', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'alcmpn', displayName: '발생제휴사', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'mcnt', displayName: '발생가맹점', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'stlmtMcnt', displayName: '정산가맹점', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'pntKnd', displayName: '포인트종류', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'slip', displayName: '전표', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'saleAmt', displayName: '매출금액', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
+        //         { field: 'pnt', displayName: '포인트', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
+        //         { field: 'csMbrCmmsn', displayName: '제휴사연회비', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
+        //         { field: 'cmmsn', displayName: '수수료', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
+        //         { field: 'pmntWay', displayName: '지불수단', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'org', displayName: '기관', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'oilPrdctSgrp', displayName: '유종', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'saleQty', displayName: '주유량', width: 100, cellTooltip: true, headerTooltip: true, cellFilter: 'number' },
+        //         { field: 'cpnPrd', displayName: '쿠폰', width: 100, cellTooltip: true, headerTooltip: true },
+        //         { field: 'trxType', displayName: '거래종류', width: 100, cellTooltip: true, headerTooltip: true }
+        //     ],
+        //     onRegisterApi: function (gridApi) {
+        //         gridApi.grid.registerRowsProcessor($scope.singleFilter, 200);
+        //         $scope.transactionHistoryGridApi = gridApi;
+        //     }
+        // };
 
-        $scope.singleFilter = function (renderableRows) {
-            if ($scope.trxType !== '') {
-                var matcher = new RegExp($scope.trxType);
+        // $scope.singleFilter = function (renderableRows) {
+        //     if ($scope.trxType !== '') {
+        //         var matcher = new RegExp($scope.trxType);
 
-                renderableRows.forEach(function (row) {
-                    ['trxType'].forEach(function (field) {
-                        if (!row.entity[field].match(matcher)) {
-                            row.visible = false;
-                        }
-                    });
-                });
-            }
-            return renderableRows;
-        };
+        //         renderableRows.forEach(function (row) {
+        //             ['trxType'].forEach(function (field) {
+        //                 if (!row.entity[field].match(matcher)) {
+        //                     row.visible = false;
+        //                 }
+        //             });
+        //         });
+        //     }
+        //     return renderableRows;
+        // };
 
-        $scope.changeTrxType = function () {
-            $scope.transactionHistoryGridApi.grid.refresh();
-        };
+        // $scope.changeTrxType = function () {
+        //     $scope.transactionHistoryGridApi.grid.refresh();
+        // };
 
         // 이메일 발송 이력
         $scope.gridOptionsEmailSendHistory = {
@@ -169,16 +169,16 @@ angular.module('app').controller('PAN0107Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         // 거래내역 조회
-        $scope.searchTransactionHistory = function () {
-            var params = {
-                searchType: $scope.selectedOption2.value,
-                searchKeyword: $scope.searchKeyword2
-            };
+        // $scope.searchTransactionHistory = function () {
+        //     var params = {
+        //         searchType: $scope.selectedOption2.value,
+        //         searchKeyword: $scope.searchKeyword2
+        //     };
 
-            $scope.transactionHistoryPromise = apiSvc.getTransactionHistory(params);
-            $scope.transactionHistoryPromise.then(function (data) {
-                $scope.gridOptionsTransactionHistory.data = data;
-            });
-        }
+        //     $scope.transactionHistoryPromise = apiSvc.getTransactionHistory(params);
+        //     $scope.transactionHistoryPromise.then(function (data) {
+        //         $scope.gridOptionsTransactionHistory.data = data;
+        //     });
+        // }
 
     }]);
