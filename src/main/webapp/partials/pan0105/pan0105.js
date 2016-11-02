@@ -74,25 +74,9 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
                 return;
             }
 
-            $scope.uploadProgressLoadingMessage = 'Uploading...';
-
-            var deferred = $q.defer();
-            $scope.uploadPromise = deferred.promise;
-
-            apiSvc.upload({ file: file, columnName: $scope.selectedOption2.value }).then(function () {
-                $scope.uploadProgressLoadingMessage = 'Extracting...';
-
-                return apiSvc.extractMemberInfo({
-                    inputDataType: $scope.selectedOption.value,
-                    periodType: $scope.selectedOption3.value,
-                    periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
-                    periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd')
-                });
-            }).then(function () {
-                $scope.extracted = true;
-                deferred.resolve();
-            }).catch(function () {
-                deferred.reject();
+            $scope.uploadPromise = apiSvc.upload({ file: file, columnName: $scope.selectedOption2.value });
+            $scope.uploadPromise.then(function () {
+                $scope.uploaded = true;
             });
         };
 
@@ -110,11 +94,20 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
         // };
 
         $scope.sendPts = function (ptsMasking) {
-            $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
+            $scope.sendPtsPromise = apiSvc.extractMemberInfo({
+                inputDataType: $scope.selectedOption.value,
+                periodType: $scope.selectedOption3.value,
+                periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
+                periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd')
+            });
+
+            $scope.sendPtsPromise.then(function () {
+                $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
+            });
         };
 
         $scope.isPtsDisabled = function () {
-            return !$scope.extracted;
+            return !$scope.uploaded;
         };
 
         authSvc.getUserInfo().then(function (userInfo) {
