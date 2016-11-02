@@ -64,10 +64,61 @@
 	</div>
 	<hr>
 	<div>
-		<button type="button" class="btn btn-primary" ng-click="loadMembers()" ng-disabled="!extracted"><i class="fa fa-search"></i> 조회</button>
+		<button type="button" class="btn btn-default" ng-click="openExplain()"><i class="fa fa-question-circle"></i> 추출항목 설명</button>
+		<!--<button type="button" class="btn btn-primary" ng-click="loadMembers()" ng-disabled="!extracted"><i class="fa fa-search"></i> 조회</button>
 		<div cg-busy="membersPromise">
 			<div class="grid-div" ui-grid="gridOptionsMembers" ui-grid-pagination ui-grid-resize-columns></div>
-		</div>
+		</div>-->
 	</div>
 	<div ng-include="'partials/common/pts-form-tpl.html'"></div>
 </div>
+<script type="text/ng-template" id="explainModal.html">
+	<div class="modal-header">
+		<h4 class="modal-title">추출항목 설명</h4>
+	</div>
+	<div class="modal-body">
+		<table class="table table-bordered bg-white small">
+			<thead class="bg-gray">
+				<th style="width:120px;">추출항목</th>
+				<th>설명</th>
+			</thead>
+			<tbody>
+				<tr><td>접수일자</td><td>마감 기준 일자</td></tr>
+				<tr><td>승인일시</td><td>승인 기준 일자. 마감 일자와 동일</td></tr>
+				<tr><td>대표승인번호</td><td>TR 건수 산출 기준</td></tr>
+				<tr><td>승인번호</td><td>일반적으로 대표승인번호와 일치하나, 사용, 할인 등 단일 TR에 서브 TR이 복수 개 존재 할 경우 다름</td></tr>
+				<tr><td>매출일시</td><td>가맹점에서 전달한 매출 발생 일자. 실시간이 승인 거래가 아닌 경우 접수일자와 다를 수 있음</td></tr>
+				<tr><td>회원ID</td><td>MBR_ID</td></tr>
+				<tr><td>카드코드</td><td></td></tr>
+				<tr><td>카드코드명</td><td></td></tr>
+				<tr><td>카드번호</td><td></td></tr>
+				<tr><td>정산제휴사코드</td><td>정산 주체가 다를 경우 발생 제휴사와 다를 수 있음 (예: 자동차 보험사의 주유소 적립 등)</td></tr>
+				<tr><td>정산제휴사명</td><td></td></tr>
+				<tr><td>정산가맹점코드</td><td>정산 주체가 다를 경우 발생 가맹점과 다를 수 있음</td></tr>
+				<tr><td>정산가맹점명</td><td></td></tr>
+				<tr><td>발생제휴사코드 </td><td></td></tr>
+				<tr><td>발생제휴사명</td><td></td></tr>
+				<tr><td>발생가맹점코드</td><td></td></tr>
+				<tr><td>발생가맹점명</td><td></td></tr>
+				<tr><td>포인트종류코드</td><td></td></tr>
+				<tr><td>포인트종류명</td><td></td></tr>
+				<tr><td>전표코드</td><td></td></tr>
+				<tr><td>전표명</td><td></td></tr>
+				<tr><td>매출금액</td><td>가맹점에서 전달된 매출 금액. 실제 매출 금액과는 다를 수 있음</td></tr>
+				<tr><td>포인트</td><td></td></tr>
+				<tr><td>제휴사연회비</td><td>Cross Sell 발생 후 적립 포인트에서 차감 하는 금액</td></tr>
+				<tr><td>수수료</td><td>적립/사용 시 가맹점으로부터 받는 수수료</td></tr>
+				<tr><td>지불수단코드</td><td></td></tr>
+				<tr><td>지불수단명</td><td></td></tr>
+				<tr><td>기관코드</td><td></td></tr>
+				<tr><td>기관명</td><td></td></tr>
+				<tr><td>유종코드</td><td></td></tr>
+				<tr><td>유종명</td><td></td></tr>
+				<tr><td>쿠폰코드</td><td></td></tr>
+				<tr><td>쿠폰명</td><td></td></tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+	</div>
+</script>

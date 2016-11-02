@@ -110,6 +110,10 @@ angular.module('app').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$time
             $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
         };
 
+        $scope.isPtsDisabled = function () {
+            return !$scope.ptsUsername || !$scope.gridOptionsMembers.data.length;
+        };
+
         $scope.downloadCsvFormat = function () {
             var text = '회원ID,카드번호,CI번호,성명,생년월일,성별';
             var data = new Blob([text], { type: 'text/csv;charset=utf-8' });

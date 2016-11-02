@@ -11,6 +11,6 @@
 				<button class="btn btn-default" ng-class="{'btn-info': !ptsMasking}" ng-model="ptsMasking" uib-btn-radio="false">안함</button>
 			</div>
 		</div>
-		<button type="button" class="btn btn-danger" ng-click="sendPts(ptsMasking)" ng-disabled="!ptsUsername || !gridOptionsMembers.data.length"><i class="fa fa-send"></i> PTS 전송</button>
+		<button type="button" class="btn btn-danger" ng-click="sendPts(ptsMasking)" ng-disabled="isDisabled()"><i class="fa fa-send"></i> PTS 전송</button>
 	</form>
 </div>
