@@ -11,17 +11,13 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
 
         $scope.selectOptions2 = [
             { label: 'TR', value: 'tr' },
+            { label: 'TR (고객성명 포함)', value: 'tr_mbrKorNm' },
             { label: '회원ID', value: 'mbrId' }
         ];
 
         $scope.selectOptions3 = [
             { label: '접수일자', value: 'rcv_dt' },
             { label: '매출일자', value: 'sale_dt' }
-        ];
-
-        $scope.selectOptions4 = [
-            { label: '포함', value: true },
-            { label: '미포함', value: false }
         ];
 
         // $scope.gridOptionsMembers = {

@@ -1,55 +1,33 @@
 <div class="section-content">
 	<div class="row">
 		<div class="col-md-7">
-			<form class="form-horizontal" name="form">
-				<div class="form-group">
-					<div class="col-sm-6">
-						<div class="input-group">
-							<label class="input-group-addon">입력데이터</label>
-							<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
-								ng-model="selectedOption"></select>
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<div class="input-group">
-							<label class="input-group-addon">추출대상</label>
-							<select class="form-control" ng-init="selectedOption2 = selectOptions2[0]" ng-options="option.label for option in selectOptions2"
-								ng-model="selectedOption2" ng-change="changeColumnVisible()"></select>
-						</div>
-					</div>
+			<form class="form-inline">
+				<div class="input-group">
+					<label class="input-group-addon">입력데이터</label>
+					<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
+						ng-model="selectedOption"></select>
 				</div>
-
-				<div class="form-group">
-					<div class="col-sm-6">
-						<div class="input-group">
-							<label class="input-group-addon">고객성명 포함 여부</label>
-							<select class="form-control" ng-init="selectedOption4 = selectOptions4[0]" ng-options="option.label for option in selectOptions4"
-								ng-model="selectedOption4"></select>
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<div class="input-group">
-							<label class="input-group-addon">일자기준</label>
-							<select class="form-control" ng-init="selectedOption3 = selectOptions3[0]" ng-options="option.label for option in selectOptions3"
-								ng-model="selectedOption3"></select>
-						</div>
-					</div>
+				<div class="input-group">
+					<label class="input-group-addon">추출대상</label>
+					<select class="form-control" ng-init="selectedOption2 = selectOptions2[0]" ng-options="option.label for option in selectOptions2"
+						ng-model="selectedOption2" ng-change="changeColumnVisible()"></select>
 				</div>
-
-				<div class="form-group">
-					<div class="col-sm-6">
-						<div class="input-group">
-							<label class="input-group-addon">조회기간</label>
-							<input type="date" class="form-control" ng-model="periodFrom" uib-datepicker-popup is-open="popup.opened" ng-required="true">
-							<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup.opened=true"><i class="fa fa-calendar"></i></button></span>
-						</div>
-					</div>
-					<div class="col-sm-5">
-						<div class="input-group">
-							<input type="date" class="form-control" ng-model="periodTo" uib-datepicker-popup is-open="popup2.opened" ng-required="true">
-							<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup2.opened=true"><i class="fa fa-calendar"></i></button></span>
-						</div>
-					</div>
+				<div class="input-group">
+					<label class="input-group-addon">일자기준</label>
+					<select class="form-control" ng-init="selectedOption3 = selectOptions3[0]" ng-options="option.label for option in selectOptions3"
+						ng-model="selectedOption3"></select>
+				</div>
+			</form>
+			<br>
+			<form class="form-inline" name="form">
+				<div class="input-group">
+					<label class="input-group-addon">조회기간</label>
+					<input type="date" class="form-control" ng-model="periodFrom" uib-datepicker-popup is-open="popup.opened" ng-required="true">
+					<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup.opened=true"><i class="fa fa-calendar"></i></button></span>
+				</div>
+				<div class="input-group">
+					<input type="date" class="form-control" ng-model="periodTo" uib-datepicker-popup is-open="popup2.opened" ng-required="true">
+					<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup2.opened=true"><i class="fa fa-calendar"></i></button></span>
 				</div>
 			</form>
 		</div>

@@ -56,118 +56,35 @@ public class RequestService {
 			@Override
 			protected void printHeader(CSVPrinter printer, List<AutoMap> list) throws IOException {
 
-				if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0101")) {
-					List<String> keyList = new ArrayList<String>();
-					keyList.add("회원ID");
-					keyList.add("OCB닷컴 로그인ID");
-					keyList.add("CI번호");
-					keyList.add("한글성명");
-					keyList.add("카드번호");
-					keyList.add("시럽스마트월렛회원ID");
-					keyList.add("11번가회원ID");
-					keyList.add("NO");
-					printer.printRecord(keyList);
+				if ("PAN0101".equals(uploadProgress.getPageId())) {
+					printer.printRecord("회원ID", "OCB닷컴 로그인ID", "CI번호", "한글성명", "카드번호", "시럽스마트월렛회원ID", "11번가회원ID", "NO");
 				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0103")) {
-					List<String> keyList = new ArrayList<String>();
-					keyList.add("회원ID");
-					keyList.add("카드번호");
-					keyList.add("CI번호");
-					keyList.add("한글성명");
-					keyList.add("생년월일");
-					keyList.add("성별");
-					keyList.add("OCB카드여부");
-					keyList.add("CI일치여부");
-					keyList.add("성명일치여부");
-					keyList.add("생년월일일치여부");
-					keyList.add("성별일치여부");
-					keyList.add("불일치항목포함여부");
-					keyList.add("NO");
-					printer.printRecord(keyList);
-				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0105")) {
-					List<String> keyList = new ArrayList<String>();
-					keyList.add("접수일시");
-					keyList.add("접수번호");
-					keyList.add("승인일시");
-					keyList.add("대표 승인번호");
-					keyList.add("승인번호");
-					keyList.add("매출일시");
-					keyList.add("회원ID");
-					keyList.add("카드코드");
-					keyList.add("카드번호");
-					keyList.add("발생제휴사");
-					keyList.add("발생가맹점");
-					keyList.add("정산가맹점");
-					keyList.add("포인트종류");
-					keyList.add("전표");
-					keyList.add("매출금액");
-					keyList.add("적립포인트");
-					keyList.add("제휴사연회비");
-					keyList.add("수수료");
-					keyList.add("지불수단");
-					keyList.add("기관");
-					keyList.add("유종");
-					keyList.add("주유량");
-					keyList.add("쿠폰");
-					keyList.add("회원한글명");
-					keyList.add("NO");
-					printer.printRecord(keyList);
-				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0106")) {
-					List<String> keyList = new ArrayList<String>();
-					keyList.add("회원ID");
-					keyList.add("OCB닷컴 United ID");
-					keyList.add("성별");
-					keyList.add("연령");
-					keyList.add("자택 행정동 대그룹명");
-					keyList.add("자택 행정동 중그룹명");
-					keyList.add("직장 행정동 대그룹명");
-					keyList.add("직장 행정동 중그룹명");
-					keyList.add("결혼 여부");
-					keyList.add("마케팅 동의 여부");
-					keyList.add("이메일 수신 동의 여부");
-					keyList.add("광고성 SMS 수신 동의 여부");
-					keyList.add("정보성 SMS 수신 동의 여부");
-					keyList.add("앱 푸시 수신 동의 여부");
-					keyList.add("혜택/모바일전단 푸시 동의 여부");
-					keyList.add("포인트사용적립 푸시 동의 여부");
-					keyList.add("친구와 함께쓰기 푸시 동의 여부");
-					keyList.add("코인알림 푸시 동의 여부");
-					keyList.add("위치활용 동의 여부");
-					keyList.add("모바일전단매장 동의 여부");
-					keyList.add("모바일전단상권 동의 여부");
-					keyList.add("OCB닷컴 가입 여부");
-					keyList.add("OCB앱 가입 여부");
-					keyList.add("OCB플러스 가입 여부");
-					keyList.add("629세그먼트코드");
-					keyList.add("트래픽세그먼트코드");
-					keyList.add("OCB닷컴 최종 로그인 일자");
-					keyList.add("OCB앱 최종 사용 일자");
-					keyList.add("앱출석 최종 사용 일자");
-					keyList.add("룰렛 최종 사용 일자");
-					keyList.add("게임 최종 사용 일자");
-					keyList.add("OCB플러스 최종 유실적 일자");
-					keyList.add("라커0 최종 유실적 일자");
-					keyList.add("미리줌 최종 유실적 일자");
-					keyList.add("더줌 최종 유실적 일자");
-					keyList.add("상품전단 최종 유실적 일자");
-					keyList.add("모바일카드 보유 여부");
-					keyList.add("SKP카드 보유 여부");
-					keyList.add("신용카드 보유 여부");
-					keyList.add("체크카드 보유 여부");
-					keyList.add("통신카드 보유 여부");
-					keyList.add("엔크린보너스카드 보유 여부");
-					keyList.add("화물복지카드 보유 여부");
-					keyList.add("주유전용카드 보유 여부");
-					keyList.add("주유 최종 유실적 일자");
-					keyList.add("통신 최종 유실적 일자");
-					keyList.add("금융 최종 유실적 일자");
-					keyList.add("기타 최종 유실적 일자");
-					keyList.add("온라인 최종 유실적 일자");
-					keyList.add("온라인쿠폰 최종 유실적 일자");
-					keyList.add("가용포인트");
-					keyList.add("NO");
-					printer.printRecord(keyList);
+					printer.printRecord("회원ID", "카드번호", "CI번호", "한글성명", "생년월일", "성별", "OCB카드여부", "CI일치여부", "성명일치여부",
+							"생년월일일치여부", "성별일치여부", "불일치항목포함여부", "NO");
+				} else if ("PAN0105".equals(uploadProgress.getPageId())) {
+					if ("TR_MBR_KOR_NM".equals(uploadProgress.getColumnName())) {
+						printer.printRecord("접수일시", "승인일시", "대표 승인번호", "승인번호", "매출일시", "회원ID", "카드코드", "카드코드명", "카드번호",
+								"정산제휴사코드", "정산제휴사명", "정산가맹점코드", "정산가맹점명", "발생제휴사코드", "발생제휴사명", "발생가맹점코드", "발생가맹점명",
+								"포인트종류코드", "포인트종류명", "전표코드", "전표명", "매출금액", "포인트", "제휴사연회비", "수수료", "지불수단코드", "지불수단명",
+								"기관코드", "기관명", "유종코드", "유종명", "쿠폰코드", "쿠폰명", "회원한글명");
+					} else {
+						printer.printRecord("접수일시", "승인일시", "대표 승인번호", "승인번호", "매출일시", "회원ID", "카드코드", "카드코드명", "카드번호",
+								"정산제휴사코드", "정산제휴사명", "정산가맹점코드", "정산가맹점명", "발생제휴사코드", "발생제휴사명", "발생가맹점코드", "발생가맹점명",
+								"포인트종류코드", "포인트종류명", "전표코드", "전표명", "매출금액", "포인트", "제휴사연회비", "수수료", "지불수단코드", "지불수단명",
+								"기관코드", "기관명", "유종코드", "유종명", "쿠폰코드", "쿠폰명", "회원한글명");
+					}
+				} else if ("PAN0106".equals(uploadProgress.getPageId())) {
+					printer.printRecord("회원ID", "OCB닷컴 United ID", "성별", "연령", "자택 행정동 대그룹명", "자택 행정동 중그룹명",
+							"직장 행정동 대그룹명", "직장 행정동 중그룹명", "결혼 여부", "마케팅 동의 여부", "이메일 수신 동의 여부", "광고성 SMS 수신 동의 여부",
+							"정보성 SMS 수신 동의 여부", "앱 푸시 수신 동의 여부", "혜택/모바일전단 푸시 동의 여부", "포인트사용적립 푸시 동의 여부",
+							"친구와 함께쓰기 푸시 동의 여부", "코인알림 푸시 동의 여부", "위치활용 동의 여부", "BLE 동의 여부", "Geo-Fencing 동의 여부",
+							"OCB닷컴 가입 여부", "OCB앱 가입 여부", "OCB플러스 가입 여부", "629세그먼트코드", "트래픽세그먼트코드", "OCB닷컴 최종 로그인 일자",
+							"OCB앱 최종 사용 일자", "앱출석 최종 사용 일자", "룰렛 최종 사용 일자", "게임 최종 사용 일자", "OCB플러스 최종 유실적 일자",
+							"라커0 최종 유실적 일자", "미리줌 최종 유실적 일자", "더줌 최종 유실적 일자", "상품전단 최종 유실적 일자", "모바일카드 보유 여부",
+							"SKP카드 보유 여부", "신용카드 보유 여부", "체크카드 보유 여부", "통신카드 보유 여부", "엔크린보너스카드 보유 여부", "화물복지카드 보유 여부",
+							"주유전용카드 보유 여부", "주유 최종 유실적 일자", "통신 최종 유실적 일자", "금융 최종 유실적 일자", "기타 최종 유실적 일자",
+							"온라인 최종 유실적 일자", "온라인쿠폰 최종 유실적 일자", "가용포인트", "NO");
 				} else {
-
 					Set<?> keyList = list.get(0).keySet();
 					printer.printRecord(keyList);
 				}
@@ -176,7 +93,7 @@ public class RequestService {
 			@Override
 			protected void printRecord(CSVPrinter printer, AutoMap map) throws IOException {
 
-				if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0101")) {
+				if ("PAN0101".equals(uploadProgress.getPageId())) {
 
 					List<String> dataList = new ArrayList<String>();
 
@@ -230,7 +147,7 @@ public class RequestService {
 
 					printer.printRecord(dataList);
 
-				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0103")) {
+				} else if ("PAN0103".equals(uploadProgress.getPageId())) {
 
 					List<String> dataList = new ArrayList<String>();
 
@@ -314,139 +231,7 @@ public class RequestService {
 
 					printer.printRecord(dataList);
 
-				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0105")) {
-
-					List<String> dataList = new ArrayList<String>();
-
-					if (map.get("rcvDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("rcvDt").toString());
-					}
-					if (map.get("rcvSeq") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("rcvSeq").toString());
-					}
-					if (map.get("apprDttm") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("apprDttm").toString());
-					}
-					if (map.get("repApprNo") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("repApprNo").toString());
-					}
-					if (map.get("apprNo") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("apprNo").toString());
-					}
-					if (map.get("saleDttm") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("saleDttm").toString());
-					}
-					if (map.get("mbrId") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("mbrId").toString());
-					}
-					if (map.get("cardDtlGrp") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("cardDtlGrp").toString());
-					}
-					if (map.get("cardNo") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("cardNo").toString());
-					}
-					if (map.get("alcmpn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("alcmpn").toString());
-					}
-					if (map.get("mcnt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("mcnt").toString());
-					}
-					if (map.get("stlmtMcnt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("stlmtMcnt").toString());
-					}
-					if (map.get("pntKnd") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("pntKnd").toString());
-					}
-					if (map.get("slip") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("slip").toString());
-					}
-					if (map.get("saleAmt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("saleAmt").toString());
-					}
-					if (map.get("pnt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("pnt").toString());
-					}
-					if (map.get("csMbrCmmsn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("csMbrCmmsn").toString());
-					}
-					if (map.get("cmmsn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("cmmsn").toString());
-					}
-					if (map.get("pmntWayCd") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("pmntWayCd").toString());
-					}
-					if (map.get("org") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("org").toString());
-					}
-					if (map.get("oilPrdctSgrp") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("oilPrdctSgrp").toString());
-					}
-					if (map.get("saleQty") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("saleQty").toString());
-					}
-					if (map.get("cpnPrd") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("cpnPrd").toString());
-					}
-					if (map.get("mbrKorNm") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("mbrKorNm").toString());
-					}
-					if (map.get("rnum") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("rnum").toString());
-					}
-
-					printer.printRecord(dataList);
-
-				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0106")) {
+				} else if ("PAN0106".equals(uploadProgress.getPageId())) {
 					List<String> dataList = new ArrayList<String>();
 
 					if (map.get("mbrId") == null) {
