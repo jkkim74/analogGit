@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'apiSvc', 'authSvc',
-    function ($scope, $q, $http, $timeout, $filter, uiGridConstants, apiSvc, authSvc) {
+angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'apiSvc', 'authSvc', 'toastr',
+    function ($scope, $q, $http, $timeout, $filter, uiGridConstants, apiSvc, authSvc, toastr) {
 
         $scope.selectOptions = [
             { label: '회원ID', value: 'mbr_id' },
@@ -69,6 +69,11 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         $scope.upload = function (file) {
+            if ($scope.form.$invalid) {
+                toastr.warning('조회기간을 설정해주세요');
+                return;
+            }
+
             $scope.uploadProgressLoadingMessage = 'Uploading...';
 
             var deferred = $q.defer();

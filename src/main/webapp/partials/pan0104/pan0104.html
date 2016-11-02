@@ -1,31 +1,29 @@
 <div class="section-content">
-	<div class="row">
-		<div class="col-md-9">
-			<form class="form-inline">
-				<div class="form-group">
-					<div class="input-group">
-						<label class="input-group-addon">조회년월</label>
+	<div>
+		<form class="form-inline">
+			<div class="form-group">
+				<div class="input-group">
+					<label class="input-group-addon">조회년월</label>
 
-						<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
-							ng-model="selectedOption" ng-change="searchSummary()"></select>
-					</div>
+					<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
+						ng-model="selectedOption" ng-change="searchSummary()"></select>
 				</div>
-			</form>
-
-			<div cg-busy="summaryPromise">
-				<div class="grid-div" ui-grid="gridOptionsSummary" ui-grid-resize-columns></div>
 			</div>
+		</form>
 
-			<div class="pull-right btn-toolbar" role="toolbar">
-				<div class="btn-group btn-group-sm" role="group">
-					<button type="button" class="btn btn-primary" ng-click="noticeExtinction('ocbcom')" ng-disabled="!gridOptionsSummary.data.length">OCB 전송</button>
-					<button type="button" class="btn btn-primary" ng-click="noticeExtinction('em')" ng-disabled="!gridOptionsSummary.data.length">EM 전송</button>
-					<button type="button" class="btn btn-primary" ng-click="noticeExtinction('sms')" ng-disabled="!gridOptionsSummary.data.length">SMS 전송</button>
-					<!--<button type="button" class="btn btn-primary" ng-click="noticeExtinction('tm')" ng-disabled="!gridOptionsSummary.data.length">TM 전송</button>-->
-				</div>
-				<div class="btn-group btn-group-sm" role="group">
-					<button type="button" class="btn btn-primary" ng-click="noticeExtinction('all')" ng-disabled="!gridOptionsSummary.data.length">전체 전송</button>
-				</div>
+		<div cg-busy="summaryPromise">
+			<div class="grid-div" ui-grid="gridOptionsSummary" ui-grid-resize-columns></div>
+		</div>
+
+		<div class="pull-right btn-toolbar" role="toolbar">
+			<div class="btn-group btn-group-sm" role="group">
+				<button type="button" class="btn btn-primary" ng-click="noticeExtinction('ocbcom')" ng-disabled="!gridOptionsSummary.data.length">OCB 전송</button>
+				<button type="button" class="btn btn-primary" ng-click="noticeExtinction('em')" ng-disabled="!gridOptionsSummary.data.length">EM 전송</button>
+				<button type="button" class="btn btn-primary" ng-click="noticeExtinction('sms')" ng-disabled="!gridOptionsSummary.data.length">SMS 전송</button>
+				<!--<button type="button" class="btn btn-primary" ng-click="noticeExtinction('tm')" ng-disabled="!gridOptionsSummary.data.length">TM 전송</button>-->
+			</div>
+			<div class="btn-group btn-group-sm" role="group">
+				<button type="button" class="btn btn-primary" ng-click="noticeExtinction('all')" ng-disabled="!gridOptionsSummary.data.length">전체 전송</button>
 			</div>
 		</div>
 	</div>
@@ -60,7 +58,7 @@
 			<div class="form-group">
 				<div class="input-group">
 					<label class="input-group-addon">OCB닷컴 United ID</label>
-					<input type="text" class="form-control" ng-model="unitedId">
+					<input type="text" class="form-control" placeholder="EC_USER_ID" ng-model="unitedId">
 				</div>
 			</div>
 			<div class="form-group">
