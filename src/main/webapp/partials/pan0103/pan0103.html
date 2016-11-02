@@ -12,7 +12,10 @@
 			</form>
 			<br>
 			<div cg-busy="uploadPromise">
-				<label>업로드( 양식 : 회원ID,카드번호,CI번호,성명,생년월일,성별 )</label>
+				<label>업로드</label>
+				<label>양식 : 회원ID,카드번호(16자리),CI번호(88자리),한글성명,생년월일(8자리),성별(1:남자/2:여자) </label>
+				<label>ex) 1111111111,111111111111,CINO,홍길동,19800101,1 </label>
+				<label>*엑셀업로드시 헤더는 제외해 주세요. </label>
 				<button type="button" class="btn btn-default btn-xs" ng-click="downloadCsvFormat()"><i class="fa fa-download fa-sm"></i> 양식 다운로드</button>
 				<div ngf-select="upload($file)" ngf-drop="upload($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'" ngf-max-size="1GB"
 					class="drop-box" ngf-drag-over-class="'drop-box-dragover'">
