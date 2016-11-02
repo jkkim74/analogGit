@@ -58,7 +58,7 @@ public class RequestService {
 
 				if ("PAN0101".equals(uploadProgress.getPageId())) {
 					printer.printRecord("회원ID", "OCB닷컴 로그인ID", "CI번호", "한글성명", "카드번호", "시럽스마트월렛회원ID", "11번가회원ID", "NO");
-				} else if ((uploadProgress.getPageId()).equalsIgnoreCase("PAN0103")) {
+				} else if ("PAN0103".equals(uploadProgress.getPageId())) {
 					printer.printRecord("회원ID", "카드번호", "CI번호", "한글성명", "생년월일", "성별", "OCB카드여부", "CI일치여부", "성명일치여부",
 							"생년월일일치여부", "성별일치여부", "불일치항목포함여부", "NO");
 				} else if ("PAN0105".equals(uploadProgress.getPageId())) {
@@ -71,7 +71,7 @@ public class RequestService {
 						printer.printRecord("접수일시", "승인일시", "대표 승인번호", "승인번호", "매출일시", "회원ID", "카드코드", "카드코드명", "카드번호",
 								"정산제휴사코드", "정산제휴사명", "정산가맹점코드", "정산가맹점명", "발생제휴사코드", "발생제휴사명", "발생가맹점코드", "발생가맹점명",
 								"포인트종류코드", "포인트종류명", "전표코드", "전표명", "매출금액", "포인트", "제휴사연회비", "수수료", "지불수단코드", "지불수단명",
-								"기관코드", "기관명", "유종코드", "유종명", "쿠폰코드", "쿠폰명", "회원한글명");
+								"기관코드", "기관명", "유종코드", "유종명", "쿠폰코드", "쿠폰명");
 					}
 				} else if ("PAN0106".equals(uploadProgress.getPageId())) {
 					printer.printRecord("회원ID", "OCB닷컴 United ID", "성별", "연령", "자택 행정동 대그룹명", "자택 행정동 중그룹명",
