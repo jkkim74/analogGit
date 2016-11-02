@@ -39,16 +39,18 @@ public abstract class CsvCreatorTemplate<T> {
 
 			List<T> list = nextList();
 
-			if (!list.isEmpty()) {
+			if (list != null && !list.isEmpty()) {
 				// 파일 첫줄에 헤더 추가
 				printHeader(printer, list);
 
-				do {
+				while (list != null && !list.isEmpty()) {
 					// 각 행을 파일에 쓰기
 					for (T t : list) {
 						printRecord(printer, t);
 					}
-				} while (!(list = nextList()).isEmpty()); // 건 단위로 읽어서 없을 때까지 반복
+
+					list = nextList();
+				}
 			}
 		} catch (IOException e) {
 			throw new BizException("CSV 파일 생성 실패", e);
