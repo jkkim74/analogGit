@@ -112,7 +112,7 @@ public class ApiController {
 		List<AutoMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, true);
 		int count = oracleRepository.countMembers(uploadProgress);
 
-		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, pageId,
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, pageId,
 				list.size());
 
 		return ApiResponse.builder().value(list).totalItems(count).build();
@@ -128,8 +128,9 @@ public class ApiController {
 		List<AutoMap> list = oracleRepository.selectMemberInfo(params);
 
 		String username = Helper.currentUser().getUsername();
+		String mbrKorNm = oracleRepository.selectMbrKorNm(mbrId);
 
-		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId,
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
 				(String) params.get("pageId"), 1);
 
 		return list;
@@ -142,8 +143,9 @@ public class ApiController {
 		List<AutoMap> list = querycacheRepository.selectAgreementInfo(mbrId);
 
 		String username = Helper.currentUser().getUsername();
+		String mbrKorNm = oracleRepository.selectMbrKorNm(mbrId);
 
-		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId,
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
 				(String) params.get("pageId"), 1);
 
 		return list;
@@ -213,8 +215,9 @@ public class ApiController {
 		List<AutoMap> list = querycacheRepository.selectTransactionHistory(mbrId);
 
 		String username = Helper.currentUser().getUsername();
+		String mbrKorNm = oracleRepository.selectMbrKorNm(mbrId);
 
-		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId,
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
 				(String) params.get("pageId"), 1);
 
 		return list;
