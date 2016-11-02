@@ -42,7 +42,7 @@ angular.module('app').controller('PAN0002Ctrl', ['$scope', '$q', '$http', '$time
             }
 
             if (colDef.name === 'ptsUsername') {
-                apiSvc.saveUser({ username: rowEntity.username, ptsUsername: rowEntity.ptsUsername });
+                apiSvc.saveUser({ username: rowEntity.username, ptsUsername: rowEntity.ptsUsername || '' });
             } else if (colDef.name === 'enabled') {
                 apiSvc.saveUser({ username: rowEntity.username, enabled: rowEntity.enabled }).then(function (data) {
                     rowEntity.beginDttm = data.value.beginDttm;
