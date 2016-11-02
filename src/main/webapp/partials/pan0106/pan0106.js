@@ -36,8 +36,8 @@ angular.module('app').controller('PAN0106Ctrl', ['$scope', '$q', '$http', '$time
                 { field: 'tusePushAgrmtYn', displayName: '친구와 함께쓰기 푸시 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'coinNotiPushAgrmtYn', displayName: '코인알림 푸시 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'locUtlzAgrmtYn', displayName: '위치활용 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'mlfShpAgrmtYn', displayName: '모바일전단매장 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'mlfTrdareaAgrmtYn', displayName: '모바일전단상권 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'mlfShpAgrmtYn', displayName: 'BLE 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'mlfTrdareaAgrmtYn', displayName: 'Geo-Fencing 동의 여부', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'ocbcomJoinYn', displayName: 'OCB닷컴 가입 여부', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'ocbAppJoinYn', displayName: 'OCB앱 가입 여부', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'ocbPlusJoinYn', displayName: 'OCB플러스 가입 여부', width: 100, cellTooltip: true, headerTooltip: true },
@@ -116,6 +116,10 @@ angular.module('app').controller('PAN0106Ctrl', ['$scope', '$q', '$http', '$time
 
         $scope.sendPts = function (ptsMasking) {
             $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
+        };
+
+        $scope.isPtsDisabled = function () {
+            return !$scope.ptsUsername || !$scope.gridOptionsMembers.data.length;
         };
 
         authSvc.getUserInfo().then(function (userInfo) {

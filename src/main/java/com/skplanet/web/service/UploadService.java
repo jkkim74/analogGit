@@ -87,7 +87,6 @@ public class UploadService {
 
 	public void endImport(JobParameters parameters) {
 		markFinish(parameters.getString("pageId"), parameters.getString("username"));
-		removeUploadedFile(Paths.get(parameters.getString("filePath")));
 	}
 
 	public void markRunning(String pageId, String username, String columnName, String filename) {
@@ -149,17 +148,17 @@ public class UploadService {
 		return uploadPath;
 	}
 
-	public void removeUploadedFile(Path filePath) {
-		if (autoRemove) {
-			try {
-				if (!Files.deleteIfExists(filePath)) {
-					log.warn("Failed to delete [{}] because it did not exist", filePath);
-				}
-			} catch (IOException e) {
-				log.error("Failed to remove uploaded file", e);
-			}
-		}
-	}
+	// public void removeUploadedFile(Path filePath) {
+	// if (autoRemove) {
+	// try {
+	// if (!Files.deleteIfExists(filePath)) {
+	// log.warn("Failed to delete [{}] because it did not exist", filePath);
+	// }
+	// } catch (IOException e) {
+	// log.error("Failed to remove uploaded file", e);
+	// }
+	// }
+	// }
 
 	public UploadProgress getFinishedUploadProgress(String pageId, String username) {
 		UploadProgress uploadProgress = getUploadProgress(pageId, username);

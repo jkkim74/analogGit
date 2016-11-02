@@ -2,7 +2,7 @@
 	<form class="form-inline">
 		<div class="input-group">
 			<span class="input-group-addon"><i class="fa fa-address-book"></i> PTS 계정</span>
-			<input type="text" class="form-control" ng-value="ptsUsername" size="10" readonly>
+			<input type="text" class="form-control" ng-value="ptsUsername" readonly>
 		</div>
 		<div class="input-group">
 			<span class="input-group-addon"><i class="fa fa-user-secret"></i> 개인정보 마스킹</span>
@@ -11,6 +11,6 @@
 				<button class="btn btn-default" ng-class="{'btn-info': !ptsMasking}" ng-model="ptsMasking" uib-btn-radio="false">안함</button>
 			</div>
 		</div>
-		<button type="button" class="btn btn-danger" ng-click="sendPts(ptsMasking)" ng-disabled="!gridOptionsMembers.data.length"><i class="fa fa-send"></i> PTS 전송</button>
+		<button type="button" class="btn btn-danger" ng-click="sendPts(ptsMasking)" ng-disabled="isPtsDisabled()"><i class="fa fa-send"></i> PTS 전송</button>
 	</form>
 </div>

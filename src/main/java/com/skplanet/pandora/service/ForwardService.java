@@ -5,11 +5,9 @@ import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.web.model.TransmissionType;
 import com.skplanet.web.service.FtpService;
-import com.skplanet.web.service.UploadService;
 import com.skplanet.web.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +18,6 @@ public class ForwardService {
 
 	@Autowired
 	private FtpService ftpService;
-	
-	@Autowired
-	private UploadService uploadService;
 
 	@Value("${ftp.extraction.host}")
 	private String extractionHost;
@@ -69,22 +64,6 @@ public class ForwardService {
 		// ftpService.send(localPath, remotePath, notificationHost,
 		// notificationPort, notificationUsername,
 		// notificationPassword);
-	}
-
-	public void forwardToFtpServer(MultipartFile file, String pageId, String username, String columnName) {
-		Path filePath = uploadService.saveUploadFile(file);
-
-		uploadService.prepareTemporaryTable(pageId, username);
-
-		uploadService.getNumberOfColumnsAndValidate(pageId, filePath);
-
-		uploadService.markRunning(pageId, username, columnName, filePath.getFileName().toString());
-
-		sendForExtraction(filePath);
-
-		uploadService.markFinish(pageId, username);
-
-		uploadService.removeUploadedFile(filePath);
 	}
 
 }

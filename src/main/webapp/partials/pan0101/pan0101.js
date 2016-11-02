@@ -79,6 +79,10 @@ angular.module('app').controller('PAN0101Ctrl', ['$scope', '$q', '$http', '$time
             $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
         };
 
+        $scope.isPtsDisabled = function () {
+            return !$scope.ptsUsername || !$scope.gridOptionsMembers.data.length;
+        };
+
         authSvc.getUserInfo().then(function (userInfo) {
             $scope.ptsUsername = userInfo.ptsUsername;
         });

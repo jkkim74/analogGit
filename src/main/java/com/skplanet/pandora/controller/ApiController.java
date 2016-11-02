@@ -1,6 +1,7 @@
 package com.skplanet.pandora.controller;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.service.IdmsLogService;
 import com.skplanet.web.service.SshService;
 import com.skplanet.web.service.UploadService;
+import com.skplanet.web.util.Constant;
 import com.skplanet.web.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -75,13 +77,9 @@ public class ApiController {
 			throw new BizException("빈 파일입니다");
 		}
 
-		if ("PAN0105".equalsIgnoreCase(pageId)) {
-			forwardService.forwardToFtpServer(file, pageId, username, columnName);
-		} else {
-			JobParameters jobParameters = uploadService.readyToImport(file, pageId, username, columnName);
+		JobParameters jobParameters = uploadService.readyToImport(file, pageId, username, columnName);
 
-			uploadService.beginImport(jobParameters);
-		}
+		uploadService.beginImport(jobParameters);
 
 		return ApiResponse.builder().message("업로드 성공").build();
 	}
@@ -266,6 +264,8 @@ public class ApiController {
 		String username = Helper.currentUser().getUsername();
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
+
+		forwardService.sendForExtraction(Paths.get(Constant.APP_FILE_DIR, uploadProgress.getFilename()));
 
 		sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, uploadProgress.getFilename());
 
