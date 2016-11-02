@@ -22,13 +22,13 @@ import com.skplanet.web.util.CsvCreatorTemplate;
 import com.skplanet.web.util.Helper;
 
 @Service
-public class RequestService {
-
-	@Autowired
-	private PtsService ptsService;
+public class TransmissionService {
 
 	@Autowired
 	private OracleRepository oracleRepository;
+
+	@Autowired
+	private PtsService ptsService;
 
 	@Value("${app.files.encoding.pts}")
 	private String encoding;

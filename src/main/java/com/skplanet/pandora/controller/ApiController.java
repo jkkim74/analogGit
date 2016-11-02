@@ -18,7 +18,7 @@ import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.pandora.service.ForwardService;
 import com.skplanet.pandora.service.NoticeService;
-import com.skplanet.pandora.service.RequestService;
+import com.skplanet.pandora.service.TransmissionService;
 import com.skplanet.web.exception.BizException;
 import com.skplanet.web.model.ApiResponse;
 import com.skplanet.web.model.AutoMap;
@@ -54,7 +54,7 @@ public class ApiController {
 	private ForwardService forwardService;
 
 	@Autowired
-	private RequestService ptsService;
+	private TransmissionService ptsService;
 
 	@Autowired
 	private SshService sshService;
