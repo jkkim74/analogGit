@@ -76,31 +76,42 @@ public class IdmsLogService {
 	public void send() {
 		if (!enabled) {
 			log.debug("disabled");
-			return;
+			// 계속 진행하여 FTP 전송만 하지 않고 파일 생성은 시도
 		}
 
 		// 로그 작성 시간 정보 수집
 		String beginDttm = Helper.nowDateTimeString();
 		Path jobInfoPath = createJobInfoFile(beginDttm);
-		ftpService.send(jobInfoPath, "/" + jobInfoPath.getFileName(), ftpHost, ftpPort, ftpUsername, ftpPassword);
+		if (enabled) {
+			ftpService.send(jobInfoPath, "/" + jobInfoPath.getFileName(), ftpHost, ftpPort, ftpUsername, ftpPassword);
+		}
 
 		// 고객정보조회 로그 수집
 		Path memberSearchLogPath = createMemberSearchLogFile();
-		ftpService.send(memberSearchLogPath, "/" + memberSearchLogPath.getFileName(), ftpHost, ftpPort, ftpUsername,
-				ftpPassword);
+		if (enabled) {
+			ftpService.send(memberSearchLogPath, "/" + memberSearchLogPath.getFileName(), ftpHost, ftpPort, ftpUsername,
+					ftpPassword);
+		}
 
 		// 사용자 계정 정보 수집
 		Path userInfoPath = createUserInfoFile();
-		ftpService.send(userInfoPath, "/" + userInfoPath.getFileName(), ftpHost, ftpPort, ftpUsername, ftpPassword);
+		if (enabled) {
+			ftpService.send(userInfoPath, "/" + userInfoPath.getFileName(), ftpHost, ftpPort, ftpUsername, ftpPassword);
+		}
 
 		// 로그인/아웃 로그 수집
 		Path accessLogPath = createAccessLogFile();
-		ftpService.send(accessLogPath, "/" + accessLogPath.getFileName(), ftpHost, ftpPort, ftpUsername, ftpPassword);
+		if (enabled) {
+			ftpService.send(accessLogPath, "/" + accessLogPath.getFileName(), ftpHost, ftpPort, ftpUsername,
+					ftpPassword);
+		}
 
 		// 로그 작성 시간 정보 수집 종료시간 포함하여 덮어쓰기
 		String endDttm = Helper.nowDateTimeString();
 		jobInfoPath = createJobInfoFile(beginDttm, endDttm);
-		ftpService.send(jobInfoPath, "/" + jobInfoPath.getFileName(), ftpHost, ftpPort, ftpUsername, ftpPassword);
+		if (enabled) {
+			ftpService.send(jobInfoPath, "/" + jobInfoPath.getFileName(), ftpHost, ftpPort, ftpUsername, ftpPassword);
+		}
 	}
 
 	@Async
