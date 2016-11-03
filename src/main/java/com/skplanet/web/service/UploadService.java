@@ -21,6 +21,7 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -89,7 +90,7 @@ public class UploadService {
 		markFinish(parameters.getString("pageId"), parameters.getString("username"));
 	}
 
-	public void markRunning(String pageId, String username, String columnName, String filename) {
+	private void markRunning(String pageId, String username, String columnName, String filename) {
 		UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
 
 		if (uploadProgress != null && uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
@@ -101,18 +102,18 @@ public class UploadService {
 		metaRepository.upsertUploadProgress(pageId, username, underScoredColumnName, filename, UploadStatus.RUNNING);
 	}
 
-	public void markFinish(String pageId, String username) {
+	private void markFinish(String pageId, String username) {
 		metaRepository.upsertUploadProgress(pageId, username, null, null, UploadStatus.FINISH);
 	}
 
-	public void prepareTemporaryTable(String pageId, String username) {
+	private void prepareTemporaryTable(String pageId, String username) {
 		if (tempRepository.countTable(pageId, username) <= 0) {
 			tempRepository.createTable(pageId, username);
 		}
 		tempRepository.truncateTable(pageId, username);
 	}
 
-	public long getNumberOfColumnsAndValidate(String pageId, Path uploadPath) {
+	private long getNumberOfColumnsAndValidate(String pageId, Path uploadPath) {
 		long numberOfColumns = 1;
 		if ("PAN0103".equalsIgnoreCase(pageId)) {
 			numberOfColumns = 6;
@@ -131,7 +132,7 @@ public class UploadService {
 		return numberOfColumns;
 	}
 
-	public Path saveUploadFile(MultipartFile file) {
+	private Path saveUploadFile(MultipartFile file) {
 		File uploadDirectory = new File(Constant.APP_FILE_DIR);
 		if (!uploadDirectory.exists()) {
 			uploadDirectory.mkdir();
@@ -148,17 +149,25 @@ public class UploadService {
 		return uploadPath;
 	}
 
-	// public void removeUploadedFile(Path filePath) {
-	// if (autoRemove) {
-	// try {
-	// if (!Files.deleteIfExists(filePath)) {
-	// log.warn("Failed to delete [{}] because it did not exist", filePath);
-	// }
-	// } catch (IOException e) {
-	// log.error("Failed to remove uploaded file", e);
-	// }
-	// }
-	// }
+	@Scheduled(fixedDelay = 86400000L) // day by day after startup
+	public void removeStoredFile() {
+		if (!autoRemove) {
+			return;
+		}
+
+		Path appFileDir = Paths.get(Constant.APP_FILE_DIR);
+
+		for (File f : appFileDir.toFile().listFiles()) {
+			// 30days = 2592000000msec = 60 * 60 * 24 * 30 * 1000
+			if (f.isFile() && f.lastModified() < System.currentTimeMillis() - 2592000000L) {
+				boolean result = f.delete();
+				if (!result) {
+					log.warn("Failed to remove file: {}", f.getName());
+				}
+
+			}
+		}
+	}
 
 	public UploadProgress getFinishedUploadProgress(String pageId, String username) {
 		UploadProgress uploadProgress = getUploadProgress(pageId, username);
