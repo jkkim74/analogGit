@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skplanet.web.service.IdmsLogService;
+import com.skplanet.web.util.Helper;
 
 @RestController
 @RequestMapping("test")
@@ -33,7 +34,8 @@ public class TestController {
 		map.put("WL-Proxy-Client-IP: {}", req.getHeader("WL-Proxy-Client-IP"));
 		map.put("HTTP_CLIENT_IP: {}", req.getHeader("HTTP_CLIENT_IP"));
 		map.put("HTTP_X_FORWARDED_FOR: {}", req.getHeader("HTTP_X_FORWARDED_FOR"));
-		map.put("getRemoteAddr(): {}", req.getRemoteAddr());
+		map.put("getRemoteAddr: {}", req.getRemoteAddr());
+		map.put("serverIp: {}", Helper.serverIp());
 
 		return map;
 	}
