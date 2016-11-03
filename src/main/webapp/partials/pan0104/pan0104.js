@@ -99,7 +99,7 @@ angular.module('app').controller('PAN0104Ctrl', ['$scope', '$q', '$http', '$time
         $scope.searchTargets = function (offset, limit) {
             var params = {
                 baseYm: $scope.selectedOption2.value,
-                notiType: $scope.selectedOption3.value,
+                transmissionType: $scope.selectedOption3.value,
                 unitedId: $scope.unitedId,
                 mbrKorNm: $scope.mbrKorNm,
                 clphnNo: $scope.clphnNo,
@@ -115,10 +115,10 @@ angular.module('app').controller('PAN0104Ctrl', ['$scope', '$q', '$http', '$time
             });
         };
 
-        $scope.noticeExtinction = function (notiType) {
+        $scope.noticeExtinction = function (transmissionType) {
             var params = {
                 baseYm: $scope.selectedOption.value,
-                notiType: notiType
+                transmissionType: transmissionType
             };
 
             $scope.summaryPromise = apiSvc.noticeExtinction(params);

@@ -63,10 +63,10 @@
 			</where>
 		) T
 		<where>
-			<if test="notiType == 'ocbcom'">AND OCBCOM = 1</if>
-			<if test="notiType == 'em'">AND EM = 1</if>
-			<if test="notiType == 'sms'">AND SMS = 1</if>
-			<if test="notiType == 'tm'">AND TM = 1</if>
+			<if test="transmissionType == 'ocbcom'">AND OCBCOM = 1</if>
+			<if test="transmissionType == 'em'">AND EM = 1</if>
+			<if test="transmissionType == 'sms'">AND SMS = 1</if>
+			<if test="transmissionType == 'tm'">AND TM = 1</if>
 		</where>
 		ORDER BY BASE_YM DESC
 	</sql>
@@ -113,10 +113,10 @@
 			</where>
 		) T
 		<where>
-			<if test="notiType == 'ocbcom'">AND OCBCOM = 1</if>
-			<if test="notiType == 'em'">AND EM = 1</if>
-			<if test="notiType == 'sms'">AND SMS = 1</if>
-			<if test="notiType == 'tm'">AND TM = 1</if>
+			<if test="transmissionType == 'ocbcom'">AND OCBCOM = 1</if>
+			<if test="transmissionType == 'em'">AND EM = 1</if>
+			<if test="transmissionType == 'sms'">AND SMS = 1</if>
+			<if test="transmissionType == 'tm'">AND TM = 1</if>
 		</where>
 		ORDER BY BASE_YM DESC
 	</sql>
