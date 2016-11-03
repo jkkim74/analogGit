@@ -1,9 +1,10 @@
 package com.skplanet.pandora.controller;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,16 +24,18 @@ public class TestController {
 	}
 
 	@GetMapping("ip")
-	public Model ip(HttpServletRequest req, Model model) {
-		// 프록시에서 remote ip address를 얻기위한 가능한 방법들.
-		model.addAttribute("X-Forwarded-For: {}", req.getHeader("X-Forwarded-For"));
-		model.addAttribute("Proxy-Client-IP: {}", req.getHeader("Proxy-Client-IP"));
-		model.addAttribute("WL-Proxy-Client-IP: {}", req.getHeader("WL-Proxy-Client-IP"));
-		model.addAttribute("HTTP_CLIENT_IP: {}", req.getHeader("HTTP_CLIENT_IP"));
-		model.addAttribute("HTTP_X_FORWARDED_FOR: {}", req.getHeader("HTTP_X_FORWARDED_FOR"));
-		model.addAttribute("getRemoteAddr(): {}", req.getRemoteAddr());
+	public HashMap<String, String> ip(HttpServletRequest req) {
+		HashMap<String, String> map = new HashMap<>();
 
-		return model;
+		// 프록시에서 remote ip address를 얻기위한 가능한 방법들.
+		map.put("X-Forwarded-For: {}", req.getHeader("X-Forwarded-For"));
+		map.put("Proxy-Client-IP: {}", req.getHeader("Proxy-Client-IP"));
+		map.put("WL-Proxy-Client-IP: {}", req.getHeader("WL-Proxy-Client-IP"));
+		map.put("HTTP_CLIENT_IP: {}", req.getHeader("HTTP_CLIENT_IP"));
+		map.put("HTTP_X_FORWARDED_FOR: {}", req.getHeader("HTTP_X_FORWARDED_FOR"));
+		map.put("getRemoteAddr(): {}", req.getRemoteAddr());
+
+		return map;
 	}
 
 }
