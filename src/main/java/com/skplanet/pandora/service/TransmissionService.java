@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.csv.CSVPrinter;
@@ -14,13 +15,19 @@ import org.springframework.stereotype.Service;
 
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.web.model.AutoMap;
+import com.skplanet.web.model.TransmissionType;
 import com.skplanet.web.model.UploadProgress;
+import com.skplanet.web.service.FtpService;
 import com.skplanet.web.service.PtsService;
+import com.skplanet.web.service.SmsService;
 import com.skplanet.web.util.Constant;
 import com.skplanet.web.util.CsvCreatorTemplate;
 import com.skplanet.web.util.Helper;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class TransmissionService {
 
 	@Autowired
@@ -29,16 +36,43 @@ public class TransmissionService {
 	@Autowired
 	private PtsService ptsService;
 
+	@Autowired
+	private SmsService smsService;
+
+	@Autowired
+	private FtpService ftpService;
+
+	@Value("${ftp.extraction.host}")
+	private String extractionHost;
+
+	@Value("${ftp.extraction.port}")
+	private int extractionPort;
+
+	@Value("${ftp.extraction.username}")
+	private String extractionUsername;
+
+	@Value("${ftp.extraction.password}")
+	private String extractionPassword;
+
+	@Value("${ftp.extinction.host}")
+	private String extinctionHost;
+
+	@Value("${ftp.extinction.port}")
+	private int extinctionPort;
+
+	@Value("${ftp.extinction.username}")
+	private String extinctionUsername;
+
+	@Value("${ftp.extinction.password}")
+	private String extinctionPassword;
+
 	@Value("${app.files.encoding.pts}")
-	private String encoding;
+	private String encodingForPts;
 
-	public void sendToPts(String ptsUsername, boolean ptsMasking, UploadProgress uploadProgress) {
-		String csvFile = createCsvFile(ptsUsername, ptsMasking, uploadProgress);
+	@Value("${app.files.encoding.ftp}")
+	private String encodingForFtp;
 
-		ptsService.send(csvFile, ptsUsername);
-	}
-
-	private String createCsvFile(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
+	public void sendToPts(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
 
 		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>() {
 
@@ -111,9 +145,80 @@ public class TransmissionService {
 		};
 
 		Path filePath = Paths.get(Constant.APP_FILE_DIR, Helper.uniqueCsvFilename("P140802BKhub_" + ptsUsername));
-		csvCreator.create(filePath, Charset.forName(encoding));
+		csvCreator.create(filePath, Charset.forName(encodingForPts));
 
-		return filePath.toFile().getAbsolutePath();
+		ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
+	}
+
+	public void sendToFtpForExtraction(Path localPath) {
+		String remotePath = "web/" + localPath.getFileName();
+
+		log.info("remotePath={}", remotePath);
+
+		ftpService.send(localPath, remotePath, extractionHost, extractionPort, extractionUsername, extractionPassword);
+	}
+
+	public void sendToFtpForExtinction(final Map<String, Object> params, final TransmissionType transmissionType) {
+
+		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>() {
+
+			int offset = 0;
+			int limit = 10000;
+
+			@Override
+			public List<AutoMap> nextList() {
+				params.put("offset", offset);
+				params.put("limit", limit);
+				offset += limit;
+
+				return oracleRepository.selectExtinctionTargets(params);
+			}
+
+			@Override
+			public void printRecord(CSVPrinter printer, AutoMap map) throws IOException {
+				String extnctObjDt = (String) map.get("extnctObjDt");
+
+				if (transmissionType == TransmissionType.OCBCOM) {
+					// 소명예정년,소멸예정월,소멸예정일,EC_USER_ID
+					printer.printRecord(extnctObjDt.substring(0, 4), extnctObjDt.substring(4, 6),
+							extnctObjDt.substring(6, 8), map.get("unitedId"));
+				} else if (transmissionType == TransmissionType.EM) {
+					String mbrId = (String) map.get("mbrId");
+					String unitedId = (String) map.get("unitedId");
+					String encrypted = Helper.skpEncrypt(mbrId + "," + unitedId);
+
+					// 소명예정년,소멸예정월,소멸예정일,고객성명,이메일주소,암호화값
+					printer.printRecord(extnctObjDt.substring(0, 4), extnctObjDt.substring(4, 6),
+							extnctObjDt.substring(6, 8), map.get("mbrKorNm"), map.get("emailAddr"), encrypted);
+				}
+			}
+
+		};
+
+		Path filePath = Paths.get(Constant.APP_FILE_DIR,
+				Helper.uniqueCsvFilename(transmissionType.name().toLowerCase()));
+
+		csvCreator.create(filePath, Charset.forName(encodingForFtp));
+
+		String remotePath = "";
+		if (transmissionType == TransmissionType.OCBCOM) {
+			remotePath = "pointExEmail/extinction_" + Helper.nowDateString() + ".txt";
+		} else if (transmissionType == TransmissionType.EM) {
+			remotePath = "pointExEmail/extinction_em_" + Helper.nowDateString() + ".txt";
+		}
+
+		log.info("remotePath={}", remotePath);
+
+		// ftpService.send(localPath, remotePath, extinctionHost,
+		// extinctionPort, extinctionUsername,
+		// extinctionPassword);
+	}
+
+	public void sendToSms(final Map<String, Object> params) {
+		params.put("noPaging", true);
+		List<AutoMap> list = oracleRepository.selectExtinctionTargets(params);
+
+		smsService.send(list);
 	}
 
 }

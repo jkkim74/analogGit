@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
-import com.skplanet.pandora.service.ForwardService;
 import com.skplanet.pandora.service.TransmissionService;
 import com.skplanet.web.exception.BizException;
 import com.skplanet.web.model.ApiResponse;
@@ -54,9 +53,6 @@ public class ApiController {
 
 	@Autowired
 	private SshService sshService;
-
-	@Autowired
-	private ForwardService forwardService;
 
 	@Autowired
 	private IdmsLogService idmsLogService;
@@ -264,7 +260,7 @@ public class ApiController {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
-		forwardService.sendToFtpForExtraction(Paths.get(Constant.APP_FILE_DIR, uploadProgress.getFilename()));
+		transmissionService.sendToFtpForExtraction(Paths.get(Constant.APP_FILE_DIR, uploadProgress.getFilename()));
 
 		sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, uploadProgress.getFilename());
 
@@ -291,17 +287,17 @@ public class ApiController {
 		switch (transmissionType) {
 		case OCBCOM:
 		case EM:
-			forwardService.sendToFtpForExtinction(params, transmissionType);
+			transmissionService.sendToFtpForExtinction(params, transmissionType);
 			break;
 		case SMS:
-			forwardService.sendToSms(params);
+			transmissionService.sendToSms(params);
 			break;
 		case TM:
 			break;
 		case ALL:
-			forwardService.sendToFtpForExtinction(params, TransmissionType.OCBCOM);
-			forwardService.sendToFtpForExtinction(params, TransmissionType.EM);
-			forwardService.sendToSms(params);
+			transmissionService.sendToFtpForExtinction(params, TransmissionType.OCBCOM);
+			transmissionService.sendToFtpForExtinction(params, TransmissionType.EM);
+			transmissionService.sendToSms(params);
 			break;
 		default:
 			throw new BizException("전송 대상이 지정되지 않았습니다");
