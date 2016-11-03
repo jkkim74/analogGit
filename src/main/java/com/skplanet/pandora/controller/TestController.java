@@ -29,13 +29,13 @@ public class TestController {
 		HashMap<String, String> map = new HashMap<>();
 
 		// 프록시에서 remote ip address를 얻기위한 가능한 방법들.
-		map.put("X-Forwarded-For: {}", req.getHeader("X-Forwarded-For"));
-		map.put("Proxy-Client-IP: {}", req.getHeader("Proxy-Client-IP"));
-		map.put("WL-Proxy-Client-IP: {}", req.getHeader("WL-Proxy-Client-IP"));
-		map.put("HTTP_CLIENT_IP: {}", req.getHeader("HTTP_CLIENT_IP"));
-		map.put("HTTP_X_FORWARDED_FOR: {}", req.getHeader("HTTP_X_FORWARDED_FOR"));
-		map.put("getRemoteAddr: {}", req.getRemoteAddr());
-		map.put("serverIp: {}", Helper.serverIp());
+		map.put("X-Forwarded-For}", req.getHeader("X-Forwarded-For"));
+		map.put("Proxy-Client-IP", req.getHeader("Proxy-Client-IP"));
+		map.put("WL-Proxy-Client-IP", req.getHeader("WL-Proxy-Client-IP"));
+		map.put("HTTP_CLIENT_IP", req.getHeader("HTTP_CLIENT_IP"));
+		map.put("HTTP_X_FORWARDED_FOR", req.getHeader("HTTP_X_FORWARDED_FOR"));
+		map.put("getRemoteAddr", req.getRemoteAddr());
+		map.put("serverIp", Helper.serverIp());
 
 		return map;
 	}
