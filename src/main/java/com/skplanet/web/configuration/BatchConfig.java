@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -15,6 +17,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.listener.JobExecutionListenerSupport;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -29,25 +32,26 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
-import com.skplanet.web.listener.JobNotificationListener;
+import com.skplanet.web.model.UploadStatus;
 import com.skplanet.web.model.UploadedPreview;
+import com.skplanet.web.repository.mysql.UploadMetaRepository;
 
 @Configuration
 @EnableBatchProcessing
 public class BatchConfig extends DefaultBatchConfigurer {
 
 	@Autowired
-	protected JobBuilderFactory jobBuilderFactory;
+	private JobBuilderFactory jobBuilderFactory;
 
 	@Autowired
-	protected StepBuilderFactory stepBuilderFactory;
-
-	@Autowired
-	protected JobExecutionListener jobExecutionListener;
+	private StepBuilderFactory stepBuilderFactory;
 
 	@Autowired
 	@Qualifier("oracleDataSource")
-	protected DataSource oracleDataSource;
+	private DataSource oracleDataSource;
+
+	@Autowired
+	private UploadMetaRepository metaRepository;
 
 	@Value("${app.files.encoding.upload}")
 	private String encoding;
@@ -142,6 +146,20 @@ public class BatchConfig extends DefaultBatchConfigurer {
 	public Step step1() {
 		return stepBuilderFactory.get("step1").<UploadedPreview, UploadedPreview> chunk(1000)
 				.reader(itemReader(null, null)).writer(itemWriter(null, null, null)).build();
+	}
+
+	class JobNotificationListener extends JobExecutionListenerSupport {
+
+		@Override
+		public void afterJob(JobExecution jobExecution) {
+			if (!jobExecution.isRunning()) {
+				JobParameters parameters = jobExecution.getJobParameters();
+				String pageId = parameters.getString("pageId");
+				String username = parameters.getString("username");
+				metaRepository.upsertUploadProgress(pageId, username, null, null, UploadStatus.FINISH);
+			}
+		}
+
 	}
 
 }

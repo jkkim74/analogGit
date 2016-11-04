@@ -35,14 +35,17 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
+	@Autowired
+	private RestTemplate restTemplate;
+
 	@Value("${idms.url}")
 	private String idmsUrl;
 
 	@Value("${idms.id}")
 	private String idmsId;
 
-	@Autowired
-	private RestTemplate restTemplate;
+	@Value("${app.enable.idms}")
+	private boolean idmsEnabled;
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -62,6 +65,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 			// local test only
 			if (Arrays.asList(env.getActiveProfiles()).contains("local")) {
+				((UserInfo) userDetails).setEmailAddr("1600328@partner.skcc.com");
 				return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 			}
 		} catch (UsernameNotFoundException e) {
@@ -76,6 +80,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	}
 
 	private void authenticateWithIdms(String username) {
+		if (!idmsEnabled) {
+			return;
+		}
+		
 		try {
 			String result = restTemplate.getForObject(idmsUrl, String.class, idmsId, username,
 					Helper.currentClientIp());
@@ -88,11 +96,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			log.info("IDMS RESULT_CD={}, RESULT_MSG={}", resultCd, resultMsg);
 
 			if (!"E0".equals(resultCd) && !"E99".equals(resultCd)) {
-				// throw new InternalAuthenticationServiceException(resultMsg);
+				throw new InternalAuthenticationServiceException(resultMsg);
 			}
 		} catch (IOException | ResourceAccessException e) {
 			log.info(e.toString());
-			// throw new InternalAuthenticationServiceException("IDMS Error", e);
+			throw new InternalAuthenticationServiceException("IDMS Error", e);
 		}
 	}
 

@@ -34,6 +34,7 @@ import com.skplanet.web.model.UploadStatus;
 import com.skplanet.web.repository.mysql.UploadMetaRepository;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.util.Constant;
+import com.skplanet.web.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -86,10 +87,6 @@ public class UploadService {
 		}
 	}
 
-	public void endImport(JobParameters parameters) {
-		markFinish(parameters.getString("pageId"), parameters.getString("username"));
-	}
-
 	private void markRunning(String pageId, String username, String columnName, String filename) {
 		UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
 
@@ -100,10 +97,6 @@ public class UploadService {
 		String underScoredColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
 
 		metaRepository.upsertUploadProgress(pageId, username, underScoredColumnName, filename, UploadStatus.RUNNING);
-	}
-
-	private void markFinish(String pageId, String username) {
-		metaRepository.upsertUploadProgress(pageId, username, null, null, UploadStatus.FINISH);
 	}
 
 	private void prepareTemporaryTable(String pageId, String username) {
@@ -138,7 +131,7 @@ public class UploadService {
 			uploadDirectory.mkdir();
 		}
 
-		Path uploadPath = Paths.get(Constant.APP_FILE_DIR, UUID.randomUUID() + "-" + file.getOriginalFilename());
+		Path uploadPath = Paths.get(Constant.APP_FILE_DIR, Helper.uniqueCsvFilename(null));
 
 		try (InputStream in = file.getInputStream()) {
 			Files.copy(in, uploadPath);
@@ -150,7 +143,7 @@ public class UploadService {
 	}
 
 	@Scheduled(fixedDelay = 86400000L) // day by day after startup
-	public void removeStoredFile() {
+	public void clearFileStore() {
 		if (!autoRemove) {
 			return;
 		}

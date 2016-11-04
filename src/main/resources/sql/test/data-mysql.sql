@@ -1,6 +1,8 @@
 insert into users(username, password, enabled, pts_username, create_dttm, begin_dttm) values('user', 'user', 1, 'co23835', '20160801090000', '20160801090000');
 insert into authorities(username, authority) values('user', 'ROLE_USER');
 insert into authorities(username, authority) values('user', 'ROLE_ADMIN');
+insert into page_access(username, page_id) values('user', 'PAN0002');
+insert into page_access(username, page_id) values('user', 'PAN0003');
 insert into page_access(username, page_id) values('user', 'PAN0101');
 insert into page_access(username, page_id) values('user', 'PAN0102');
 insert into page_access(username, page_id) values('user', 'PAN0103');
@@ -8,7 +10,3 @@ insert into page_access(username, page_id) values('user', 'PAN0104');
 insert into page_access(username, page_id) values('user', 'PAN0105');
 insert into page_access(username, page_id) values('user', 'PAN0106');
 insert into page_access(username, page_id) values('user', 'PAN0107');
-insert into page_access(username, page_id) values('user', 'PAN0002');
-insert into page_access(username, page_id) values('user', 'PAN0003');
-insert into page_access(username, page_id) values('user', 'CTAS0101');
-insert into page_access(username, page_id) values('user', 'CTAS0102');

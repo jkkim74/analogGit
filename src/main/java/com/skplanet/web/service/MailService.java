@@ -16,6 +16,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.google.common.collect.ObjectArrays;
 import com.skplanet.web.exception.BizException;
+import com.skplanet.web.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,14 +52,7 @@ public class MailService {
 
 		try {
 			helper.setFrom(from);
-
-			String[] toList = withTo.split("[,;]");
-			if (toList.length > 0) {
-				helper.setTo(ObjectArrays.concat(to, toList, String.class));
-			} else {
-				helper.setTo(to);
-			}
-
+			helper.setTo(Helper.eraseEmpty(to, String.class));
 			helper.setSubject(subject);
 
 			String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/templates/mail/" + templateName,
@@ -68,6 +62,21 @@ public class MailService {
 			mailSender.send(mimeMessage);
 		} catch (MessagingException e) {
 			throw new BizException("Failed to send EMAIL", e);
+		}
+	}
+
+	public void send(String templateName, Map<String, Object> model, String subject) {
+		String to = Helper.currentUser().getEmailAddr();
+		send(templateName, model, subject, to);
+	}
+
+	public void sendWith(String templateName, Map<String, Object> model, String subject) {
+		String to = Helper.currentUser().getEmailAddr();
+		String[] toList = withTo.split("[,;]");
+		if (toList.length > 0) {
+			send(templateName, model, subject, ObjectArrays.concat(toList, new String[] { to }, String.class));
+		} else {
+			send(templateName, model, subject, to);
 		}
 	}
 
