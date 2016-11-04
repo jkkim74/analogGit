@@ -34,6 +34,7 @@ import com.skplanet.web.model.UploadStatus;
 import com.skplanet.web.repository.mysql.UploadMetaRepository;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.util.Constant;
+import com.skplanet.web.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -130,7 +131,7 @@ public class UploadService {
 			uploadDirectory.mkdir();
 		}
 
-		Path uploadPath = Paths.get(Constant.APP_FILE_DIR, UUID.randomUUID() + "-" + file.getOriginalFilename());
+		Path uploadPath = Paths.get(Constant.APP_FILE_DIR, Helper.uniqueCsvFilename(null));
 
 		try (InputStream in = file.getInputStream()) {
 			Files.copy(in, uploadPath);

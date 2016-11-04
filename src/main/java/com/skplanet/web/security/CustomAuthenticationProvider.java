@@ -35,14 +35,17 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
+	@Autowired
+	private RestTemplate restTemplate;
+
 	@Value("${idms.url}")
 	private String idmsUrl;
 
 	@Value("${idms.id}")
 	private String idmsId;
 
-	@Autowired
-	private RestTemplate restTemplate;
+	@Value("${app.enable.idms}")
+	private boolean idmsEnabled;
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -77,6 +80,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	}
 
 	private void authenticateWithIdms(String username) {
+		if (!idmsEnabled) {
+			return;
+		}
+		
 		try {
 			String result = restTemplate.getForObject(idmsUrl, String.class, idmsId, username,
 					Helper.currentClientIp());
