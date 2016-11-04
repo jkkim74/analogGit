@@ -1,8 +1,6 @@
 'use strict';
 
-angular.module('app').constant('appInfo', {
-
-}).value('cgBusyDefaults', {
+angular.module('app').value('cgBusyDefaults', {
     message: 'Waiting...'
 }).config(['$stateProvider', '$urlRouterProvider', '$provide', '$translateProvider', 'uibDatepickerConfig', 'uibDatepickerPopupConfig',
     function ($stateProvider, $urlRouterProvider, $provide, $translateProvider, uibDatepickerConfig, uibDatepickerPopupConfig) {

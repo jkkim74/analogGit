@@ -8,9 +8,6 @@ angular.module('app').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
         this.authenticate = function (username, password) {
             var deferred = $q.defer();
 
-            var clientId = '50e81484-2b00-43df-a5cd-37538ec422ef';
-            var clientSecret = '52245357-e466-4957-a4c6-5c2ddaa46f6f';
-
             var params = {
                 grant_type: 'password',
                 username: username,
@@ -21,7 +18,7 @@ angular.module('app').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
             $http.post('oauth/token', $httpParamSerializer(params),
                 {
                     headers: {
-                        'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
+                        'Authorization': 'Basic ' + btoa(appInfo.clientId + ':' + appInfo.clientSecret),
                         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
                     }
                 }
