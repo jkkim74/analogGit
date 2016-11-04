@@ -2,6 +2,7 @@ package com.skplanet.web.util;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -10,9 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.io.Resources;
 import com.skplanet.web.security.UserInfo;
 
@@ -97,6 +101,16 @@ public final class Helper {
 			e.printStackTrace();
 			return "0.0.0.0";
 		}
+	}
+
+	public static <T> T[] eraseEmpty(T[] array, Class<T> type) {
+		Iterable<T> filtered = Iterables.filter(Arrays.asList(array), new Predicate<T>() {
+			@Override
+			public boolean apply(T input) {
+				return !StringUtils.isEmpty(input);
+			}
+		});
+		return Iterables.toArray(filtered, type);
 	}
 
 }
