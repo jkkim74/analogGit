@@ -86,10 +86,6 @@ public class UploadService {
 		}
 	}
 
-	public void endImport(JobParameters parameters) {
-		markFinish(parameters.getString("pageId"), parameters.getString("username"));
-	}
-
 	private void markRunning(String pageId, String username, String columnName, String filename) {
 		UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
 
@@ -100,10 +96,6 @@ public class UploadService {
 		String underScoredColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
 
 		metaRepository.upsertUploadProgress(pageId, username, underScoredColumnName, filename, UploadStatus.RUNNING);
-	}
-
-	private void markFinish(String pageId, String username) {
-		metaRepository.upsertUploadProgress(pageId, username, null, null, UploadStatus.FINISH);
 	}
 
 	private void prepareTemporaryTable(String pageId, String username) {
@@ -150,7 +142,7 @@ public class UploadService {
 	}
 
 	@Scheduled(fixedDelay = 86400000L) // day by day after startup
-	public void removeStoredFile() {
+	public void clearFileStore() {
 		if (!autoRemove) {
 			return;
 		}
