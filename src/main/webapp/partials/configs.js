@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app').constant('appInfo', {
-    entryPage: 'PAN0101'
+
 }).value('cgBusyDefaults', {
     message: 'Waiting...'
 }).config(['$stateProvider', '$urlRouterProvider', '$provide', '$translateProvider', 'uibDatepickerConfig', 'uibDatepickerPopupConfig',
