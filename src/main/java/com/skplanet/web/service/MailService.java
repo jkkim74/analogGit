@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
+import com.google.common.collect.ObjectArrays;
 import com.skplanet.web.exception.BizException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,13 +34,13 @@ public class MailService {
 	private String from;
 
 	@Value("${mail.to}")
-	private String to;
+	private String withTo;
 
 	@Value("${app.enable.mail}")
 	private boolean enabled;
 
 	@Async
-	public void send(String to, String subject, String templateName, Map<String, Object> model) {
+	public void send(String templateName, Map<String, Object> model, String subject, String... to) {
 		if (!enabled) {
 			log.debug("disabled");
 			return;
@@ -50,7 +51,14 @@ public class MailService {
 
 		try {
 			helper.setFrom(from);
-			helper.setTo(to);
+
+			String[] toList = withTo.split("[,;]");
+			if (toList.length > 0) {
+				helper.setTo(ObjectArrays.concat(to, toList, String.class));
+			} else {
+				helper.setTo(to);
+			}
+
 			helper.setSubject(subject);
 
 			String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/templates/mail/" + templateName,
@@ -60,14 +68,6 @@ public class MailService {
 			mailSender.send(mimeMessage);
 		} catch (MessagingException e) {
 			throw new BizException("Failed to send EMAIL", e);
-		}
-	}
-
-	public void send(String subject, String templateName, Map<String, Object> model) {
-		String[] toList = to.split("[,;]");
-
-		for (String to : toList) {
-			send(to, subject, templateName, model);
 		}
 	}
 

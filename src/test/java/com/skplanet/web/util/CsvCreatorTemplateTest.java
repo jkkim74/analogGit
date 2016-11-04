@@ -39,7 +39,7 @@ public class CsvCreatorTemplateTest {
 	@Test
 	public void testNormal() throws IOException {
 		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>() {
-			boolean none;
+			boolean done;
 
 			@Override
 			protected List<AutoMap> nextList() {
@@ -54,10 +54,11 @@ public class CsvCreatorTemplateTest {
 				List<AutoMap> list = new ArrayList<>();
 				list.add(m);
 
-				if (none) {
+				if (done) {
 					return Collections.emptyList();
 				}
-				none = true;
+				done = true;
+
 				return list;
 			}
 

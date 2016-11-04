@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.csv.CSVPrinter;
@@ -15,13 +15,19 @@ import org.springframework.stereotype.Service;
 
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.web.model.AutoMap;
+import com.skplanet.web.model.TransmissionType;
 import com.skplanet.web.model.UploadProgress;
+import com.skplanet.web.service.FtpService;
 import com.skplanet.web.service.PtsService;
+import com.skplanet.web.service.SmsService;
 import com.skplanet.web.util.Constant;
 import com.skplanet.web.util.CsvCreatorTemplate;
 import com.skplanet.web.util.Helper;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class TransmissionService {
 
 	@Autowired
@@ -30,16 +36,43 @@ public class TransmissionService {
 	@Autowired
 	private PtsService ptsService;
 
+	@Autowired
+	private SmsService smsService;
+
+	@Autowired
+	private FtpService ftpService;
+
+	@Value("${ftp.extraction.host}")
+	private String extractionHost;
+
+	@Value("${ftp.extraction.port}")
+	private int extractionPort;
+
+	@Value("${ftp.extraction.username}")
+	private String extractionUsername;
+
+	@Value("${ftp.extraction.password}")
+	private String extractionPassword;
+
+	@Value("${ftp.extinction.host}")
+	private String extinctionHost;
+
+	@Value("${ftp.extinction.port}")
+	private int extinctionPort;
+
+	@Value("${ftp.extinction.username}")
+	private String extinctionUsername;
+
+	@Value("${ftp.extinction.password}")
+	private String extinctionPassword;
+
 	@Value("${app.files.encoding.pts}")
-	private String encoding;
+	private String encodingForPts;
 
-	public void sendToPts(String ptsUsername, boolean ptsMasking, UploadProgress uploadProgress) {
-		String csvFile = createCsvFile(ptsUsername, ptsMasking, uploadProgress);
+	@Value("${app.files.encoding.ftp}")
+	private String encodingForFtp;
 
-		ptsService.send(csvFile, ptsUsername);
-	}
-
-	private String createCsvFile(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
+	public void sendToPts(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
 
 		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>() {
 
@@ -92,421 +125,100 @@ public class TransmissionService {
 
 			@Override
 			protected void printRecord(CSVPrinter printer, AutoMap map) throws IOException {
-
-				if ("PAN0101".equals(uploadProgress.getPageId())) {
-
-					List<String> dataList = new ArrayList<String>();
-
-					if (map.get("mbrId") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("mbrId").toString());
-					}
-
-					if (map.get("ocbcomLgnId") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("ocbcomLgnId").toString());
-					}
-
-					if (map.get("ciNo") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("ciNo").toString());
-					}
-
-					if (map.get("mbrKorNm") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("mbrKorNm").toString());
-					}
-
-					if (map.get("cardNo") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("cardNo").toString());
-					}
-
-					if (map.get("sywMbrId") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("sywMbrId").toString());
-					}
-
-					if (map.get("evsMbrId") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("evsMbrId").toString());
-					}
-
-					if (map.get("rnum") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("rnum").toString());
-					}
-
-					printer.printRecord(dataList);
-
-				} else if ("PAN0103".equals(uploadProgress.getPageId())) {
-
-					List<String> dataList = new ArrayList<String>();
-
-					if (map.get("mbrId") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("mbrId").toString());
-					}
-
-					if (map.get("cardNo") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("cardNo").toString());
-					}
-
-					if (map.get("ciNo") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("ciNo").toString());
-					}
-
-					if (map.get("mbrKorNm") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("mbrKorNm").toString());
-					}
-
-					if (map.get("leglBthdt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("leglBthdt").toString());
-					}
-
-					if (map.get("leglGndrFgCd") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("leglGndrFgCd").toString());
-					}
-
-					if (map.get("cardNoYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("cardNoYn").toString());
-					}
-
-					if (map.get("ciNoYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("ciNoYn").toString());
-					}
-
-					if (map.get("mbrKorNmYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("mbrKorNmYn").toString());
-					}
-
-					if (map.get("leglBthdtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("leglBthdtYn").toString());
-					}
-
-					if (map.get("leglGndrFgYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("leglGndrFgYn").toString());
-					}
-
-					if (map.get("allYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("allYn").toString());
-					}
-
-					if (map.get("rnum") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add((String) map.get("rnum").toString());
-					}
-
-					printer.printRecord(dataList);
-
-				} else if ("PAN0106".equals(uploadProgress.getPageId())) {
-					List<String> dataList = new ArrayList<String>();
-
-					if (map.get("mbrId") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("mbrId").toString());
-					}
-					if (map.get("unitedId") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("unitedId").toString());
-					}
-					if (map.get("gndr") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("gndr").toString());
-					}
-					if (map.get("age") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("age").toString());
-					}
-					if (map.get("homeHjdLgrp") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("homeHjdLgrp").toString());
-					}
-					if (map.get("homeHjdMgrp") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("homeHjdMgrp").toString());
-					}
-					if (map.get("jobpHjdLgrp") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("jobpHjdLgrp").toString());
-					}
-					if (map.get("jobpHjdMgrp") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("jobpHjdMgrp").toString());
-					}
-					if (map.get("mrrgYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("mrrgYn").toString());
-					}
-					if (map.get("ocbMktngAgrmtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("ocbMktngAgrmtYn").toString());
-					}
-					if (map.get("emailRcvAgrmtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("emailRcvAgrmtYn").toString());
-					}
-					if (map.get("advtSmsRcvAgrmtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("advtSmsRcvAgrmtYn").toString());
-					}
-					if (map.get("ifrmtSmsRcvAgrmtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("ifrmtSmsRcvAgrmtYn").toString());
-					}
-					if (map.get("pushRcvAgrmtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("pushRcvAgrmtYn").toString());
-					}
-					if (map.get("bnftMlfPushAgrmtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("bnftMlfPushAgrmtYn").toString());
-					}
-					if (map.get("pntUseRsvngPushAgrmtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("pntUseRsvngPushAgrmtYn").toString());
-					}
-					if (map.get("tusePushAgrmtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("tusePushAgrmtYn").toString());
-					}
-					if (map.get("coinNotiPushAgrmtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("coinNotiPushAgrmtYn").toString());
-					}
-					if (map.get("locUtlzAgrmtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("locUtlzAgrmtYn").toString());
-					}
-					if (map.get("mlfShpAgrmtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("mlfShpAgrmtYn").toString());
-					}
-					if (map.get("mlfTrdareaAgrmtYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("mlfTrdareaAgrmtYn").toString());
-					}
-					if (map.get("ocbcomJoinYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("ocbcomJoinYn").toString());
-					}
-					if (map.get("ocbAppJoinYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("ocbAppJoinYn").toString());
-					}
-					if (map.get("ocbPlusJoinYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("ocbPlusJoinYn").toString());
-					}
-					if (map.get("seg629Cd") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("seg629Cd").toString());
-					}
-					if (map.get("trfcSegCd") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("trfcSegCd").toString());
-					}
-					if (map.get("ocbcomMth07FnlLgnDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("ocbcomMth07FnlLgnDt").toString());
-					}
-					if (map.get("ocbAppMth07FnlUseDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("ocbAppMth07FnlUseDt").toString());
-					}
-					if (map.get("appAtdcMth07FnlUseDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("appAtdcMth07FnlUseDt").toString());
-					}
-					if (map.get("rletMth07FnlUseDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("rletMth07FnlUseDt").toString());
-					}
-					if (map.get("gameMth07FnlUseDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("gameMth07FnlUseDt").toString());
-					}
-					if (map.get("ocbPlusMth07FnlYachvDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("ocbPlusMth07FnlYachvDt").toString());
-					}
-					if (map.get("lckrMth07FnlYachvDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("lckrMth07FnlYachvDt").toString());
-					}
-					if (map.get("mzmMth07FnlYachvDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("mzmMth07FnlYachvDt").toString());
-					}
-					if (map.get("azmMth07FnlYachvDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("azmMth07FnlYachvDt").toString());
-					}
-					if (map.get("prdLflMth07FnlYachvDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("prdLflMth07FnlYachvDt").toString());
-					}
-					if (map.get("mblCardPossYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("mblCardPossYn").toString());
-					}
-					if (map.get("skpCardPossYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("skpCardPossYn").toString());
-					}
-					if (map.get("crdtCardPossYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("crdtCardPossYn").toString());
-					}
-					if (map.get("chkcrdPossYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("chkcrdPossYn").toString());
-					}
-					if (map.get("cmncnCardPossYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("cmncnCardPossYn").toString());
-					}
-					if (map.get("encleanBnsCardPossYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("encleanBnsCardPossYn").toString());
-					}
-					if (map.get("freiWlfrCardPossYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("freiWlfrCardPossYn").toString());
-					}
-					if (map.get("rflExcsCardPossYn") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("rflExcsCardPossYn").toString());
-					}
-					if (map.get("rflMth07FnlYachvDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("rflMth07FnlYachvDt").toString());
-					}
-					if (map.get("cmncnMth07FnlYachvDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("cmncnMth07FnlYachvDt").toString());
-					}
-					if (map.get("fncMth07FnlYachvDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("fncMth07FnlYachvDt").toString());
-					}
-					if (map.get("etcMth07FnlYachvDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("etcMth07FnlYachvDt").toString());
-					}
-					if (map.get("onlnMth07FnlYachvDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("onlnMth07FnlYachvDt").toString());
-					}
-					if (map.get("onlnMth07CpnFnlYachvDt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("onlnMth07CpnFnlYachvDt").toString());
-					}
-					if (map.get("avlPnt") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("avlPnt").toString());
-					}
-					if (map.get("rnum") == null) {
-						dataList.add(" ");
-					} else {
-						dataList.add(map.get("rnum").toString());
-					}
-
-					printer.printRecord(dataList);
-				} else {
+				String pageId = uploadProgress.getPageId();
+				switch (pageId) {
+				case "PAN0101":
+				case "PAN0103":
+				case "PAN0106":
+					Object rnum = map.get("rnum");
+					map.remove("rnum");
+					map.put("rnum", rnum); // 맨 뒤로 보내기
 					printer.printRecord(map.values());
+					break;
+				default:
+					map.remove("rnum");
+					printer.printRecord(map.values());
+
 				}
 			}
 
 		};
 
 		Path filePath = Paths.get(Constant.APP_FILE_DIR, Helper.uniqueCsvFilename("P140802BKhub_" + ptsUsername));
-		csvCreator.create(filePath, Charset.forName(encoding));
+		csvCreator.create(filePath, Charset.forName(encodingForPts));
 
-		return filePath.toFile().getAbsolutePath();
+		ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
+	}
+
+	public void sendToFtpForExtraction(Path localPath) {
+		String remotePath = "web/" + localPath.getFileName();
+
+		log.info("remotePath={}", remotePath);
+
+		ftpService.send(localPath, remotePath, extractionHost, extractionPort, extractionUsername, extractionPassword);
+	}
+
+	public void sendToFtpForExtinction(final Map<String, Object> params, final TransmissionType transmissionType) {
+
+		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>() {
+
+			int offset = 0;
+			int limit = 10000;
+
+			@Override
+			public List<AutoMap> nextList() {
+				params.put("offset", offset);
+				params.put("limit", limit);
+				offset += limit;
+
+				return oracleRepository.selectExtinctionTargets(params);
+			}
+
+			@Override
+			public void printRecord(CSVPrinter printer, AutoMap map) throws IOException {
+				String extnctObjDt = (String) map.get("extnctObjDt");
+
+				if (transmissionType == TransmissionType.OCBCOM) {
+					// 소명예정년,소멸예정월,소멸예정일,EC_USER_ID
+					printer.printRecord(extnctObjDt.substring(0, 4), extnctObjDt.substring(4, 6),
+							extnctObjDt.substring(6, 8), map.get("unitedId"));
+				} else if (transmissionType == TransmissionType.EM) {
+					String mbrId = (String) map.get("mbrId");
+					String unitedId = (String) map.get("unitedId");
+					String encrypted = Helper.skpEncrypt(mbrId + "," + unitedId);
+
+					// 소명예정년,소멸예정월,소멸예정일,고객성명,이메일주소,암호화값
+					printer.printRecord(extnctObjDt.substring(0, 4), extnctObjDt.substring(4, 6),
+							extnctObjDt.substring(6, 8), map.get("mbrKorNm"), map.get("emailAddr"), encrypted);
+				}
+			}
+
+		};
+
+		Path filePath = Paths.get(Constant.APP_FILE_DIR,
+				Helper.uniqueCsvFilename(transmissionType.name().toLowerCase()));
+
+		csvCreator.create(filePath, Charset.forName(encodingForFtp));
+
+		String remotePath = "";
+		if (transmissionType == TransmissionType.OCBCOM) {
+			remotePath = "pointExEmail/extinction_" + Helper.nowDateString() + ".txt";
+		} else if (transmissionType == TransmissionType.EM) {
+			remotePath = "pointExEmail/extinction_em_" + Helper.nowDateString() + ".txt";
+		}
+
+		log.info("remotePath={}", remotePath);
+
+		// ftpService.send(localPath, remotePath, extinctionHost,
+		// extinctionPort, extinctionUsername,
+		// extinctionPassword);
+	}
+
+	public void sendToSms(final Map<String, Object> params) {
+		params.put("noPaging", true);
+		List<AutoMap> list = oracleRepository.selectExtinctionTargets(params);
+
+		smsService.send(list);
 	}
 
 }

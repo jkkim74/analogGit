@@ -45,9 +45,24 @@
 		<trim prefix="UPDATE" suffixOverrides=",">
 			<if test="username != null and username != ''">USERNAME = #{username},</if>
 			<if test="ptsUsername != null and ptsUsername != ''">PTS_USERNAME = #{ptsUsername},</if>
+			<if test="ptsUsername != null and ptsUsername == ''">PTS_USERNAME = NULL,</if>
 			<if test="enabled != null and enabled != ''">ENABLED = IF('true' = #{enabled}, 1, 0),</if>
 			<if test="enabled != null and enabled == 'true'">BEGIN_DTTM = DATE_FORMAT(NOW(),'%Y%m%d%H%i%s'), END_DTTM = NULL,</if>
 			<if test="enabled != null and enabled == 'false'">END_DTTM = DATE_FORMAT(NOW(),'%Y%m%d%H%i%s'),</if>
+		</trim>
+	</update>
+	<update id="upsertUser" parameterType="map" databaseId="hsql">
+		INSERT
+		INTO USERS ( USERNAME, ENABLED, BEGIN_DTTM, CREATE_DTTM )
+		VALUES ( #{username}, 1, TO_CHAR(NOW(),'YYYYMMDDHH24MISS'), TO_CHAR(NOW(),'YYYYMMDDHH24MISS') )
+		ON DUPLICATE KEY
+		<trim prefix="UPDATE" suffixOverrides=",">
+			<if test="username != null and username != ''">USERNAME = #{username},</if>
+			<if test="ptsUsername != null and ptsUsername != ''">PTS_USERNAME = #{ptsUsername},</if>
+			<if test="ptsUsername != null and ptsUsername == ''">PTS_USERNAME = NULL,</if>
+			<if test="enabled != null and enabled != ''">ENABLED = #{enabled},</if>
+			<if test="enabled != null and enabled == 'true'">BEGIN_DTTM = TO_CHAR(NOW(),'YYYYMMDDHH24MISS'), END_DTTM = NULL,</if>
+			<if test="enabled != null and enabled == 'false'">END_DTTM = TO_CHAR(NOW(),'YYYYMMDDHH24MISS'),</if>
 		</trim>
 	</update>
 

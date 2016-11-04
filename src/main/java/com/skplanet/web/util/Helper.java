@@ -17,9 +17,7 @@ import com.google.common.io.Resources;
 import com.skplanet.web.security.UserInfo;
 
 import kr.co.skplanet.crypto.EncryptCustomerInfo;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public final class Helper {
 
 	private static final String EMREJECT_PW = "9gPXBD95qbDedk5PaRLE";
@@ -88,14 +86,6 @@ public final class Helper {
 	public static String currentClientIp() {
 		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest();
-
-		// 프록시에서 remote ip address를 얻기위한 가능한 방법들.
-		log.debug("X-Forwarded-For: {}", req.getHeader("X-Forwarded-For"));
-		log.debug("Proxy-Client-IP: {}", req.getHeader("Proxy-Client-IP"));
-		log.debug("WL-Proxy-Client-IP: {}", req.getHeader("WL-Proxy-Client-IP"));
-		log.debug("HTTP_CLIENT_IP: {}", req.getHeader("HTTP_CLIENT_IP"));
-		log.debug("HTTP_X_FORWARDED_FOR: {}", req.getHeader("HTTP_X_FORWARDED_FOR"));
-		log.debug("getRemoteAddr(): {}", req.getRemoteAddr());
 
 		return req.getRemoteAddr();
 	}

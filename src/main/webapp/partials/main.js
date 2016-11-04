@@ -24,5 +24,6 @@ angular.module('app', [
     'angular-ui-grid-translate',
     'toastr',
     'cgBusy',
-    'mwl.confirm'
+    'mwl.confirm',
+    'checklist-model'
 ]);

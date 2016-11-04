@@ -5,72 +5,87 @@
 	<select id="selectMembers" parameterType="map" resultType="AutoMap">
 		<include refid="com.skplanet.web.repository.pagingHead" />
 
-		<if test="uploadProgress.pageId == 'PAN0101'">
-			<if test="masking == true">
-				<include refid="selectMembers_PAN0101" />
-			</if>
-			<if test="masking == false">
-				<include refid="selectMembers_PAN0101_nomas" />
-			</if>
-		</if>
-		<if test="uploadProgress.pageId == 'PAN0103'">
-			<if test="masking == true">
-				<include refid="selectMembers_PAN0103" />
-			</if>
-			<if test="masking == false">
-				<include refid="selectMembers_PAN0103_nomas" />
-			</if>
-		</if>
-		<if test="uploadProgress.pageId == 'PAN0105'">
-			<if test="masking == true">
-				<include refid="selectMembers_PAN0105" />
-			</if>
-			<if test="masking == false">
-				<include refid="selectMembers_PAN0105_nomas" />
-			</if>
-		</if>
-		<if test="uploadProgress.pageId == 'PAN0106'">
-			<if test="masking == true">
-				<include refid="selectMembers_PAN0106" />
-			</if>
-			<if test="masking == false">
-				<include refid="selectMembers_PAN0106_nomas" />
-			</if>
-		</if>
+		<choose>
+			<when test="uploadProgress.pageId == 'PAN0101'">
+				<if test="masking == true">
+					<include refid="selectMembers_PAN0101" />
+				</if>
+				<if test="masking == false">
+					<include refid="selectMembers_PAN0101_nomas" />
+				</if>
+			</when>
+			<when test="uploadProgress.pageId == 'PAN0103'">
+				<if test="masking == true">
+					<include refid="selectMembers_PAN0103" />
+				</if>
+				<if test="masking == false">
+					<include refid="selectMembers_PAN0103_nomas" />
+				</if>
+			</when>
+			<when test="uploadProgress.pageId == 'PAN0105'">
+				<if test="masking == true">
+					<include refid="selectMembers_PAN0105" />
+				</if>
+				<if test="masking == false">
+					<include refid="selectMembers_PAN0105_nomas" />
+				</if>
+			</when>
+			<when test="uploadProgress.pageId == 'PAN0106'">
+				<if test="masking == true">
+					<include refid="selectMembers_PAN0106" />
+				</if>
+				<if test="masking == false">
+					<include refid="selectMembers_PAN0106_nomas" />
+				</if>
+			</when>
+			<otherwise>
+				SELECT 1 FROM DUAL WHERE 1=2
+			</otherwise>
+		</choose>
 
 		<include refid="com.skplanet.web.repository.pagingFoot" />
 	</select>
 	<select id="selectMembers" parameterType="map" resultType="AutoMap" databaseId="hsql">
-		<if test="uploadProgress.pageId == 'PAN0101'">
-			<include refid="selectMembers_PAN0101" />
-		</if>
-		<if test="uploadProgress.pageId == 'PAN0103'">
-			<include refid="selectMembers_PAN0103" />
-		</if>
-		<if test="uploadProgress.pageId == 'PAN0105'">
-			<include refid="selectMembers_PAN0105" />
-		</if>
-		<if test="uploadProgress.pageId == 'PAN0106'">
-			<include refid="selectMembers_PAN0106" />
-		</if>
+		<choose>
+			<when test="uploadProgress.pageId == 'PAN0101'">
+				<include refid="selectMembers_PAN0101" />
+			</when>
+			<when test="uploadProgress.pageId == 'PAN0103'">
+				<include refid="selectMembers_PAN0103" />
+			</when>
+			<when test="uploadProgress.pageId == 'PAN0105'">
+				<include refid="selectMembers_PAN0105" />
+			</when>
+			<when test="uploadProgress.pageId == 'PAN0106'">
+				<include refid="selectMembers_PAN0106" />
+			</when>
+			<otherwise>
+				SELECT 1 FROM DUAL WHERE 1=2
+			</otherwise>
+		</choose>
 
 		<include refid="com.skplanet.web.repository.pagingFoot" />
 	</select>
 
 	<select id="countMembers" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM (
-		<if test="uploadProgress.pageId == 'PAN0101'">
-			<include refid="selectMembers_PAN0101" />
-		</if>
-		<if test="uploadProgress.pageId == 'PAN0103'">
-			<include refid="selectMembers_PAN0103" />
-		</if>
-		<if test="uploadProgress.pageId == 'PAN0105'">
-			<include refid="selectMembers_PAN0105" />
-		</if>
-		<if test="uploadProgress.pageId == 'PAN0106'">
-			<include refid="selectMembers_PAN0106" />
-		</if>
+		<choose>
+			<when test="uploadProgress.pageId == 'PAN0101'">
+				<include refid="selectMembers_PAN0101" />
+			</when>
+			<when test="uploadProgress.pageId == 'PAN0103'">
+				<include refid="selectMembers_PAN0103" />
+			</when>
+			<when test="uploadProgress.pageId == 'PAN0105'">
+				<include refid="selectMembers_PAN0105" />
+			</when>
+			<when test="uploadProgress.pageId == 'PAN0106'">
+				<include refid="selectMembers_PAN0106" />
+			</when>
+			<otherwise>
+				SELECT 1 FROM DUAL WHERE 1=2
+			</otherwise>
+		</choose>
 		)
 	</select>
 

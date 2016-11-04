@@ -16,8 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
-import com.skplanet.pandora.service.ForwardService;
-import com.skplanet.pandora.service.NoticeService;
 import com.skplanet.pandora.service.TransmissionService;
 import com.skplanet.web.exception.BizException;
 import com.skplanet.web.model.ApiResponse;
@@ -51,16 +49,10 @@ public class ApiController {
 	private UploadService uploadService;
 
 	@Autowired
-	private ForwardService forwardService;
-
-	@Autowired
-	private TransmissionService ptsService;
+	private TransmissionService transmissionService;
 
 	@Autowired
 	private SshService sshService;
-
-	@Autowired
-	private NoticeService noticeService;
 
 	@Autowired
 	private IdmsLogService idmsLogService;
@@ -255,7 +247,7 @@ public class ApiController {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
-		ptsService.sendToPts(ptsUsername, ptsMasking, uploadProgress);
+		transmissionService.sendToPts(ptsUsername, ptsMasking, uploadProgress);
 
 		return ApiResponse.builder().message("PTS 전송 성공").build();
 	}
@@ -268,7 +260,7 @@ public class ApiController {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
-		forwardService.sendForExtraction(Paths.get(Constant.APP_FILE_DIR, uploadProgress.getFilename()));
+		transmissionService.sendToFtpForExtraction(Paths.get(Constant.APP_FILE_DIR, uploadProgress.getFilename()));
 
 		sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, uploadProgress.getFilename());
 
@@ -290,22 +282,22 @@ public class ApiController {
 
 	@PostMapping("/noticeExtinction")
 	public ApiResponse noticeExtinction(@RequestParam Map<String, Object> params) {
-		TransmissionType notiType = TransmissionType.valueOf(((String) params.get("notiType")).toUpperCase());
+		TransmissionType transmissionType = TransmissionType.valueOf(((String) params.get("transmissionType")).toUpperCase());
 
-		switch (notiType) {
+		switch (transmissionType) {
 		case OCBCOM:
 		case EM:
-			noticeService.noticeUsingFtp(params, notiType);
+			transmissionService.sendToFtpForExtinction(params, transmissionType);
 			break;
 		case SMS:
-			noticeService.noticeUsingSms(params);
+			transmissionService.sendToSms(params);
 			break;
 		case TM:
 			break;
 		case ALL:
-			noticeService.noticeUsingFtp(params, TransmissionType.OCBCOM);
-			noticeService.noticeUsingFtp(params, TransmissionType.EM);
-			noticeService.noticeUsingSms(params);
+			transmissionService.sendToFtpForExtinction(params, TransmissionType.OCBCOM);
+			transmissionService.sendToFtpForExtinction(params, TransmissionType.EM);
+			transmissionService.sendToSms(params);
 			break;
 		default:
 			throw new BizException("전송 대상이 지정되지 않았습니다");
