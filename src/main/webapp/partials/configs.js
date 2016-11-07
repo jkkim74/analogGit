@@ -2,8 +2,8 @@
 
 angular.module('app').value('cgBusyDefaults', {
     message: 'Waiting...'
-}).config(['$stateProvider', '$urlRouterProvider', '$provide', '$translateProvider', 'uibDatepickerConfig', 'uibDatepickerPopupConfig',
-    function ($stateProvider, $urlRouterProvider, $provide, $translateProvider, uibDatepickerConfig, uibDatepickerPopupConfig) {
+}).config(['$stateProvider', '$urlRouterProvider', '$provide', '$translateProvider', 'uibDatepickerConfig', 'uibDatepickerPopupConfig', 'IdleProvider',
+    function ($stateProvider, $urlRouterProvider, $provide, $translateProvider, uibDatepickerConfig, uibDatepickerPopupConfig, IdleProvider) {
 
         $urlRouterProvider.otherwise('/');
 
@@ -72,9 +72,12 @@ angular.module('app').value('cgBusyDefaults', {
         uibDatepickerPopupConfig.closeText = '닫기';
         uibDatepickerPopupConfig.currentText = '오늘';
 
+        IdleProvider.idle(3600); // 1시간
+        IdleProvider.timeout(10);
+
     }
-]).run(['$rootScope', '$state', 'authSvc', 'confirmationPopoverDefaults', '$window',
-    function ($rootScope, $state, authSvc, confirmationPopoverDefaults, $window) {
+]).run(['$rootScope', '$state', 'authSvc', 'confirmationPopoverDefaults', '$window', '$uibModal',
+    function ($rootScope, $state, authSvc, confirmationPopoverDefaults, $window, $uibModal) {
 
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams/*, fromState, fromParams, options*/) {
             var needAuth = true;
@@ -91,6 +94,24 @@ angular.module('app').value('cgBusyDefaults', {
                 $state.transitionTo('index.home');
                 event.preventDefault();
             }
+        });
+
+        $rootScope.$on('IdleStart', function () {
+            if ($rootScope.warningIdle) {
+                $rootScope.warningIdle.close();
+            }
+
+            $rootScope.warningIdle = $uibModal.open({
+                templateUrl: 'partials/common/idle-modal-tpl.html'
+            });
+        });
+
+        $rootScope.$on('IdleEnd', function () {
+            $rootScope.warningIdle.close();
+        });
+
+        $rootScope.$on('IdleTimeout', function () {
+            authSvc.logout();
         });
 
         // logout event log

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('app').service('authSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$timeout', '$window', '$state', 'toastr', '$uibModalStack', 'appInfo',
-    function ($log, $q, $http, $httpParamSerializer, $timeout, $window, $state, toastr, $uibModalStack, appInfo) {
+angular.module('app').service('authSvc', ['$log', '$q', '$http', '$httpParamSerializer', '$timeout', '$window', '$state', 'toastr', '$uibModalStack', 'appInfo', 'Idle',
+    function ($log, $q, $http, $httpParamSerializer, $timeout, $window, $state, toastr, $uibModalStack, appInfo, Idle) {
 
         var self = this;
 
@@ -26,6 +26,8 @@ angular.module('app').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
                 sessionStorage.setItem('access_token', resp.data.access_token);
                 return self.userInfo(true);
             }).then(function () {
+                Idle.watch();
+
                 if (appInfo.entryPage && !self.isAdmin()) {
                     $state.go('index.page', { pageId: appInfo.entryPage.toLowerCase() }, { reload: true });
                 } else {
@@ -48,6 +50,8 @@ angular.module('app').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
         };
 
         this.logout = function () {
+            Idle.unwatch();
+
             $uibModalStack.dismissAll();
 
             $http.get('api/users/logout', {
