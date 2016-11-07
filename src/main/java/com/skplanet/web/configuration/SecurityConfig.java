@@ -19,6 +19,8 @@ import org.springframework.security.ldap.search.FilterBasedLdapUserSearch;
 import org.springframework.security.ldap.search.LdapUserSearch;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import com.skplanet.web.security.CustomAuthenticationProvider;
 import com.skplanet.web.security.CustomUserDetailsContextMapper;
@@ -84,6 +86,15 @@ public class SecurityConfig {
 	@EnableAuthorizationServer
 	@EnableResourceServer
 	protected static class OAuthServerConfiguration {
+
+		@Autowired
+		@Qualifier("mysqlDataSource")
+		private DataSource mysqlDataSource;
+
+		@Bean
+		public TokenStore jdbcTokenStore() {
+			return new JdbcTokenStore(mysqlDataSource);
+		}
 
 	}
 
