@@ -1,9 +1,12 @@
 package com.skplanet.web.util;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -96,11 +99,20 @@ public final class Helper {
 
 	public static String serverIp() {
 		try {
-			return InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
+			for (Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces(); e.hasMoreElements();) {
+				NetworkInterface ni = e.nextElement();
+				for (Enumeration<InetAddress> ia = ni.getInetAddresses(); ia.hasMoreElements();) {
+					InetAddress inetAddress = ia.nextElement();
+					if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress()
+							&& inetAddress instanceof Inet4Address) {
+						return inetAddress.getHostAddress().toString();
+					}
+				}
+			}
+		} catch (SocketException e) {
 			e.printStackTrace();
-			return "0.0.0.0";
 		}
+		return "0.0.0.0";
 	}
 
 	public static <T> T[] eraseEmpty(T[] array, Class<T> type) {
