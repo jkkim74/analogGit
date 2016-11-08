@@ -6,7 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>개인정보 조회 시스템</title>
 
   <link rel="shortcut icon" href="favicon.ico" />
   
@@ -15,18 +14,12 @@
 </head>
 
 <body>
-
-  <div class="container">
-    <h2 class="text-danger">개인정보 조회 시스템</h2>
-  </div>
   
-  <br><br>
-
   <div class="jumbotron">
     <div class="container text-center">
       <p style="font-style:bold; font-size:15vw;">\(·-·)/</p>
       <h1>${status} <small>${error}</small></h1>
-      <p><a class="btn btn-primary btn-lg" href="/#" role="button">홈으로</a></p>
+      <a href="/" class="btn btn-primary btn-lg">홈으로</a>
     </div>
   </div>
 
