@@ -74,12 +74,11 @@ public class TransmissionService {
 
 	public void sendToPts(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
 
-		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>(1000000) {
+		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>(500000) {
 
 			@Override
 			protected List<AutoMap> nextList(int offset, int limit) {
 				List<AutoMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, ptsMasking);
-				offset += limit;
 				return list;
 			}
 
@@ -157,7 +156,7 @@ public class TransmissionService {
 
 	public void sendToFtpForExtinction(final Map<String, Object> params, final TransmissionType transmissionType) {
 
-		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>(1000000) {
+		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>(500000) {
 
 			@Override
 			public List<AutoMap> nextList(int offset, int limit) {
