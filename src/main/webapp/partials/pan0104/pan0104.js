@@ -33,9 +33,9 @@ angular.module('app').controller('PAN0104Ctrl', ['$scope', '$q', '$http', '$time
         self.setYearMonthOption($scope.selectOptions2);
 
         $scope.selectOptions3 = [
-            { label: 'OCB', value: 'ocbcom' },
-            { label: 'EM', value: 'em' },
-            { label: 'SMS', value: 'sms' }
+            { label: 'OCB', value: 'OCBCOM' },
+            { label: 'EM', value: 'EM' },
+            { label: 'SMS', value: 'SMS' }
             // { label: 'TM', value: 'tm' }
         ];
 

@@ -1,4 +1,4 @@
-package com.skplanet.web.model;
+package com.skplanet.pandora.model;
 
 public enum TransmissionType {
 	ALL, OCBCOM, EM, SMS, TM, PTS

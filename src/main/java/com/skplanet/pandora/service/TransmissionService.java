@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.web.model.AutoMap;
-import com.skplanet.web.model.TransmissionType;
 import com.skplanet.web.model.UploadProgress;
 import com.skplanet.web.service.FtpService;
 import com.skplanet.web.service.PtsService;
@@ -179,7 +179,7 @@ public class TransmissionService {
 				String extnctObjDt = (String) map.get("extnctObjDt");
 
 				if (transmissionType == TransmissionType.OCBCOM) {
-					// 소명예정년,소멸예정월,소멸예정일,EC_USER_ID
+					// 소멸예정년,소멸예정월,소멸예정일,EC_USER_ID
 					printer.printRecord(extnctObjDt.substring(0, 4), extnctObjDt.substring(4, 6),
 							extnctObjDt.substring(6, 8), map.get("unitedId"));
 				} else if (transmissionType == TransmissionType.EM) {
@@ -187,7 +187,7 @@ public class TransmissionService {
 					String unitedId = (String) map.get("unitedId");
 					String encrypted = Helper.skpEncrypt(mbrId + "," + unitedId);
 
-					// 소명예정년,소멸예정월,소멸예정일,고객성명,이메일주소,암호화값
+					// 소멸예정년,소멸예정월,소멸예정일,고객성명,이메일주소,암호화값
 					printer.printRecord(extnctObjDt.substring(0, 4), extnctObjDt.substring(4, 6),
 							extnctObjDt.substring(6, 8), map.get("mbrKorNm"), map.get("emailAddr"), encrypted);
 				}

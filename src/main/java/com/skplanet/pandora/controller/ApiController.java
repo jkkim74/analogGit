@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.pandora.service.TransmissionService;
 import com.skplanet.web.exception.BizException;
 import com.skplanet.web.model.ApiResponse;
 import com.skplanet.web.model.AutoMap;
-import com.skplanet.web.model.TransmissionType;
 import com.skplanet.web.model.UploadProgress;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.service.IdmsLogService;
