@@ -65,7 +65,7 @@
 			, DECODE(HOME_BASIC_ADDR,NULL,HOME_BASIC_ADDR,
 			  SUBSTR(HOME_BASIC_ADDR,1,LENGTH(HOME_BASIC_ADDR) - LENGTH(regexp_substr(HOME_BASIC_ADDR, '[^ ]+', 1, REGEXP_COUNT(HOME_BASIC_ADDR,' ')+1)) )
               ||'***'|| SUBSTR(regexp_substr(HOME_BASIC_ADDR, '[^ ]+', 1, REGEXP_COUNT(HOME_BASIC_ADDR,' ')+1),LENGTH(regexp_substr(HOME_BASIC_ADDR, '[^ ]+', 1, REGEXP_COUNT(HOME_BASIC_ADDR,' ')+1)),1))
-			  || ' ' || A.HOME_DTL_ADDR AS HOME_ADDR
+			  || ' ' || '***' AS HOME_ADDR
 			, A.JOBP_BASIC_ADDR /* 직장기본주소 */
 			, TO_CHAR(TO_DATE(B.JOBP_BASIC_ADDR_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS JOBP_BASIC_ADDR_DT /* 직장기본주소 최종유입일자 */
 			, A.JOBP_DTL_ADDR /* 직장상세주소 */
@@ -73,7 +73,7 @@
 			, DECODE(JOBP_BASIC_ADDR,NULL,JOBP_BASIC_ADDR,
 			  SUBSTR(JOBP_BASIC_ADDR,1,LENGTH(JOBP_BASIC_ADDR) - LENGTH(regexp_substr(JOBP_BASIC_ADDR, '[^ ]+', 1, REGEXP_COUNT(JOBP_BASIC_ADDR,' ')+1)) )
               ||'***'|| SUBSTR(regexp_substr(JOBP_BASIC_ADDR, '[^ ]+', 1, REGEXP_COUNT(JOBP_BASIC_ADDR,' ')+1),LENGTH(regexp_substr(JOBP_BASIC_ADDR, '[^ ]+', 1, REGEXP_COUNT(JOBP_BASIC_ADDR,' ')+1)),1))
-			  || ' ' || A.JOBP_DTL_ADDR AS JOBP_ADDR
+			  || ' ' || '***' AS JOBP_ADDR
 			, DECODE(A.EMAIL_ADDR,NULL,A.EMAIL_ADDR,SUBSTR(regexp_substr(A.EMAIL_ADDR, '[^@]+', 1, 1),1,LENGTH(regexp_substr(A.EMAIL_ADDR, '[^@]+', 1, 1))-2)||'**@'||regexp_substr(A.EMAIL_ADDR, '[^@]+', 1, 2)) AS EMAIL_ADDR /* 이메일주소 */
 			, TO_CHAR(TO_DATE(B.EMAIL_ADDR_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS EMAIL_ADDR_DT /* 이메일주소 최종유입일자 */
 			, CASE WHEN F.MBR_ID IS NOT NULL THEN 'Y' ELSE 'N' END AS EMAIL_ADDR_DUP_YN /* 이메일주소 중복 여부 */
