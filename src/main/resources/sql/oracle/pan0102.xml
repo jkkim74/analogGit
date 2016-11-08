@@ -208,7 +208,7 @@
 			  DECODE(HOME_BASIC_ADDR,NULL,HOME_BASIC_ADDR,
 			  SUBSTR(HOME_BASIC_ADDR,1,LENGTH(HOME_BASIC_ADDR) - LENGTH(regexp_substr(HOME_BASIC_ADDR, '[^ ]+', 1, REGEXP_COUNT(HOME_BASIC_ADDR,' ')+1)) )
               ||'***'|| SUBSTR(regexp_substr(HOME_BASIC_ADDR, '[^ ]+', 1, REGEXP_COUNT(HOME_BASIC_ADDR,' ')+1),LENGTH(regexp_substr(HOME_BASIC_ADDR, '[^ ]+', 1, REGEXP_COUNT(HOME_BASIC_ADDR,' ')+1)),1))
-			  || ' ' || HOME_DTL_ADDR AS HOME_ADDR /* 자택주소 */
+			  || ' ' || '***' AS HOME_ADDR /* 자택주소 */
 			, A.HOME_ADDR_FNL_SRC_ORG_CD /* 자택주소 최종 유입 출처 코드 */
 			, A.HOME_ADDR_FNL_INFL_DT /* 자택주소 최종유입일자 */
 			, A.HOME_ADDR_FNL_SRC_ORG_CD
@@ -219,7 +219,7 @@
               DECODE(JOBP_BASIC_ADDR,NULL,JOBP_BASIC_ADDR,
 			  SUBSTR(JOBP_BASIC_ADDR,1,LENGTH(JOBP_BASIC_ADDR) - LENGTH(regexp_substr(JOBP_BASIC_ADDR, '[^ ]+', 1, REGEXP_COUNT(JOBP_BASIC_ADDR,' ')+1)) )
               ||'***'|| SUBSTR(regexp_substr(JOBP_BASIC_ADDR, '[^ ]+', 1, REGEXP_COUNT(JOBP_BASIC_ADDR,' ')+1),LENGTH(regexp_substr(JOBP_BASIC_ADDR, '[^ ]+', 1, REGEXP_COUNT(JOBP_BASIC_ADDR,' ')+1)),1))
-			  || ' ' || JOBP_DTL_ADDR AS JOBP_ADDR /* 직장주소 */
+			  || ' ' || '***' AS JOBP_ADDR /* 직장주소 */
 			, A.JOBP_ADDR_FNL_SRC_ORG_CD /* 직장주소 최종 유입 출처 코드 */
 			, A.JOBP_ADDR_FNL_INFL_DT /* 직장주소 최종유입일자 */
 			, A.JOBP_ADDR_FNL_SRC_ORG_CD
