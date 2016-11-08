@@ -74,7 +74,7 @@ public class TransmissionService {
 
 	public void sendToPts(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
 
-		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>(500000) {
+		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>(100000) {
 
 			@Override
 			protected List<AutoMap> nextList(int offset, int limit) {
@@ -156,7 +156,7 @@ public class TransmissionService {
 
 	public void sendToFtpForExtinction(final Map<String, Object> params, final TransmissionType transmissionType) {
 
-		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>(500000) {
+		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>(100000) {
 
 			@Override
 			public List<AutoMap> nextList(int offset, int limit) {
