@@ -282,7 +282,8 @@ public class ApiController {
 
 	@PostMapping("/noticeExtinction")
 	public ApiResponse noticeExtinction(@RequestParam Map<String, Object> params) {
-		TransmissionType transmissionType = TransmissionType.valueOf(((String) params.get("transmissionType")).toUpperCase());
+		TransmissionType transmissionType = TransmissionType
+				.valueOf(params.get("transmissionType").toString().toUpperCase());
 
 		switch (transmissionType) {
 		case OCBCOM:
