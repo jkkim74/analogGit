@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -159,13 +158,7 @@ public class IdmsLogService {
 		Path jobInfoPath = Paths.get(Constant.APP_FILE_DIR, idmsId + "_JOB_" + Helper.yesterdayDateString() + ".log");
 
 		new CsvCreatorTemplate<String>() {
-			boolean done;
-
-			protected List<String> nextList() {
-				if (done) {
-					return Collections.emptyList();
-				}
-				done = true;
+			protected List<String> nextList(int offset, int limit) {
 				return Arrays.asList(dttm);
 			}
 
@@ -182,13 +175,7 @@ public class IdmsLogService {
 				idmsId + "_CUS_" + Helper.yesterdayDateString() + ".log");
 
 		new CsvCreatorTemplate<Map<String, Object>>() {
-			boolean done;
-
-			protected List<Map<String, Object>> nextList() {
-				if (done) {
-					return Collections.emptyList();
-				}
-				done = true;
+			protected List<Map<String, Object>> nextList(int offset, int limit) {
 				return idmsLogRepository.selectMemberSearchLogAtYesterday();
 			}
 
@@ -204,13 +191,7 @@ public class IdmsLogService {
 		Path userInfoPath = Paths.get(Constant.APP_FILE_DIR, idmsId + "_ID_" + Helper.yesterdayDateString() + ".log");
 
 		new CsvCreatorTemplate<UserInfo>() {
-			boolean done;
-
-			protected List<UserInfo> nextList() {
-				if (done) {
-					return Collections.emptyList();
-				}
-				done = true;
+			protected List<UserInfo> nextList(int offset, int limit) {
 				return userService.getUsers(Maps.<String, Object> newHashMap());
 			}
 
@@ -230,13 +211,7 @@ public class IdmsLogService {
 				idmsId + "_LOGIN_" + Helper.yesterdayDateString() + ".log");
 
 		new CsvCreatorTemplate<Map<String, Object>>() {
-			boolean done;
-
-			protected List<Map<String, Object>> nextList() {
-				if (done) {
-					return Collections.emptyList();
-				}
-				done = true;
+			protected List<Map<String, Object>> nextList(int offset, int limit) {
 				return idmsLogRepository.selectAccessLogAtYesterday();
 			}
 

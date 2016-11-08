@@ -21,6 +21,21 @@ import com.skplanet.web.exception.BizException;
  */
 public abstract class CsvCreatorTemplate<T> {
 
+	private int offset;
+	private int limit;
+	private boolean once;
+
+	public CsvCreatorTemplate() {
+		this.once = true;
+	}
+
+	public CsvCreatorTemplate(int limit) {
+		if (limit > 0) {
+			this.limit = limit;
+		}
+		this.once = false;
+	}
+
 	public final Path create(Path filePath) {
 		return create(filePath, ',', StandardCharsets.UTF_8);
 	}
@@ -37,7 +52,7 @@ public abstract class CsvCreatorTemplate<T> {
 				new OutputStreamWriter(Files.newOutputStream(filePath), encoder));
 				CSVPrinter printer = CSVFormat.RFC4180.withDelimiter(delimiter).withQuote(null).print(writer)) {
 
-			List<T> list = nextList();
+			List<T> list = nextList(offset, limit);
 
 			if (list != null && !list.isEmpty()) {
 				// 파일 첫줄에 헤더 추가
@@ -49,7 +64,11 @@ public abstract class CsvCreatorTemplate<T> {
 						printRecord(printer, t);
 					}
 
-					list = nextList();
+					if (once) {
+						break;
+					}
+					offset += limit;
+					list = nextList(offset, limit);
 				}
 			}
 		} catch (IOException e) {
@@ -59,7 +78,7 @@ public abstract class CsvCreatorTemplate<T> {
 		return filePath;
 	}
 
-	abstract protected List<T> nextList();
+	abstract protected List<T> nextList(int offset, int limit);
 
 	protected void printHeader(CSVPrinter printer, List<T> list) throws IOException {
 	}

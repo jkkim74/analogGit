@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.csv.CSVPrinter;
@@ -19,8 +18,6 @@ import org.junit.Test;
 import org.springframework.util.StringUtils;
 
 import com.skplanet.web.model.AutoMap;
-import com.skplanet.web.util.Constant;
-import com.skplanet.web.util.CsvCreatorTemplate;
 
 public class CsvCreatorTemplateTest {
 
@@ -39,10 +36,8 @@ public class CsvCreatorTemplateTest {
 	@Test
 	public void testNormal() throws IOException {
 		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>() {
-			boolean done;
-
 			@Override
-			protected List<AutoMap> nextList() {
+			protected List<AutoMap> nextList(int offset, int limit) {
 				AutoMap m = new AutoMap();
 				m.put("aString", "string");
 				m.put("aEmptyString", "");
@@ -53,11 +48,6 @@ public class CsvCreatorTemplateTest {
 
 				List<AutoMap> list = new ArrayList<>();
 				list.add(m);
-
-				if (done) {
-					return Collections.emptyList();
-				}
-				done = true;
 
 				return list;
 			}
@@ -86,10 +76,8 @@ public class CsvCreatorTemplateTest {
 		final Charset charset = Charset.forName("CP949");
 
 		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>() {
-			boolean none;
-
 			@Override
-			protected List<AutoMap> nextList() {
+			protected List<AutoMap> nextList(int offset, int limit) {
 				AutoMap m = new AutoMap();
 				m.put("aString", "똠방각하");
 				m.put("email", " ？？？？@yahoo.co.kr");
@@ -97,10 +85,6 @@ public class CsvCreatorTemplateTest {
 				List<AutoMap> list = new ArrayList<>();
 				list.add(m);
 
-				if (none) {
-					return Collections.emptyList();
-				}
-				none = true;
 				return list;
 			}
 
