@@ -260,9 +260,12 @@ public class ApiController {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
+		String filename = uploadProgress.getFilename();
+		int extractionTarget = "MBR_ID".equals(uploadProgress.getColumnName()) ? 2 : 1;
+
 		transmissionService.sendToFtpForExtraction(Paths.get(Constant.APP_FILE_DIR, uploadProgress.getFilename()));
 
-		sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, uploadProgress.getFilename());
+		sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget);
 
 		return ApiResponse.builder().message("추출 완료").build();
 	}

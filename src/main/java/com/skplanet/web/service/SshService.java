@@ -32,11 +32,12 @@ public class SshService {
 	private boolean enabled;
 
 	public void execute(String username, String inputDataType, String periodType, String periodFrom, String periodTo,
-			String filename) {
+			String filename, int extractionTarget) {
 
 		StringBuilder builder = new StringBuilder("sh /app/home/bi_ocb/WEB/web_2_5.sh ");
 		String command = builder.append(username).append(' ').append(inputDataType).append(' ').append(periodType)
-				.append(' ').append(periodFrom).append(' ').append(periodTo).append(" 1 ").append(filename).toString();
+				.append(' ').append(periodFrom).append(' ').append(periodTo).append(' ').append(extractionTarget)
+				.append(' ').append(filename).toString();
 
 		log.info("execute ssh command: {}", command);
 
