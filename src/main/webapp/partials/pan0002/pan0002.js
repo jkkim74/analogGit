@@ -20,13 +20,13 @@ angular.module('app').controller('PAN0002Ctrl', ['$scope', '$q', '$http', '$time
                     cellTemplate: '<div class="ui-grid-cell-contents"><span title="TOOLTIP">{{ COL_FIELD CUSTOM_FILTERS }}</span> <i class="fa fa-pencil" aria-hidden="true" title="수정하려면 더블클릭"></i></div>'
                 },
                 {
-                    field: 'enabled', displayName: '사용여부', width: 50, cellTooltip: true, headerTooltip: true, type: 'boolean',
+                    field: 'enabled', displayName: '사용여부', width: 100, cellTooltip: true, headerTooltip: true, type: 'boolean',
                     cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.enabled" ng-change="grid.appScope.saveColumn(row.entity, {name:\'enabled\'}, COL_FIELD)"></div>'
                 },
                 { field: 'beginDttm', displayName: '사용시작일시', cellTooltip: true, headerTooltip: true },
                 { field: 'endDttm', displayName: '사용종료일시', cellTooltip: true, headerTooltip: true },
                 {
-                    field: 'isAdmin', displayName: '관리자', width: 50, cellTooltip: true, headerTooltip: true, type: 'boolean',
+                    field: 'isAdmin', displayName: '관리자', width: 100, cellTooltip: true, headerTooltip: true, type: 'boolean',
                     cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.isAdmin" ng-change="grid.appScope.saveColumn(row.entity, {name:\'isAdmin\'}, COL_FIELD)" ng-init="grid.appScope.initAdmin(row.entity)"></div>'
                 }
             ],

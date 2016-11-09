@@ -14,7 +14,7 @@ angular.module('app').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$time
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             minRowsToShow: 8,
             columnDefs: [
-                { field: 'no', displayName: 'No.', width: 60, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
+                { field: 'no', displayName: 'No.', width: 50, cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>' },
                 { field: 'column1', displayName: '회원ID', cellTooltip: true, headerTooltip: true },
                 { field: 'column2', displayName: '카드번호', width: 200, cellTooltip: true, headerTooltip: true },
                 { field: 'column3', displayName: 'CI번호', cellTooltip: true, headerTooltip: true },
