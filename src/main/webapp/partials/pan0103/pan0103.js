@@ -116,7 +116,7 @@ angular.module('app').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$time
 
         $scope.downloadCsvFormat = function () {
             var text = '회원ID,카드번호,CI번호,성명,생년월일,성별';
-            var data = new Blob([text], { type: 'text/csv;charset=utf-8' });
+            var data = new Blob([text], { type: 'text/csv' });
             FileSaver.saveAs(data, '배치적립파일검증 업로드 양식.csv');
         };
 
