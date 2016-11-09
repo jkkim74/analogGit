@@ -73,7 +73,14 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
             $scope.uploadPromise = apiSvc.upload({ file: file, columnName: $scope.selectedOption2.value });
             $scope.uploadPromise.then(function () {
                 $scope.uploaded = true;
+                $scope.mbrId = null;
             });
+        };
+
+        $scope.sendOneMbrId = function () {
+            var data = new Blob([$scope.mbrId], { type: 'text/csv' });
+
+            $scope.upload(data);
         };
 
         // $scope.loadMembers = function (offset, limit) {
