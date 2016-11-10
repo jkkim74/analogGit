@@ -101,11 +101,12 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
                 inputDataType: $scope.selectedOption.value,
                 periodType: $scope.selectedOption3.value,
                 periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
-                periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd')
+                periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd'),
+                ptsMasking: ptsMasking
             });
 
             $scope.sendPtsPromise.then(function () {
-                $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
+                // $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
             });
         };
 

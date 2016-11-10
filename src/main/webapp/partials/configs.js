@@ -115,9 +115,10 @@ angular.module('app').value('cgBusyDefaults', {
         });
 
         // logout event log
-        $window.onbeforeunload = function () {
-            // authSvc.logout();
-        };
+        // F5 새로고침 시에도 로그아웃 되는 문제있음. 사실상 unload 이벤트에 로그아웃 로그를 처리할 수 없음
+        // $window.onbeforeunload = function () {
+        //     authSvc.logout();
+        // };
 
         // check token validity when application started
         authSvc.userInfo();
