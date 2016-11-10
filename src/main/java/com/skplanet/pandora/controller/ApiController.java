@@ -21,6 +21,7 @@ import com.skplanet.web.exception.BizException;
 import com.skplanet.web.model.ApiResponse;
 import com.skplanet.web.model.AutoMap;
 import com.skplanet.web.model.UploadProgress;
+import com.skplanet.web.model.UploadStatus;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.security.UserInfo;
 import com.skplanet.web.service.IdmsLogService;
@@ -258,6 +259,8 @@ public class ApiController {
 		String emailAddr = user.getEmailAddr();
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
+
+		uploadService.mark(UploadStatus.PROCESSING, pageId, username, null, null);
 
 		transmissionService.sendForExtraction(username, inputDataType, periodType, periodFrom, periodTo, ptsUsername,
 				ptsMasking, emailAddr, uploadProgress);

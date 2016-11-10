@@ -22,7 +22,8 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
                         toastr.error('로그인이 필요합니다');
                         authSvc.logout();
                     } else {
-                        toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
+                        toastr.error((resp.data && resp.data.message) || resp.statusText);
+                        // toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }
 
                     deferred.reject(resp.data);
@@ -48,7 +49,7 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
                     }
                 }).then(function (resp) {
                     if (resp.data && resp.data.message) {
-                        toastr.success((resp.data && resp.data.message) || resp.config.url);
+                        toastr.success((resp.data && resp.data.message) || resp.statusText);
                     }
                     deferred.resolve(resp.data);
                 }).catch(function (resp) {
@@ -58,7 +59,8 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
                         toastr.error('로그인이 필요합니다');
                         authSvc.logout();
                     } else {
-                        toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
+                        toastr.error((resp.data && resp.data.message) || resp.statusText);
+                        // toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }
 
                     deferred.reject();

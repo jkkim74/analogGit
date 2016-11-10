@@ -33,7 +33,7 @@ public class ExceptionResolver {
 	@ResponseStatus
 	public ApiResponse handleBizException(BizException ex) {
 		log.warn("", ex);
-		return ApiResponse.builder().code(900).message(ex.getMessage()).developerMessage(ex.toString()).build();
+		return ApiResponse.builder().message(ex.getMessage()).developerMessage(ex.toString()).build();
 	}
 
 }

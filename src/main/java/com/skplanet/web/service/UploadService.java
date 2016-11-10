@@ -98,6 +98,14 @@ public class UploadService {
 		metaRepository.upsertUploadProgress(pageId, username, underScoredColumnName, filename, UploadStatus.RUNNING);
 	}
 
+	@Transactional("mysqlTxManager")
+	public void mark(UploadStatus uploadStatus, String pageId, String username, String columnName, String filename) {
+		String underScoredColumnName = columnName == null ? null
+				: CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
+
+		metaRepository.upsertUploadProgress(pageId, username, underScoredColumnName, filename, uploadStatus);
+	}
+
 	private void prepareTemporaryTable(String pageId, String username) {
 		if (tempRepository.countTable(pageId, username) <= 0) {
 			tempRepository.createTable(pageId, username);
@@ -164,11 +172,14 @@ public class UploadService {
 	public UploadProgress getFinishedUploadProgress(String pageId, String username) {
 		UploadProgress uploadProgress = getUploadProgress(pageId, username);
 
-		if (uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
+		switch (uploadProgress.getUploadStatus()) {
+		case RUNNING:
 			throw new BizException("업로드 중입니다");
+		case PROCESSING:
+			throw new BizException("처리 중인 작업이 있습니다");
+		default:
+			return uploadProgress;
 		}
-
-		return uploadProgress;
 	}
 
 	public UploadProgress getUploadProgress(String pageId, String username) {

@@ -19,11 +19,13 @@ import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.web.model.AutoMap;
 import com.skplanet.web.model.UploadProgress;
+import com.skplanet.web.model.UploadStatus;
 import com.skplanet.web.service.FtpService;
 import com.skplanet.web.service.MailService;
 import com.skplanet.web.service.PtsService;
 import com.skplanet.web.service.SmsService;
 import com.skplanet.web.service.SshService;
+import com.skplanet.web.service.UploadService;
 import com.skplanet.web.util.Constant;
 import com.skplanet.web.util.CsvCreatorTemplate;
 import com.skplanet.web.util.Helper;
@@ -48,6 +50,9 @@ public class TransmissionService {
 
 	@Autowired
 	private MailService mailService;
+
+	@Autowired
+	private UploadService uploadService;
 
 	@Autowired
 	private FtpService ftpService;
@@ -161,24 +166,28 @@ public class TransmissionService {
 	@Async
 	public void sendForExtraction(String username, String inputDataType, String periodType, String periodFrom,
 			String periodTo, String ptsUsername, boolean ptsMasking, String emailAddr, UploadProgress uploadProgress) {
+		try {
+			String filename = uploadProgress.getFilename();
+			Path localPath = Paths.get(Constant.APP_FILE_DIR, filename);
+			String remotePath = "web/" + filename;
 
-		String filename = uploadProgress.getFilename();
-		Path localPath = Paths.get(Constant.APP_FILE_DIR, filename);
-		String remotePath = "web/" + filename;
+			log.info("remotePath={}", remotePath);
 
-		log.info("remotePath={}", remotePath);
+			ftpService.send(localPath, remotePath, extractionHost, extractionPort, extractionUsername,
+					extractionPassword);
 
-		ftpService.send(localPath, remotePath, extractionHost, extractionPort, extractionUsername, extractionPassword);
+			int extractionTarget = "MBR_ID".equals(uploadProgress.getColumnName()) ? 2 : 1;
 
-		int extractionTarget = "MBR_ID".equals(uploadProgress.getColumnName()) ? 2 : 1;
+			sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget);
 
-		sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget);
+			String sentFilename = sendToPts(ptsUsername, ptsMasking, uploadProgress);
 
-		String sentFilename = sendToPts(ptsUsername, ptsMasking, uploadProgress);
-
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
-		mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
+			mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
+		} finally {
+			uploadService.mark(UploadStatus.FINISH, uploadProgress.getPageId(), username, null, null);
+		}
 	}
 
 	public void sendToFtpForExtinction(final Map<String, Object> params, final TransmissionType transmissionType) {
