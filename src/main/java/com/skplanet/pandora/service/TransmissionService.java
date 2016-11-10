@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,7 @@ import java.util.Set;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.skplanet.pandora.model.TransmissionType;
@@ -18,8 +20,10 @@ import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.web.model.AutoMap;
 import com.skplanet.web.model.UploadProgress;
 import com.skplanet.web.service.FtpService;
+import com.skplanet.web.service.MailService;
 import com.skplanet.web.service.PtsService;
 import com.skplanet.web.service.SmsService;
+import com.skplanet.web.service.SshService;
 import com.skplanet.web.util.Constant;
 import com.skplanet.web.util.CsvCreatorTemplate;
 import com.skplanet.web.util.Helper;
@@ -38,6 +42,12 @@ public class TransmissionService {
 
 	@Autowired
 	private SmsService smsService;
+
+	@Autowired
+	private SshService sshService;
+
+	@Autowired
+	private MailService mailService;
 
 	@Autowired
 	private FtpService ftpService;
@@ -72,7 +82,7 @@ public class TransmissionService {
 	@Value("${app.files.encoding.ftp}")
 	private String encodingForFtp;
 
-	public void sendToPts(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
+	public String sendToPts(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
 
 		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>(10000) {
 
@@ -144,14 +154,31 @@ public class TransmissionService {
 		csvCreator.create(filePath, Charset.forName(encodingForPts));
 
 		ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
+
+		return filePath.getFileName().toString();
 	}
 
-	public void sendToFtpForExtraction(Path localPath) {
-		String remotePath = "web/" + localPath.getFileName();
+	@Async
+	public void sendForExtraction(String username, String inputDataType, String periodType, String periodFrom,
+			String periodTo, String ptsUsername, boolean ptsMasking, String emailAddr, UploadProgress uploadProgress) {
+
+		String filename = uploadProgress.getFilename();
+		Path localPath = Paths.get(Constant.APP_FILE_DIR, filename);
+		String remotePath = "web/" + filename;
 
 		log.info("remotePath={}", remotePath);
 
 		ftpService.send(localPath, remotePath, extractionHost, extractionPort, extractionUsername, extractionPassword);
+
+		int extractionTarget = "MBR_ID".equals(uploadProgress.getColumnName()) ? 2 : 1;
+
+		sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget);
+
+		String sentFilename = sendToPts(ptsUsername, ptsMasking, uploadProgress);
+
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
+		mailService.send("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
 	}
 
 	public void sendToFtpForExtinction(final Map<String, Object> params, final TransmissionType transmissionType) {

@@ -1,7 +1,6 @@
 package com.skplanet.pandora.controller;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -23,10 +22,9 @@ import com.skplanet.web.model.ApiResponse;
 import com.skplanet.web.model.AutoMap;
 import com.skplanet.web.model.UploadProgress;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
+import com.skplanet.web.security.UserInfo;
 import com.skplanet.web.service.IdmsLogService;
-import com.skplanet.web.service.SshService;
 import com.skplanet.web.service.UploadService;
-import com.skplanet.web.util.Constant;
 import com.skplanet.web.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -50,9 +48,6 @@ public class ApiController {
 
 	@Autowired
 	private TransmissionService transmissionService;
-
-	@Autowired
-	private SshService sshService;
 
 	@Autowired
 	private IdmsLogService idmsLogService;
@@ -254,20 +249,20 @@ public class ApiController {
 
 	@PostMapping("/extractMemberInfo")
 	public ApiResponse extractMemberInfo(@RequestParam String pageId, @RequestParam String inputDataType,
-			@RequestParam String periodType, @RequestParam String periodFrom, @RequestParam String periodTo) {
+			@RequestParam String periodType, @RequestParam String periodFrom, @RequestParam String periodTo,
+			@RequestParam boolean ptsMasking) {
 
-		String username = Helper.currentUser().getUsername();
+		UserInfo user = Helper.currentUser();
+		String username = user.getUsername();
+		String ptsUsername = user.getPtsUsername();
+		String emailAddr = user.getEmailAddr();
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
-		String filename = uploadProgress.getFilename();
-		int extractionTarget = "MBR_ID".equals(uploadProgress.getColumnName()) ? 2 : 1;
+		transmissionService.sendForExtraction(username, inputDataType, periodType, periodFrom, periodTo, ptsUsername,
+				ptsMasking, emailAddr, uploadProgress);
 
-		transmissionService.sendToFtpForExtraction(Paths.get(Constant.APP_FILE_DIR, uploadProgress.getFilename()));
-
-		sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget);
-
-		return ApiResponse.builder().message("추출 완료").build();
+		return ApiResponse.builder().message("추출 요청 완료").build();
 	}
 
 	@GetMapping("/extinctionSummary")
