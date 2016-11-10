@@ -181,7 +181,7 @@
 
 	<select id="selectMarketingMemberInfo" parameterType="map" resultType="AutoMap">
 		SELECT A.MBR_ID
-			, A.MBR_KOR_NM /* 한글성명 */
+			, DECODE(A.MBR_KOR_NM,NULL,A.MBR_KOR_NM,SUBSTR(A.MBR_KOR_NM,1,LENGTH(A.MBR_KOR_NM)-2)||'*'||SUBSTR(A.MBR_KOR_NM,LENGTH(A.MBR_KOR_NM),1)) AS MBR_KOR_NM /* 한글성명 */
 			, DECODE(A.CLPHN_NO,NULL,A.CLPHN_NO,SUBSTR(A.CLPHN_NO,1,LENGTH(A.CLPHN_NO)-8)||'****'||SUBSTR(A.CLPHN_NO,LENGTH(A.CLPHN_NO)-3,4)) AS CLPHN_NO /* 휴대전화번호 */
 			, A.CLPHN_NO_FNL_SRC_ORG_CD /* 휴대전화번호 최종 유입 출처 코드 */
 			, A.CLPHN_NO_FNL_INFL_DT /* 휴대전화번호 최종 유입 일자 */
