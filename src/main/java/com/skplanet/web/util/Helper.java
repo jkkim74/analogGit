@@ -1,5 +1,6 @@
 package com.skplanet.web.util;
 
+import java.lang.reflect.Array;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -115,7 +116,12 @@ public final class Helper {
 		return "0.0.0.0";
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T[] eraseEmpty(T[] array, Class<T> type) {
+		if (array == null) {
+			return (T[]) Array.newInstance(type, 0);
+		}
+
 		Iterable<T> filtered = Iterables.filter(Arrays.asList(array), new Predicate<T>() {
 			@Override
 			public boolean apply(T input) {

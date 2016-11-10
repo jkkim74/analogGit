@@ -37,11 +37,14 @@ public class MailService {
 	@Value("${mail.to}")
 	private String withTo;
 
+	@Value("${mail.cc}")
+	private String withCc;
+
 	@Value("${app.enable.mail}")
 	private boolean enabled;
 
 	@Async
-	public void send(String templateName, Map<String, Object> model, String subject, String... to) {
+	public void send(String templateName, Map<String, Object> model, String subject, String[] to, String[] cc) {
 		if (!enabled) {
 			log.debug("disabled");
 			return;
@@ -52,8 +55,9 @@ public class MailService {
 
 		try {
 			helper.setFrom(from);
-			helper.setTo(Helper.eraseEmpty(to, String.class));
 			helper.setSubject(subject);
+			helper.setTo(Helper.eraseEmpty(to, String.class));
+			helper.setCc(Helper.eraseEmpty(cc, String.class));
 
 			String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/templates/mail/" + templateName,
 					model);
@@ -65,19 +69,22 @@ public class MailService {
 		}
 	}
 
-	public void send(String templateName, Map<String, Object> model, String subject) {
-		String to = Helper.currentUser().getEmailAddr();
-		send(templateName, model, subject, to);
+	public void sendAsTo(String templateName, Map<String, Object> model, String subject, String to) {
+		send(templateName, model, subject, new String[] { to }, null);
 	}
 
-	public void sendWith(String templateName, Map<String, Object> model, String subject) {
-		String to = Helper.currentUser().getEmailAddr();
+	public void sendMeAsTo(String templateName, Map<String, Object> model, String subject) {
+		String me = Helper.currentUser().getEmailAddr();
+
+		sendAsTo(templateName, model, subject, me);
+	}
+
+	public void sendMeAsCc(String templateName, Map<String, Object> model, String subject) {
+		String me = Helper.currentUser().getEmailAddr();
 		String[] toList = withTo.split("[,;]");
-		if (toList.length > 0) {
-			send(templateName, model, subject, ObjectArrays.concat(toList, new String[] { to }, String.class));
-		} else {
-			send(templateName, model, subject, to);
-		}
+		String[] ccList = withCc.split("[,;]");
+
+		send(templateName, model, subject, toList, ObjectArrays.concat(ccList, new String[] { me }, String.class));
 	}
 
 }

@@ -178,7 +178,7 @@ public class TransmissionService {
 
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
-		mailService.send("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
+		mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
 	}
 
 	public void sendToFtpForExtinction(final Map<String, Object> params, final TransmissionType transmissionType) {
