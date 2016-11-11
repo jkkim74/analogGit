@@ -49,7 +49,7 @@ angular.module('app').controller('PAN0106Ctrl', ['$scope', '$q', '$http', '$time
                 { field: 'rletMth07FnlUseDt', displayName: '룰렛 최종 사용 일자', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'gameMth07FnlUseDt', displayName: '게임 최종 사용 일자', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'ocbPlusMth07FnlYachvDt', displayName: 'OCB플러스 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
-                { field: 'lckrMth07FnlYachvDt', displayName: '라커0 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
+                { field: 'lckrMth07FnlYachvDt', displayName: 'OCB락 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'mzmMth07FnlYachvDt', displayName: '미리줌 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'azmMth07FnlYachvDt', displayName: '더줌 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'prdLflMth07FnlYachvDt', displayName: '상품전단 최종 유실적 일자', width: 100, cellTooltip: true, headerTooltip: true },
