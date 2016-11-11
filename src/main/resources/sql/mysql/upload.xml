@@ -2,19 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.web.repository.mysql.UploadMetaRepository">
 
-	<select id="selectUploadProgress" parameterType="map" resultType="UploadProgress">
+	<select id="selectMenuProgress" parameterType="map" resultType="MenuProgress">
 		SELECT PAGE_ID
 			, USERNAME
 			, PARAM
 			, FILENAME
 			, STATUS
-		FROM UPLOAD_PROGRESS
+		FROM MENU_PROGRESS
 		WHERE PAGE_ID = #{pageId} AND USERNAME = #{username}
 	</select>
 
-	<update id="upsertUploadProgress" parameterType="map">
+	<update id="upsertMenuProgress" parameterType="map">
 		INSERT
-		INTO UPLOAD_PROGRESS ( PAGE_ID, USERNAME, PARAM, FILENAME, STATUS )
+		INTO MENU_PROGRESS ( PAGE_ID, USERNAME, PARAM, FILENAME, STATUS )
 		VALUES ( #{pageId}, #{username}, #{param}, #{filename}, #{status} )
 		ON DUPLICATE KEY
 		<trim prefix="UPDATE" suffixOverrides=",">

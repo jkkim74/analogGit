@@ -20,7 +20,7 @@ import com.skplanet.pandora.service.TransmissionService;
 import com.skplanet.web.exception.BizException;
 import com.skplanet.web.model.ApiResponse;
 import com.skplanet.web.model.AutoMap;
-import com.skplanet.web.model.UploadProgress;
+import com.skplanet.web.model.MenuProgress;
 import com.skplanet.web.model.ProgressStatus;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.security.UserInfo;
@@ -79,11 +79,11 @@ public class ApiController {
 		String username = Helper.currentUser().getUsername();
 
 		if (countOnly) {
-			UploadProgress uploadProgress = uploadService.getUploadProgress(pageId, username);
+			MenuProgress progress = uploadService.getMenuProgress(pageId, username);
 
 			int count = uploadTempRepository.countUploaded(pageId, username);
 
-			return ApiResponse.builder().message(uploadProgress.getStatus().toString()).totalItems(count).build();
+			return ApiResponse.builder().message(progress.getStatus().toString()).totalItems(count).build();
 		} else {
 			List<AutoMap> list = uploadTempRepository.selectUploaded(pageId, username);
 			return ApiResponse.builder().value(list).build();
@@ -96,9 +96,9 @@ public class ApiController {
 
 		String username = Helper.currentUser().getUsername();
 
-		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
-		List<AutoMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, true);
-		int count = oracleRepository.countMembers(uploadProgress);
+		MenuProgress progress = uploadService.getFinishedMenuProgress(pageId, username);
+		List<AutoMap> list = oracleRepository.selectMembers(progress, offset, limit, true);
+		int count = oracleRepository.countMembers(progress);
 
 		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, pageId,
 				list.size());
@@ -241,9 +241,9 @@ public class ApiController {
 		String username = Helper.currentUser().getUsername();
 		String ptsUsername = Helper.currentUser().getPtsUsername();
 
-		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
+		MenuProgress progress = uploadService.getFinishedMenuProgress(pageId, username);
 
-		transmissionService.sendToPts(ptsUsername, ptsMasking, uploadProgress);
+		transmissionService.sendToPts(ptsUsername, ptsMasking, progress);
 
 		return ApiResponse.builder().message("PTS 전송 성공").build();
 	}
@@ -258,12 +258,12 @@ public class ApiController {
 		String ptsUsername = user.getPtsUsername();
 		String emailAddr = user.getEmailAddr();
 
-		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
+		MenuProgress progress = uploadService.getFinishedMenuProgress(pageId, username);
 
 		uploadService.markStatus(ProgressStatus.PROCESSING, pageId, username, null, null);
 
 		transmissionService.sendForExtraction(username, inputDataType, periodType, periodFrom, periodTo, ptsUsername,
-				ptsMasking, emailAddr, uploadProgress);
+				ptsMasking, emailAddr, progress);
 
 		return ApiResponse.builder().message("추출 요청 완료").build();
 	}

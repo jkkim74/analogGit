@@ -4,9 +4,9 @@
 
 	<sql id="selectMembers_PAN0105">
 		<choose>
-			<when test="uploadProgress.param == 'MBR_ID'">
+			<when test="menuProgress.param == 'MBR_ID'">
 				SELECT MBR_ID
-				FROM WEB_2_5_${uploadProgress.username}_UPLOAD A
+				FROM WEB_2_5_${menuProgress.username}_UPLOAD A
 				GROUP BY MBR_ID
 			</when>
 			<otherwise>
@@ -43,10 +43,10 @@
 					, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CAR_OIL_PRDCT_SGRP_CD' AND DTL_CD = A.OIL_PRDCT_SGRP_CD) OIL_PRDCT_SGRP_NM
 					, A.CPN_PRD_CD
 					, A.CPN_PRD_NM
-					<if test="uploadProgress.param == 'TR_MBR_KOR_NM'">
+					<if test="menuProgress.param == 'TR_MBR_KOR_NM'">
 						, DECODE(B.MBR_KOR_NM,NULL,B.MBR_KOR_NM,SUBSTR(B.MBR_KOR_NM,1,LENGTH(B.MBR_KOR_NM)-2)||'*'||SUBSTR(B.MBR_KOR_NM,LENGTH(B.MBR_KOR_NM),1)) AS MBR_KOR_NM
 					</if>
-				FROM WEB_2_5_${uploadProgress.username}_UPLOAD A
+				FROM WEB_2_5_${menuProgress.username}_UPLOAD A
 				LEFT OUTER JOIN DW_MBR_MST B ON A.MBR_ID = B.MBR_ID AND B.MBRSHP_PGM_ID = 'A'
 			</otherwise>
 		</choose>
@@ -54,9 +54,9 @@
 	
 	<sql id="selectMembers_PAN0105_nomas">
 		<choose>
-			<when test="uploadProgress.param == 'MBR_ID'">
+			<when test="menuProgress.param == 'MBR_ID'">
 				SELECT MBR_ID
-				FROM WEB_2_5_${uploadProgress.username}_UPLOAD A
+				FROM WEB_2_5_${menuProgress.username}_UPLOAD A
 				GROUP BY MBR_ID
 			</when>
 			<otherwise>
@@ -93,10 +93,10 @@
 					, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CAR_OIL_PRDCT_SGRP_CD' AND DTL_CD = A.OIL_PRDCT_SGRP_CD) OIL_PRDCT_SGRP_NM
 					, A.CPN_PRD_CD
 					, A.CPN_PRD_NM
-					<if test="uploadProgress.param == 'TR_MBR_KOR_NM'">
+					<if test="menuProgress.param == 'TR_MBR_KOR_NM'">
 						, B.MBR_KOR_NM
 					</if>
-				FROM WEB_2_5_${uploadProgress.username}_UPLOAD A
+				FROM WEB_2_5_${menuProgress.username}_UPLOAD A
 				LEFT OUTER JOIN DW_MBR_MST B ON A.MBR_ID = B.MBR_ID AND B.MBRSHP_PGM_ID = 'A'
 			</otherwise>
 		</choose>

@@ -28,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.CaseFormat;
 import com.skplanet.web.exception.BizException;
-import com.skplanet.web.model.UploadProgress;
+import com.skplanet.web.model.MenuProgress;
 import com.skplanet.web.model.ProgressStatus;
 import com.skplanet.web.repository.mysql.UploadMetaRepository;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
@@ -90,9 +90,9 @@ public class UploadService {
 	public void markStatus(ProgressStatus progressStatus, String pageId, String username, String param,
 			String filename) {
 		if (progressStatus == ProgressStatus.UPLOADING) {
-			UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
+			MenuProgress progress = metaRepository.selectMenuProgress(pageId, username);
 
-			if (uploadProgress != null && uploadProgress.getStatus() == ProgressStatus.UPLOADING) {
+			if (progress != null && progress.getStatus() == ProgressStatus.UPLOADING) {
 				throw new BizException("업로드 중입니다");
 			}
 		}
@@ -100,7 +100,7 @@ public class UploadService {
 		String underscoredParam = param == null ? null
 				: CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, param);
 
-		metaRepository.upsertUploadProgress(pageId, username, underscoredParam, filename, progressStatus);
+		metaRepository.upsertMenuProgress(pageId, username, underscoredParam, filename, progressStatus);
 	}
 
 	private void prepareTemporaryTable(String pageId, String username) {
@@ -166,27 +166,27 @@ public class UploadService {
 		}
 	}
 
-	public UploadProgress getFinishedUploadProgress(String pageId, String username) {
-		UploadProgress uploadProgress = getUploadProgress(pageId, username);
+	public MenuProgress getFinishedMenuProgress(String pageId, String username) {
+		MenuProgress progress = getMenuProgress(pageId, username);
 
-		switch (uploadProgress.getStatus()) {
+		switch (progress.getStatus()) {
 		case UPLOADING:
 			throw new BizException("업로드 중입니다");
 		case PROCESSING:
 			throw new BizException("처리 중인 작업이 있습니다");
 		default:
-			return uploadProgress;
+			return progress;
 		}
 	}
 
-	public UploadProgress getUploadProgress(String pageId, String username) {
-		UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
+	public MenuProgress getMenuProgress(String pageId, String username) {
+		MenuProgress progress = metaRepository.selectMenuProgress(pageId, username);
 
-		if (uploadProgress == null) {
+		if (progress == null) {
 			throw new BizException("업로드를 먼저 해주세요");
 		}
 
-		return uploadProgress;
+		return progress;
 	}
 
 }

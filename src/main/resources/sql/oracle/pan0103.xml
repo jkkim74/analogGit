@@ -4,7 +4,7 @@
 
 	<sql id="selectMembers_PAN0103">
 		<choose>
-			<when test="uploadProgress.param == 'CI_NO'">
+			<when test="menuProgress.param == 'CI_NO'">
 				SELECT A.MBR_ID /* MBR_ID */
 					, DECODE(A.CARD_NO,NULL,A.CARD_NO,SUBSTR(A.CARD_NO,1,LENGTH(A.CARD_NO)-8)||'****'||SUBSTR(A.CARD_NO,LENGTH(A.CARD_NO)-3,4)) AS CARD_NO /* 카드번호 */
 					, A.CI_NO /* CI */
@@ -28,12 +28,12 @@
 						, COLUMN4 AS MBR_KOR_NM
 						, COLUMN5 AS LEGL_BTHDT
 						, COLUMN6 AS LEGL_GNDR_FG_CD
-					FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
+					FROM TMP_${menuProgress.pageId}_${menuProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.CI_NO = B.CI_NO
 				GROUP BY A.MBR_ID, A.CARD_NO, A.CI_NO, A.MBR_KOR_NM, A.LEGL_BTHDT, A.LEGL_GNDR_FG_CD
 			</when>
-			<when test="uploadProgress.param == 'CARD_NO'">
+			<when test="menuProgress.param == 'CARD_NO'">
 				SELECT A.MBR_ID /* MBR_ID */
 					, DECODE(A.CARD_NO,NULL,A.CARD_NO,SUBSTR(A.CARD_NO,1,LENGTH(A.CARD_NO)-8)||'****'||SUBSTR(A.CARD_NO,LENGTH(A.CARD_NO)-3,4)) AS CARD_NO /* 카드번호 */
 					, A.CI_NO /* CI */
@@ -55,7 +55,7 @@
 						, COLUMN4 AS MBR_KOR_NM
 						, COLUMN5 AS LEGL_BTHDT
 						, COLUMN6 AS LEGL_GNDR_FG_CD
-					FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
+					FROM TMP_${menuProgress.pageId}_${menuProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.CARD_NO = B.CARD_NO
 			</when>
@@ -83,7 +83,7 @@
 						, COLUMN4 AS MBR_KOR_NM
 						, COLUMN5 AS LEGL_BTHDT
 						, COLUMN6 AS LEGL_GNDR_FG_CD
-					FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
+					FROM TMP_${menuProgress.pageId}_${menuProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
 				GROUP BY A.MBR_ID, A.CARD_NO, A.CI_NO, A.MBR_KOR_NM, A.LEGL_BTHDT, A.LEGL_GNDR_FG_CD
@@ -93,7 +93,7 @@
 
 	<sql id="selectMembers_PAN0103_nomas">
 		<choose>
-			<when test="uploadProgress.param == 'CI_NO'">
+			<when test="menuProgress.param == 'CI_NO'">
 				SELECT A.MBR_ID /* MBR_ID */
 					, A.CARD_NO /* 카드번호 */
 					, A.CI_NO /* CI */
@@ -117,12 +117,12 @@
 						, COLUMN4 AS MBR_KOR_NM
 						, COLUMN5 AS LEGL_BTHDT
 						, COLUMN6 AS LEGL_GNDR_FG_CD
-					FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
+					FROM TMP_${menuProgress.pageId}_${menuProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.CI_NO = B.CI_NO
 				GROUP BY A.MBR_ID, A.CARD_NO, A.CI_NO, A.MBR_KOR_NM, A.LEGL_BTHDT, A.LEGL_GNDR_FG_CD
 			</when>
-			<when test="uploadProgress.param == 'CARD_NO'">
+			<when test="menuProgress.param == 'CARD_NO'">
 				SELECT A.MBR_ID /* MBR_ID */
 					, A.CARD_NO /* 카드번호 */
 					, A.CI_NO /* CI */
@@ -144,7 +144,7 @@
 						, COLUMN4 AS MBR_KOR_NM
 						, COLUMN5 AS LEGL_BTHDT
 						, COLUMN6 AS LEGL_GNDR_FG_CD
-					FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
+					FROM TMP_${menuProgress.pageId}_${menuProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.CARD_NO = B.CARD_NO
 			</when>
@@ -172,7 +172,7 @@
 						, COLUMN4 AS MBR_KOR_NM
 						, COLUMN5 AS LEGL_BTHDT
 						, COLUMN6 AS LEGL_GNDR_FG_CD
-					FROM TMP_${uploadProgress.pageId}_${uploadProgress.username}
+					FROM TMP_${menuProgress.pageId}_${menuProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
 				GROUP BY A.MBR_ID, A.CARD_NO, A.CI_NO, A.MBR_KOR_NM, A.LEGL_BTHDT, A.LEGL_GNDR_FG_CD

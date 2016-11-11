@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.web.model.AutoMap;
-import com.skplanet.web.model.UploadProgress;
+import com.skplanet.web.model.MenuProgress;
 import com.skplanet.web.model.ProgressStatus;
 import com.skplanet.web.service.FtpService;
 import com.skplanet.web.service.MailService;
@@ -87,26 +87,26 @@ public class TransmissionService {
 	@Value("${app.files.encoding.ftp}")
 	private String encodingForFtp;
 
-	public String sendToPts(String ptsUsername, final boolean ptsMasking, final UploadProgress uploadProgress) {
+	public String sendToPts(String ptsUsername, final boolean ptsMasking, final MenuProgress menuProgress) {
 
 		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>(10000) {
 
 			@Override
 			protected List<AutoMap> nextList(int offset, int limit) {
-				List<AutoMap> list = oracleRepository.selectMembers(uploadProgress, offset, limit, ptsMasking);
+				List<AutoMap> list = oracleRepository.selectMembers(menuProgress, offset, limit, ptsMasking);
 				return list;
 			}
 
 			@Override
 			protected void printHeader(CSVPrinter printer, List<AutoMap> list) throws IOException {
 
-				if ("PAN0101".equals(uploadProgress.getPageId())) {
+				if ("PAN0101".equals(menuProgress.getPageId())) {
 					printer.printRecord("회원ID", "OCB닷컴 로그인ID", "CI번호", "한글성명", "카드번호", "시럽스마트월렛회원ID", "11번가회원ID", "NO");
-				} else if ("PAN0103".equals(uploadProgress.getPageId())) {
+				} else if ("PAN0103".equals(menuProgress.getPageId())) {
 					printer.printRecord("회원ID", "카드번호", "CI번호", "한글성명", "생년월일", "성별", "OCB카드여부", "CI일치여부", "성명일치여부",
 							"생년월일일치여부", "성별일치여부", "불일치항목포함여부", "NO");
-				} else if ("PAN0105".equals(uploadProgress.getPageId())) {
-					if ("TR_MBR_KOR_NM".equals(uploadProgress.getParam())) {
+				} else if ("PAN0105".equals(menuProgress.getPageId())) {
+					if ("TR_MBR_KOR_NM".equals(menuProgress.getParam())) {
 						printer.printRecord("접수일시", "승인일시", "대표 승인번호", "승인번호", "매출일시", "회원ID", "카드코드", "카드코드명", "카드번호",
 								"정산제휴사코드", "정산제휴사명", "정산가맹점코드", "정산가맹점명", "발생제휴사코드", "발생제휴사명", "발생가맹점코드", "발생가맹점명",
 								"포인트종류코드", "포인트종류명", "전표코드", "전표명", "매출금액", "포인트", "제휴사연회비", "수수료", "지불수단코드", "지불수단명",
@@ -117,7 +117,7 @@ public class TransmissionService {
 								"포인트종류코드", "포인트종류명", "전표코드", "전표명", "매출금액", "포인트", "제휴사연회비", "수수료", "지불수단코드", "지불수단명",
 								"기관코드", "기관명", "유종코드", "유종명", "쿠폰코드", "쿠폰명");
 					}
-				} else if ("PAN0106".equals(uploadProgress.getPageId())) {
+				} else if ("PAN0106".equals(menuProgress.getPageId())) {
 					printer.printRecord("회원ID", "OCB닷컴 United ID", "성별", "연령", "자택 행정동 대그룹명", "자택 행정동 중그룹명",
 							"직장 행정동 대그룹명", "직장 행정동 중그룹명", "결혼 여부", "마케팅 동의 여부", "이메일 수신 동의 여부", "광고성 SMS 수신 동의 여부",
 							"정보성 SMS 수신 동의 여부", "앱 푸시 수신 동의 여부", "혜택/모바일전단 푸시 동의 여부", "포인트사용적립 푸시 동의 여부",
@@ -136,7 +136,7 @@ public class TransmissionService {
 
 			@Override
 			protected void printRecord(CSVPrinter printer, AutoMap map) throws IOException {
-				String pageId = uploadProgress.getPageId();
+				String pageId = menuProgress.getPageId();
 				switch (pageId) {
 				case "PAN0101":
 				case "PAN0103":
@@ -165,9 +165,9 @@ public class TransmissionService {
 
 	@Async
 	public void sendForExtraction(String username, String inputDataType, String periodType, String periodFrom,
-			String periodTo, String ptsUsername, boolean ptsMasking, String emailAddr, UploadProgress uploadProgress) {
+			String periodTo, String ptsUsername, boolean ptsMasking, String emailAddr, MenuProgress menuProgress) {
 		try {
-			String filename = uploadProgress.getFilename();
+			String filename = menuProgress.getFilename();
 			Path localPath = Paths.get(Constant.APP_FILE_DIR, filename);
 			String remotePath = "web/" + filename;
 
@@ -176,17 +176,17 @@ public class TransmissionService {
 			ftpService.send(localPath, remotePath, extractionHost, extractionPort, extractionUsername,
 					extractionPassword);
 
-			int extractionTarget = "MBR_ID".equals(uploadProgress.getParam()) ? 2 : 1;
+			int extractionTarget = "MBR_ID".equals(menuProgress.getParam()) ? 2 : 1;
 
 			sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget);
 
-			String sentFilename = sendToPts(ptsUsername, ptsMasking, uploadProgress);
+			String sentFilename = sendToPts(ptsUsername, ptsMasking, menuProgress);
 
 			HashMap<String, Object> map = new HashMap<>();
 			map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
 			mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
 		} finally {
-			uploadService.markStatus(ProgressStatus.FINISHED, uploadProgress.getPageId(), username, null, null);
+			uploadService.markStatus(ProgressStatus.FINISHED, menuProgress.getPageId(), username, null, null);
 		}
 	}
 

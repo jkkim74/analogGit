@@ -156,7 +156,7 @@ public class BatchConfig extends DefaultBatchConfigurer {
 				JobParameters parameters = jobExecution.getJobParameters();
 				String pageId = parameters.getString("pageId");
 				String username = parameters.getString("username");
-				metaRepository.upsertUploadProgress(pageId, username, null, null, ProgressStatus.FINISHED);
+				metaRepository.upsertMenuProgress(pageId, username, null, null, ProgressStatus.FINISHED);
 			}
 		}
 

@@ -7,15 +7,15 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.skplanet.web.model.AutoMap;
-import com.skplanet.web.model.UploadProgress;
+import com.skplanet.web.model.MenuProgress;
 
 @Repository
 public interface OracleRepository {
 
-	List<AutoMap> selectMembers(@Param("uploadProgress") UploadProgress uploadProgress, @Param("offset") int offset,
+	List<AutoMap> selectMembers(@Param("menuProgress") MenuProgress menuProgress, @Param("offset") int offset,
 			@Param("limit") int limit, @Param("masking") boolean masking);
 
-	int countMembers(@Param("uploadProgress") UploadProgress uploadProgress);
+	int countMembers(@Param("menuProgress") MenuProgress menuProgress);
 
 	String selectMbrId(Map<String, Object> params);
 

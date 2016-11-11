@@ -55,8 +55,8 @@
 			, TO_CHAR(TO_DATE(A.ONLN_MTH07_CPN_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS ONLN_MTH07_CPN_FNL_YACHV_DT /* 온라인쿠폰07개월최종유실적일자 */
 			, A.AVL_PNT /* 가용포인트 */
 		FROM MART_MBR_TGTNG_MST A
-		   , TMP_${uploadProgress.pageId}_${uploadProgress.username} B
-		WHERE A.${uploadProgress.param} = B.COLUMN1
+		   , TMP_${menuProgress.pageId}_${menuProgress.username} B
+		WHERE A.${menuProgress.param} = B.COLUMN1
 	</sql>
 
 	<sql id="selectMembers_PAN0106_nomas">
@@ -112,8 +112,8 @@
 			, TO_CHAR(TO_DATE(A.ONLN_MTH07_CPN_FNL_YACHV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS ONLN_MTH07_CPN_FNL_YACHV_DT /* 온라인쿠폰07개월최종유실적일자 */
 			, A.AVL_PNT /* 가용포인트 */
 		FROM MART_MBR_TGTNG_MST A
-		   , TMP_${uploadProgress.pageId}_${uploadProgress.username} B
-		WHERE A.${uploadProgress.param} = B.COLUMN1
+		   , TMP_${menuProgress.pageId}_${menuProgress.username} B
+		WHERE A.${menuProgress.param} = B.COLUMN1
 	</sql>
 
 </mapper>

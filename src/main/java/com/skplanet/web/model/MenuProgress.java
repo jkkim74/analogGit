@@ -3,7 +3,7 @@ package com.skplanet.web.model;
 import lombok.Data;
 
 @Data
-public class UploadProgress {
+public class MenuProgress {
 
 	private String username;
 	private String pageId;

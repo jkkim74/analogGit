@@ -6,7 +6,7 @@
 		<include refid="com.skplanet.web.repository.pagingHead" />
 
 		<choose>
-			<when test="uploadProgress.pageId == 'PAN0101'">
+			<when test="menuProgress.pageId == 'PAN0101'">
 				<if test="masking == true">
 					<include refid="selectMembers_PAN0101" />
 				</if>
@@ -14,7 +14,7 @@
 					<include refid="selectMembers_PAN0101_nomas" />
 				</if>
 			</when>
-			<when test="uploadProgress.pageId == 'PAN0103'">
+			<when test="menuProgress.pageId == 'PAN0103'">
 				<if test="masking == true">
 					<include refid="selectMembers_PAN0103" />
 				</if>
@@ -22,7 +22,7 @@
 					<include refid="selectMembers_PAN0103_nomas" />
 				</if>
 			</when>
-			<when test="uploadProgress.pageId == 'PAN0105'">
+			<when test="menuProgress.pageId == 'PAN0105'">
 				<if test="masking == true">
 					<include refid="selectMembers_PAN0105" />
 				</if>
@@ -30,7 +30,7 @@
 					<include refid="selectMembers_PAN0105_nomas" />
 				</if>
 			</when>
-			<when test="uploadProgress.pageId == 'PAN0106'">
+			<when test="menuProgress.pageId == 'PAN0106'">
 				<if test="masking == true">
 					<include refid="selectMembers_PAN0106" />
 				</if>
@@ -47,16 +47,16 @@
 	</select>
 	<select id="selectMembers" parameterType="map" resultType="AutoMap" databaseId="hsql">
 		<choose>
-			<when test="uploadProgress.pageId == 'PAN0101'">
+			<when test="menuProgress.pageId == 'PAN0101'">
 				<include refid="selectMembers_PAN0101" />
 			</when>
-			<when test="uploadProgress.pageId == 'PAN0103'">
+			<when test="menuProgress.pageId == 'PAN0103'">
 				<include refid="selectMembers_PAN0103" />
 			</when>
-			<when test="uploadProgress.pageId == 'PAN0105'">
+			<when test="menuProgress.pageId == 'PAN0105'">
 				<include refid="selectMembers_PAN0105" />
 			</when>
-			<when test="uploadProgress.pageId == 'PAN0106'">
+			<when test="menuProgress.pageId == 'PAN0106'">
 				<include refid="selectMembers_PAN0106" />
 			</when>
 			<otherwise>
@@ -70,16 +70,16 @@
 	<select id="countMembers" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM (
 		<choose>
-			<when test="uploadProgress.pageId == 'PAN0101'">
+			<when test="menuProgress.pageId == 'PAN0101'">
 				<include refid="selectMembers_PAN0101" />
 			</when>
-			<when test="uploadProgress.pageId == 'PAN0103'">
+			<when test="menuProgress.pageId == 'PAN0103'">
 				<include refid="selectMembers_PAN0103" />
 			</when>
-			<when test="uploadProgress.pageId == 'PAN0105'">
+			<when test="menuProgress.pageId == 'PAN0105'">
 				<include refid="selectMembers_PAN0105" />
 			</when>
-			<when test="uploadProgress.pageId == 'PAN0106'">
+			<when test="menuProgress.pageId == 'PAN0106'">
 				<include refid="selectMembers_PAN0106" />
 			</when>
 			<otherwise>
