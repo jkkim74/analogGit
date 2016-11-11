@@ -46,7 +46,7 @@
 			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'MBR_STS_CD' AND DTL_CD = A.MBR_STS_CD) AS MBR_STS_CD /* 회원상태 */
 			, A.MBR_ID /* MBR_ID */
 			, C.CI_NO /* CI */
-			, DECODE(D.PNT_EXTNCT_YN,'1','Y',DECODE(D.PNT_EXTNCT_YN,'2','N',DECODE(D.PNT_EXTNCT_YN,'Y','미입력','미상'))) AS PNT_EXTNCT_YN  /* 포인트소멸여부 */
+			, DECODE(G.MBR_ID,null,'N','Y') AS PNT_EXTNCT_YN  /* 포인트소멸여부 */
 			, DECODE(A.MBR_KOR_NM,NULL,A.MBR_KOR_NM,SUBSTR(A.MBR_KOR_NM,1,LENGTH(A.MBR_KOR_NM)-2)||'*'||SUBSTR(A.MBR_KOR_NM,LENGTH(A.MBR_KOR_NM),1)) AS MBR_KOR_NM /* 한글성명 */
 			, '****-**-**' AS LEGL_BTHDT /* 법정생년월일 */
 			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'GNDR_FG_CD' AND DTL_CD = D.LEGL_GNDR_FG_CD) AS LEGL_GNDR_FG_CD /* 법정성별 */
@@ -98,6 +98,7 @@
 		LEFT OUTER JOIN MART_MBR_INQ_INFO D ON A.MBR_ID = D.MBR_ID
 		LEFT OUTER JOIN MART_CLPHN_NO_DUP_INFO E ON A.MBR_ID = E.MBR_ID
 		LEFT OUTER JOIN MART_EMAIL_ADDR_DUP_INFO F ON A.MBR_ID = F.MBR_ID
+		LEFT OUTER JOIN MART_EXTNCT_MBR_NOTI_MST G ON A.MBR_ID = G.MBR_ID
 
 		<include refid="whereMbrId" />
 	</select>
@@ -338,7 +339,10 @@
 	</select>
 
 	<select id="selectThirdPartyProvideHistory" parameterType="map" resultType="AutoMap">
-		SELECT '' AS DATA_DST_ORG_CD /* 제공대상기관 */
+		SELECT CASE WHEN SUBSTR(AGRMT_VER_CD,1,2) = 'BB' THEN 'SK브로드밴드' 
+		            WHEN SUBSTR(AGRMT_VER_CD,1,2) = 'DB' THEN '동부화재'
+		            WHEN SUBSTR(AGRMT_VER_CD,1,2) = 'MN' THEN 'M&S'
+		            ELSE '알수없음' END AS DATA_DST_ORG_CD /* 제공대상기관 */
 			, A.DATA_SRC_ORG_CD /* 유입기관코드 */
 			, A.AGRMT_VER_CD /* 동의버전 */
 			, TO_CHAR(TO_DATE(A.AGRMT_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS AGRMT_DT /* 동의일자 */
