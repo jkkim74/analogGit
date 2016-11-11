@@ -28,18 +28,18 @@ angular.module('app').value('cgBusyDefaults', {
                 templateUrl: 'partials/home/home.html',
                 controller: 'HomeCtrl'
             })
-            .state('index.page', {
-                url: '/:pageId',
+            .state('index.menu', {
+                url: '/:menuId',
                 params: {
                     pageParams: {}
                 },
                 templateUrl: function ($stateParams) {
                     // 화면ID로 디렉터리, .html, .js 만들어서 하나의 페이지를 구성하는 구조.
-                    var pageId = $stateParams.pageId.toLowerCase();
-                    return 'partials/' + pageId + '/' + pageId + '.html';
+                    var menuId = $stateParams.menuId.toLowerCase();
+                    return 'partials/' + menuId + '/' + menuId + '.html';
                 },
                 controllerProvider: function ($stateParams) {
-                    return $stateParams.pageId.toUpperCase() + "Ctrl";
+                    return $stateParams.menuId.toUpperCase() + "Ctrl";
                 }
             });
 
@@ -90,7 +90,7 @@ angular.module('app').value('cgBusyDefaults', {
                 event.preventDefault();
             }
 
-            if (needAuth && toState.name === 'index.page' && !authSvc.isAllowedPage(toParams.pageId)) {
+            if (needAuth && toState.name === 'index.menu' && !authSvc.isAllowedPage(toParams.menuId)) {
                 $state.transitionTo('index.home');
                 event.preventDefault();
             }

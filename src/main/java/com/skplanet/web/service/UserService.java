@@ -40,11 +40,11 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Value("${app.pageIds.user}")
-	private String userPageIds;
+	@Value("${app.menuIds.user}")
+	private String userMenu;
 
-	@Value("${app.pageIds.admin}")
-	private String adminPageIds;
+	@Value("${app.menuIds.admin}")
+	private String adminMenu;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -120,21 +120,21 @@ public class UserService implements UserDetailsService {
 		return users.get(0);
 	}
 
-	public void updateAccesses(String username, String pageList) {
-		userRepository.deleteAccesses(username, userPageIds);
+	public void updateAccesses(String username, String menuList) {
+		userRepository.deleteAccesses(username, userMenu);
 
-		if (!StringUtils.isEmpty(pageList)) {
-			userRepository.insertAccesses(username, pageList);
+		if (!StringUtils.isEmpty(menuList)) {
+			userRepository.insertAccesses(username, menuList);
 		}
 	}
 
 	public void updateAdmin(String username, boolean isAdmin) {
 		if (isAdmin) {
 			userRepository.insertAuthorities(username, "ROLE_ADMIN");
-			userRepository.insertAccesses(username, adminPageIds);
+			userRepository.insertAccesses(username, adminMenu);
 		} else {
 			userRepository.deleteAuthorities(username, "ROLE_ADMIN");
-			userRepository.deleteAccesses(username, adminPageIds);
+			userRepository.deleteAccesses(username, adminMenu);
 		}
 	}
 

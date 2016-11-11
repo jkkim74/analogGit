@@ -5,12 +5,12 @@ angular.module('app').controller('PAN0003Ctrl', ['$scope', '$q', '$http', '$time
 
         var self = this;
 
-        $scope.checkPageId = {};
+        $scope.checkMenuId = {};
         $scope.checkResults = [];
 
-        $scope.$watchCollection('checkPageId', function () {
+        $scope.$watchCollection('checkMenuId', function () {
             $scope.checkResults = [];
-            angular.forEach($scope.checkPageId, function (value, key) {
+            angular.forEach($scope.checkMenuId, function (value, key) {
                 if (value) {
                     $scope.checkResults.push(key);
                 }
@@ -44,22 +44,22 @@ angular.module('app').controller('PAN0003Ctrl', ['$scope', '$q', '$http', '$time
         self.loadUsers();
 
         self.initSelection = function (entity) {
-            $scope.checkPageId.PAN0101 = entity.pageList.indexOf('PAN0101') !== -1;
-            $scope.checkPageId.PAN0102 = entity.pageList.indexOf('PAN0102') !== -1;
-            $scope.checkPageId.PAN0103 = entity.pageList.indexOf('PAN0103') !== -1;
-            $scope.checkPageId.PAN0104 = entity.pageList.indexOf('PAN0104') !== -1;
-            $scope.checkPageId.PAN0105 = entity.pageList.indexOf('PAN0105') !== -1;
-            $scope.checkPageId.PAN0106 = entity.pageList.indexOf('PAN0106') !== -1;
-            $scope.checkPageId.PAN0107 = entity.pageList.indexOf('PAN0107') !== -1;
+            $scope.checkMenuId.PAN0101 = entity.menuList.indexOf('PAN0101') !== -1;
+            $scope.checkMenuId.PAN0102 = entity.menuList.indexOf('PAN0102') !== -1;
+            $scope.checkMenuId.PAN0103 = entity.menuList.indexOf('PAN0103') !== -1;
+            $scope.checkMenuId.PAN0104 = entity.menuList.indexOf('PAN0104') !== -1;
+            $scope.checkMenuId.PAN0105 = entity.menuList.indexOf('PAN0105') !== -1;
+            $scope.checkMenuId.PAN0106 = entity.menuList.indexOf('PAN0106') !== -1;
+            $scope.checkMenuId.PAN0107 = entity.menuList.indexOf('PAN0107') !== -1;
         };
 
         $scope.saveAccess = function () {
             var selectedRow = $scope.gridApi.selection.getSelectedRows()[0];
             var username = selectedRow.username;
-            var pageList = $scope.checkResults.join(',');
+            var menuList = $scope.checkResults.join(',');
 
-            apiSvc.saveAccess({ username: username, pageList: pageList }).then(function () {
-                selectedRow.pageList = pageList;
+            apiSvc.saveAccess({ username: username, menuList: menuList }).then(function () {
+                selectedRow.menuList = menuList;
             });
         };
 

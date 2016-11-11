@@ -45,8 +45,8 @@
 	</select>
 
 	<insert id="insertMemberSearch" parameterType="map">
-		INSERT INTO IDMS_MEMBER_SEARCH_LOG ( SEL_DTTM, WAS_IP, USERNAME, USER_IP, MBR_ID, MBR_KOR_NM, PAGE_ID, FUNC_CD, MBR_CNT )
-		VALUES ( #{selDttm}, #{wasIp}, #{username}, #{userIp}, #{mbrId}, #{mbrKorNm}, #{pageId}, #{funcCd}, #{mbrCnt} )
+		INSERT INTO IDMS_MEMBER_SEARCH_LOG ( SEL_DTTM, WAS_IP, USERNAME, USER_IP, MBR_ID, MBR_KOR_NM, MENU_ID, FUNC_CD, MBR_CNT )
+		VALUES ( #{selDttm}, #{wasIp}, #{username}, #{userIp}, #{mbrId}, #{mbrKorNm}, #{menuId}, #{funcCd}, #{mbrCnt} )
 	</insert>
 
 	<select id="selectMemberSearchLogAtYesterday" parameterType="map" resultType="LinkedHashMap">
@@ -56,7 +56,7 @@
 			, USER_IP
 			, MBR_ID
 			, MBR_KOR_NM
-			, PAGE_ID
+			, MENU_ID
 			, FUNC_CD
 			, MBR_CNT
 		FROM IDMS_MEMBER_SEARCH_LOG
@@ -71,7 +71,7 @@
 			, USER_IP
 			, MBR_ID
 			, MBR_KOR_NM
-			, PAGE_ID
+			, MENU_ID
 			, FUNC_CD
 			, MBR_CNT
 		FROM IDMS_MEMBER_SEARCH_LOG

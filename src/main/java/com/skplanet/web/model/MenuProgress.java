@@ -6,7 +6,7 @@ import lombok.Data;
 public class MenuProgress {
 
 	private String username;
-	private String pageId;
+	private String menuId;
 	private String param;
 	private String filename;
 	private ProgressStatus status;

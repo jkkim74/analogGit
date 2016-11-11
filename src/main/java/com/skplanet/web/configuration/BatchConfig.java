@@ -95,7 +95,7 @@ public class BatchConfig extends DefaultBatchConfigurer {
 
 	@Bean
 	@JobScope
-	public JdbcBatchItemWriter<UploadedPreview> itemWriter(@Value("#{jobParameters[pageId]}") String pageId,
+	public JdbcBatchItemWriter<UploadedPreview> itemWriter(@Value("#{jobParameters[menuId]}") String menuId,
 			@Value("#{jobParameters[username]}") String username,
 			@Value("#{jobParameters[numberOfColumns]}") Long numberOfColumns) {
 
@@ -104,7 +104,7 @@ public class BatchConfig extends DefaultBatchConfigurer {
 		writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<UploadedPreview>());
 
 		StringBuilder sql = new StringBuilder("INSERT /*+ APPEND_VALUES */ INTO TMP_");
-		sql.append(pageId.toUpperCase()).append('_').append(username.toUpperCase());
+		sql.append(menuId.toUpperCase()).append('_').append(username.toUpperCase());
 		sql.append('(');
 
 		for (int i = 0; i < numberOfColumns; i++) {
@@ -154,9 +154,9 @@ public class BatchConfig extends DefaultBatchConfigurer {
 		public void afterJob(JobExecution jobExecution) {
 			if (!jobExecution.isRunning()) {
 				JobParameters parameters = jobExecution.getJobParameters();
-				String pageId = parameters.getString("pageId");
+				String menuId = parameters.getString("menuId");
 				String username = parameters.getString("username");
-				metaRepository.upsertMenuProgress(pageId, username, null, null, ProgressStatus.FINISHED);
+				metaRepository.upsertMenuProgress(menuId, username, null, null, ProgressStatus.FINISHED);
 			}
 		}
 

@@ -28,43 +28,43 @@
 			<th style="width:80px;">내 권한 유무</th>
 		</thead>
 		<tbody>
-			<tr ui-sref="index.page({pageId: 'pan0101'})">
+			<tr ui-sref="index.menu({menuId: 'pan0101'})">
 				<td>멤버 ID 일괄 전환</td>
 				<td>OCB 고객에 대한 시스템 간 ID 일괄 변경<br> - OCB MBR_ID, okcashbag.com 로그인ID 등 OCB 사업 ID<br> - Syrup Wallet Member ID<br> - 11번가 MEM_NO</td>
 				<td>- okcahsbag.com 행사 참여자 포인트 적립을 위해 okcashbag.com 로그인 ID를 MBR_ID로 변환<br> - Syrup Wallet이나 11번가 이벤트 참여자에 대한 OCB 포인트 적립</td>
 				<td class="text-center"><i ng-show="isAllowedPage('PAN0101')" class="fa fa-check-circle fa-lg"></i></td>
 			</tr>
-			<tr ui-sref="index.page({pageId: 'pan0103'})">
+			<tr ui-sref="index.menu({menuId: 'pan0103'})">
 				<td>배치 적립 파일 검증</td>
 				<td>배치 적립 파일의 OCB 카드번호, 성명 유효성 검증<br> - OCB 카드번호, MBR_ID, CI 유효성 검증<br> - 카드번호와 성명 일치 여부 등 추가 검증</td>
 				<td>- 행사 진행 후 제휴사로부터 전달 받은 배치 적립 기초 자료 내 OCB 카드번호나 CI가 유효한지 사전 검증</td>
 				<td class="text-center"><i ng-show="isAllowedPage('PAN0103')" class="fa fa-check-circle fa-lg"></i></td>
 			</tr>
-			<tr ui-sref="index.page({pageId: 'pan0104'})">
+			<tr ui-sref="index.menu({menuId: 'pan0104'})">
 				<td>시효 만료 포인트<br> 사전 고지</td>
 				<td>포인트 소멸 처리<br> - 모수 조회 및 포인트 소멸 도래 사전 고지 발송 자동화<br> - 민원인 사전 고지 이력 조회</td>
 				<td>- 포인트 소멸 담당자만 이용</td>
 				<td class="text-center"><i ng-show="isAllowedPage('PAN0104')" class="fa fa-check-circle fa-lg"></i></td>
 			</tr>
-			<tr ui-sref="index.page({pageId: 'pan0106'})">
+			<tr ui-sref="index.menu({menuId: 'pan0106'})">
 				<td>회원 프로파일 분석</td>
 				<td>고객 속성 분석 자료 생성<br> - Geo/Demo 속성 및 가입 서비스 추출<br> - 가용포인트 대역, 업종별 실적, 고객 등급 추출</td>
 				<td>- 캠페인 참여자 속성 분석<br> - App Push 등을 위해 추출한 MBR_ID 리스트의 고객 속성 사전/사후 분석</td>
 				<td class="text-center"><i ng-show="isAllowedPage('PAN0106')" class="fa fa-check-circle fa-lg"></i></td>
 			</tr>
-			<tr ui-sref="index.page({pageId: 'pan0102'})">
+			<tr ui-sref="index.menu({menuId: 'pan0102'})">
 				<td>고객 정보 기본 조회</td>
 				<td>고객 기본 정보 조회<br> - 고객 상태<br> - 회원 및 마케팅 원장 내역<br> - 마케팅 동의 유입 이력 및 3자 제공 이력<br> - 보유 카드 목록</td>
 				<td>- 고객행복센터 및 당사 민원 대응 관련 담당자 전용<br> - 개인정보유효기간 상담<br> - 3자 제공 관련 상담</td>
 				<td class="text-center"><i ng-show="isAllowedPage('PAN0102')" class="fa fa-check-circle fa-lg"></i></td>
 			</tr>
-			<tr ui-sref="index.page({pageId: 'pan0107'})">
+			<tr ui-sref="index.menu({menuId: 'pan0107'})">
 				<td>고객 정보 상세 조회</td>
 				<td>고객 상세 정보 조회<br> - 마케팅동의상태<br> - 이메일 및 앱 푸쉬 발송 이력<br> - OCB 앱, 닷컴 가입 현황 및 이력</td>
 				<td>- 고객행복센터 및 당사 민원 대응 관련 담당자 전용</td>
 				<td class="text-center"><i ng-show="isAllowedPage('PAN0107')" class="fa fa-check-circle fa-lg"></i></td>
 			</tr>
-			<tr ui-sref="index.page({pageId: 'pan0105'})">
+			<tr ui-sref="index.menu({menuId: 'pan0105'})">
 				<td>거래 실적 및<br> 유실적 고객 추출</td>
 				<td>TR 추출<br> - MBR_ID 리스트<br> - 카드번호리스트<br> - 가맹점 리스트</td>
 				<td>- 단체 카드 / 주유전용카드 등 정산 증빙 보조<br> - PGP 적립 대상 선정을 위해 특정 기간 동안 특정 가맹점 유실적 고객 MBR_ID 추출<br> - 특정 제휴사 / 가맹점 유실적 고객 대상 타겟팅을
@@ -75,7 +75,7 @@
 	</table>
 
 	<div class="text-center">
-		<button ng-show="isAllowedPage('PAN0002')" ui-sref="index.page({pageId: 'pan0002'})" type="button" class="btn btn-default btn-lg">사용자 등록 관리 바로가기</button>
-		<button ng-show="isAllowedPage('PAN0003')" ui-sref="index.page({pageId: 'pan0003'})" type="button" class="btn btn-default btn-lg">화면 권한 관리 바로가기</button>
+		<button ng-show="isAllowedPage('PAN0002')" ui-sref="index.menu({menuId: 'pan0002'})" type="button" class="btn btn-default btn-lg">사용자 등록 관리 바로가기</button>
+		<button ng-show="isAllowedPage('PAN0003')" ui-sref="index.menu({menuId: 'pan0003'})" type="button" class="btn btn-default btn-lg">화면 권한 관리 바로가기</button>
 	</div>
 </div>

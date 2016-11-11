@@ -29,7 +29,7 @@ angular.module('app').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
                 Idle.watch();
 
                 if (appInfo.entryPage && !self.isAdmin()) {
-                    $state.go('index.page', { pageId: appInfo.entryPage.toLowerCase() }, { reload: true });
+                    $state.go('index.menu', { menuId: appInfo.entryPage.toLowerCase() }, { reload: true });
                 } else {
                     $state.reload();
                 }
@@ -124,14 +124,14 @@ angular.module('app').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
             return hasAdmin;
         };
 
-        this.isAllowedPage = function (pageId) {
+        this.isAllowedPage = function (menuId) {
             if (!self.isAuthenticated()) {
                 return false;
             }
 
             var userInfo = JSON.parse($window.sessionStorage.getItem('user_info'));
 
-            return userInfo && userInfo.pageList && userInfo.pageList.indexOf(pageId.toUpperCase()) !== -1;
+            return userInfo && userInfo.menuList && userInfo.menuList.indexOf(menuId.toUpperCase()) !== -1;
         };
 
     }]);

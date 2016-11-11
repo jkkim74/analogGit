@@ -54,18 +54,18 @@ public class ApiController {
 	private IdmsLogService idmsLogService;
 
 	@PostMapping("files")
-	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String pageId,
+	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String menuId,
 			@RequestParam String param) throws IOException {
 
 		String username = Helper.currentUser().getUsername();
 
-		log.info("Uploading file... pageId={}, username={}, param={}", pageId, username, param);
+		log.info("Uploading file... menuId={}, username={}, param={}", menuId, username, param);
 
 		if (file.isEmpty()) {
 			throw new BizException("빈 파일입니다");
 		}
 
-		JobParameters jobParameters = uploadService.readyToImport(file, pageId, username, param);
+		JobParameters jobParameters = uploadService.readyToImport(file, menuId, username, param);
 
 		uploadService.beginImport(jobParameters);
 
@@ -73,34 +73,34 @@ public class ApiController {
 	}
 
 	@GetMapping("files")
-	public ApiResponse getUploaded(@RequestParam String pageId,
+	public ApiResponse getUploaded(@RequestParam String menuId,
 			@RequestParam(defaultValue = "false") boolean countOnly) {
 
 		String username = Helper.currentUser().getUsername();
 
 		if (countOnly) {
-			MenuProgress progress = uploadService.getMenuProgress(pageId, username);
+			MenuProgress progress = uploadService.getMenuProgress(menuId, username);
 
-			int count = uploadTempRepository.countUploaded(pageId, username);
+			int count = uploadTempRepository.countUploaded(menuId, username);
 
 			return ApiResponse.builder().message(progress.getStatus().toString()).totalItems(count).build();
 		} else {
-			List<AutoMap> list = uploadTempRepository.selectUploaded(pageId, username);
+			List<AutoMap> list = uploadTempRepository.selectUploaded(menuId, username);
 			return ApiResponse.builder().value(list).build();
 		}
 	}
 
 	@GetMapping("/members")
-	public ApiResponse getMembers(@RequestParam String pageId, @RequestParam(defaultValue = "0") int offset,
+	public ApiResponse getMembers(@RequestParam String menuId, @RequestParam(defaultValue = "0") int offset,
 			@RequestParam(defaultValue = "20") int limit) {
 
 		String username = Helper.currentUser().getUsername();
 
-		MenuProgress progress = uploadService.getFinishedMenuProgress(pageId, username);
+		MenuProgress progress = uploadService.getFinishedMenuProgress(menuId, username);
 		List<AutoMap> list = oracleRepository.selectMembers(progress, offset, limit, true);
 		int count = oracleRepository.countMembers(progress);
 
-		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, pageId,
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, menuId,
 				list.size());
 
 		return ApiResponse.builder().value(list).totalItems(count).build();
@@ -119,7 +119,7 @@ public class ApiController {
 		String mbrKorNm = oracleRepository.selectMbrKorNm(mbrId);
 
 		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
-				(String) params.get("pageId"), 1);
+				(String) params.get("menuId"), 1);
 
 		return list;
 	}
@@ -134,7 +134,7 @@ public class ApiController {
 		String mbrKorNm = oracleRepository.selectMbrKorNm(mbrId);
 
 		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
-				(String) params.get("pageId"), 1);
+				(String) params.get("menuId"), 1);
 
 		return list;
 	}
@@ -206,7 +206,7 @@ public class ApiController {
 		String mbrKorNm = oracleRepository.selectMbrKorNm(mbrId);
 
 		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
-				(String) params.get("pageId"), 1);
+				(String) params.get("menuId"), 1);
 
 		return list;
 	}
@@ -236,12 +236,12 @@ public class ApiController {
 	}
 
 	@PostMapping("/sendPts")
-	public ApiResponse sendPts(@RequestParam boolean ptsMasking, @RequestParam String pageId) {
+	public ApiResponse sendPts(@RequestParam boolean ptsMasking, @RequestParam String menuId) {
 
 		String username = Helper.currentUser().getUsername();
 		String ptsUsername = Helper.currentUser().getPtsUsername();
 
-		MenuProgress progress = uploadService.getFinishedMenuProgress(pageId, username);
+		MenuProgress progress = uploadService.getFinishedMenuProgress(menuId, username);
 
 		transmissionService.sendToPts(ptsUsername, ptsMasking, progress);
 
@@ -249,7 +249,7 @@ public class ApiController {
 	}
 
 	@PostMapping("/extractMemberInfo")
-	public ApiResponse extractMemberInfo(@RequestParam String pageId, @RequestParam String inputDataType,
+	public ApiResponse extractMemberInfo(@RequestParam String menuId, @RequestParam String inputDataType,
 			@RequestParam String periodType, @RequestParam String periodFrom, @RequestParam String periodTo,
 			@RequestParam boolean ptsMasking) {
 
@@ -258,9 +258,9 @@ public class ApiController {
 		String ptsUsername = user.getPtsUsername();
 		String emailAddr = user.getEmailAddr();
 
-		MenuProgress progress = uploadService.getFinishedMenuProgress(pageId, username);
+		MenuProgress progress = uploadService.getFinishedMenuProgress(menuId, username);
 
-		uploadService.markStatus(ProgressStatus.PROCESSING, pageId, username, null, null);
+		uploadService.markStatus(ProgressStatus.PROCESSING, menuId, username, null, null);
 
 		transmissionService.sendForExtraction(username, inputDataType, periodType, periodFrom, periodTo, ptsUsername,
 				ptsMasking, emailAddr, progress);

@@ -8,7 +8,7 @@
 		<result property="ptsUsername" column="PTS_USERNAME" javaType="string" />
 		<result property="beginDttm" column="BEGIN_DTTM" javaType="string" />
 		<result property="endDttm" column="END_DTTM" javaType="string" />
-		<result property="pageList" column="PAGE_LIST" javaType="string" />
+		<result property="menuList" column="MENU_LIST" javaType="string" />
 		<collection property="authorities" ofType="org.springframework.security.core.authority.SimpleGrantedAuthority">
 			<constructor>
 				<arg column="AUTHORITY" javaType="string" />
@@ -24,9 +24,9 @@
 			<otherwise>
 				SELECT *
 				FROM (
-					SELECT A.*, IFNULL(GROUP_CONCAT(B.PAGE_ID), '') AS PAGE_LIST
+					SELECT A.*, IFNULL(GROUP_CONCAT(B.MENU_ID), '') AS MENU_LIST
 					FROM USERS A
-					LEFT OUTER JOIN PAGE_ACCESS B ON A.USERNAME = B.USERNAME
+					LEFT OUTER JOIN MENU_ACCESS B ON A.USERNAME = B.USERNAME
 					GROUP BY A.USERNAME
 					<if test="username != null and username != ''">
 						HAVING A.USERNAME = #{username}
@@ -84,18 +84,18 @@
 	</delete>
 
 	<insert id="insertAccesses" parameterType="map">
-		INSERT INTO PAGE_ACCESS (USERNAME, PAGE_ID)
+		INSERT INTO MENU_ACCESS (USERNAME, MENU_ID)
 		VALUES
-		<foreach collection="pageList.split(',')" item="item" separator=",">
+		<foreach collection="menuList.split(',')" item="item" separator=",">
 			( #{username}, UPPER(#{item}) )
 		</foreach>
 	</insert>
 
 	<delete id="deleteAccesses" parameterType="map">
-		DELETE FROM PAGE_ACCESS
+		DELETE FROM MENU_ACCESS
 		WHERE USERNAME = #{username}
-		AND PAGE_ID IN
-		<foreach collection="pageList.split(',')" item="item" separator="," open="(" close=")">
+		AND MENU_ID IN
+		<foreach collection="menuList.split(',')" item="item" separator="," open="(" close=")">
 			UPPER(#{item})
 		</foreach>
 	</delete>

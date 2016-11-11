@@ -32,7 +32,7 @@ public class UserInfo implements UserDetails {
 	private String beginDttm;
 	private String endDttm;
 	private String createDttm;
-	private String pageList;
+	private String menuList;
 	private Collection<? extends GrantedAuthority> authorities;
 
 	@Override

@@ -28,7 +28,7 @@
 						, COLUMN4 AS MBR_KOR_NM
 						, COLUMN5 AS LEGL_BTHDT
 						, COLUMN6 AS LEGL_GNDR_FG_CD
-					FROM TMP_${menuProgress.pageId}_${menuProgress.username}
+					FROM TMP_${menuProgress.menuId}_${menuProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.CI_NO = B.CI_NO
 				GROUP BY A.MBR_ID, A.CARD_NO, A.CI_NO, A.MBR_KOR_NM, A.LEGL_BTHDT, A.LEGL_GNDR_FG_CD
@@ -55,7 +55,7 @@
 						, COLUMN4 AS MBR_KOR_NM
 						, COLUMN5 AS LEGL_BTHDT
 						, COLUMN6 AS LEGL_GNDR_FG_CD
-					FROM TMP_${menuProgress.pageId}_${menuProgress.username}
+					FROM TMP_${menuProgress.menuId}_${menuProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.CARD_NO = B.CARD_NO
 			</when>
@@ -83,7 +83,7 @@
 						, COLUMN4 AS MBR_KOR_NM
 						, COLUMN5 AS LEGL_BTHDT
 						, COLUMN6 AS LEGL_GNDR_FG_CD
-					FROM TMP_${menuProgress.pageId}_${menuProgress.username}
+					FROM TMP_${menuProgress.menuId}_${menuProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
 				GROUP BY A.MBR_ID, A.CARD_NO, A.CI_NO, A.MBR_KOR_NM, A.LEGL_BTHDT, A.LEGL_GNDR_FG_CD
@@ -117,7 +117,7 @@
 						, COLUMN4 AS MBR_KOR_NM
 						, COLUMN5 AS LEGL_BTHDT
 						, COLUMN6 AS LEGL_GNDR_FG_CD
-					FROM TMP_${menuProgress.pageId}_${menuProgress.username}
+					FROM TMP_${menuProgress.menuId}_${menuProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.CI_NO = B.CI_NO
 				GROUP BY A.MBR_ID, A.CARD_NO, A.CI_NO, A.MBR_KOR_NM, A.LEGL_BTHDT, A.LEGL_GNDR_FG_CD
@@ -144,7 +144,7 @@
 						, COLUMN4 AS MBR_KOR_NM
 						, COLUMN5 AS LEGL_BTHDT
 						, COLUMN6 AS LEGL_GNDR_FG_CD
-					FROM TMP_${menuProgress.pageId}_${menuProgress.username}
+					FROM TMP_${menuProgress.menuId}_${menuProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.CARD_NO = B.CARD_NO
 			</when>
@@ -172,7 +172,7 @@
 						, COLUMN4 AS MBR_KOR_NM
 						, COLUMN5 AS LEGL_BTHDT
 						, COLUMN6 AS LEGL_GNDR_FG_CD
-					FROM TMP_${menuProgress.pageId}_${menuProgress.username}
+					FROM TMP_${menuProgress.menuId}_${menuProgress.username}
 				) A
 				LEFT OUTER JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
 				GROUP BY A.MBR_ID, A.CARD_NO, A.CI_NO, A.MBR_KOR_NM, A.LEGL_BTHDT, A.LEGL_GNDR_FG_CD

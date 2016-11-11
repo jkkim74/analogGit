@@ -60,16 +60,16 @@ public class UploadService {
 	private String encoding;
 
 	@Transactional("mysqlTxManager")
-	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String param) {
+	public JobParameters readyToImport(MultipartFile file, String menuId, String username, String param) {
 		Path filePath = saveUploadFile(file);
 
-		markStatus(ProgressStatus.UPLOADING, pageId, username, param, filePath.getFileName().toString());
+		markStatus(ProgressStatus.UPLOADING, menuId, username, param, filePath.getFileName().toString());
 
-		prepareTemporaryTable(pageId, username);
+		prepareTemporaryTable(menuId, username);
 
-		long numberOfColumns = getNumberOfColumnsAndValidate(pageId, filePath);
+		long numberOfColumns = getNumberOfColumnsAndValidate(menuId, filePath);
 
-		JobParameters jobParameters = new JobParametersBuilder().addString("pageId", pageId)
+		JobParameters jobParameters = new JobParametersBuilder().addString("menuId", menuId)
 				.addString("username", username).addString("filePath", filePath.toString())
 				.addLong("numberOfColumns", numberOfColumns).toJobParameters();
 
@@ -87,10 +87,10 @@ public class UploadService {
 	}
 
 	@Transactional("mysqlTxManager")
-	public void markStatus(ProgressStatus progressStatus, String pageId, String username, String param,
+	public void markStatus(ProgressStatus progressStatus, String menuId, String username, String param,
 			String filename) {
 		if (progressStatus == ProgressStatus.UPLOADING) {
-			MenuProgress progress = metaRepository.selectMenuProgress(pageId, username);
+			MenuProgress progress = metaRepository.selectMenuProgress(menuId, username);
 
 			if (progress != null && progress.getStatus() == ProgressStatus.UPLOADING) {
 				throw new BizException("업로드 중입니다");
@@ -100,19 +100,19 @@ public class UploadService {
 		String underscoredParam = param == null ? null
 				: CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, param);
 
-		metaRepository.upsertMenuProgress(pageId, username, underscoredParam, filename, progressStatus);
+		metaRepository.upsertMenuProgress(menuId, username, underscoredParam, filename, progressStatus);
 	}
 
-	private void prepareTemporaryTable(String pageId, String username) {
-		if (tempRepository.countTable(pageId, username) <= 0) {
-			tempRepository.createTable(pageId, username);
+	private void prepareTemporaryTable(String menuId, String username) {
+		if (tempRepository.countTable(menuId, username) <= 0) {
+			tempRepository.createTable(menuId, username);
 		}
-		tempRepository.truncateTable(pageId, username);
+		tempRepository.truncateTable(menuId, username);
 	}
 
-	private long getNumberOfColumnsAndValidate(String pageId, Path uploadPath) {
+	private long getNumberOfColumnsAndValidate(String menuId, Path uploadPath) {
 		long numberOfColumns = 1;
-		if ("PAN0103".equalsIgnoreCase(pageId)) {
+		if ("PAN0103".equalsIgnoreCase(menuId)) {
 			numberOfColumns = 6;
 		}
 
@@ -166,8 +166,8 @@ public class UploadService {
 		}
 	}
 
-	public MenuProgress getFinishedMenuProgress(String pageId, String username) {
-		MenuProgress progress = getMenuProgress(pageId, username);
+	public MenuProgress getFinishedMenuProgress(String menuId, String username) {
+		MenuProgress progress = getMenuProgress(menuId, username);
 
 		switch (progress.getStatus()) {
 		case UPLOADING:
@@ -179,8 +179,8 @@ public class UploadService {
 		}
 	}
 
-	public MenuProgress getMenuProgress(String pageId, String username) {
-		MenuProgress progress = metaRepository.selectMenuProgress(pageId, username);
+	public MenuProgress getMenuProgress(String menuId, String username) {
+		MenuProgress progress = metaRepository.selectMenuProgress(menuId, username);
 
 		if (progress == null) {
 			throw new BizException("업로드를 먼저 해주세요");

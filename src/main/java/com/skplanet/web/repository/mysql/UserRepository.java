@@ -19,8 +19,8 @@ public interface UserRepository {
 
 	void deleteAuthorities(@Param("username") String username, @Param("authorities") String authorities);
 
-	void insertAccesses(@Param("username") String username, @Param("pageList") String pageList);
+	void insertAccesses(@Param("username") String username, @Param("menuList") String menuList);
 
-	void deleteAccesses(@Param("username") String username, @Param("pageList") String pageList);
+	void deleteAccesses(@Param("username") String username, @Param("menuList") String menuList);
 
 }

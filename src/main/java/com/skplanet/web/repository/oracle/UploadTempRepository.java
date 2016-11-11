@@ -10,14 +10,14 @@ import com.skplanet.web.model.AutoMap;
 @Repository
 public interface UploadTempRepository {
 
-	int countTable(@Param("pageId") String pageId, @Param("username") String username);
+	int countTable(@Param("menuId") String menuId, @Param("username") String username);
 
-	void createTable(@Param("pageId") String pageId, @Param("username") String username);
+	void createTable(@Param("menuId") String menuId, @Param("username") String username);
 
-	void truncateTable(@Param("pageId") String pageId, @Param("username") String username);
+	void truncateTable(@Param("menuId") String menuId, @Param("username") String username);
 
-	List<AutoMap> selectUploaded(@Param("pageId") String pageId, @Param("username") String username);
+	List<AutoMap> selectUploaded(@Param("menuId") String menuId, @Param("username") String username);
 
-	int countUploaded(@Param("pageId") String pageId, @Param("username") String username);
+	int countUploaded(@Param("menuId") String menuId, @Param("username") String username);
 
 }

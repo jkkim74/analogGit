@@ -19,7 +19,7 @@ public interface IdmsLogRepository {
 
 	void insertMemberSearch(@Param("selDttm") String selDttm, @Param("wasIp") String wasIp,
 			@Param("username") String username, @Param("userIp") String userIp, @Param("mbrId") String mbrId,
-			@Param("mbrKorNm") String mbrKorNm, @Param("pageId") String pageId, @Param("funcCd") String funcCd,
+			@Param("mbrKorNm") String mbrKorNm, @Param("menuId") String menuId, @Param("funcCd") String funcCd,
 			@Param("mbrCnt") int mbrCnt);
 
 	List<Map<String, Object>> selectMemberSearchLogAtYesterday();

@@ -11,7 +11,7 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
                 }
 
                 $http.get(params.url || 'api/' + command, {
-                    params: angular.extend({ pageId: $stateParams.pageId.toUpperCase() }, params),
+                    params: angular.extend({ menuId: $stateParams.menuId.toUpperCase() }, params),
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
                     deferred.resolve(resp.data);
@@ -37,7 +37,7 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
             return function (params) {
                 var deferred = $q.defer();
 
-                var args = angular.extend({ pageId: $stateParams.pageId.toUpperCase() }, params);
+                var args = angular.extend({ menuId: $stateParams.menuId.toUpperCase() }, params);
                 if (hiddenMethod) {
                     args._method = hiddenMethod;
                 }
@@ -106,7 +106,7 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
             if (params.file) {
                 Upload.upload({
                     url: params.url || 'api/files',
-                    data: angular.extend({ pageId: $stateParams.pageId.toUpperCase() }, params),
+                    data: angular.extend({ menuId: $stateParams.menuId.toUpperCase() }, params),
                     headers: { 'Authorization': 'Bearer ' + authSvc.getAccessToken() }
                 }).then(function (resp) {
                     toastr.success(resp.config.data.file.name, resp.data.message);

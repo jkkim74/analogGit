@@ -137,7 +137,7 @@ public class IdmsLogService {
 	 *            Null은 고객 리스트를 보여주는 경우와 고객정보와 무관한 업무처리를 하는 경우에만 허용
 	 * @param mbrKorNm
 	 *            고객명 - Biz 사용자가 조회한 고객 명
-	 * @param pageId
+	 * @param menuId
 	 *            Biz 사이트 화면 ID -사용자가 조회 또는 처리한 화면 ID (IDMS 연동_정보요청양식.xlsx의
 	 *            3.화면정보 시트 참조)
 	 * @param mbrCnt
@@ -146,12 +146,12 @@ public class IdmsLogService {
 	 */
 	@Async
 	public void memberSearch(String selDttm, String username, String userIp, String mbrId, String mbrKorNm,
-			String pageId, int mbrCnt) {
+			String menuId, int mbrCnt) {
 		/*
 		 * Biz 사이트 IP - Biz 사이트 서버 IP(WAS IP)
 		 */
 		String wasIp = Helper.serverIp();
-		idmsLogRepository.insertMemberSearch(selDttm, wasIp, username, userIp, mbrId, mbrKorNm, pageId, funcCd, mbrCnt);
+		idmsLogRepository.insertMemberSearch(selDttm, wasIp, username, userIp, mbrId, mbrKorNm, menuId, funcCd, mbrCnt);
 	}
 
 	private Path createJobInfoFile(final String... dttm) {

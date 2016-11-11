@@ -14,7 +14,7 @@
 					, A.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_OCBCOM_MBR_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.LGN_ID IN (SELECT COLUMN1 FROM TMP_${menuProgress.pageId}_${menuProgress.username})
+				WHERE B.LGN_ID IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</when>
 			<when test="menuProgress.param == 'CARD_NO'">
 				SELECT A.MBR_ID
@@ -26,7 +26,7 @@
 					, A.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.pageId}_${menuProgress.username})
+				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</when>
 			<when test="menuProgress.param == 'SYW_MBR_ID'">
 				SELECT A.MBR_ID
@@ -38,7 +38,7 @@
 					, A.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_SYW_MBR_ID_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.pageId}_${menuProgress.username})
+				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</when>
 			<when test="menuProgress.param == 'EVS_MBR_ID'">
 				SELECT A.MBR_ID
@@ -50,7 +50,7 @@
 					, B.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_EVS_MBR_ID_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.pageId}_${menuProgress.username})
+				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</when>
 			<otherwise>
 				SELECT MBR_ID
@@ -61,7 +61,7 @@
 					, SYW_MBR_ID
 					, EVS_MBR_ID
 				FROM MART_MBR_ID_MST
-				WHERE ${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.pageId}_${menuProgress.username})
+				WHERE ${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</otherwise>
 		</choose>
 	</sql>
@@ -78,7 +78,7 @@
 					, A.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_OCBCOM_MBR_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.LGN_ID IN (SELECT COLUMN1 FROM TMP_${menuProgress.pageId}_${menuProgress.username})
+				WHERE B.LGN_ID IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</when>
 			<when test="menuProgress.param == 'CARD_NO'">
 				SELECT A.MBR_ID
@@ -90,7 +90,7 @@
 					, A.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.pageId}_${menuProgress.username})
+				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</when>
 			<when test="menuProgress.param == 'SYW_MBR_ID'">
 				SELECT A.MBR_ID
@@ -102,7 +102,7 @@
 					, A.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_SYW_MBR_ID_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.pageId}_${menuProgress.username})
+				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</when>
 			<when test="menuProgress.param == 'EVS_MBR_ID'">
 				SELECT A.MBR_ID
@@ -114,7 +114,7 @@
 					, B.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_EVS_MBR_ID_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.pageId}_${menuProgress.username})
+				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</when>
 			<otherwise>
 				SELECT MBR_ID
@@ -125,7 +125,7 @@
 					, SYW_MBR_ID
 					, EVS_MBR_ID
 				FROM MART_MBR_ID_MST
-				WHERE ${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.pageId}_${menuProgress.username})
+				WHERE ${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</otherwise>
 		</choose>
 	</sql>	

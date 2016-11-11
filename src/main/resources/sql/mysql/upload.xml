@@ -3,19 +3,19 @@
 <mapper namespace="com.skplanet.web.repository.mysql.UploadMetaRepository">
 
 	<select id="selectMenuProgress" parameterType="map" resultType="MenuProgress">
-		SELECT PAGE_ID
+		SELECT MENU_ID
 			, USERNAME
 			, PARAM
 			, FILENAME
 			, STATUS
 		FROM MENU_PROGRESS
-		WHERE PAGE_ID = #{pageId} AND USERNAME = #{username}
+		WHERE MENU_ID = #{menuId} AND USERNAME = #{username}
 	</select>
 
 	<update id="upsertMenuProgress" parameterType="map">
 		INSERT
-		INTO MENU_PROGRESS ( PAGE_ID, USERNAME, PARAM, FILENAME, STATUS )
-		VALUES ( #{pageId}, #{username}, #{param}, #{filename}, #{status} )
+		INTO MENU_PROGRESS ( MENU_ID, USERNAME, PARAM, FILENAME, STATUS )
+		VALUES ( #{menuId}, #{username}, #{param}, #{filename}, #{status} )
 		ON DUPLICATE KEY
 		<trim prefix="UPDATE" suffixOverrides=",">
 			<if test="param != null and param != ''">PARAM = #{param},</if>

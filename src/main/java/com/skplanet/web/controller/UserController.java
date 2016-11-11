@@ -72,8 +72,8 @@ public class UserController {
 	@PostMapping("/access")
 	@RolesAllowed("ROLE_ADMIN")
 	@Transactional("mysqlTxManager")
-	public ApiResponse saveAccess(@RequestParam String username, @RequestParam String pageList) {
-		userService.updateAccesses(username, pageList);
+	public ApiResponse saveAccess(@RequestParam String username, @RequestParam String menuList) {
+		userService.updateAccesses(username, menuList);
 		return ApiResponse.builder().message("화면 권한 수정 완료").build();
 	}
 

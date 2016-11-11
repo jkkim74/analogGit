@@ -3,7 +3,7 @@
 <mapper namespace="com.skplanet.web.repository.oracle.UploadTempRepository">
 
 	<select id="countTable" parameterType="map" resultType="int">
-		SELECT COUNT(*) FROM USER_TABLES WHERE TABLE_NAME = 'TMP_' || UPPER(#{pageId}) || '_' || UPPER(#{username})
+		SELECT COUNT(*) FROM USER_TABLES WHERE TABLE_NAME = 'TMP_' || UPPER(#{menuId}) || '_' || UPPER(#{username})
 	</select>
 	<select id="countTable" parameterType="map" resultType="int" databaseId="hsql">
 		SELECT 0 FROM DUAL
@@ -11,8 +11,8 @@
 
 	<update id="createTable" parameterType="map">
 		<choose>
-			<when test="pageId != null and pageId == 'PAN0103'">
-				CREATE TABLE TMP_${pageId}_${username} (
+			<when test="menuId != null and menuId == 'PAN0103'">
+				CREATE TABLE TMP_${menuId}_${username} (
 					COLUMN1 VARCHAR2(4000),
 					COLUMN2 VARCHAR2(4000),
 					COLUMN3 VARCHAR2(4000),
@@ -22,7 +22,7 @@
 				)
 			</when>
 			<otherwise>
-				CREATE TABLE TMP_${pageId}_${username} (
+				CREATE TABLE TMP_${menuId}_${username} (
 					COLUMN1 VARCHAR2(4000)
 				)
 			</otherwise>
@@ -38,8 +38,8 @@
 	<update id="createTable" parameterType="map" databaseId="hsql">
 
 		<choose>
-			<when test="pageId != null and pageId == 'PAN0103'">
-				CREATE TABLE IF NOT EXISTS TMP_${pageId}_${username} (
+			<when test="menuId != null and menuId == 'PAN0103'">
+				CREATE TABLE IF NOT EXISTS TMP_${menuId}_${username} (
 					COLUMN1 VARCHAR2(4000),
 					COLUMN2 VARCHAR2(4000),
 					COLUMN3 VARCHAR2(4000),
@@ -49,7 +49,7 @@
 				)
 			</when>
 			<otherwise>
-				CREATE TABLE IF NOT EXISTS TMP_${pageId}_${username} (
+				CREATE TABLE IF NOT EXISTS TMP_${menuId}_${username} (
 					COLUMN1 VARCHAR2(4000)
 				)
 			</otherwise>
@@ -57,12 +57,12 @@
 	</update>
 
 	<update id="truncateTable" parameterType="map">
-		TRUNCATE TABLE TMP_${pageId}_${username}
+		TRUNCATE TABLE TMP_${menuId}_${username}
 	</update>
 
 	<select id="selectUploaded" parameterType="map" resultType="AutoMap">
 		<choose>
-			<when test="pageId != null and pageId == 'PAN0103'">
+			<when test="menuId != null and menuId == 'PAN0103'">
 				SELECT *
 				FROM (
 					SELECT IN_SQ.*, ROWNUM AS RNUM
@@ -73,7 +73,7 @@
 							, DECODE(COLUMN4,NULL,COLUMN4,SUBSTR(COLUMN4,1,LENGTH(COLUMN4)-2)||'*'||SUBSTR(COLUMN4,LENGTH(COLUMN4),1)) AS COLUMN4
 							, DECODE(COLUMN5,NULL,COLUMN5,'****-**-**') AS COLUMN5
 							, COLUMN6
-						FROM TMP_${pageId}_${username}
+						FROM TMP_${menuId}_${username}
 					) IN_SQ
 					WHERE ROWNUM &lt;= 100
 				)
@@ -83,7 +83,7 @@
 				SELECT *
 				FROM (
 					SELECT IN_SQ.*, ROWNUM AS RNUM
-					FROM ( SELECT * FROM TMP_${pageId}_${username} ) IN_SQ
+					FROM ( SELECT * FROM TMP_${menuId}_${username} ) IN_SQ
 					WHERE ROWNUM &lt;= 100
 				)
 				WHERE RNUM &gt; 0
@@ -91,11 +91,11 @@
 		</choose>
 	</select>
 	<select id="selectUploaded" parameterType="map" resultType="AutoMap" databaseId="hsql">
-		SELECT * FROM TMP_${pageId}_${username} LIMIT 0, 100
+		SELECT * FROM TMP_${menuId}_${username} LIMIT 0, 100
 	</select>
 
 	<select id="countUploaded" parameterType="map" resultType="int">
-		SELECT COUNT(*) FROM TMP_${pageId}_${username}
+		SELECT COUNT(*) FROM TMP_${menuId}_${username}
 	</select>
 
 </mapper>
