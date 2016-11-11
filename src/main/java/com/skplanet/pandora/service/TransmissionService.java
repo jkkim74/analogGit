@@ -19,7 +19,7 @@ import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.web.model.AutoMap;
 import com.skplanet.web.model.UploadProgress;
-import com.skplanet.web.model.UploadStatus;
+import com.skplanet.web.model.ProgressStatus;
 import com.skplanet.web.service.FtpService;
 import com.skplanet.web.service.MailService;
 import com.skplanet.web.service.PtsService;
@@ -186,7 +186,7 @@ public class TransmissionService {
 			map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
 			mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
 		} finally {
-			uploadService.markStatus(UploadStatus.FINISHED, uploadProgress.getPageId(), username, null, null);
+			uploadService.markStatus(ProgressStatus.FINISHED, uploadProgress.getPageId(), username, null, null);
 		}
 	}
 

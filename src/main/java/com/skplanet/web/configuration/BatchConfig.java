@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
-import com.skplanet.web.model.UploadStatus;
+import com.skplanet.web.model.ProgressStatus;
 import com.skplanet.web.model.UploadedPreview;
 import com.skplanet.web.repository.mysql.UploadMetaRepository;
 
@@ -156,7 +156,7 @@ public class BatchConfig extends DefaultBatchConfigurer {
 				JobParameters parameters = jobExecution.getJobParameters();
 				String pageId = parameters.getString("pageId");
 				String username = parameters.getString("username");
-				metaRepository.upsertUploadProgress(pageId, username, null, null, UploadStatus.FINISHED);
+				metaRepository.upsertUploadProgress(pageId, username, null, null, ProgressStatus.FINISHED);
 			}
 		}
 

@@ -1,5 +1,5 @@
 package com.skplanet.web.model;
 
-public enum UploadStatus {
+public enum ProgressStatus {
 	UPLOADING, PROCESSING, FINISHED
 }

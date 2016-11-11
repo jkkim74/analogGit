@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.skplanet.web.model.UploadProgress;
-import com.skplanet.web.model.UploadStatus;
+import com.skplanet.web.model.ProgressStatus;
 
 @Repository
 public interface UploadMetaRepository {
@@ -13,6 +13,6 @@ public interface UploadMetaRepository {
 
 	int upsertUploadProgress(@Param("pageId") String pageId, @Param("username") String username,
 			@Param("columnName") String columnName, @Param("filename") String filename,
-			@Param("uploadStatus") UploadStatus uploadStatus);
+			@Param("status") ProgressStatus status);
 
 }

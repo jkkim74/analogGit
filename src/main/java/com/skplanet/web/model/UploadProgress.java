@@ -9,6 +9,6 @@ public class UploadProgress {
 	private String username;
 	private String columnName;
 	private String filename;
-	private UploadStatus uploadStatus;
+	private ProgressStatus status;
 
 }

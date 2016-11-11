@@ -21,7 +21,7 @@ import com.skplanet.web.exception.BizException;
 import com.skplanet.web.model.ApiResponse;
 import com.skplanet.web.model.AutoMap;
 import com.skplanet.web.model.UploadProgress;
-import com.skplanet.web.model.UploadStatus;
+import com.skplanet.web.model.ProgressStatus;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.security.UserInfo;
 import com.skplanet.web.service.IdmsLogService;
@@ -83,7 +83,7 @@ public class ApiController {
 
 			int count = uploadTempRepository.countUploaded(pageId, username);
 
-			return ApiResponse.builder().message(uploadProgress.getUploadStatus().toString()).totalItems(count).build();
+			return ApiResponse.builder().message(uploadProgress.getStatus().toString()).totalItems(count).build();
 		} else {
 			List<AutoMap> list = uploadTempRepository.selectUploaded(pageId, username);
 			return ApiResponse.builder().value(list).build();
@@ -260,7 +260,7 @@ public class ApiController {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
-		uploadService.markStatus(UploadStatus.PROCESSING, pageId, username, null, null);
+		uploadService.markStatus(ProgressStatus.PROCESSING, pageId, username, null, null);
 
 		transmissionService.sendForExtraction(username, inputDataType, periodType, periodFrom, periodTo, ptsUsername,
 				ptsMasking, emailAddr, uploadProgress);

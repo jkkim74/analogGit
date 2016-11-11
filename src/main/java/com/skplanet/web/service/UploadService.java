@@ -29,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.common.base.CaseFormat;
 import com.skplanet.web.exception.BizException;
 import com.skplanet.web.model.UploadProgress;
-import com.skplanet.web.model.UploadStatus;
+import com.skplanet.web.model.ProgressStatus;
 import com.skplanet.web.repository.mysql.UploadMetaRepository;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.util.Constant;
@@ -63,7 +63,7 @@ public class UploadService {
 	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
 		Path filePath = saveUploadFile(file);
 
-		markStatus(UploadStatus.UPLOADING, pageId, username, columnName, filePath.getFileName().toString());
+		markStatus(ProgressStatus.UPLOADING, pageId, username, columnName, filePath.getFileName().toString());
 
 		prepareTemporaryTable(pageId, username);
 
@@ -87,12 +87,12 @@ public class UploadService {
 	}
 
 	@Transactional("mysqlTxManager")
-	public void markStatus(UploadStatus uploadStatus, String pageId, String username, String columnName,
+	public void markStatus(ProgressStatus progressStatus, String pageId, String username, String columnName,
 			String filename) {
-		if (uploadStatus == UploadStatus.UPLOADING) {
+		if (progressStatus == ProgressStatus.UPLOADING) {
 			UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
 
-			if (uploadProgress != null && uploadProgress.getUploadStatus() == UploadStatus.UPLOADING) {
+			if (uploadProgress != null && uploadProgress.getStatus() == ProgressStatus.UPLOADING) {
 				throw new BizException("업로드 중입니다");
 			}
 		}
@@ -100,7 +100,7 @@ public class UploadService {
 		String underScoredColumnName = columnName == null ? null
 				: CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
 
-		metaRepository.upsertUploadProgress(pageId, username, underScoredColumnName, filename, uploadStatus);
+		metaRepository.upsertUploadProgress(pageId, username, underScoredColumnName, filename, progressStatus);
 	}
 
 	private void prepareTemporaryTable(String pageId, String username) {
@@ -169,7 +169,7 @@ public class UploadService {
 	public UploadProgress getFinishedUploadProgress(String pageId, String username) {
 		UploadProgress uploadProgress = getUploadProgress(pageId, username);
 
-		switch (uploadProgress.getUploadStatus()) {
+		switch (uploadProgress.getStatus()) {
 		case UPLOADING:
 			throw new BizException("업로드 중입니다");
 		case PROCESSING:
