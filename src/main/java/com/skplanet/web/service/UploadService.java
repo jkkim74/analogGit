@@ -63,7 +63,7 @@ public class UploadService {
 	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
 		Path filePath = saveUploadFile(file);
 
-		markStatus(UploadStatus.RUNNING, pageId, username, columnName, filePath.getFileName().toString());
+		markStatus(UploadStatus.UPLOADING, pageId, username, columnName, filePath.getFileName().toString());
 
 		prepareTemporaryTable(pageId, username);
 
@@ -89,10 +89,10 @@ public class UploadService {
 	@Transactional("mysqlTxManager")
 	public void markStatus(UploadStatus uploadStatus, String pageId, String username, String columnName,
 			String filename) {
-		if (uploadStatus == UploadStatus.RUNNING) {
+		if (uploadStatus == UploadStatus.UPLOADING) {
 			UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
 
-			if (uploadProgress != null && uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
+			if (uploadProgress != null && uploadProgress.getUploadStatus() == UploadStatus.UPLOADING) {
 				throw new BizException("업로드 중입니다");
 			}
 		}
@@ -170,7 +170,7 @@ public class UploadService {
 		UploadProgress uploadProgress = getUploadProgress(pageId, username);
 
 		switch (uploadProgress.getUploadStatus()) {
-		case RUNNING:
+		case UPLOADING:
 			throw new BizException("업로드 중입니다");
 		case PROCESSING:
 			throw new BizException("처리 중인 작업이 있습니다");

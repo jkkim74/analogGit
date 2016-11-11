@@ -91,7 +91,7 @@ angular.module('app').controller('PAN0106Ctrl', ['$scope', '$q', '$http', '$time
                 apiSvc.getUploaded({ countOnly: true }).then(function (data) {
                     $scope.uploadedItems = data.totalItems;
 
-                    if (data.message === 'FINISH') {
+                    if (data.message === 'FINISHED') {
                         $scope.uploadStatusIsRunning = false;
                     } else {
                         $scope.uploadStatusIsRunning = true;
