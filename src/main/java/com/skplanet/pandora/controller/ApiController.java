@@ -260,7 +260,7 @@ public class ApiController {
 
 		UploadProgress uploadProgress = uploadService.getFinishedUploadProgress(pageId, username);
 
-		uploadService.mark(UploadStatus.PROCESSING, pageId, username, null, null);
+		uploadService.markStatus(UploadStatus.PROCESSING, pageId, username, null, null);
 
 		transmissionService.sendForExtraction(username, inputDataType, periodType, periodFrom, periodTo, ptsUsername,
 				ptsMasking, emailAddr, uploadProgress);

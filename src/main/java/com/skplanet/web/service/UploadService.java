@@ -63,7 +63,7 @@ public class UploadService {
 	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
 		Path filePath = saveUploadFile(file);
 
-		markRunning(pageId, username, columnName, filePath.getFileName().toString());
+		markStatus(UploadStatus.RUNNING, pageId, username, columnName, filePath.getFileName().toString());
 
 		prepareTemporaryTable(pageId, username);
 
@@ -86,20 +86,17 @@ public class UploadService {
 		}
 	}
 
-	private void markRunning(String pageId, String username, String columnName, String filename) {
-		UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
+	@Transactional("mysqlTxManager")
+	public void markStatus(UploadStatus uploadStatus, String pageId, String username, String columnName,
+			String filename) {
+		if (uploadStatus == UploadStatus.RUNNING) {
+			UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
 
-		if (uploadProgress != null && uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
-			throw new BizException("업로드 중입니다");
+			if (uploadProgress != null && uploadProgress.getUploadStatus() == UploadStatus.RUNNING) {
+				throw new BizException("업로드 중입니다");
+			}
 		}
 
-		String underScoredColumnName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
-
-		metaRepository.upsertUploadProgress(pageId, username, underScoredColumnName, filename, UploadStatus.RUNNING);
-	}
-
-	@Transactional("mysqlTxManager")
-	public void mark(UploadStatus uploadStatus, String pageId, String username, String columnName, String filename) {
 		String underScoredColumnName = columnName == null ? null
 				: CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
 
