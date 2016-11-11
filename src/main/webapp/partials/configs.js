@@ -31,7 +31,7 @@ angular.module('app').value('cgBusyDefaults', {
             .state('index.menu', {
                 url: '/:menuId',
                 params: {
-                    pageParams: {}
+                    menuParams: {}
                 },
                 templateUrl: function ($stateParams) {
                     // 화면ID로 디렉터리, .html, .js 만들어서 하나의 페이지를 구성하는 구조.
@@ -90,7 +90,7 @@ angular.module('app').value('cgBusyDefaults', {
                 event.preventDefault();
             }
 
-            if (needAuth && toState.name === 'index.menu' && !authSvc.isAllowedPage(toParams.menuId)) {
+            if (needAuth && toState.name === 'index.menu' && !authSvc.isAllowedMenu(toParams.menuId)) {
                 $state.transitionTo('index.home');
                 event.preventDefault();
             }

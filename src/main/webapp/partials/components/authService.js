@@ -28,8 +28,8 @@ angular.module('app').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
             }).then(function () {
                 Idle.watch();
 
-                if (appInfo.entryPage && !self.isAdmin()) {
-                    $state.go('index.menu', { menuId: appInfo.entryPage.toLowerCase() }, { reload: true });
+                if (appInfo.entryMenu && !self.isAdmin()) {
+                    $state.go('index.menu', { menuId: appInfo.entryMenu.toLowerCase() }, { reload: true });
                 } else {
                     $state.reload();
                 }
@@ -124,7 +124,7 @@ angular.module('app').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
             return hasAdmin;
         };
 
-        this.isAllowedPage = function (menuId) {
+        this.isAllowedMenu = function (menuId) {
             if (!self.isAuthenticated()) {
                 return false;
             }

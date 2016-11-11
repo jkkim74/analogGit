@@ -5,8 +5,8 @@ angular.module('app').controller('HeaderCtrl', ['$scope', 'authSvc', function ($
     $scope.isNavCollapsed = true
     $scope.isAuthenticated = authSvc.isAuthenticated();
 
-    $scope.isAllowedPage = function (menuId) {
-        return authSvc.isAllowedPage(menuId);
+    $scope.isAllowedMenu = function (menuId) {
+        return authSvc.isAllowedMenu(menuId);
     }
 
     $scope.logout = function () {

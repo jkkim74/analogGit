@@ -5,8 +5,8 @@ angular.module('app').controller('HomeCtrl', ['$scope', '$q', '$http', '$state',
 
         $scope.isAuthenticated = authSvc.isAuthenticated();
 
-        $scope.isAllowedPage = function (menuId) {
-            return authSvc.isAllowedPage(menuId);
+        $scope.isAllowedMenu = function (menuId) {
+            return authSvc.isAllowedMenu(menuId);
         }
 
         $scope.authenticate = function () {
