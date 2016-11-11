@@ -341,7 +341,7 @@
 	<select id="selectThirdPartyProvideHistory" parameterType="map" resultType="AutoMap">
 		SELECT CASE WHEN SUBSTR(AGRMT_VER_CD,1,2) = 'BB' THEN 'SK브로드밴드' 
 		            WHEN SUBSTR(AGRMT_VER_CD,1,2) = 'DB' THEN '동부화재'
-		            WHEN SUBSTR(AGRMT_VER_CD,1,2) = 'MN' THEN 'M&S'
+		            WHEN SUBSTR(AGRMT_VER_CD,1,2) = 'MN' THEN 'M&amp;S'
 		            ELSE '알수없음' END AS DATA_DST_ORG_CD /* 제공대상기관 */
 			, A.DATA_SRC_ORG_CD /* 유입기관코드 */
 			, A.AGRMT_VER_CD /* 동의버전 */
