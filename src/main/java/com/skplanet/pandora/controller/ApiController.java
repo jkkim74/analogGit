@@ -55,17 +55,17 @@ public class ApiController {
 
 	@PostMapping("files")
 	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String pageId,
-			@RequestParam String columnName) throws IOException {
+			@RequestParam String param) throws IOException {
 
 		String username = Helper.currentUser().getUsername();
 
-		log.info("Uploading file... pageId={}, username={}, columnName={}", pageId, username, columnName);
+		log.info("Uploading file... pageId={}, username={}, param={}", pageId, username, param);
 
 		if (file.isEmpty()) {
 			throw new BizException("빈 파일입니다");
 		}
 
-		JobParameters jobParameters = uploadService.readyToImport(file, pageId, username, columnName);
+		JobParameters jobParameters = uploadService.readyToImport(file, pageId, username, param);
 
 		uploadService.beginImport(jobParameters);
 

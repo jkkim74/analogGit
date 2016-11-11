@@ -60,10 +60,10 @@ public class UploadService {
 	private String encoding;
 
 	@Transactional("mysqlTxManager")
-	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String columnName) {
+	public JobParameters readyToImport(MultipartFile file, String pageId, String username, String param) {
 		Path filePath = saveUploadFile(file);
 
-		markStatus(ProgressStatus.UPLOADING, pageId, username, columnName, filePath.getFileName().toString());
+		markStatus(ProgressStatus.UPLOADING, pageId, username, param, filePath.getFileName().toString());
 
 		prepareTemporaryTable(pageId, username);
 
@@ -87,7 +87,7 @@ public class UploadService {
 	}
 
 	@Transactional("mysqlTxManager")
-	public void markStatus(ProgressStatus progressStatus, String pageId, String username, String columnName,
+	public void markStatus(ProgressStatus progressStatus, String pageId, String username, String param,
 			String filename) {
 		if (progressStatus == ProgressStatus.UPLOADING) {
 			UploadProgress uploadProgress = metaRepository.selectUploadProgress(pageId, username);
@@ -97,10 +97,10 @@ public class UploadService {
 			}
 		}
 
-		String underScoredColumnName = columnName == null ? null
-				: CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, columnName);
+		String underscoredParam = param == null ? null
+				: CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, param);
 
-		metaRepository.upsertUploadProgress(pageId, username, underScoredColumnName, filename, progressStatus);
+		metaRepository.upsertUploadProgress(pageId, username, underscoredParam, filename, progressStatus);
 	}
 
 	private void prepareTemporaryTable(String pageId, String username) {

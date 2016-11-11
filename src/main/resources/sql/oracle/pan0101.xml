@@ -4,7 +4,7 @@
 
 	<sql id="selectMembers_PAN0101">
 		<choose>
-			<when test="uploadProgress.columnName == 'OCBCOM_LGN_ID'">
+			<when test="uploadProgress.param == 'OCBCOM_LGN_ID'">
 				SELECT A.MBR_ID
 					, DECODE(B.LGN_ID,NULL,B.LGN_ID,SUBSTR(B.LGN_ID,1,LENGTH(B.LGN_ID)-2)||'**') AS OCBCOM_LGN_ID
 					, A.CI_NO
@@ -16,7 +16,7 @@
 				JOIN MART_OCBCOM_MBR_MST B ON A.MBR_ID = B.MBR_ID
 				WHERE B.LGN_ID IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 			</when>
-			<when test="uploadProgress.columnName == 'CARD_NO'">
+			<when test="uploadProgress.param == 'CARD_NO'">
 				SELECT A.MBR_ID
 				    , DECODE(A.OCBCOM_LGN_ID,NULL,A.OCBCOM_LGN_ID,SUBSTR(A.OCBCOM_LGN_ID,1,LENGTH(A.OCBCOM_LGN_ID)-2)||'**') AS OCBCOM_LGN_ID
 					, A.CI_NO
@@ -26,9 +26,9 @@
 					, A.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
+				WHERE B.${uploadProgress.param} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 			</when>
-			<when test="uploadProgress.columnName == 'SYW_MBR_ID'">
+			<when test="uploadProgress.param == 'SYW_MBR_ID'">
 				SELECT A.MBR_ID
 					, DECODE(A.OCBCOM_LGN_ID,NULL,A.OCBCOM_LGN_ID,SUBSTR(A.OCBCOM_LGN_ID,1,LENGTH(A.OCBCOM_LGN_ID)-2)||'**') AS OCBCOM_LGN_ID
 					, A.CI_NO
@@ -38,9 +38,9 @@
 					, A.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_SYW_MBR_ID_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
+				WHERE B.${uploadProgress.param} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 			</when>
-			<when test="uploadProgress.columnName == 'EVS_MBR_ID'">
+			<when test="uploadProgress.param == 'EVS_MBR_ID'">
 				SELECT A.MBR_ID
 					, DECODE(A.OCBCOM_LGN_ID,NULL,A.OCBCOM_LGN_ID,SUBSTR(A.OCBCOM_LGN_ID,1,LENGTH(A.OCBCOM_LGN_ID)-2)||'**') AS OCBCOM_LGN_ID
 					, A.CI_NO
@@ -50,7 +50,7 @@
 					, B.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_EVS_MBR_ID_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
+				WHERE B.${uploadProgress.param} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 			</when>
 			<otherwise>
 				SELECT MBR_ID
@@ -61,14 +61,14 @@
 					, SYW_MBR_ID
 					, EVS_MBR_ID
 				FROM MART_MBR_ID_MST
-				WHERE ${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
+				WHERE ${uploadProgress.param} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 			</otherwise>
 		</choose>
 	</sql>
 	
 	<sql id="selectMembers_PAN0101_nomas">
 		<choose>
-			<when test="uploadProgress.columnName == 'OCBCOM_LGN_ID'">
+			<when test="uploadProgress.param == 'OCBCOM_LGN_ID'">
 				SELECT A.MBR_ID
 					, B.LGN_ID AS OCBCOM_LGN_ID
 					, A.CI_NO
@@ -80,7 +80,7 @@
 				JOIN MART_OCBCOM_MBR_MST B ON A.MBR_ID = B.MBR_ID
 				WHERE B.LGN_ID IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 			</when>
-			<when test="uploadProgress.columnName == 'CARD_NO'">
+			<when test="uploadProgress.param == 'CARD_NO'">
 				SELECT A.MBR_ID
 				    , A.OCBCOM_LGN_ID AS OCBCOM_LGN_ID
 					, A.CI_NO
@@ -90,9 +90,9 @@
 					, A.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
+				WHERE B.${uploadProgress.param} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 			</when>
-			<when test="uploadProgress.columnName == 'SYW_MBR_ID'">
+			<when test="uploadProgress.param == 'SYW_MBR_ID'">
 				SELECT A.MBR_ID
 					, A.OCBCOM_LGN_ID AS OCBCOM_LGN_ID
 					, A.CI_NO
@@ -102,9 +102,9 @@
 					, A.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_SYW_MBR_ID_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
+				WHERE B.${uploadProgress.param} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 			</when>
-			<when test="uploadProgress.columnName == 'EVS_MBR_ID'">
+			<when test="uploadProgress.param == 'EVS_MBR_ID'">
 				SELECT A.MBR_ID
 					, A.OCBCOM_LGN_ID AS OCBCOM_LGN_ID
 					, A.CI_NO
@@ -114,7 +114,7 @@
 					, B.EVS_MBR_ID
 				FROM MART_MBR_ID_MST A
 				JOIN MART_EVS_MBR_ID_MST B ON A.MBR_ID = B.MBR_ID
-				WHERE B.${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
+				WHERE B.${uploadProgress.param} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 			</when>
 			<otherwise>
 				SELECT MBR_ID
@@ -125,7 +125,7 @@
 					, SYW_MBR_ID
 					, EVS_MBR_ID
 				FROM MART_MBR_ID_MST
-				WHERE ${uploadProgress.columnName} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
+				WHERE ${uploadProgress.param} IN (SELECT COLUMN1 FROM TMP_${uploadProgress.pageId}_${uploadProgress.username})
 			</otherwise>
 		</choose>
 	</sql>	

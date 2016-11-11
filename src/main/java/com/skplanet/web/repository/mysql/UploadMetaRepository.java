@@ -12,7 +12,6 @@ public interface UploadMetaRepository {
 	UploadProgress selectUploadProgress(@Param("pageId") String pageId, @Param("username") String username);
 
 	int upsertUploadProgress(@Param("pageId") String pageId, @Param("username") String username,
-			@Param("columnName") String columnName, @Param("filename") String filename,
-			@Param("status") ProgressStatus status);
+			@Param("param") String param, @Param("filename") String filename, @Param("status") ProgressStatus status);
 
 }

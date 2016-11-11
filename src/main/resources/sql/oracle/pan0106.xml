@@ -56,7 +56,7 @@
 			, A.AVL_PNT /* 가용포인트 */
 		FROM MART_MBR_TGTNG_MST A
 		   , TMP_${uploadProgress.pageId}_${uploadProgress.username} B
-		WHERE A.${uploadProgress.columnName} = B.COLUMN1
+		WHERE A.${uploadProgress.param} = B.COLUMN1
 	</sql>
 
 	<sql id="selectMembers_PAN0106_nomas">
@@ -113,7 +113,7 @@
 			, A.AVL_PNT /* 가용포인트 */
 		FROM MART_MBR_TGTNG_MST A
 		   , TMP_${uploadProgress.pageId}_${uploadProgress.username} B
-		WHERE A.${uploadProgress.columnName} = B.COLUMN1
+		WHERE A.${uploadProgress.param} = B.COLUMN1
 	</sql>
 
 </mapper>

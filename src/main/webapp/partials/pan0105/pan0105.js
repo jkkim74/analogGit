@@ -70,7 +70,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
                 return;
             }
 
-            $scope.uploadPromise = apiSvc.upload({ file: file, columnName: $scope.selectedOption2.value });
+            $scope.uploadPromise = apiSvc.upload({ file: file, param: $scope.selectedOption2.value });
             $scope.uploadPromise.then(function () {
                 $scope.uploaded = true;
                 $scope.mbrId = null;

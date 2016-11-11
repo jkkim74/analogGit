@@ -5,7 +5,7 @@
 	<select id="selectUploadProgress" parameterType="map" resultType="UploadProgress">
 		SELECT PAGE_ID
 			, USERNAME
-			, COLUMN_NAME
+			, PARAM
 			, FILENAME
 			, STATUS
 		FROM UPLOAD_PROGRESS
@@ -14,11 +14,11 @@
 
 	<update id="upsertUploadProgress" parameterType="map">
 		INSERT
-		INTO UPLOAD_PROGRESS ( PAGE_ID, USERNAME, COLUMN_NAME, FILENAME, STATUS )
-		VALUES ( #{pageId}, #{username}, #{columnName}, #{filename}, #{status} )
+		INTO UPLOAD_PROGRESS ( PAGE_ID, USERNAME, PARAM, FILENAME, STATUS )
+		VALUES ( #{pageId}, #{username}, #{param}, #{filename}, #{status} )
 		ON DUPLICATE KEY
 		<trim prefix="UPDATE" suffixOverrides=",">
-			<if test="columnName != null and columnName != ''">COLUMN_NAME = #{columnName},</if>
+			<if test="param != null and param != ''">PARAM = #{param},</if>
 			<if test="filename != null and filename != ''">FILENAME = #{filename},</if>
 			<if test="status != null">STATUS = #{status},</if>
 		</trim>
