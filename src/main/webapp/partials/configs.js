@@ -2,8 +2,8 @@
 
 angular.module('app').value('cgBusyDefaults', {
     message: 'Waiting...'
-}).config(['$stateProvider', '$urlRouterProvider', '$provide', '$translateProvider', 'uibDatepickerConfig', 'uibDatepickerPopupConfig', 'IdleProvider',
-    function ($stateProvider, $urlRouterProvider, $provide, $translateProvider, uibDatepickerConfig, uibDatepickerPopupConfig, IdleProvider) {
+}).config(['$stateProvider', '$urlRouterProvider', '$provide', '$translateProvider', 'uibDatepickerConfig', 'uibDatepickerPopupConfig', 'IdleProvider', 'TitleProvider',
+    function ($stateProvider, $urlRouterProvider, $provide, $translateProvider, uibDatepickerConfig, uibDatepickerPopupConfig, IdleProvider, TitleProvider) {
 
         $urlRouterProvider.otherwise('/');
 
@@ -74,6 +74,7 @@ angular.module('app').value('cgBusyDefaults', {
 
         IdleProvider.idle(3600); // 1시간
         IdleProvider.timeout(10);
+        TitleProvider.enabled(false);
 
     }
 ]).run(['$rootScope', '$state', 'authSvc', 'confirmationPopoverDefaults', '$window', '$uibModal',
