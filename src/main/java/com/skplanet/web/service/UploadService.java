@@ -97,8 +97,7 @@ public class UploadService {
 			}
 		}
 
-		String underscoredParam = param == null ? null
-				: CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, param);
+		String underscoredParam = param == null ? null : CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, param);
 
 		metaRepository.upsertMenuProgress(menuId, username, underscoredParam, filename, progressStatus);
 	}
@@ -149,8 +148,11 @@ public class UploadService {
 	@Scheduled(fixedDelay = 86400000L) // day by day after startup
 	public void clearFileStore() {
 		if (!autoRemove) {
+			log.info("disabled");
 			return;
 		}
+
+		log.info("Auto removing the older files in {}", Constant.APP_FILE_DIR);
 
 		Path appFileDir = Paths.get(Constant.APP_FILE_DIR);
 
