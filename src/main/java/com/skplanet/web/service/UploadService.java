@@ -158,7 +158,7 @@ public class UploadService {
 
 		for (File f : appFileDir.toFile().listFiles()) {
 			// 30days = 2592000000msec = 60 * 60 * 24 * 30 * 1000
-			if (f.isFile() && f.lastModified() < System.currentTimeMillis() - 2592000000L) {
+			if (f.isFile() && f.lastModified() < System.currentTimeMillis() - 86400000L) {
 				boolean result = f.delete();
 				if (!result) {
 					log.warn("Failed to remove file: {}", f.getName());
