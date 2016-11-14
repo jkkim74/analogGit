@@ -148,7 +148,7 @@ public class UploadService {
 	@Scheduled(fixedDelay = 86400000L) // day by day after startup
 	public void clearFileStore() {
 		if (!autoRemove) {
-			log.info("disabled");
+			log.info("auto remove disabled");
 			return;
 		}
 
