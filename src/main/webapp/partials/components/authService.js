@@ -61,7 +61,7 @@ angular.module('app').service('authSvc', ['$log', '$q', '$http', '$httpParamSeri
             $window.sessionStorage.removeItem('access_token');
             $window.sessionStorage.removeItem('user_info');
 
-            $state.go('index.home', null, { reload: true });
+            $window.location.reload();
         };
 
         this.isAuthenticated = function () {
