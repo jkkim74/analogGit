@@ -188,7 +188,9 @@ public class TransmissionService {
 			map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
 			mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
 		} finally {
-			uploadService.markStatus(ProgressStatus.FINISHED, menuProgress.getMenuId(), username, null, null);
+			//uploadService.markStatus(ProgressStatus.FINISHED, menuProgress.getMenuId(), username, null, null);
+			//임시로 하드코딩
+			uploadService.markStatus(ProgressStatus.FINISHED, "pan0005", username, null, null);
 		}
 	}
 

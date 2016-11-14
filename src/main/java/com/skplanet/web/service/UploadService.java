@@ -193,6 +193,9 @@ public class UploadService {
 	
 	public MenuProgress getFinishedMenuProgressTmp(String menuId, String username) {
 		MenuProgress progress = metaRepository.selectMenuProgress(menuId, username);
+		
+		if(progress == null)
+			return progress;
 
 		switch (progress.getStatus()) {
 		case PROCESSING:

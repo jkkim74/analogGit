@@ -259,7 +259,8 @@ public class ApiController {
 		String emailAddr = user.getEmailAddr();
 
 		//임시로 하드코딩 수정 menuId 새로 생성
-		MenuProgress progress = uploadService.getFinishedMenuProgressTmp("pan0005", username);
+		MenuProgress progress = uploadService.getFinishedMenuProgressTmp(menuId, username);
+		uploadService.getFinishedMenuProgressTmp("pan0005", username);
 		//임시로 하드코딩 수정 menuId 새로 생성
 		uploadService.markStatus(ProgressStatus.PROCESSING, "pan0005", username, null, null);
 
