@@ -190,5 +190,17 @@ public class UploadService {
 
 		return progress;
 	}
+	
+	public MenuProgress getFinishedMenuProgressTmp(String menuId, String username) {
+		MenuProgress progress = metaRepository.selectMenuProgress(menuId, username);
+
+		switch (progress.getStatus()) {
+		case PROCESSING:
+			throw new BizException("처리 중인 작업이 있습니다");
+		default:
+			return progress;
+		}
+	}
+
 
 }
