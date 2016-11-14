@@ -57,7 +57,6 @@
 			<when test="menuProgress.param == 'MBR_ID'">
 				SELECT MBR_ID
 				FROM WEB_2_5_${menuProgress.username}_UPLOAD A
-				GROUP BY MBR_ID
 			</when>
 			<otherwise>
                SELECT TO_CHAR(TO_DATE(A.RCV_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS RCV_DT
