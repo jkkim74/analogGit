@@ -22,6 +22,7 @@ import com.skplanet.web.model.ApiResponse;
 import com.skplanet.web.model.AutoMap;
 import com.skplanet.web.model.MenuProgress;
 import com.skplanet.web.model.ProgressStatus;
+import com.skplanet.web.repository.mysql.UploadMetaRepository;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.security.UserInfo;
 import com.skplanet.web.service.IdmsLogService;
@@ -258,8 +259,17 @@ public class ApiController {
 		String ptsUsername = user.getPtsUsername();
 		String emailAddr = user.getEmailAddr();
 
+		MenuProgress progress = uploadService.getFinishedMenuProgress(menuId, username);
 		//임시로 하드코딩 수정 menuId 새로 생성
-		MenuProgress progress = uploadService.getFinishedMenuProgress("pan0005", username);
+		UploadMetaRepository metaRepository;
+		
+		MenuProgress progress = metaRepository.selectMenuProgress("pan0005", username);
+		
+		switch (progress.getStatus()) {
+		case "PROCESSING":
+			throw new BizException("처리 중인 작업이 있습니다");
+		}
+		
 		//임시로 하드코딩 수정 menuId 새로 생성
 		uploadService.markStatus(ProgressStatus.PROCESSING, "pan0005", username, null, null);
 
