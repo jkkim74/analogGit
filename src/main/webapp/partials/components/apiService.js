@@ -118,7 +118,8 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
                         toastr.error('로그인이 필요합니다');
                         authSvc.logout();
                     } else {
-                        toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
+                        toastr.error((resp.data && resp.data.message) || resp.statusText);
+                        // toastr.error((resp.data && resp.data.message) || resp.config.url, (resp.data && resp.data.code) || (resp.status + ' ' + resp.statusText));
                     }
 
                     deferred.reject(resp.data);

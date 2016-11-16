@@ -1,0 +1,12 @@
+<div cg-busy="uploadPromise">
+	<div ngf-select="upload($file)" ngf-drop="upload($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'" ngf-max-size="1GB"
+		class="drop-box" ngf-drag-over-class="'drop-box-dragover'" ng-disabled="disableUpload">
+		<i class="fa fa-upload fa-5x" aria-hidden="true"></i><br><br>파일 선택 또는 끌어놓기
+	</div>
+</div>
+<br>
+<div>
+	<uib-progressbar ng-show="!uploadStatusIsRunning && uploadedItems" animate="false" type="success">업로드 완료 <strong class="text-danger">{{ uploadedItems | number }}</strong> 건</uib-progressbar>
+	<uib-progressbar ng-show="!uploadStatusIsRunning && !uploadedItems" animate="false" type="warning">업로드 대기</uib-progressbar>
+	<uib-progressbar ng-show="uploadStatusIsRunning" class="progress-striped active">업로드 적재 중 <strong class="">{{ uploadedItems | number }}</strong> 건</uib-progressbar>
+</div>

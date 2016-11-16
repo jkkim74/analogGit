@@ -72,9 +72,27 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
 
             $scope.uploadPromise = apiSvc.upload({ file: file, param: $scope.selectedOption2.value });
             $scope.uploadPromise.then(function () {
+                $scope.checkUploadProgress();
                 $scope.uploaded = true;
+                $scope.disableUpload = true;
                 $scope.mbrId = null;
             });
+        };
+
+        $scope.checkUploadProgress = function () {
+            // 업로드 끝 flag 까지 재귀반복
+            $timeout(function () {
+                apiSvc.getUploaded({ countOnly: true }).then(function (data) {
+                    $scope.uploadedItems = data.totalItems;
+
+                    if (data.message === 'FINISHED') {
+                        $scope.uploadStatusIsRunning = false;
+                    } else {
+                        $scope.uploadStatusIsRunning = true;
+                        $scope.checkUploadProgress();
+                    }
+                });
+            }, 1000);
         };
 
         $scope.sendOneMbrId = function () {
@@ -129,9 +147,11 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
                 $scope.selectedOption2 = $scope.selectOptions2[0];
                 $scope.selectedOption3 = $scope.selectOptions3[0];
                 $scope.uploaded = false;
+                $scope.disableUpload = false;
                 $scope.mbrId = null;
                 $scope.periodFrom = null;
                 $scope.periodTo = null;
+                $scope.uploadedItems = 0;
             });
         };
 

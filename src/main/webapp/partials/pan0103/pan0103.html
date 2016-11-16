@@ -11,22 +11,11 @@
 				</div>
 			</form>
 			<br>
-			<div cg-busy="uploadPromise">
-				<label>업로드</label>
-				<label>양식 : 회원ID,카드번호(16자리),CI번호(88자리),한글성명,생년월일(8자리),성별(1:남자/2:여자) </label>
-				<label>ex) 1111111111,111111111111,CINO,홍길동,19800101,1 </label>
-				<button type="button" class="btn btn-default btn-xs" ng-click="downloadCsvFormat()"><i class="fa fa-download fa-sm"></i> 양식 다운로드</button>
-				<div ngf-select="upload($file)" ngf-drop="upload($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'" ngf-max-size="1GB"
-					class="drop-box" ngf-drag-over-class="'drop-box-dragover'">
-					<i class="fa fa-upload fa-5x" aria-hidden="true"></i><br><br>파일 선택 또는 끌어놓기
-				</div>
-			</div>
-			<br>
-			<div>
-				<uib-progressbar ng-show="!uploadStatusIsRunning && uploadedItems" animate="false" type="success">업로드 완료 <strong class="text-danger">{{ uploadedItems | number }}</strong> 건</uib-progressbar>
-				<uib-progressbar ng-show="!uploadStatusIsRunning && !uploadedItems" animate="false" type="warning">업로드 대기</uib-progressbar>
-				<uib-progressbar ng-show="uploadStatusIsRunning" class="progress-striped active">업로드 적재 중 <strong class="">{{ uploadedItems | number }}</strong> 건</uib-progressbar>
-			</div>
+			<label>업로드</label>
+			<label>양식 : 회원ID,카드번호(16자리),CI번호(88자리),한글성명,생년월일(8자리),성별(1:남자/2:여자) </label>
+			<label>ex) 1111111111,111111111111,CINO,홍길동,19800101,1 </label>
+			<button type="button" class="btn btn-default btn-xs" ng-click="downloadCsvFormat()"><i class="fa fa-download fa-sm"></i> 양식 다운로드</button>
+			<div ng-include="'partials/common/upload-form-tpl.html'"></div>
 		</div>
 		<div class="col-md-6">
 			<label>업로드 미리보기</label>
