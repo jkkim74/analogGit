@@ -15,7 +15,7 @@
 	<update id="upsertMenuProgress" parameterType="map">
 		INSERT
 		INTO MENU_PROGRESS ( MENU_ID, USERNAME, PARAM, FILENAME, STATUS )
-		VALUES ( #{menuId}, #{username}, #{param}, #{filename}, #{status} )
+		VALUES ( UPPER(#{menuId}), #{username}, #{param}, #{filename}, #{status} )
 		ON DUPLICATE KEY
 		<trim prefix="UPDATE" suffixOverrides=",">
 			<if test="param != null and param != ''">PARAM = #{param},</if>
