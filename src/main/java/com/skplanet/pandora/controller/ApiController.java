@@ -258,16 +258,16 @@ public class ApiController {
 		String ptsUsername = user.getPtsUsername();
 		String emailAddr = user.getEmailAddr();
 
-		//임시로 하드코딩 수정 menuId 새로 생성
+		// 임시로 하드코딩 수정 menuId 새로 생성
 		MenuProgress progress = uploadService.getFinishedMenuProgressTmp(menuId, username);
-		uploadService.getFinishedMenuProgressTmp("pan0005", username);
-		//임시로 하드코딩 수정 menuId 새로 생성
-		uploadService.markStatus(ProgressStatus.PROCESSING, "pan0005", username, null, null);
+		uploadService.getFinishedMenuProgressTmp("PAN0005", username);
+		// 임시로 하드코딩 수정 menuId 새로 생성
+		uploadService.markStatus(ProgressStatus.PROCESSING, "PAN0005", username, null, null);
 
 		transmissionService.sendForExtraction(username, inputDataType, periodType, periodFrom, periodTo, ptsUsername,
 				ptsMasking, emailAddr, progress);
 
-		return ApiResponse.builder().message("추출 요청 완료").build();
+		return ApiResponse.builder().message("PTS전송되었습니다. 메일로 안내됩니다.").build();
 	}
 
 	@GetMapping("/extinctionSummary")

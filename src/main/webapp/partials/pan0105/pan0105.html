@@ -5,19 +5,19 @@
 				<div class="input-group">
 					<label class="input-group-addon">입력데이터</label>
 					<select class="form-control" ng-init="selectedOption = selectOptions[0]" ng-options="option.label for option in selectOptions"
-						ng-model="selectedOption"></select>
+						ng-model="selectedOption" ng-disabled="uploaded"></select>
 				</div>
 				<div class="input-group" ng-show="selectedOption == selectOptions[0]">
-					<input type="text" class="form-control" placeholder="MBR_ID" ng-model="mbrId">
+					<input type="text" class="form-control" placeholder="MBR_ID" ng-model="mbrId" ng-disabled="uploaded">
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-primary" ng-click="sendOneMbrId()" ng-disabled="!mbrId">단 건 업로드</button>
+						<button type="button" class="btn btn-primary" ng-click="sendOneMbrId()" ng-disabled="!mbrId || uploaded">단 건 업로드</button>
 					</span>
 				</div>
 				<br><br>
 				<div class="input-group">
 					<label class="input-group-addon">추출대상</label>
 					<select class="form-control" ng-init="selectedOption2 = selectOptions2[0]" ng-options="option.label for option in selectOptions2"
-						ng-model="selectedOption2" ng-change="changeColumnVisible()"></select>
+						ng-model="selectedOption2" ng-change="changeColumnVisible()" ng-disabled="uploaded"></select>
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-default" ng-click="openExplain()"><i class="fa fa-question-circle"></i> 추출항목 안내</button>
 					</span>
@@ -26,27 +26,40 @@
 				<div class="input-group">
 					<label class="input-group-addon">일자기준</label>
 					<select class="form-control" ng-init="selectedOption3 = selectOptions3[0]" ng-options="option.label for option in selectOptions3"
-						ng-model="selectedOption3"></select>
+						ng-model="selectedOption3" ng-disabled="uploaded"></select>
 				</div>
 			</form>
 			<br>
 			<form class="form-inline" name="form">
 				<div class="input-group">
 					<label class="input-group-addon">조회기간</label>
-					<input type="date" class="form-control" ng-model="periodFrom" uib-datepicker-popup is-open="popup.opened" ng-required="true">
+					<input type="date" class="form-control" ng-model="periodFrom" uib-datepicker-popup is-open="popup.opened" ng-required="true"
+						ng-disabled="uploaded">
 					<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup.opened=true"><i class="fa fa-calendar"></i></button></span>
 				</div>
 				<div class="input-group">
-					<input type="date" class="form-control" ng-model="periodTo" uib-datepicker-popup is-open="popup2.opened" ng-required="true">
+					<input type="date" class="form-control" ng-model="periodTo" uib-datepicker-popup is-open="popup2.opened" ng-required="true"
+						ng-disabled="uploaded">
 					<span class="input-group-btn"><button type="button" class="btn btn-default" ng-click="popup2.opened=true"><i class="fa fa-calendar"></i></button></span>
 				</div>
 			</form>
 		</div>
-		<div class="col-md-5" cg-busy="uploadPromise">
-			<div ngf-select="upload($file)" ngf-drop="upload($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'" ngf-max-size="1GB"
-				class="drop-box" ngf-drag-over-class="'drop-box-dragover'">
-				<i class="fa fa-upload fa-5x" aria-hidden="true"></i><br><br>업로드 파일 선택 또는 끌어놓기
+		<div class="col-md-5">
+			<div cg-busy="uploadPromise">
+				<div ngf-select="upload($file)" ngf-drop="upload($file)" ng-model="file" ngf-pattern="'*/*'" ngf-accept="'*/*'" ngf-max-size="1GB"
+					class="drop-box" ngf-drag-over-class="'drop-box-dragover'" ng-disabled="uploaded">
+					<i class="fa fa-upload fa-5x" aria-hidden="true"></i><br><br>업로드 파일 선택 또는 끌어놓기
+				</div>
 			</div>
+			<br>
+			<!--<div>
+				<uib-progressbar ng-show="!uploadStatusIsRunning && uploadedItems" animate="false" type="success">업로드 완료 <strong class="text-danger">{{ uploadedItems | number }}</strong> 건</uib-progressbar>
+				<uib-progressbar ng-show="!uploadStatusIsRunning && !uploadedItems" animate="false" type="warning">업로드 대기</uib-progressbar>
+				<uib-progressbar ng-show="uploadStatusIsRunning" class="progress-striped active">업로드 적재 중 <strong class="">{{ uploadedItems | number }}</strong> 건</uib-progressbar>
+			</div>-->
+			<p class="text-danger small">
+				* 파일 업로드 이후 모든 조회 조건은 고정됩니다.<br> * 입력데이터, 추출대상, 일자기준, 조회기간을 모두 선택하신 후 파일을 업로드 해주세요.
+			</p>
 		</div>
 	</div>
 	<hr>
@@ -106,5 +119,27 @@
 		</table>
 	</div>
 	<div class="modal-footer">
+	</div>
+</script>
+<script type="text/ng-template" id="confirmPtsModal.html">
+	<div class="modal-header">
+		<h3 class="modal-title">PTS 전송 요청 확인</h3>
+	</div>
+	<div class="modal-body">
+		<p>
+		입력데이터 : <mark><strong>{{$ctrl.params.inputDataType}}</strong></mark><br>
+		추출대상 : <mark><strong>{{$ctrl.params.extractionTarget}}</strong></mark><br>
+		일자기준 : <mark><strong>{{$ctrl.params.periodType}}</strong></mark><br>
+		조회기간 : <mark><strong>{{$ctrl.params.periodFrom}} ~ {{$ctrl.params.periodTo}}</strong></mark>
+		</p>
+		<p>
+		입력하신 조건으로 PTS 전송 작업이 요청됩니다.<br> 
+		맞으면 <strong class="bg-success">YES</strong>. 조건 수정이 필요할 경우 <strong class="bg-danger">NO</strong> 를 선택하세요.<br>
+		</p>
+		<small class="text-danger">(NO를 선택하면 업로드 파일 및 모든 조건이 초기화 됩니다.)</small>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success" type="button" ng-click="$ctrl.close()">YES</button>
+		<button class="btn btn-danger" type="button" ng-click="$ctrl.dismiss()">NO</button>
 	</div>
 </script>

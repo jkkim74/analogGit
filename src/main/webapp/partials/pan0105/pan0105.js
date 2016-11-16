@@ -66,7 +66,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
 
         $scope.upload = function (file) {
             if ($scope.form.$invalid) {
-                toastr.warning('조회기간을 설정해주세요');
+                toastr.warning('파일 업로드 이후 모든 조회 조건은 고정됩니다. 조건을 모두 선택하시고 파일을 업로드해주세요.');
                 return;
             }
 
@@ -97,16 +97,41 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
         // };
 
         $scope.sendPts = function (ptsMasking) {
-            $scope.sendPtsPromise = apiSvc.extractMemberInfo({
-                inputDataType: $scope.selectedOption.value,
-                periodType: $scope.selectedOption3.value,
-                periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
-                periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd'),
-                ptsMasking: ptsMasking
+            var modalInstance = $uibModal.open({
+                component: 'confirmPtsModal',
+                resolve: {
+                    params: function () {
+                        return {
+                            inputDataType: $scope.selectedOption.label,
+                            extractionTarget: $scope.selectedOption2.label,
+                            periodType: $scope.selectedOption3.label,
+                            periodFrom: $filter('date')($scope.periodFrom, 'yyyy.MM.dd'),
+                            periodTo: $filter('date')($scope.periodTo, 'yyyy.MM.dd')
+                        };
+                    }
+                }
             });
 
-            $scope.sendPtsPromise.then(function () {
-                // $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
+            modalInstance.result.then(function () {
+                $scope.sendPtsPromise = apiSvc.extractMemberInfo({
+                    inputDataType: $scope.selectedOption.value,
+                    periodType: $scope.selectedOption3.value,
+                    periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
+                    periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd'),
+                    ptsMasking: ptsMasking
+                });
+
+                $scope.sendPtsPromise.then(function () {
+                    // $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
+                });
+            }, function () {
+                $scope.selectedOption = $scope.selectOptions[0];
+                $scope.selectedOption2 = $scope.selectOptions2[0];
+                $scope.selectedOption3 = $scope.selectOptions3[0];
+                $scope.uploaded = false;
+                $scope.mbrId = null;
+                $scope.periodFrom = null;
+                $scope.periodTo = null;
             });
         };
 
@@ -138,4 +163,20 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
             });
         };
 
-    }]);
+    }
+]).component('confirmPtsModal', {
+    templateUrl: 'confirmPtsModal.html',
+    bindings: {
+        resolve: '<',
+        close: '&',
+        dismiss: '&'
+    },
+    controller: function () {
+        var self = this;
+
+        self.$onInit = function () {
+            self.params = self.resolve.params;
+        };
+
+    }
+});

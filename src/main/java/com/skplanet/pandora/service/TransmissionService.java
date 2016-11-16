@@ -190,7 +190,7 @@ public class TransmissionService {
 		} finally {
 			//uploadService.markStatus(ProgressStatus.FINISHED, menuProgress.getMenuId(), username, null, null);
 			//임시로 하드코딩
-			uploadService.markStatus(ProgressStatus.FINISHED, "pan0005", username, null, null);
+			uploadService.markStatus(ProgressStatus.FINISHED, "PAN0005", username, null, null);
 		}
 	}
 
