@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
@@ -87,7 +88,8 @@ public class TransmissionService {
 	@Value("${app.files.encoding.ftp}")
 	private String encodingForFtp;
 
-	public String sendToPts(String ptsUsername, final boolean ptsMasking, final MenuProgress menuProgress) {
+	public String sendToPts(String ptsUsername, final boolean ptsMasking, String ptsPrefix,
+			final MenuProgress menuProgress) {
 
 		CsvCreatorTemplate<AutoMap> csvCreator = new CsvCreatorTemplate<AutoMap>(10000) {
 
@@ -157,7 +159,15 @@ public class TransmissionService {
 
 		};
 
-		Path filePath = Paths.get(Constant.APP_FILE_DIR, Helper.uniqueCsvFilename("P140802BKhub_" + ptsUsername));
+		StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
+				.append(Helper.nowDateString());
+		if (!StringUtils.isEmpty(ptsPrefix)) {
+			filename.append('_').append(ptsPrefix);
+		}
+		filename.append('-').append(menuProgress.getUsername()).append('-').append(Helper.nowDateTimeString())
+				.append(".csv");
+
+		Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
 		csvCreator.create(filePath, Charset.forName(encodingForPts));
 
 		ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
@@ -167,7 +177,8 @@ public class TransmissionService {
 
 	@Async
 	public void sendForExtraction(String username, String inputDataType, String periodType, String periodFrom,
-			String periodTo, String ptsUsername, boolean ptsMasking, String emailAddr, MenuProgress menuProgress) {
+			String periodTo, String ptsUsername, boolean ptsMasking, String ptsPrefix, String emailAddr,
+			MenuProgress menuProgress) {
 		try {
 			String filename = menuProgress.getFilename();
 			Path localPath = Paths.get(Constant.APP_FILE_DIR, filename);
@@ -182,14 +193,15 @@ public class TransmissionService {
 
 			sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget);
 
-			String sentFilename = sendToPts(ptsUsername, ptsMasking, menuProgress);
+			String sentFilename = sendToPts(ptsUsername, ptsMasking, ptsPrefix, menuProgress);
 
 			HashMap<String, Object> map = new HashMap<>();
 			map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
 			mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
 		} finally {
-			//uploadService.markStatus(ProgressStatus.FINISHED, menuProgress.getMenuId(), username, null, null);
-			//임시로 하드코딩
+			// uploadService.markStatus(ProgressStatus.FINISHED,
+			// menuProgress.getMenuId(), username, null, null);
+			// 임시로 하드코딩
 			uploadService.markStatus(ProgressStatus.FINISHED, "PAN0005", username, null, null);
 		}
 	}

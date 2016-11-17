@@ -20,6 +20,18 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
             { label: '매출일자', value: 'sale_dt' }
         ];
 
+        $scope.clear = function () {
+            $scope.selectedOption = $scope.selectOptions[0];
+            $scope.selectedOption2 = $scope.selectOptions2[0];
+            $scope.selectedOption3 = $scope.selectOptions3[0];
+            $scope.uploaded = false;
+            $scope.disableUpload = false;
+            $scope.mbrId = null;
+            $scope.periodFrom = null;
+            $scope.periodTo = null;
+            $scope.uploadedItems = 0;
+        };
+
         // $scope.gridOptionsMembers = {
         //     enableRowSelection: true,
         //     enableRowHeaderSelection: false,
@@ -114,7 +126,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
         //     });
         // };
 
-        $scope.sendPts = function (ptsMasking) {
+        $scope.sendPts = function (ptsMasking, ptsPrefix) {
             var modalInstance = $uibModal.open({
                 component: 'confirmPtsModal',
                 resolve: {
@@ -136,22 +148,16 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
                     periodType: $scope.selectedOption3.value,
                     periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
                     periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd'),
-                    ptsMasking: ptsMasking
+                    ptsMasking: ptsMasking,
+                    ptsPrefix: ptsPrefix
                 });
 
                 $scope.sendPtsPromise.then(function () {
+                    $scope.clear();
                     // $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
                 });
             }, function () {
-                $scope.selectedOption = $scope.selectOptions[0];
-                $scope.selectedOption2 = $scope.selectOptions2[0];
-                $scope.selectedOption3 = $scope.selectOptions3[0];
-                $scope.uploaded = false;
-                $scope.disableUpload = false;
-                $scope.mbrId = null;
-                $scope.periodFrom = null;
-                $scope.periodTo = null;
-                $scope.uploadedItems = 0;
+                $scope.clear();
             });
         };
 

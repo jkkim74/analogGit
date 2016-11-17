@@ -236,14 +236,15 @@ public class ApiController {
 	}
 
 	@PostMapping("/sendPts")
-	public ApiResponse sendPts(@RequestParam boolean ptsMasking, @RequestParam String menuId) {
+	public ApiResponse sendPts(@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix,
+			@RequestParam String menuId) {
 
 		String username = Helper.currentUser().getUsername();
 		String ptsUsername = Helper.currentUser().getPtsUsername();
 
 		MenuProgress progress = uploadService.getFinishedMenuProgress(menuId, username);
 
-		transmissionService.sendToPts(ptsUsername, ptsMasking, progress);
+		transmissionService.sendToPts(ptsUsername, ptsMasking, ptsPrefix, progress);
 
 		return ApiResponse.builder().message("PTS 전송 성공").build();
 	}
@@ -251,7 +252,7 @@ public class ApiController {
 	@PostMapping("/extractMemberInfo")
 	public ApiResponse extractMemberInfo(@RequestParam String menuId, @RequestParam String inputDataType,
 			@RequestParam String periodType, @RequestParam String periodFrom, @RequestParam String periodTo,
-			@RequestParam boolean ptsMasking) {
+			@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix) {
 
 		UserInfo user = Helper.currentUser();
 		String username = user.getUsername();
@@ -265,7 +266,7 @@ public class ApiController {
 		uploadService.markStatus(ProgressStatus.PROCESSING, "PAN0005", username, null, null);
 
 		transmissionService.sendForExtraction(username, inputDataType, periodType, periodFrom, periodTo, ptsUsername,
-				ptsMasking, emailAddr, progress);
+				ptsMasking, ptsPrefix, emailAddr, progress);
 
 		return ApiResponse.builder().message("PTS전송되었습니다. 메일로 안내됩니다.").build();
 	}

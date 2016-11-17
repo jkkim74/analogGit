@@ -106,8 +106,8 @@ angular.module('app').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$time
             });
         };
 
-        $scope.sendPts = function (ptsMasking) {
-            $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
+        $scope.sendPts = function (ptsMasking, ptsPrefix) {
+            $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking, ptsPrefix: ptsPrefix });
         };
 
         $scope.isPtsDisabled = function () {
