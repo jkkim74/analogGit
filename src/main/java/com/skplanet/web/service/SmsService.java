@@ -99,7 +99,7 @@ public class SmsService {
 				throw new BizException(resultVo.getResultCode() + " : " + resultVo.getResultMessage());
 			}
 		} catch (IOException e) {
-			throw new BizException("Failed to send SMS", e);
+			throw new BizException("Failed to send using SMS", e);
 		}
 	}
 

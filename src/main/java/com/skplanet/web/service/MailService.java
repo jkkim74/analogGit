@@ -65,7 +65,7 @@ public class MailService {
 
 			mailSender.send(mimeMessage);
 		} catch (MessagingException e) {
-			throw new BizException("Failed to send EMAIL", e);
+			throw new BizException("Failed to send using EMAIL", e);
 		}
 	}
 
