@@ -114,11 +114,11 @@ angular.module('app').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$time
             return !$scope.ptsUsername || !$scope.gridOptionsMembers.data.length;
         };
 
-        $scope.downloadCsvFormat = function () {
-            var text = '회원ID,카드번호,CI번호,성명,생년월일,성별';
-            var data = new Blob([text], { type: 'text/csv' });
-            FileSaver.saveAs(data, '배치적립파일검증 업로드 양식.csv');
-        };
+        // $scope.downloadCsvFormat = function () {
+        //     var text = '회원ID,카드번호,CI번호,성명,생년월일,성별';
+        //     var data = new Blob(['\ufeff', text], { type: 'text/csv' });
+        //     FileSaver.saveAs(data, '배치적립파일검증 업로드 양식.csv');
+        // };
 
         authSvc.getUserInfo().then(function (userInfo) {
             $scope.ptsUsername = userInfo.ptsUsername;

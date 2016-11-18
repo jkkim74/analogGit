@@ -14,7 +14,8 @@
 			<label>업로드</label>
 			<label>양식 : 회원ID,카드번호(16자리),CI번호(88자리),한글성명,생년월일(8자리),성별(1:남자/2:여자) </label>
 			<label>ex) 1111111111,111111111111,CINO,홍길동,19800101,1 </label>
-			<button type="button" class="btn btn-default btn-xs" ng-click="downloadCsvFormat()"><i class="fa fa-download fa-sm"></i> 양식 다운로드</button>
+			<!--<button type="button" class="btn btn-default btn-xs" ng-click="downloadCsvFormat()"><i class="fa fa-download fa-sm"></i> 양식 다운로드</button>-->
+			<a href="files/template-pan0103.csv" class="btn btn-default btn-xs" download="배치적립파일검증 업로드 양식.csv"><i class="fa fa-download fa-sm"></i> 양식 다운로드</a>
 			<div ng-include="'partials/common/upload-form-tpl.html'"></div>
 		</div>
 		<div class="col-md-6">
