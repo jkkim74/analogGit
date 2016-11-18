@@ -268,6 +268,9 @@ public class ApiController {
 		transmissionService.sendForExtraction(username, inputDataType, periodType, periodFrom, periodTo, ptsUsername,
 				ptsMasking, ptsPrefix, emailAddr, progress);
 
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, menuId,
+				250); // 다른 화면에서 보통 고객조회 첫페이지로 250건 조회하므로 일관성맞춤.
+
 		return ApiResponse.builder().message("PTS전송되었습니다. 메일로 안내됩니다.").build();
 	}
 
