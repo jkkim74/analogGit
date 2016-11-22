@@ -9,6 +9,7 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
+import com.skplanet.web.exception.BizException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,9 +49,10 @@ public class SshService {
 
 		JSch sshClient = new JSch();
 		ChannelExec execChannel = null;
+		Session session = null;
 
 		try {
-			Session session = sshClient.getSession(sshUsername, sshHost, sshPort);
+			session = sshClient.getSession(sshUsername, sshHost, sshPort);
 
 			UserInfo ui = new MyUI(sshPassword);
 			session.setUserInfo(ui);
@@ -73,7 +75,13 @@ public class SshService {
 					int i = in.read(tmp, 0, 1024);
 					if (i < 0)
 						break;
-					log.info(new String(tmp, 0, i));
+					
+					String s = new String(tmp, 0, i);
+					log.info(s);
+					
+					if (s.indexOf("exception") != -1) {
+						throw new RuntimeException(s.substring(s.indexOf("exception")));
+					}
 				}
 
 				if (execChannel.isClosed()) {
@@ -89,13 +97,19 @@ public class SshService {
 				}
 			}
 
-			execChannel.disconnect();
-			session.disconnect();
+			// execChannel.disconnect();
+			// session.disconnect();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.toString());
+			throw new BizException("Failed to send using SSH", e);
 		} finally {
 			if (execChannel != null) {
 				execChannel.disconnect();
+				execChannel = null;
+			}
+			if (session != null) {
+				session.disconnect();
+				session = null;
 			}
 		}
 	}

@@ -195,14 +195,16 @@ public class TransmissionService {
 
 			String sentFilename = sendToPts(ptsUsername, ptsMasking, ptsPrefix, menuProgress);
 
-			HashMap<String, Object> map = new HashMap<>();
-			map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
-			mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
-		} finally {
 			// uploadService.markStatus(ProgressStatus.FINISHED,
 			// menuProgress.getMenuId(), username, null, null);
 			// 임시로 하드코딩
 			uploadService.markStatus(ProgressStatus.FINISHED, "PAN0005", username, null, null);
+
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
+			mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
+		} catch (Exception e) {
+			uploadService.markStatus(ProgressStatus.FAILED, "PAN0005", username, null, null);
 		}
 	}
 
@@ -253,9 +255,8 @@ public class TransmissionService {
 
 		log.info("remotePath={}", remotePath);
 
-		// ftpService.send(localPath, remotePath, extinctionHost,
-		// extinctionPort, extinctionUsername,
-		// extinctionPassword);
+		// ftpService.send(filePath, remotePath, extinctionHost, extinctionPort,
+		// extinctionUsername, extinctionPassword);
 	}
 
 	public void sendToSms(final Map<String, Object> params) {
