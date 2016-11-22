@@ -4,9 +4,9 @@
 			<span class="input-group-addon"><i class="fa fa-address-book"></i> PTS 계정</span>
 			<input type="text" class="form-control" ng-value="ptsUsername" readonly>
 		</div>
-		<div class="input-group" ng-class="{ 'has-error' : form.prefix.$invalid && !form.prefix.$pristine }" uib-popover="10자 이하 영문자, 숫자, 밑줄문자만">
+		<div class="input-group" ng-class="{ 'has-error' : form.prefix.$invalid && !form.prefix.$pristine }" uib-popover="10자 이하 영문자, 숫자만">
 			<span class="input-group-addon">파일명 Prefix</span>
-			<input type="text" class="form-control" name="prefix" ng-model="ptsPrefix" ng-pattern="'\\w*'" ng-maxlength="10" maxlength="10">
+			<input type="text" class="form-control" name="prefix" ng-model="ptsPrefix" ng-pattern="'[\\da-zA-Z]*'" ng-maxlength="10" maxlength="10">
 		</div>
 		<div class="input-group">
 			<span class="input-group-addon"><i class="fa fa-user-secret"></i> 개인정보 마스킹</span>
