@@ -255,6 +255,7 @@ public class TransmissionService {
 
 		log.info("remotePath={}", remotePath);
 
+		// TODO 주석풀기
 		// ftpService.send(filePath, remotePath, extinctionHost, extinctionPort,
 		// extinctionUsername, extinctionPassword);
 	}
