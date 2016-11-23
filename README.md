@@ -24,3 +24,10 @@ Front-end에서는 Bower, Gulp를 사용하여 의존성 및 빌드를 관리하
 4. > mvn clean package (src/main/webapp의 Front-end와 Back-end를 .war로 묶음)
 
 개발상황에서는 주로 2, 3번 사항이 요구된다. 4번은 CI 서버에서 수행하며 1번은 최초 빌드환경 구성 시만 필요하다.
+
+# 실행환경설명
+
+실행환경은 프로파일 별(local,dev,prod)로 변경해서 실행할 수 있으며 기본은 *prod* (배포에 적용, application.properties 파일에 지정됨)이고 로컬 테스트를 위해 ApplicationTest.java 를 실행할 경우에는 *local*이다.
+
+개발자환경에서는 Eclipse - Run Configurations - Arguments - VM arguments 에 아래 옵션 적용하고 실행하면 된다. 
+> -Dspring.profiles.active=dev (또는 local, prod)
