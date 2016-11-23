@@ -160,12 +160,11 @@ public class TransmissionService {
 		};
 
 		StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
-				.append(Helper.nowDateTimeString());
+				.append(Helper.nowDateTimeString()).append('_');
 		if (!StringUtils.isEmpty(ptsPrefix)) {
-			filename.append('_').append(ptsPrefix);
+			filename.append(ptsPrefix).append('-');
 		}
-		filename.append('-').append(menuProgress.getUsername()).append('-').append(Helper.nowDateTimeString())
-				.append(".csv");
+		filename.append(menuProgress.getUsername()).append('-').append(Helper.nowDateTimeString()).append(".csv");
 
 		Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
 		csvCreator.create(filePath, Charset.forName(encodingForPts));
