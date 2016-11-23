@@ -160,7 +160,7 @@ public class TransmissionService {
 		};
 
 		StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
-				.append(Helper.nowDateString());
+				.append(Helper.nowDateTimeString());
 		if (!StringUtils.isEmpty(ptsPrefix)) {
 			filename.append('_').append(ptsPrefix);
 		}
