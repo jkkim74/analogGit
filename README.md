@@ -18,10 +18,24 @@
 Front-end에서는 Bower, Gulp를 사용하여 의존성 및 빌드를 관리하며 (NPM은 Bower, Gulp 의존성 설치를 위함) Back-end에서는 Maven을 사용하여 관리한다.
 
 빌드 순서는 Front-end ---> Back-end 이며 다음과 같다.
-1. > npm install (Bower, Gulp 다운로드 및 설치)
-2. > bower install (Bower 의존성 설치. 생략가능. offline 고려하여 미리 넣어둠)
-3. > gulp (index.html에 .js, .css 파일과 Bower 의존성을 injection. 부가로 Linting도 실행)
-4. > mvn clean package (src/main/webapp의 Front-end와 Back-end를 .war로 묶음)
+1. Bower, Gulp 다운로드 및 설치
+```
+npm install 
+npm install -g bower
+npm install -g gulp
+```
+2. Bower 의존성 설치. 생략가능. offline 고려하여 미리 넣어둠
+```
+bower install
+```
+3. index.html에 .js, .css 파일과 Bower 의존성을 injection. 부가로 Linting도 실행할
+```
+gulp
+```
+4. src/main/webapp의 Front-end와 Back-end를 .war로 묶음
+```
+mvn clean package
+```
 
 개발상황에서는 주로 2, 3번 사항이 요구된다. 4번은 CI 서버에서 수행하며 1번은 최초 빌드환경 구성 시만 필요하다.
 
