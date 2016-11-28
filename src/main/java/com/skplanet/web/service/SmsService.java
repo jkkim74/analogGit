@@ -7,12 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.skplanet.web.exception.BizException;
 import com.skplanet.web.model.AutoMap;
@@ -23,7 +21,6 @@ import skp.bss.msg.rms.front.vo.MultiRequestVo;
 import skp.bss.msg.rms.front.vo.ReceiveNumVo;
 
 @Service
-@SuppressWarnings("deprecation")
 @Slf4j
 public class SmsService {
 
@@ -31,7 +28,7 @@ public class SmsService {
 	private HttpMessageApi smsApi;
 
 	@Autowired
-	private VelocityEngine velocityEngine;
+	private TemplateService templateService;
 
 	@Value("${sms.serviceId}")
 	private String serviceId;
@@ -72,8 +69,7 @@ public class SmsService {
 		MultiRequestVo multiRequest = new MultiRequestVo();
 		multiRequest.setOcallPhonNum(sender); /* 발신전화번호 */
 
-		String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/templates/sms/" + templateName,
-				model);
+		String text = templateService.mergeTemplate("/templates/sms/" + templateName, model);
 		multiRequest.setMsgPhrs(text); /* 메시지문구 */
 
 		List<ReceiveNumVo> receiveNumList = new ArrayList<>();

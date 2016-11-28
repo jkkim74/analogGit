@@ -5,14 +5,12 @@ import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.google.common.collect.ObjectArrays;
 import com.skplanet.web.exception.BizException;
@@ -22,14 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@SuppressWarnings("deprecation")
 public class MailService {
 
 	@Autowired
 	private JavaMailSender mailSender;
 
 	@Autowired
-	private VelocityEngine velocityEngine;
+	private TemplateService templateService;
 
 	@Value("${mail.from}")
 	private String from;
@@ -59,8 +56,7 @@ public class MailService {
 			helper.setTo(Helper.eraseEmpty(to, String.class));
 			helper.setCc(Helper.eraseEmpty(cc, String.class));
 
-			String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "/templates/mail/" + templateName,
-					model);
+			String text = templateService.mergeTemplate("/templates/mail/" + templateName, model);
 			helper.setText(text, true);
 
 			mailSender.send(mimeMessage);
