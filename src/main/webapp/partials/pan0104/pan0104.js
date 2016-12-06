@@ -10,19 +10,23 @@ angular.module('app').controller('PAN0104Ctrl', ['$scope', '$q', '$http', '$time
             var year = now.getFullYear();
             var month = now.getMonth() + 1;
             // move to next month
-            if (month == 12) {
-                year++;
-                month = 1;
-            } else {
-                month++;
+            for (var i = 0; i < 3; i++) {
+	            if (month == 12) {
+	                year++;
+	                month = 1;
+	            } else {
+	                month++;
+	            }
             }
 
-            for (var i = 0; i < 7; i++ , month--) {
+            for (var i = 0; i < 1000; i++ , month--) {
                 if (month < 1) {
                     year--;
                     month = 12;
                 }
                 options.push({ label: year + '년 ' + month + '월', value: year + ('0' + month).slice(-2) });
+                if ( year == 2010 && month == 7 )
+                	break;
             }
         };
 
