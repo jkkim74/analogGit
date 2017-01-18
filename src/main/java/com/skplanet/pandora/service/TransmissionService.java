@@ -164,7 +164,8 @@ public class TransmissionService {
 		if (!StringUtils.isEmpty(ptsPrefix)) {
 			filename.append(ptsPrefix).append('-');
 		}
-		filename.append(menuProgress.getUsername()).append('-').append(Helper.nowDateTimeString()).append(".csv");
+		
+		filename.append(menuProgress.getUsername()).append('-').append(Helper.nowDateTimeString()).append(".txt");
 
 		Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
 		csvCreator.create(filePath, Charset.forName(encodingForPts));
@@ -177,7 +178,7 @@ public class TransmissionService {
 	@Async
 	public void sendForExtraction(String username, String inputDataType, String periodType, String periodFrom,
 			String periodTo, String ptsUsername, boolean ptsMasking, String ptsPrefix, String emailAddr,
-			MenuProgress menuProgress) {
+			MenuProgress menuProgress, String extractionCond) {
 		try {
 			String filename = menuProgress.getFilename();
 			Path localPath = Paths.get(Constant.APP_FILE_DIR, filename);
@@ -190,7 +191,7 @@ public class TransmissionService {
 
 			int extractionTarget = "MBR_ID".equals(menuProgress.getParam()) ? 2 : 1;
 
-			sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget);
+			sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget, extractionCond);
 
 			String sentFilename = sendToPts(ptsUsername, ptsMasking, ptsPrefix, menuProgress);
 
@@ -255,8 +256,8 @@ public class TransmissionService {
 		log.info("remotePath={}", remotePath);
 
 		// TODO 주석풀기
-		// ftpService.send(filePath, remotePath, extinctionHost, extinctionPort,
-		// extinctionUsername, extinctionPassword);
+		ftpService.send(filePath, remotePath, extinctionHost, extinctionPort,
+		extinctionUsername, extinctionPassword);
 	}
 
 	public void sendToSms(final Map<String, Object> params) {

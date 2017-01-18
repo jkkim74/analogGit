@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('app').controller('PAN0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', '$uibModal',
-    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, $uibModal) {
+angular.module('app').controller('PAN0102Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', '$uibModal', 'authSvc',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, $uibModal, authSvc) {
 
         // 조회 조건
         $scope.selectOptions = [
@@ -36,21 +36,21 @@ angular.module('app').controller('PAN0102Ctrl', ['$scope', '$q', '$http', '$time
                 { field: 'leglGndrFgCd', displayName: '성별', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'fstCardRregDt', displayName: 'OCB 최초 카드 본등록 일자', width: 100, cellTooltip: true, headerTooltip: true },
                 { field: 'clphnNo', displayName: '휴대전화번호', width: 150, cellTooltip: true, headerTooltip: true },
-                { field: 'clphnNoDt', displayName: '휴대전화번호 최종 유입 출처/일자', width: 200, cellTooltip: true, headerTooltip: true },
+                { field: 'clphnNoDt', displayName: '휴대전화번호 최종 유입 일자', width: 200, cellTooltip: true, headerTooltip: true },
                 {
                     field: 'clphnNoDupYn', displayName: '휴대전화번호 중복 여부', width: 100, cellTooltip: true, headerTooltip: true,
                     cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'popup-cell\': row.entity.clphnNoDupYn === \'Y\'}" role="button" title="TOOLTIP" ng-click="row.entity.clphnNoDupYn === \'Y\' && grid.appScope.openDupModal(\'clphnNoDupModal\', row.entity.mbrId)">{{ COL_FIELD CUSTOM_FILTERS }}</div>'
                 },
                 { field: 'homeTelNo', displayName: '자택전화번호', width: 150, cellTooltip: true, headerTooltip: true },
-                { field: 'homeTelNoDt', displayName: '자택전화번호 최종 유입 출처/일자', width: 200, cellTooltip: true, headerTooltip: true },
+                { field: 'homeTelNoDt', displayName: '자택전화번호 최종 유입 일자', width: 200, cellTooltip: true, headerTooltip: true },
                 { field: 'jobpTelNo', displayName: '직장전화번호', width: 150, cellTooltip: true, headerTooltip: true },
-                { field: 'jobpTelNoDt', displayName: '직장전화번호 최종 유입 출처/일자', width: 200, cellTooltip: true, headerTooltip: true },
+                { field: 'jobpTelNoDt', displayName: '직장전화번호 최종 유입 일자', width: 200, cellTooltip: true, headerTooltip: true },
                 { field: 'homeAddr', displayName: '자택주소', width: 500, cellTooltip: true, headerTooltip: true },
-                { field: 'homeBasicAddrDt', displayName: '자택주소 최종 유입 출처/일자', width: 200, cellTooltip: true, headerTooltip: true },
+                { field: 'homeBasicAddrDt', displayName: '자택주소 최종 유입 일자', width: 200, cellTooltip: true, headerTooltip: true },
                 { field: 'jobpAddr', displayName: '직장주소', width: 500, cellTooltip: true, headerTooltip: true },
-                { field: 'jobpBasicAddrDt', displayName: '직장주소 최종 유입 출처/일자', width: 200, cellTooltip: true, headerTooltip: true },
+                { field: 'jobpBasicAddrDt', displayName: '직장주소 최종 유입 일자', width: 200, cellTooltip: true, headerTooltip: true },
                 { field: 'emailAddr', displayName: '이메일주소', width: 200, cellTooltip: true, headerTooltip: true },
-                { field: 'emailAddrDt', displayName: '이메일주소 최종 유입 출처/일자', width: 200, cellTooltip: true, headerTooltip: true },
+                { field: 'emailAddrDt', displayName: '이메일주소 최종 유입 일자', width: 200, cellTooltip: true, headerTooltip: true },
                 {
                     field: 'emailAddrDupYn', displayName: '이메일주소 중복 여부', width: 100, cellTooltip: true, headerTooltip: true,
                     cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'popup-cell\': row.entity.emailAddrDupYn === \'Y\'}" role="button" title="TOOLTIP" ng-click="row.entity.emailAddrDupYn === \'Y\' && grid.appScope.openDupModal(\'emailAddrDupModal\', row.entity.mbrId)">{{ COL_FIELD CUSTOM_FILTERS }}</div>'
@@ -209,6 +209,22 @@ angular.module('app').controller('PAN0102Ctrl', ['$scope', '$q', '$http', '$time
                 }
             });
         };
+        
+        $scope.sendPts = function (ptsMasking, ptsPrefix) {
+            $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking, ptsPrefix: ptsPrefix, searchType: $scope.selectedOption.value, searchKeyword: $scope.searchKeyword });
+        };
+
+        $scope.isPtsDisabled = function () {
+            return !$scope.ptsUsername 
+            || (!$scope.gridOptionsBasicInfo.data.length && !$scope.gridOptionsMemberInfo.data.length && !$scope.gridOptionsLastestUsageInfo.data.length
+            	&& !$scope.gridOptionsMarketingMemberInfo.data.length && !$scope.gridOptionsMarketingMemberInfoHistory.data.length 
+            	&& !$scope.gridOptionsThirdPartyProvideHistory.data.length && !$scope.gridOptionsCardList.data.length);
+        };
+
+        authSvc.getUserInfo().then(function (userInfo) {
+            $scope.ptsUsername = userInfo.ptsUsername;
+        });       
+        
 
     }
 ]).component('clphnNoDupModal', {

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('app').controller('PAN0107Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc',
-    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc) {
+angular.module('app').controller('PAN0107Ctrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'authSvc',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, authSvc) {
 
         // 조회 조건
         $scope.selectOptions = [
@@ -166,6 +166,20 @@ angular.module('app').controller('PAN0107Ctrl', ['$scope', '$q', '$http', '$time
                 $scope.gridOptionsAppPushHistory.data = data;
             });
         };
+        
+        $scope.sendPts = function (ptsMasking, ptsPrefix) {
+            $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking, ptsPrefix: ptsPrefix, searchType: $scope.selectedOption.value, searchKeyword: $scope.searchKeyword });
+        };
+
+        $scope.isPtsDisabled = function () {
+            return !$scope.ptsUsername 
+            || (!$scope.gridOptionsAgreementInfo.data.length && !$scope.gridOptionsJoinInfoOcbapp.data.length && !$scope.gridOptionsJoinInfoOcbcom.data.length
+            	&& !$scope.gridOptionsEmailSendHistory.data.length && !$scope.gridOptionsAppPushHistory.data.length);
+        };
+
+        authSvc.getUserInfo().then(function (userInfo) {
+            $scope.ptsUsername = userInfo.ptsUsername;
+        });         
 
         // 거래내역 조회
         // $scope.searchTransactionHistory = function () {

@@ -19,11 +19,18 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
             { label: '접수일자', value: 'rcv_dt' },
             { label: '매출일자', value: 'sale_dt' }
         ];
+        
+        $scope.selectOptions4 = [
+            { label: '전체', value: 't' },
+            { label: '일반', value: 'g' },
+            { label: '주유', value: 'f' }
+        ];        
 
         $scope.clear = function () {
             $scope.selectedOption = $scope.selectOptions[0];
             $scope.selectedOption2 = $scope.selectOptions2[0];
             $scope.selectedOption3 = $scope.selectOptions3[0];
+            $scope.selectedOption4 = $scope.selectOptions4[0];
             $scope.uploaded = false;
             $scope.disableUpload = false;
             $scope.mbrId = null;
@@ -134,6 +141,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
                         return {
                             inputDataType: $scope.selectedOption.label,
                             extractionTarget: $scope.selectedOption2.label,
+                            extractionCond: $scope.selectedOption4.label,
                             periodType: $scope.selectedOption3.label,
                             periodFrom: $filter('date')($scope.periodFrom, 'yyyy.MM.dd'),
                             periodTo: $filter('date')($scope.periodTo, 'yyyy.MM.dd')
@@ -145,6 +153,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
             modalInstance.result.then(function () {
                 $scope.sendPtsPromise = apiSvc.extractMemberInfo({
                     inputDataType: $scope.selectedOption.value,
+                    extractionCond: $scope.selectedOption4.value,
                     periodType: $scope.selectedOption3.value,
                     periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
                     periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd'),

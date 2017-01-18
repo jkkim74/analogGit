@@ -3,10 +3,11 @@
 <mapper namespace="com.skplanet.pandora.repository.querycache.QueryCacheRepository">
 
 	<select id="selectAgreementInfo" parameterType="map" resultType="AutoMap">
-		SELECT IF(A.OCB_MKTNG_AGRMT_YN='1','Y',IF(A.OCB_MKTNG_AGRMT_YN='2','N',IF(A.OCB_MKTNG_AGRMT_YN='X','미상','미입력'))) AS OCB_MKTNG_AGRMT_YN
-			, A.MKTNG_FNL_AGRMT_SRC_ORG_CD AS MKTNG_FNL_AGRMT_SRC_ORG_CD
-			, B.DTL_CD_NM AS MKTNG_FNL_AGRMT_SRC_ORG_NM
-			, A.MKTNG_FNL_AGRMT_DT AS MKTNG_FNL_AGRMT_DT
+		SELECT A.MBR_ID 
+		    , IF(A.OCB_MKTNG_AGRMT_YN='1','Y',IF(A.OCB_MKTNG_AGRMT_YN='2','N',IF(A.OCB_MKTNG_AGRMT_YN='X','미상','미입력'))) AS OCB_MKTNG_AGRMT_YN
+			--, A.MKTNG_FNL_AGRMT_SRC_ORG_CD AS MKTNG_FNL_AGRMT_SRC_ORG_CD
+			--, B.DTL_CD_NM AS MKTNG_FNL_AGRMT_SRC_ORG_NM
+			--, A.MKTNG_FNL_AGRMT_DT AS MKTNG_FNL_AGRMT_DT
 			, CONCAT_WS(' / ', A.MKTNG_FNL_AGRMT_SRC_ORG_CD, DTL_CD_NM, A.MKTNG_FNL_AGRMT_DT) AS MKTNG_FNL_AGRMT
 			, IF(A.ENTPR_MKTNG_AGRMT_YN='1','Y',IF(A.ENTPR_MKTNG_AGRMT_YN='2','N',IF(A.ENTPR_MKTNG_AGRMT_YN='X','미상','미입력'))) AS ENTPR_MKTNG_AGRMT_YN
 			, IF(A.TM_RCV_AGRMT_YN='1','Y',IF(A.TM_RCV_AGRMT_YN='2','N',IF(A.TM_RCV_AGRMT_YN='X','미상','미입력'))) AS TM_RCV_AGRMT_YN
@@ -24,6 +25,25 @@
 		LEFT OUTER JOIN (SELECT DTL_CD, DTL_CD_NM FROM OCB.DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD') B ON A.MKTNG_FNL_AGRMT_SRC_ORG_CD = B.DTL_CD
 		WHERE MBR_ID = #{mbrId}
 	</select>
+	
+	<select id="selectAgreementInfo" parameterType="map" resultType="AutoMap" databaseId="hsql">
+		SELECT '123456789' AS MBR_ID 
+		    , 'Y' AS OCB_MKTNG_AGRMT_YNT
+			, '3100/SK/20160805' AS MKTNG_FNL_AGRMT
+			, 'Y' AS ENTPR_MKTNG_AGRMT_YN
+			, 'Y' AS TM_RCV_AGRMT_YN
+			, 'Y' AS EMAIL_RCV_AGRMT_YN
+			, 'Y' AS ADVT_SMS_RCV_AGRMT_YN
+			, 'N' AS IFRMT_SMS_RCV_AGRMT_YN
+			, 'Y' AS PUSH_RCV_AGRMT_YN
+			, 'N' AS PNT_USE_RSVNG_PUSH_AGRMT_YN
+			, 'Y' AS BNFT_MLF_PUSH_AGRMT_YN
+			, 'Y' AS TUSE_PUSH_AGRMT_YN
+			, 'N' AS COIN_NOTI_PUSH_AGRMT_YN
+			, 'Y' AS LOC_UTLZ_AGRMT_YN
+			, 'Y' AS BLTH_AGRMT_YN
+		FROM dual
+	</select>	
 
 	<select id="selectJoinInfo" parameterType="map" resultType="AutoMap">
 		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(MAX(A.REG_DTTM), 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS OCBAPP_FNL_ENTR_DT 
@@ -32,6 +52,12 @@
 		LEFT OUTER JOIN OCB.DW_USR_LGN_SESS_INFO B ON A.MBR_ID = B.MBR_ID
 		WHERE A.MBR_ID = #{mbrId}
 	</select>
+	
+	<select id="selectJoinInfo" parameterType="map" resultType="AutoMap" databaseId="hsql">
+		SELECT '20160905' AS OCBAPP_FNL_ENTR_DT 
+			, '20160101' As OCBAPP_FNL_LGN_DT 
+		FROM dual
+	</select>	
 
 	<select id="selectTransactionHistory" parameterType="map" resultType="AutoMap">
 		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(A.RCV_DT, 'yyyyMMdd'), 'yyyy-MM-dd') AS RCV_DT 
@@ -150,8 +176,8 @@
 	<select id="selectEmailSendHistory" parameterType="map" resultType="AutoMap">
 		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(A.SND_DT, 'yyyyMMdd'), 'yyyy-MM-dd') AS SND_DT  
 			, B.EMAIL_TITL AS EMAIL_TITL 
-			, A.LCPT_EMAIL_SND_RSLT_CD AS LCPT_EMAIL_SND_RSLT_CD
-			, C.DTL_CD_NM AS LCPT_EMAIL_SND_RSLT_NM 
+			--, A.LCPT_EMAIL_SND_RSLT_CD AS LCPT_EMAIL_SND_RSLT_CD
+			--, C.DTL_CD_NM AS LCPT_EMAIL_SND_RSLT_NM 
 			, CONCAT_WS(' / ' , A.LCPT_EMAIL_SND_RSLT_CD, C.DTL_CD_NM) AS LCPT_EMAIL_SND_RSLT
 		FROM OCB.DW_EMAIL_SND_RSLT_CTNT A
 		JOIN OCB.DW_EMAIL_SND_CTNT B ON A.SYS_SRC_CD = B.SYS_SRC_CD AND A.MSG_ID = B.MSG_ID	AND A.SUB_MSG_ID = B.SUB_MSG_ID	AND A.MSG_GRP_ID = B.MSG_GRP_ID
@@ -159,17 +185,35 @@
 		WHERE A.SRC_IDNTF2_ID = #{mbrId}
 		ORDER BY SND_DT DESC
 	</select>
+	
+	<select id="selectEmailSendHistory" parameterType="map" resultType="AutoMap" databaseId="hsql">
+		SELECT '20170101' AS SND_DT  
+			, '이메일' AS EMAIL_TITL 
+			--, 'A' AS LCPT_EMAIL_SND_RSLT_CD
+			--, '반송' AS LCPT_EMAIL_SND_RSLT_NM 
+			, 'test' AS LCPT_EMAIL_SND_RSLT
+		FROM dual
+	</select>	
 
 	<select id="selectAppPushHistory" parameterType="map" resultType="AutoMap">
 		SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(A.SND_DTTM, 'yyyyMMddHHmmss'), 'yyyy-MM-dd HH:mm:ss') AS SND_DTTM 
 			, A.MSG_TITL AS MSG_TITL 
-			, A.PUSH_SND_RSLT_CD AS PUSH_SND_RSLT_CD
-			, B.DTL_CD_NM AS PUSH_SND_RSLT_NM 
+			--, A.PUSH_SND_RSLT_CD AS PUSH_SND_RSLT_CD
+			--, B.DTL_CD_NM AS PUSH_SND_RSLT_NM 
 			, CONCAT_WS(' / ', A.PUSH_SND_RSLT_CD, B.DTL_CD_NM) AS PUSH_SND_RSLT
 		FROM OCB.DW_PUSH_SND_LOG_CTNT A
 		LEFT OUTER JOIN (SELECT DTL_CD, DTL_CD_NM FROM OCB.DW_OCB_INTG_CD WHERE DOMN_ID = 'PUSH_SND_RSLT_CD') B ON A.PUSH_SND_RSLT_CD = B.DTL_CD
 		WHERE MBR_ID = #{mbrId}
 		ORDER BY SND_DTTM DESC
 	</select>
+	
+	<select id="selectAppPushHistory" parameterType="map" resultType="AutoMap" databaseId="hsql">
+		SELECT '20160101133033' AS SND_DTTM 
+			, 'title' AS MSG_TITL 
+			--, 'test' AS PUSH_SND_RSLT_CD
+			--, 'test' AS PUSH_SND_RSLT_NM 
+			, 'test/test' AS PUSH_SND_RSLT
+		FROM dual
+	</select>	
 
 </mapper>

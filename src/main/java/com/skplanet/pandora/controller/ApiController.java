@@ -1,11 +1,16 @@
 package com.skplanet.pandora.controller;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.batch.core.JobParameters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +29,11 @@ import com.skplanet.web.model.MenuProgress;
 import com.skplanet.web.model.ProgressStatus;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.security.UserInfo;
+import com.skplanet.web.service.ExcelService;
 import com.skplanet.web.service.IdmsLogService;
+import com.skplanet.web.service.PtsService;
 import com.skplanet.web.service.UploadService;
+import com.skplanet.web.util.Constant;
 import com.skplanet.web.util.Helper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +60,12 @@ public class ApiController {
 
 	@Autowired
 	private IdmsLogService idmsLogService;
+	
+	@Autowired
+	private ExcelService excelService;	
+	
+	@Autowired
+	private PtsService ptsService;	
 
 	@PostMapping("files")
 	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String menuId,
@@ -237,21 +251,120 @@ public class ApiController {
 
 	@PostMapping("/sendPts")
 	public ApiResponse sendPts(@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix,
-			@RequestParam String menuId) {
+			@RequestParam String menuId, @RequestParam Map<String, Object> params) {
 
+		String mbrId = oracleRepository.selectMbrId(params);
+		params.put("mbrId", mbrId);
+		
 		String username = Helper.currentUser().getUsername();
 		String ptsUsername = Helper.currentUser().getPtsUsername();
 
-		MenuProgress progress = uploadService.getFinishedMenuProgress(menuId, username);
+		if(menuId.equals("PAN0102")){
+			
+			StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
+					.append(Helper.nowDateTimeString()).append('_');
+			if (!StringUtils.isEmpty(ptsPrefix)) {
+				filename.append(ptsPrefix).append('-');
+			}
+			
+			filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".xls");			
+			
+			List<AutoMap> list = oracleRepository.selectTotMbrInfoNoMas(params);
+			
+			Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
+			excelService.create(filePath,"고객정보 기본조회",list);
+			
+			ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);			
+		}else if(menuId.equals("PAN0107")){
+			
+			List<AutoMap> list1 = querycacheRepository.selectAgreementInfo(mbrId);
+			List<AutoMap> list2 = querycacheRepository.selectJoinInfo(mbrId);
 
-		transmissionService.sendToPts(ptsUsername, ptsMasking, ptsPrefix, progress);
+			if (list2 == null || list2.size() <= 0 || list2.get(0) == null) {
+				AutoMap m = new AutoMap();
+				m.put("OCB_APP_JOIN_YN", "N");
+				list2.clear();
+				list2.add(m);
+			} else {
+				log.info("{}", list2);
+				AutoMap m = list2.get(0);
+
+				m.put("OCB_APP_JOIN_YN", "Y");
+			}			
+			
+			List<AutoMap> list3 = querycacheRepository.selectEmailSendHistory(mbrId);
+			List<AutoMap> list4 = querycacheRepository.selectAppPushHistory(mbrId);
+			List<AutoMap> list5 = oracleRepository.selectJoinInfo(params);
+			
+			AutoMap dummyMap = new AutoMap();
+			dummyMap.put("dummy", "");
+			
+			AutoMap map1 = new AutoMap();
+			String header1[] = {"회원ID","마케팅 동의 여부","마케팅 최종 동의 유입 출처/일자","교차 활용 동의 여부","TM 수신 동의 여부","이메일 수신 동의 여부","광고성 SMS 수신 동의 여부","정보성 SMS 수신 동의 여부","앱 푸시 동의 여부","포인트 사용적립 동의 여부","혜택/모바일전단 푸시 동의 여부","친구와 함께쓰기 푸시 동의 여부","코인알림 푸시 동의 여부","위치활용 동의 여부","BLE 동의 여부"}; 
+			String header2[] = {"OCB앱 최종 가입 일자","OCB앱 최종 로그인 일자","OCB앱 가입 여부"};
+			String header3[] = {"발송일자","이메일 제목","이메일 발송 결과"};
+			String header4[] = {"발송일자","푸시 제목","푸시 결과"};
+			String header5[] = {"OCB닷컴 United ID","OCB닷컴 로그인ID","OCB닷컴 가입 일자","OCB닷컴 최종 로그인 일자"};
+			
+			AutoMap hMap1 = new AutoMap();
+			AutoMap hMap2 = new AutoMap();
+			AutoMap hMap3 = new AutoMap();
+			AutoMap hMap4 = new AutoMap();
+			AutoMap hMap5 = new AutoMap();
+			
+			int i = 0;
+			
+			for ( i = 0 ; i < header1.length ; i++ ){hMap1.put(Integer.toString(i), header1[i]);};
+			for ( i = 0 ; i < header2.length ; i++ ){hMap2.put(Integer.toString(i), header2[i]);};
+			for ( i = 0 ; i < header3.length ; i++ ){hMap3.put(Integer.toString(i), header3[i]);};
+			for ( i = 0 ; i < header4.length ; i++ ){hMap4.put(Integer.toString(i), header4[i]);};
+			for ( i = 0 ; i < header5.length ; i++ ){hMap5.put(Integer.toString(i), header5[i]);};
+			
+			List<AutoMap> list = new ArrayList();
+			
+			list.add(hMap1);
+			list.addAll(list1);
+			list.add(dummyMap);
+			list.add(hMap2);
+			list.addAll(list2);
+			list.add(dummyMap);
+			list.add(hMap3);
+			list.addAll(list3);
+			list.add(dummyMap);
+			list.add(hMap4);
+			list.addAll(list4);
+			list.add(dummyMap);
+			list.add(hMap5);
+			list.addAll(list5);
+			
+			StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
+					.append(Helper.nowDateTimeString()).append('_');
+			if (!StringUtils.isEmpty(ptsPrefix)) {
+				filename.append(ptsPrefix).append('-');
+			}
+			
+			filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".xls");			
+			
+			
+			Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
+			excelService.create(filePath,"고객정보 상세조회",list);
+			
+			ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);					
+			
+			
+		}else{
+			MenuProgress progress = uploadService.getFinishedMenuProgress(menuId, username);
+			transmissionService.sendToPts(ptsUsername, ptsMasking, ptsPrefix, progress);
+		}
+
+		
 
 		return ApiResponse.builder().message("PTS 전송 성공").build();
 	}
 
 	@PostMapping("/extractMemberInfo")
 	public ApiResponse extractMemberInfo(@RequestParam String menuId, @RequestParam String inputDataType,
-			@RequestParam String periodType, @RequestParam String periodFrom, @RequestParam String periodTo,
+			@RequestParam String extractionCond, @RequestParam String periodType, @RequestParam String periodFrom, @RequestParam String periodTo,
 			@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix) {
 
 		UserInfo user = Helper.currentUser();
@@ -259,6 +372,8 @@ public class ApiController {
 		String ptsUsername = user.getPtsUsername();
 		String emailAddr = user.getEmailAddr();
 
+		System.out.println(extractionCond);
+		
 		// 임시로 하드코딩 수정 menuId 새로 생성
 		MenuProgress progress = uploadService.getFinishedMenuProgressTmp(menuId, username);
 		uploadService.getFinishedMenuProgressTmp("PAN0005", username);
@@ -266,7 +381,7 @@ public class ApiController {
 		uploadService.markStatus(ProgressStatus.PROCESSING, "PAN0005", username, null, null);
 
 		transmissionService.sendForExtraction(username, inputDataType, periodType, periodFrom, periodTo, ptsUsername,
-				ptsMasking, ptsPrefix, emailAddr, progress);
+				ptsMasking, ptsPrefix, emailAddr, progress, extractionCond);
 
 		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, menuId,
 				250); // 다른 화면에서 보통 고객조회 첫페이지로 250건 조회하므로 일관성맞춤.

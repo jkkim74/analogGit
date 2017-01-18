@@ -24,6 +24,12 @@
 				</div>
 				<br><br>
 				<div class="input-group">
+					<label class="input-group-addon">추출조건</label>
+					<select class="form-control" ng-init="selectedOption4 = selectOptions4[0]" ng-options="option.label for option in selectOptions4"
+						ng-model="selectedOption4" ng-disabled="uploaded"></select>
+				</div>				
+				<br><br>
+				<div class="input-group">
 					<label class="input-group-addon">일자기준</label>
 					<select class="form-control" ng-init="selectedOption3 = selectOptions3[0]" ng-options="option.label for option in selectOptions3"
 						ng-model="selectedOption3" ng-disabled="uploaded"></select>

@@ -44,6 +44,10 @@ public interface OracleRepository {
 	List<AutoMap> selectExtinctionTargets(Map<String, Object> params);
 
 	List<AutoMap> selectExtinctionTargetsMas(Map<String, Object> params);
+	
+	List<AutoMap> selectTotMbrInfo(Map<String, Object> params);
+	
+	List<AutoMap> selectTotMbrInfoNoMas(Map<String, Object> params);
 
 	int countExtinctionTargets(Map<String, Object> params);
 

@@ -13,7 +13,7 @@
 				<if test="masking == false">
 					<include refid="selectMembers_PAN0101_nomas" />
 				</if>
-			</when>
+			</when>		
 			<when test="menuProgress.menuId == 'PAN0103'">
 				<if test="masking == true">
 					<include refid="selectMembers_PAN0103" />
@@ -49,7 +49,7 @@
 		<choose>
 			<when test="menuProgress.menuId == 'PAN0101'">
 				<include refid="selectMembers_PAN0101" />
-			</when>
+			</when>	
 			<when test="menuProgress.menuId == 'PAN0103'">
 				<include refid="selectMembers_PAN0103" />
 			</when>
@@ -72,7 +72,7 @@
 		<choose>
 			<when test="menuProgress.menuId == 'PAN0101'">
 				<include refid="selectMembers_PAN0101" />
-			</when>
+			</when>		
 			<when test="menuProgress.menuId == 'PAN0103'">
 				<include refid="selectMembers_PAN0103" />
 			</when>
