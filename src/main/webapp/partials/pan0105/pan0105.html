@@ -22,8 +22,8 @@
 						<button type="button" class="btn btn-default" ng-click="openExplain()"><i class="fa fa-question-circle"></i> 추출항목 안내</button>
 					</span>
 				</div>
-				<br><br>
-				<div class="input-group">
+				<!--  <br><br> -->
+				<div class="input-group" style="display:none;">
 					<label class="input-group-addon">추출조건</label>
 					<select class="form-control" ng-init="selectedOption4 = selectOptions4[0]" ng-options="option.label for option in selectOptions4"
 						ng-model="selectedOption4" ng-disabled="uploaded"></select>
