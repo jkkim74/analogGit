@@ -542,7 +542,7 @@
 		WHERE A.MBR_ID = #{mbrId}
 	</select>		
 
-	<select id="selectTotMbrInfo4" parameterType="map" resultType="AutoMap">L		
+	<select id="selectTotMbrInfo4" parameterType="map" resultType="AutoMap">		
 		SELECT A.DATA_SRC_ORG_CD /* 유입기관코드 */
 			, A.AGRMT_VER_CD /* 동의버전 */
 			, TO_CHAR(TO_DATE(A.AGRMT_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS AGRMT_DT /* 동의일자 */
