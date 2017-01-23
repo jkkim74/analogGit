@@ -484,8 +484,11 @@ public class ApiController {
 		case TM:
 			break;
 		case ALL:
+			params.put("transmissionType", "OCBCOM");
 			transmissionService.sendToFtpForExtinction(params, TransmissionType.OCBCOM);
+			params.put("transmissionType", "EM");
 			transmissionService.sendToFtpForExtinction(params, TransmissionType.EM);
+			params.put("transmissionType", "SMS");
 			transmissionService.sendToSms(params);
 			break;
 		default:

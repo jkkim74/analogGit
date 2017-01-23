@@ -70,5 +70,7 @@ public interface OracleRepository {
 	List<AutoMap> selectTotMbrInfoNoMas6(Map<String, Object> params);
 
 	int countExtinctionTargets(Map<String, Object> params);
+	
+	void updateSmsSendStatus(Map<String, Object> params);
 
 }

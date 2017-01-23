@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.web.exception.BizException;
 import com.skplanet.web.model.AutoMap;
 
@@ -29,6 +30,9 @@ public class SmsService {
 
 	@Autowired
 	private TemplateService templateService;
+	
+	@Autowired
+	private OracleRepository oracleRepository;	
 
 	@Value("${sms.serviceId}")
 	private String serviceId;
@@ -54,13 +58,17 @@ public class SmsService {
 			model.put("dd", extnctObjDt.substring(6, 8));
 
 			String clphnNo = (String) m.get("clphnNo");
+			String mbrId = (String) m.get("mbrId");
+			String baseYm = (String) m.get("baseYm");
+			
+			
 
-			send(Arrays.asList(clphnNo), "pan0104.vm", model);
+			send(Arrays.asList(clphnNo), "pan0104.vm", model,mbrId,baseYm);
 		}
 	}
 
 	@Async
-	public void send(List<String> receiverPhoneNumbers, String templateName, Map<String, Object> model) {
+	public void send(List<String> receiverPhoneNumbers, String templateName, Map<String, Object> model, String mbrId, String baseYm) {
 		if (!enabled) {
 			log.debug("disabled");
 			return;
@@ -90,12 +98,26 @@ public class SmsService {
 				for (ReceiveNumVo rcvNum : resultVo.getRcvPhonNumList()) {
 					log.debug("##### ReqNum={}, RcvPhonNum={}, TransactionId={}", rcvNum.getReqNum(),
 							rcvNum.getRcvPhonNum(), rcvNum.getTransactionId());
+					Map<String, Object> params = new HashMap<String, Object>();
+					params.put("mbrId", mbrId);
+					params.put("baseYm", baseYm);
+					params.put("smsSndYn", "1");
+					params.put("smsSndFgCd", resultVo.getResultCode());
+					oracleRepository.updateSmsSendStatus(params);
 				}
 			} else {
-				throw new BizException(resultVo.getResultCode() + " : " + resultVo.getResultMessage());
+				log.info("Failed to send using SMS  : "+ resultVo.getResultCode() + " : " + resultVo.getResultMessage());
+				//throw new BizException(resultVo.getResultCode() + " : " + resultVo.getResultMessage());
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("mbrId", mbrId);
+				params.put("baseYm", baseYm);
+				params.put("smsSndYn", "2");
+				params.put("smsSndFgCd", resultVo.getResultCode());
+				oracleRepository.updateSmsSendStatus(params);
 			}
 		} catch (IOException e) {
-			throw new BizException("Failed to send using SMS", e);
+			//throw new BizException("Failed to send using SMS", e);
+			log.info("Failed to send using SMS  : "+ e.toString());
 		}
 	}
 

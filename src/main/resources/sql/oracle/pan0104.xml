@@ -162,5 +162,13 @@
 			<include refid="selectExtinctionTargets_inner" />
 		)
 	</select>
+	
+	<update id="updateSmsSendStatus" parameterType="map">
+		UPDATE MART_EXTNCT_MBR_NOTI_MST
+		SET SMS_SND_YN = #{smsSndYn}
+		  , SMS_SND_FG_CD = #{smsSndFgCd}
+		WHERE BASE_YM = #{baseYm}
+		AND MBR_ID = #{mbrId}
+	</update>	
 
 </mapper>
