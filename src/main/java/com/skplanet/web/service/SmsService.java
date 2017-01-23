@@ -59,7 +59,7 @@ public class SmsService {
 
 			String clphnNo = (String) m.get("clphnNo");
 			String mbrId = (String) m.get("mbrId");
-			String baseYm = (String) m.get("baseYm");
+			String baseYm = ((String) m.get("baseYm")).replaceAll("-", "");
 			
 			
 
