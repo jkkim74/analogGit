@@ -18,12 +18,12 @@
 					<label class="input-group-addon">추출대상</label>
 					<select class="form-control" ng-init="selectedOption2 = selectOptions2[0]" ng-options="option.label for option in selectOptions2"
 						ng-model="selectedOption2" ng-change="changeColumnVisible()" ng-disabled="uploaded"></select>
-					<span class="input-group-btn">
+					<span class="input-group-btn" ng-style="desc_bt">
 						<button type="button" class="btn btn-default" ng-click="openExplain()"><i class="fa fa-question-circle"></i> 추출항목 안내</button>
 					</span>
 				</div>
-				<!--  <br><br> -->
-				<div class="input-group" style="display:none;">
+				<br ng-style="extr_br1"><br ng-style="extr_br2">
+				<div class="input-group" ng-style="extr_bt">
 					<label class="input-group-addon">추출조건</label>
 					<select class="form-control" ng-init="selectedOption4 = selectOptions4[0]" ng-options="option.label for option in selectOptions4"
 						ng-model="selectedOption4" ng-disabled="uploaded"></select>

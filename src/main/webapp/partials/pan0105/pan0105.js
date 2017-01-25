@@ -178,19 +178,19 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
             $scope.ptsUsername = userInfo.ptsUsername;
         });
 
-        // $scope.changeColumnVisible = function () {
-        //     if ($scope.selectedOption2.value === 'mbrId') {
-        //         $scope.gridOptionsMembers.columnDefs.forEach(function (def) {
-        //             def.visible = def.name === 'mbrId';
-        //         });
-        //     } else {
-        //         $scope.gridOptionsMembers.columnDefs.forEach(function (def) {
-        //             def.visible = true;
-        //         });
-        //     }
-
-        //     $scope.gridApi.grid.refresh();
-        // };
+        $scope.changeColumnVisible = function () {
+             if ($scope.selectedOption2.value === 'mbrId') {
+            	 $scope.extr_bt = {'display': 'none'};
+            	 $scope.extr_br1 = {'display': 'none'};
+            	 $scope.extr_br2 = {'display': 'none'};
+            	 $scope.desc_bt = {'display': 'none'};
+             } else {
+            	 $scope.extr_bt = {'display': 'true'};
+            	 $scope.extr_br1 = {'display': 'true'};
+            	 $scope.extr_br2 = {'display': 'true'};
+            	 $scope.desc_bt = {'display': 'true'};
+             }
+        };
 
         $scope.openExplain = function () {
             $uibModal.open({
