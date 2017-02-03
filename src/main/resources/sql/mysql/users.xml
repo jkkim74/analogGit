@@ -103,7 +103,6 @@
 
 	<update id="updateMasking" parameterType="map">
 		UPDATE AUTHORITIES
--- 		SET MASKING_YN = IF('true' = #{maskingYn}, 1, 0)
 	  	SET MASKING_YN = CASE WHEN #{maskingYn} &lt;&gt;'true' THEN 0 ELSE 1 END
 		WHERE USERNAME = #{username}
 	</update>

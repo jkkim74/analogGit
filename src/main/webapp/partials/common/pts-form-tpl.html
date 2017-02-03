@@ -13,7 +13,6 @@
 			<div class="input-group-btn" ng-init="ptsMasking = true">
 				<button class="btn btn-default" ng-class="{'btn-info': ptsMasking}" ng-model="ptsMasking" uib-btn-radio="true">함</button>
 				<button class="btn btn-default" ng-class="{'btn-info': !ptsMasking}" ng-model="ptsMasking" uib-btn-radio="false">안함</button>
-				<!--<button class="btn btn-default" ng-disabled="!maskingAuth" ng-class="{'btn-info': !ptsMasking}" ng-model="ptsMasking" uib-btn-radio="false">안함</button>-->
 			</div>
 		</div>
 		<button type="button" class="btn btn-danger" ng-click="sendPts(ptsMasking, ptsPrefix)" ng-disabled="isPtsDisabled() || form.prefix.$invalid"><i class="fa fa-send"></i> PTS 전송</button>
