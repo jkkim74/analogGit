@@ -23,6 +23,10 @@ angular.module('app').controller('PAN0002Ctrl', ['$scope', '$q', '$http', '$time
                     field: 'enabled', displayName: '사용여부', width: 100, cellTooltip: true, headerTooltip: true, type: 'boolean',
                     cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.enabled" ng-change="grid.appScope.saveColumn(row.entity, {name:\'enabled\'}, COL_FIELD)"></div>'
                 },
+                {
+                    field: 'maskingYn', displayName: '마스킹권한', width: 100, cellTooltip: true, headerTooltip: true, type: 'boolean',
+                    cellTemplate: '<div class="ui-grid-cell-contents"><input type="checkbox" ng-model="row.entity.maskingYn" ng-change="grid.appScope.saveColumn(row.entity, {name:\'maskingYn\'}, COL_FIELD)"></div>'
+                },
                 { field: 'beginDttm', displayName: '사용시작일시', cellTooltip: true, headerTooltip: true },
                 { field: 'endDttm', displayName: '사용종료일시', cellTooltip: true, headerTooltip: true },
                 {
@@ -61,6 +65,8 @@ angular.module('app').controller('PAN0002Ctrl', ['$scope', '$q', '$http', '$time
                 }
 
                 apiSvc.saveAdmin({ username: rowEntity.username, isAdmin: rowEntity.isAdmin });
+            } else if(colDef.name === 'maskingYn'){
+                apiSvc.saveMasking({ username: rowEntity.username, maskingYn: rowEntity.maskingYn});
             }
         };
 
@@ -88,7 +94,6 @@ angular.module('app').controller('PAN0002Ctrl', ['$scope', '$q', '$http', '$time
             var roleAdmin = rowEntity.authorities.filter(function (obj) {
                 return obj.authority === 'ROLE_ADMIN';
             });
-
             rowEntity.isAdmin = roleAdmin.length > 0;
         };
 

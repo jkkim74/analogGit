@@ -76,6 +76,7 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
         this.saveUser = new ApiPost('users/info');
         this.saveAdmin = new ApiPost('users/admin');
         this.saveAccess = new ApiPost('users/access');
+        this.saveMasking = new ApiPost('users/masking');
 
         // PANDORA
         this.getMembers = new ApiGet('members');

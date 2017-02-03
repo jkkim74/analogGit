@@ -8,11 +8,12 @@
 			<span class="input-group-addon">파일명 Prefix</span>
 			<input type="text" class="form-control" name="prefix" ng-model="ptsPrefix" ng-pattern="'[\\da-zA-Z]*'" ng-maxlength="10" maxlength="10">
 		</div>
-		<div class="input-group">
+		<div class="input-group" ng-show="maskingAuth">
 			<span class="input-group-addon"><i class="fa fa-user-secret"></i> 개인정보 마스킹</span>
 			<div class="input-group-btn" ng-init="ptsMasking = true">
 				<button class="btn btn-default" ng-class="{'btn-info': ptsMasking}" ng-model="ptsMasking" uib-btn-radio="true">함</button>
 				<button class="btn btn-default" ng-class="{'btn-info': !ptsMasking}" ng-model="ptsMasking" uib-btn-radio="false">안함</button>
+				<!--<button class="btn btn-default" ng-disabled="!maskingAuth" ng-class="{'btn-info': !ptsMasking}" ng-model="ptsMasking" uib-btn-radio="false">안함</button>-->
 			</div>
 		</div>
 		<button type="button" class="btn btn-danger" ng-click="sendPts(ptsMasking, ptsPrefix)" ng-disabled="isPtsDisabled() || form.prefix.$invalid"><i class="fa fa-send"></i> PTS 전송</button>

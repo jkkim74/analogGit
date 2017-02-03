@@ -85,4 +85,12 @@ public class UserController {
 		return ApiResponse.builder().message("관리자 정보 수정 완료").build();
 	}
 
+	@PostMapping("/masking")
+	@RolesAllowed("ROLE_ADMIN")
+	@Transactional("mysqlTxManager")
+    public ApiResponse updateMasking(@RequestParam String username, @RequestParam String maskingYn){
+		userService.updateMasking(username, maskingYn);
+		return ApiResponse.builder().message("마스킹 권한 수정 완료").build();
+	}
+
 }

@@ -122,6 +122,7 @@ angular.module('app').controller('PAN0103Ctrl', ['$scope', '$q', '$http', '$time
 
         authSvc.getUserInfo().then(function (userInfo) {
             $scope.ptsUsername = userInfo.ptsUsername;
+            $scope.maskingAuth = userInfo.maskingYn;
         });
 
     }]);

@@ -7,7 +7,7 @@ angular.module('app').controller('HomeCtrl', ['$scope', '$q', '$http', '$state',
 
         $scope.isAllowedMenu = function (menuId) {
             return authSvc.isAllowedMenu(menuId);
-        }
+        };
 
         $scope.authenticate = function () {
             $scope.loginPromise = authSvc.authenticate($scope.username, $scope.password);

@@ -33,6 +33,7 @@ public class UserInfo implements UserDetails {
 	private String endDttm;
 	private String createDttm;
 	private String menuList;
+	private boolean maskingYn;
 	private Collection<? extends GrantedAuthority> authorities;
 
 	@Override

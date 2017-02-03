@@ -10,6 +10,9 @@
 		</div>
 
 		<div class="col-md-9">
+			<div style="text-align:right;">
+				<button ui-sref="index.menu({menuId: 'pan0003'})" type="button" class="btn btn-default btn-sm">화면 권한 관리 바로가기</button>
+			</div>
 			<div cg-busy="usersPromise">
 				<div ui-grid="gridOptionsUserList" ui-grid-selection ui-grid-resize-column ui-grid-edit></div>
 			</div>
