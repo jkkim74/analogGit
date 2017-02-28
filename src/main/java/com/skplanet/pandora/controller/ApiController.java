@@ -431,7 +431,8 @@ public class ApiController {
 	@PostMapping("/extractMemberInfo")
 	public ApiResponse extractMemberInfo(@RequestParam String menuId, @RequestParam String inputDataType,
 			@RequestParam String extractionCond, @RequestParam String periodType, @RequestParam String periodFrom, @RequestParam String periodTo,
-			@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix) {
+			@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix,
+			@RequestParam(defaultValue = "N") String singleReq) {
 
 		UserInfo user = Helper.currentUser();
 		String username = user.getUsername();
@@ -447,7 +448,7 @@ public class ApiController {
 		uploadService.markStatus(ProgressStatus.PROCESSING, "PAN0005", username, null, null);
 
 		transmissionService.sendForExtraction(username, inputDataType, periodType, periodFrom, periodTo, ptsUsername,
-				ptsMasking, ptsPrefix, emailAddr, progress, extractionCond);
+				ptsMasking, ptsPrefix, emailAddr, progress, extractionCond, singleReq);
 
 		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, menuId,
 				250); // 다른 화면에서 보통 고객조회 첫페이지로 250건 조회하므로 일관성맞춤.

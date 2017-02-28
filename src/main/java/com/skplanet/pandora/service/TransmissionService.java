@@ -178,7 +178,7 @@ public class TransmissionService {
 	@Async
 	public void sendForExtraction(String username, String inputDataType, String periodType, String periodFrom,
 			String periodTo, String ptsUsername, boolean ptsMasking, String ptsPrefix, String emailAddr,
-			MenuProgress menuProgress, String extractionCond) {
+			MenuProgress menuProgress, String extractionCond, String singleReq) {
 		try {
 			String filename = menuProgress.getFilename();
 			Path localPath = Paths.get(Constant.APP_FILE_DIR, filename);
@@ -191,7 +191,7 @@ public class TransmissionService {
 
 			int extractionTarget = "MBR_ID".equals(menuProgress.getParam()) ? 2 : 1;
 
-			sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget, extractionCond);
+			sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget, extractionCond, singleReq);
 
 			String sentFilename = sendToPts(ptsUsername, ptsMasking, ptsPrefix, menuProgress);
 
