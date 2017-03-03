@@ -74,7 +74,7 @@ class LocalDataSourceConfig extends DataSourceConfig {
 	@Bean
 	public DataSource querycacheDataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		return builder.addScripts("sql/test/schema-querycache.sql").build();
+		return builder.addScripts("sql/test/schema-querycache.sql", "sql/test/data-querycache.sql").build();
 	}
 
 }

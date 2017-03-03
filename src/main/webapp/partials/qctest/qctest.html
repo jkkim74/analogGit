@@ -1,0 +1,35 @@
+<div class="section-content">
+    <form class="form-inline">
+        <div class="input-group">
+            <label class="input-group-addon">회 원 I D</label>
+            <input type="text" class="form-control" placeholder="mbr_id" ng-model="qcObject.mbrId">
+        </div><br/>
+        <div class="input-group">
+            <label class="input-group-addon">추출대상</label>
+            <input type="text" class="form-control" placeholder="1.TR 2.TR+고객명 3.회원ID" ng-model="qcObject.extractTarget">
+        </div><br/>
+        <div class="input-group">
+            <label class="input-group-addon">추출조건</label>
+            <input type="text" class="form-control" placeholder="1.전체 2.일반 3.주유" ng-model="qcObject.extractCondition">
+        </div><br/>
+        <div class="input-group">
+            <label class="input-group-addon">일자기준</label>
+            <input type="text" class="form-control" placeholder="1.접수일자 2.매출일자" ng-model="qcObject.standardDate">
+        </div><br/>
+        <div class="input-group">
+            <label class="input-group-addon">조회기간</label>
+            <input type="text" class="form-control" placeholder="xxxx.xx.xx" ng-model="qcObject.searchDateStart">
+            <input type="text" class="form-control" placeholder="xxxx.xx.xx" ng-model="qcObject.searchDateEnd">
+        </div>
+    </form>
+    <br/>
+
+    <button type="button" class="btn btn-primary" ng-click="searchQueryCacheTest()" ng-disabled="!qcObject.mbrId"><i class="fa fa-search"></i> 조회</button>
+    <br>
+    <div cg-busy="querycacheTestPromise">
+        <div ui-grid="gridOptionsQueryCacheTest" ui-grid-resize-columns></div>
+    </div>
+
+    <div ng-include="'partials/common/pts-form-tpl.html'"></div>
+
+</div>
