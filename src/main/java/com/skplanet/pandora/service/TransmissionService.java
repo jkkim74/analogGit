@@ -204,6 +204,7 @@ public class TransmissionService {
 			map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
 			mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
 		} catch (Exception e) {
+			e.printStackTrace();
 			uploadService.markStatus(ProgressStatus.FAILED, "PAN0005", username, null, null);
 		}
 	}
