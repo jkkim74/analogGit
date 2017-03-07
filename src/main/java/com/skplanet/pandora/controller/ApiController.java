@@ -249,6 +249,26 @@ public class ApiController {
 		return oracleRepository.selectEmailAddrDup(params);
 	}
 
+	@GetMapping("/queryCacheTest")
+	public List<AutoMap> getQueryCacheTest(@RequestParam Map<String, Object> params) {
+
+		log.info("call::getQuerycache...");
+		log.info("params={}", params);
+
+//		String mbrId = oracleRepository.selectMbrId(params);
+		List<AutoMap> list = querycacheRepository.selectQueryCache(params);
+		log.info("list={}", list);
+
+		String username = Helper.currentUser().getUsername();
+		String mbrId = String.valueOf(params.get("memberId"));
+		String mbrKorNm = oracleRepository.selectMbrKorNm(mbrId);
+		log.info("username={}, mbrId={}, mbrKorNm={}", username, mbrId, mbrKorNm);
+//		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
+//				(String) params.get("menuId"), 1);
+
+		return list;
+	}
+
 	@PostMapping("/sendPts")
 	public ApiResponse sendPts(@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix,
 			@RequestParam String menuId, @RequestParam Map<String, Object> params) {
@@ -449,10 +469,52 @@ public class ApiController {
 				break;
 			}
 			case "QCTEST": {
-				//todo queryCache logic........
+				/**
+				 * todo queryCache logic........
+				 *
+				 * step0. check file...
+				 * step1. select query.
+				 * step2. make temp list
+				 * step3. send file to PTS
+				 */
 
+//				MenuProgress progress = uploadService.getFinishedMenuProgress(menuId, username);
+//				log.info("case::QCTEST\nprogress={}", progress);
+				log.info("case::QCTEST");
+				log.info("params={}", params);
 
+				String mbrKorNm = oracleRepository.selectMbrKorNm(String.valueOf(params.get("memberId")));
 
+				log.info("mbrKorNm={}", mbrKorNm);
+
+				List<AutoMap> rawList = querycacheRepository.selectQueryCache(params);
+				log.info("rawList={}", rawList);
+				AutoMap hMap = new AutoMap();
+				String header[] = {"접수일자","승인일시","대표승인번호","승인번호","매출일시","회원ID","카드코드","카드코드명","카드번호","정산제휴사코드","정산제휴사명","정산가맹점코드","정산가맹점명","발생제휴사코드","발생제휴사명","발생가맹점코드","발생가맹점명","포인트종류코드","포인트종류명","전표코드","전표명","매출금액","포인트","제휴사연회비","수수료","지불수단코드","지불수단명","기관코드","기관명","유종코드","유종명","쿠폰코드","쿠폰명"};
+
+				log.info("params={}", params);
+
+				for(int i=0; i<header.length; i++){
+					hMap.put(Integer.toString(i), header[i]);
+				}
+
+				List<AutoMap> resultList = new ArrayList();
+				resultList.add(hMap);
+				resultList.addAll(rawList);
+
+				StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
+						.append(Helper.nowDateTimeString()).append('_');
+				if (!StringUtils.isEmpty(ptsPrefix)) {
+					filename.append(ptsPrefix).append('-');
+				}
+
+				filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".xls");
+
+				Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
+				excelService.create(filePath, "거래실적 단건조회", resultList);
+
+				ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
+//				transmissionService.sendToPts(ptsUsername, ptsMasking, ptsPrefix, progress);
 
 				break;
 			}

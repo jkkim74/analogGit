@@ -25,7 +25,7 @@ create table MOCK_TB_SEL_TRX_HIST (
 	trx_type VARCHAR(50)
 );
 
-CREATE TABLE MOCK_TB_SEL_TRX_HIST_QC (
+CREATE TABLE MOCK_QC_TEST (
  	rcv_dt varchar(100)	--접수일시
 	,appr_dttm varchar(100)	--승인일시
 	,rep_appr_no varchar(100)	--대표 승인번호

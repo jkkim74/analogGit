@@ -100,6 +100,7 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
         this.getExtinctionTargets = new ApiGet('extinctionTargets');
         this.noticeExtinction = new ApiPost('noticeExtinction');
         this.getUploaded = new ApiGet('files');
+        this.getQueryCacheTest = new ApiGet('queryCacheTest');
 
         this.upload = function (params) {
             var deferred = $q.defer();
