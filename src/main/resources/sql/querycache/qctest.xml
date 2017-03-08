@@ -70,7 +70,8 @@
         AND stlmt_mcnt_cd NOT IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1' ELSE '2'
         end                           AS tr_ind
         FROM   ocb.dw_sale_ctnt
-        WHERE  Substring(slip_cd, 1, 1) NOT IN ( 'I' )
+        WHERE  intg_slip_fg_cd in ('g') 
+        and Substring(slip_cd, 1, 1) NOT IN ( 'I' )
         AND slip_cd NOT IN ( 'A1', 'A2' )
         AND ${periodType} BETWEEN #{periodFrom} AND #{periodTo}
         UNION ALL
