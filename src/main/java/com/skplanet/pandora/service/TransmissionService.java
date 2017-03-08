@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
+import com.skplanet.web.exception.BizException;
 import com.skplanet.web.model.AutoMap;
 import com.skplanet.web.model.MenuProgress;
 import com.skplanet.web.model.ProgressStatus;
@@ -205,6 +206,7 @@ public class TransmissionService {
 			mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
 		} catch (Exception e) {
 			uploadService.markStatus(ProgressStatus.FAILED, "PAN0005", username, null, null);
+			throw new BizException("Failed to Write File", e);
 		}
 	}
 
