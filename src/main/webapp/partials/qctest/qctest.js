@@ -8,6 +8,7 @@ angular.module('app').controller('QCTESTCtrl', ['$scope', '$q', '$http', '$timeo
             $scope.maskingAuth = userInfo.maskingYn;
         });
 
+        $scope.canSearch = true;
         $scope.qcObject = {
             memberId: null,
             extractTarget: null,
@@ -108,9 +109,20 @@ angular.module('app').controller('QCTESTCtrl', ['$scope', '$q', '$http', '$timeo
         $scope.searchQcTest = function () {
             console.log('call::searchQcTest');
             console.log($scope.qcObject);
+
+            var nStart = new Date().getTime();
+            $scope.canSearch = false;
+            $scope.gridOptionsQueryCacheTest.data = null;
+
             $scope.querycacheTestPromise = apiSvc.getQueryCacheTest($scope.qcObject);
             $scope.querycacheTestPromise.then(function (data) {
-                $scope.gridOptionsQueryCacheTest.data = data;
+                var nEnd = new Date().getTime();
+                var nDiff = nEnd - nStart;
+                console.log(nDiff + "ms");
+                //$timeout(function () {
+                    $scope.gridOptionsQueryCacheTest.data = data;
+                    $scope.canSearch = true;
+                //}, 3000, true);
             });
         };
 
