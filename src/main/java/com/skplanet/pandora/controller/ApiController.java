@@ -476,6 +476,8 @@ public class ApiController {
 				 * 			a. TR : from hive(queryCache)
 				 * 			b. member name : from oracle(jdbc)
 				 * step2. make list
+				 * 			a. TR
+				 * 			b. TR + member name
 				 * step3. send file to PTS
 				 *
 				 */
@@ -483,7 +485,7 @@ public class ApiController {
 				log.info("case::QCTEST");
 
 				List<AutoMap> rawList = querycacheRepository.selectQueryCache(params);
-				log.info("rawList={}", rawList);
+				log.info("rawList size={}", rawList.size());
 
 				String mbrKorNm = oracleRepository.selectMbrKorNm(String.valueOf(params.get("memberId")));
 				log.info("mbrKorNm={}", mbrKorNm);

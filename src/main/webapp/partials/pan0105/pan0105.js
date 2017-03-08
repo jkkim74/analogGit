@@ -84,9 +84,15 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
         // };
 
         $scope.upload = function (file) {
+
             if ($scope.form.$invalid) {
                 toastr.warning('파일 업로드 이후 모든 조회 조건은 고정됩니다. 조건을 모두 선택하시고 파일을 업로드해주세요.');
                 return;
+            }
+
+            //check request type (single or multi)
+            if(file.name){
+                $scope.mbrId = null;  //clear mbrId to multi request.(to throw singleReq='N')
             }
 
             $scope.uploadPromise = apiSvc.upload({ file: file, param: $scope.selectedOption2.value });
@@ -115,7 +121,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         $scope.sendOneMbrId = function () {
-            var data = new Blob([$scope.mbrId], { type: 'text/csv' });
+            var data = new Blob([$scope.mbrId], { type: 'text/csv'});
 
             $scope.upload(data);
         };
