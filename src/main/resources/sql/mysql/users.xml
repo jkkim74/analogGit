@@ -9,6 +9,7 @@
 		<result property="beginDttm" column="BEGIN_DTTM" javaType="string" />
 		<result property="endDttm" column="END_DTTM" javaType="string" />
 		<result property="menuList" column="MENU_LIST" javaType="string" />
+		<result property="maskingYn" column="MASKING_YN" javaType="_boolean" />
 		<collection property="authorities" ofType="org.springframework.security.core.authority.SimpleGrantedAuthority">
 			<constructor>
 				<arg column="AUTHORITY" javaType="string" />
@@ -67,10 +68,10 @@
 	</update>
 
 	<insert id="insertAuthorities" parameterType="map">
-		INSERT INTO AUTHORITIES (USERNAME, AUTHORITY)
+		INSERT INTO AUTHORITIES (USERNAME, AUTHORITY, MASKING_YN)
 		VALUES
 		<foreach collection="authorities.split(',',-1)" item="item" separator=",">
-			( #{username}, #{item} )
+			( #{username}, #{item}, 0 )
 		</foreach>
 	</insert>
 
@@ -99,5 +100,17 @@
 			UPPER(#{item})
 		</foreach>
 	</delete>
+
+	<update id="updateMasking" parameterType="map">
+		UPDATE AUTHORITIES
+	  	SET MASKING_YN = CASE WHEN #{maskingYn} &lt;&gt;'true' THEN 0 ELSE 1 END
+		WHERE USERNAME = #{username}
+	</update>
+
+	<update id="updateMasking" parameterType="map" databaseId="hsql">
+		UPDATE AUTHORITIES
+	  	SET MASKING_YN = CASE WHEN #{maskingYn} &lt;&gt;'true' THEN 0 ELSE 1 END
+		WHERE USERNAME = #{username}
+	</update>
 
 </mapper>

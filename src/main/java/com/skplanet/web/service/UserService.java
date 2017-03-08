@@ -138,4 +138,8 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
+	public void updateMasking(String username, String maskingYn){
+	    userRepository.updateMasking(username, maskingYn);
+	}
+
 }

@@ -23,4 +23,6 @@ public interface UserRepository {
 
 	void deleteAccesses(@Param("username") String username, @Param("menuList") String menuList);
 
+	void updateMasking(@Param("username") String username, @Param("maskingYn") String maskingYn);
+
 }

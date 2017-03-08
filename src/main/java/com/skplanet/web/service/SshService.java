@@ -33,12 +33,19 @@ public class SshService {
 	private boolean enabled;
 
 	public void execute(String username, String inputDataType, String periodType, String periodFrom, String periodTo,
-			String filename, int extractionTarget, String extractionCond) {
+			String filename, int extractionTarget, String extractionCond, String singleReq) {
 
 		StringBuilder builder = new StringBuilder("sh /app/home/bi_ocb/WEB/web_2_5.sh ");
-		String command = builder.append(username).append(' ').append(inputDataType).append(' ').append(periodType)
-				.append(' ').append(periodFrom).append(' ').append(periodTo).append(' ').append(extractionTarget)
-				.append(' ').append(filename).append(' ').append(extractionCond).toString();
+		String command = builder.append(username)
+				.append(' ').append(inputDataType)
+				.append(' ').append(periodType)
+				.append(' ').append(periodFrom)
+				.append(' ').append(periodTo)
+				.append(' ').append(extractionTarget)
+				.append(' ').append(filename)
+				.append(' ').append(extractionCond)
+				.append(' ').append(singleReq)
+				.toString();
 
 		log.info("execute ssh command: {}", command);
 

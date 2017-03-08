@@ -94,7 +94,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
                 $scope.checkUploadProgress();
                 $scope.uploaded = true;
                 $scope.disableUpload = true;
-                $scope.mbrId = null;
+                //$scope.mbrId = null;  //not clear for singleReq
             });
         };
 
@@ -134,6 +134,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
         // };
 
         $scope.sendPts = function (ptsMasking, ptsPrefix) {
+
             var modalInstance = $uibModal.open({
                 component: 'confirmPtsModal',
                 resolve: {
@@ -151,6 +152,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
             });
 
             modalInstance.result.then(function () {
+
                 $scope.sendPtsPromise = apiSvc.extractMemberInfo({
                     inputDataType: $scope.selectedOption.value,
                     extractionCond: $scope.selectedOption4.value,
@@ -158,7 +160,8 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
                     periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
                     periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd'),
                     ptsMasking: ptsMasking,
-                    ptsPrefix: ptsPrefix
+                    ptsPrefix: ptsPrefix,
+                    singleReq: $scope.mbrId ? $scope.mbrId : 'N'
                 });
 
                 $scope.sendPtsPromise.then(function () {
@@ -176,6 +179,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
 
         authSvc.getUserInfo().then(function (userInfo) {
             $scope.ptsUsername = userInfo.ptsUsername;
+            $scope.maskingAuth = userInfo.maskingYn;
         });
 
         $scope.changeColumnVisible = function () {

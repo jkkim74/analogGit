@@ -179,7 +179,8 @@ angular.module('app').controller('PAN0107Ctrl', ['$scope', '$q', '$http', '$time
 
         authSvc.getUserInfo().then(function (userInfo) {
             $scope.ptsUsername = userInfo.ptsUsername;
-        });         
+            $scope.maskingAuth = userInfo.maskingYn;
+        });
 
         // 거래내역 조회
         // $scope.searchTransactionHistory = function () {
