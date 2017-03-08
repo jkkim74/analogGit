@@ -60,15 +60,19 @@ public abstract class CsvCreatorTemplate<T> {
 
 				while (list != null && !list.isEmpty()) {
 					// 각 행을 파일에 쓰기
+					System.out.println("step1");
 					for (T t : list) {
 						printRecord(printer, t);
 					}
 
+					System.out.println("step2");
 					if (once) {
 						break;
 					}
 					offset += limit;
 					list = nextList(offset, limit);
+
+					System.out.println("step3");
 				}
 			}
 		} catch (IOException e) {
