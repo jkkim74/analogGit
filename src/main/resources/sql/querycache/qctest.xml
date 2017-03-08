@@ -118,17 +118,17 @@
         ON A.mcnt_cd = E.mcnt_cd
         left outer join ocb.dw_cpn_prd_mst f
         on a.cpn_prd_cd = f.cpn_prd_cd
-        left outer join (select dtl_cd, dtl_cd_nm from dw_ocb_intg_cd where domn_id = 'card_dtl_grp_cd') g
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'card_dtl_grp_cd') g
         on a.card_dtl_grp_cd = g.dtl_cd
-        left outer join (select dtl_cd, dtl_cd_nm from dw_ocb_intg_cd where domn_id = 'pnt_knd_cd') h
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'pnt_knd_cd') h
         on a.pnt_knd_cd = h.dtl_cd
-        left outer join (select dtl_cd, dtl_cd_nm from dw_ocb_intg_cd where domn_id = 'slip_cd') i
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'slip_cd') i
         on a.slip_cd = i.dtl_cd
-        left outer join (select dtl_cd, dtl_cd_nm from dw_ocb_intg_cd where domn_id = 'pmnt_way_cd') j
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'pmnt_way_cd') j
         on a.pmnt_way_cd = j.dtl_cd
-        left outer join (select dtl_cd, dtl_cd_nm from dw_ocb_intg_cd where domn_id = 'org_cd') k
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'org_cd') k
         on a.org_cd = k.dtl_cd
-        left outer join (select dtl_cd, dtl_cd_nm from dw_ocb_intg_cd where domn_id = 'car_oil_prdct_sgrp_cd') l
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'car_oil_prdct_sgrp_cd') l
         on a.oil_prdct_sgrp_cd = l.dtl_cd
     </select>
 
