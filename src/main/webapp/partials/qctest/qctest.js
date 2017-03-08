@@ -1,17 +1,12 @@
 'use strict';
 
-angular.module('app').controller('QCTESTCtrl', ['$scope', '$q', '$http', '$timeout', '$filter', 'uiGridConstants', 'apiSvc', 'authSvc',
-    function ($scope, $q, $http, $timeout, $filter, uiGridConstants, apiSvc, authSvc) {
+angular.module('app').controller('QCTESTCtrl', ['$scope', '$q', '$http', '$timeout', 'uiGridConstants', 'apiSvc', 'authSvc',
+    function ($scope, $q, $http, $timeout, uiGridConstants, apiSvc, authSvc) {
 
         authSvc.getUserInfo().then(function (userInfo) {
             $scope.ptsUsername = userInfo.ptsUsername;
             $scope.maskingAuth = userInfo.maskingYn;
         });
-
-        $scope.isPtsDisabled = function () {
-            return !$scope.ptsUsername
-        };
-
 
         $scope.qcObject = {
             memberId: null,
@@ -20,6 +15,33 @@ angular.module('app').controller('QCTESTCtrl', ['$scope', '$q', '$http', '$timeo
             periodType: null,
             periodFrom: null,
             periodTo: null
+        };
+
+        $scope.qcObjectClear= function() {
+            $scope.qcObject.memberId = null;
+            $scope.qcObject.extractTarget = null;
+            $scope.qcObject.extractCond = null;
+            $scope.qcObject.periodType = null;
+            $scope.qcObject.periodFrom = null;
+            $scope.qcObject.periodTo= null;
+        };
+
+        $scope.qcObjectSample1 = function() {
+            $scope.qcObject.memberId = 101700393;
+            $scope.qcObject.extractTarget = 'tr';
+            $scope.qcObject.extractCond = 't';
+            $scope.qcObject.periodType = 'sale_dt';
+            $scope.qcObject.periodFrom = '20160101';
+            $scope.qcObject.periodTo= '20170303';
+        };
+
+        $scope.qcObjectSample2= function() {
+            $scope.qcObject.memberId = 111854997;
+            $scope.qcObject.extractTarget = 'tr';
+            $scope.qcObject.extractCond = 't';
+            $scope.qcObject.periodType = 'sale_dt';
+            $scope.qcObject.periodFrom = '20120301';
+            $scope.qcObject.periodTo= '20170306';
         };
 
         $scope.gridOptionsQueryCacheTest = {
@@ -83,31 +105,32 @@ angular.module('app').controller('QCTESTCtrl', ['$scope', '$q', '$http', '$timeo
         //     $scope.transactionHistoryGridApi.grid.refresh();
         // };
 
-        $scope.searchQueryCacheTest = function () {
-            console.log('call::searchQueryCacheTest');
-            $scope.qcObject.periodFrom = $filter('date')($scope.qcObject.periodFrom, 'yyyyMMdd');
-            $scope.qcObject.periodTo = $filter('date')($scope.qcObject.periodTo, 'yyyyMMdd');
+        $scope.searchQcTest = function () {
+            console.log('call::searchQcTest');
             console.log($scope.qcObject);
-
             $scope.querycacheTestPromise = apiSvc.getQueryCacheTest($scope.qcObject);
             $scope.querycacheTestPromise.then(function (data) {
                 $scope.gridOptionsQueryCacheTest.data = data;
-                console.log(data);
             });
         };
 
         $scope.sendPts = function (ptsMasking, ptsPrefix) {
-            console.log('call::sendPts..QueryCacheTest');
-            $scope.qcObject.periodFrom = $filter('date')($scope.qcObject.periodFrom, 'yyyyMMdd');
-            $scope.qcObject.periodTo = $filter('date')($scope.qcObject.periodTo, 'yyyyMMdd');
+            console.log('call::sendPts in qctest page');
+            console.log($scope.qcObject);
             $scope.sendPtsPromise = apiSvc.sendPts({
                 ptsMasking: ptsMasking,
                 ptsPrefix: ptsPrefix,
-                //searchType: 'type',
-                //searchKeyword: 'key...',
                 options:$scope.qcObject
             });
         };
 
+        $scope.isPtsDisabled = function () {
+            return !($scope.qcObject.memberId
+                        && $scope.qcObject.extractTarget
+                        && $scope.qcObject.extractCond
+                        && $scope.qcObject.periodType
+                        && $scope.qcObject.periodFrom
+                        && $scope.qcObject.periodTo);
+        };
 
     }]);
