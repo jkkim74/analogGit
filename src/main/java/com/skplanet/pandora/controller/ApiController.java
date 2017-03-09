@@ -271,7 +271,7 @@ public class ApiController {
 
 	@PostMapping("/sendPts")
 	public ApiResponse sendPts(@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix,
-			@RequestParam String menuId, @RequestParam Map<String, Object> params) {
+					   @RequestParam String menuId, @RequestParam Map<String, Object> params) {
 
 		log.info("call::sendPts...");
 		log.info("ptsMasking={}, ptsPrefix={}, menuId={}, params={}", ptsMasking, ptsPrefix, menuId, params);
@@ -483,10 +483,12 @@ public class ApiController {
 				 */
 
 				log.info("case::QCTEST");
+				log.info("params={}", params);
 
 				List<AutoMap> rawList = querycacheRepository.selectQueryCache(params);
 				log.info("rawList size={}", rawList.size());
 
+				log.info("memberId={}",String.valueOf(params.get("memberId")));
 				String mbrKorNm = oracleRepository.selectMbrKorNm(String.valueOf(params.get("memberId")));
 				log.info("mbrKorNm={}", mbrKorNm);
 

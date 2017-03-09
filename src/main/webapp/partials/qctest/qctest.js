@@ -132,7 +132,12 @@ angular.module('app').controller('QCTESTCtrl', ['$scope', '$q', '$http', '$timeo
             $scope.sendPtsPromise = apiSvc.sendPts({
                 ptsMasking: ptsMasking,
                 ptsPrefix: ptsPrefix,
-                options:$scope.qcObject
+                memberId: $scope.qcObject.memberId,
+                extractTarget: $scope.qcObject.extractTarget,
+                extractCond: $scope.qcObject.extractCond,
+                periodType: $scope.qcObject.periodType,
+                periodFrom: $scope.qcObject.periodFrom,
+                periodTo: $scope.qcObject.periodTo
             });
         };
 
