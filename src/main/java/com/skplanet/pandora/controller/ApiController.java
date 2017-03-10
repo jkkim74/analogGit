@@ -60,7 +60,7 @@ public class ApiController {
 
 	@Autowired
 	private IdmsLogService idmsLogService;
-	
+
 	@Autowired
 	private ExcelService excelService;	
 	
@@ -470,51 +470,14 @@ public class ApiController {
 			}
 			case "QCTEST": {
 				/**
-				 * todo queryCache logic........
-				 * step0. check call count under 5times?
-				 * step1. load data
-				 * 			a. TR : from hive(queryCache)
-				 * 			b. member name : from oracle(jdbc)
-				 * step2. make list
-				 * 			a. TR
-				 * 			b. TR + member name
-				 * step3. send file to PTS
-				 *
+				 * todo check request count under 5 or not???
+				 * step1. load request count.
+				 * step2. under 5 or not?
+				 * step3. if under 5, call sendForSingleRequest
+				 * step4. if over 5, send message 'Your request count is over limit..!!!, just wait....'
 				 */
 
-				log.info("case::QCTEST");
-				log.info("params={}", params);
-
-				List<AutoMap> rawList = querycacheRepository.selectQueryCache(params);
-				log.info("rawList size={}", rawList.size());
-
-				log.info("memberId={}",String.valueOf(params.get("memberId")));
-				String mbrKorNm = oracleRepository.selectMbrKorNm(String.valueOf(params.get("memberId")));
-				log.info("mbrKorNm={}", mbrKorNm);
-
-				AutoMap hMap = new AutoMap();
-				String header[] = {"접수일자","승인일시","대표승인번호","승인번호","매출일시","회원ID","카드코드","카드코드명","카드번호","정산제휴사코드","정산제휴사명","정산가맹점코드","정산가맹점명","발생제휴사코드","발생제휴사명","발생가맹점코드","발생가맹점명","포인트종류코드","포인트종류명","전표코드","전표명","매출금액","포인트","제휴사연회비","수수료","지불수단코드","지불수단명","기관코드","기관명","유종코드","유종명","쿠폰코드","쿠폰명"};
-
-				for(int i=0; i<header.length; i++){
-					hMap.put(Integer.toString(i), header[i]);
-				}
-
-				List<AutoMap> resultList = new ArrayList();
-				resultList.add(hMap);
-				resultList.addAll(rawList);
-
-				StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
-						.append(Helper.nowDateTimeString()).append('_');
-				if (!StringUtils.isEmpty(ptsPrefix)) {
-					filename.append(ptsPrefix).append('-');
-				}
-
-				filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".xls");
-
-				Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
-				excelService.create(filePath, "거래실적 단건조회", resultList);
-
-				ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
+				transmissionService.sendForSingleRequst(username,ptsUsername,ptsPrefix,params);
 
 				break;
 			}
@@ -523,7 +486,11 @@ public class ApiController {
 				transmissionService.sendToPts(ptsUsername, ptsMasking, ptsPrefix, progress);
 				break;
 		}
-		return ApiResponse.builder().message("PTS 전송 성공").build();
+		if(!menuId.equals("QCTEST")){
+			return ApiResponse.builder().message("PTS 전송 성공").build();
+		}else{
+			return ApiResponse.builder().message("PTS전송되었습니다. (mail service is not yet.").build();
+		}
 	}
 
 	@PostMapping("/extractMemberInfo")
