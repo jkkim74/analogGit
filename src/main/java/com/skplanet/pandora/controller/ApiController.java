@@ -537,7 +537,6 @@ public class ApiController {
 		if(!menuId.equals("QCTEST")){
 			return ApiResponse.builder().message("PTS 전송 성공").build();
 		}else{
-//			return ApiResponse.builder().message("PTS전송되었습니다. 메일로 안내됩니다.").build();
 			return ApiResponse.builder().message("PTS전송되었습니다. (mail service is not yet.").build();
 		}
 	}
