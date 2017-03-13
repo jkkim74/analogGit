@@ -198,7 +198,11 @@ dtl_cd_nm5,
 oil_prdct_sgrp_cd,
 dtl_cd_nm6,
 cpn_prd_cd,
-prd_nm
+prd_nm,
+oriappr_dt,
+oriappr_no,
+cnsl_slip_tp_cd,
+cnsl_slip_tp_nm
 from MOCK_QC_TEST
 where mbr_id = #{memberId}
 	</select>
