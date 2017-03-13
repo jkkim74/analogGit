@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.web.repository.mysql.SingleReqRepository">
+
+
+	<select id="selectSingleReqProcessingCnt" parameterType="SingleReq" resultType="int">
+		SELECT count(*) processingCount
+		  FROM SINGLE_REQUEST_PROGRESS
+		 WHERE username = #{username}
+		   AND stauts = 'PROCESSING'
+	</select>
+
+	<select id="selectSingleRequestProgress" parameterType="SingleReq" resultType="SingleReq">
+		SELECT USERNAME
+			  ,MEMBER_ID
+			  ,EXTRACT_TARGET
+  			  ,EXTRACT_COND
+  			  ,PERIOD_TYPE
+  			  ,PERIOD_FROM
+  			  ,PERIOD_TO
+  			  ,STATUS
+  			  ,REQ_START_TIME
+  			  ,REQ_FINISH_TIME
+		 FROM SINGLE_REQUEST_PROGRESS
+		WHERE STATUS = 'PROCESSING'
+	</select>
+
+	<insert id="insertSingleRequestProgress" parameterType="SingleReq">
+		INSERT INTO SINGLE_REQUEST_PROGRESS (USERNAME ,MEMBER_ID ,EXTRACT_TARGET ,EXTRACT_COND ,PERIOD_TYPE ,PERIOD_FROM ,PERIOD_TO ,STATUS ,REQ_START_TIME)
+		VALUES (#{username} ,#{memberId} ,#{extractTarget} ,#{extractCond} ,#{periodType} ,#{periodFrom} ,#{periodTo} ,#{status} ,NOW())
+		<selectKey resultType="int" keyProperty="sn" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	<insert id="insertSingleRequestProgress" parameterType="SingleReq" databaseId="hsql">
+		INSERT INTO SINGLE_REQUEST_PROGRESS (USERNAME ,MEMBER_ID ,EXTRACT_TARGET ,EXTRACT_COND ,PERIOD_TYPE ,PERIOD_FROM ,PERIOD_TO ,STATUS ,REQ_START_TIME)
+		VALUES (#{username} ,#{memberId} ,#{extractTarget} ,#{extractCond} ,#{periodType} ,#{periodFrom} ,#{periodTo} ,#{status} ,NOW())
+		<selectKey resultType="int" keyProperty="sn" order="AFTER">
+			SELECT MAX(SN) FROM SINGLE_REQUEST_PROGRESS
+		</selectKey>
+	</insert>
+
+	<update id="updateSingleRequestProgress"></update>
+
+</mapper>

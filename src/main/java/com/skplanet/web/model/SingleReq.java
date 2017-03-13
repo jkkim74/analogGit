@@ -15,7 +15,7 @@ public class SingleReq implements Serializable {
     private static final long serialVersionUID = 10374769796287439L;
 
     private long sn;
-    private String userName;
+    private String username;
     private String memberId;
     private String extractTarget;
     private String extractCond;

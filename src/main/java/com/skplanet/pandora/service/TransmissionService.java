@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
+import com.skplanet.web.model.SingleReq;
+import com.skplanet.web.repository.mysql.SingleReqRepository;
 import com.skplanet.web.service.*;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ public class TransmissionService {
 
 	@Autowired
 	private QueryCacheRepository querycacheRepository;
+
+	@Autowired
+	private SingleReqRepository singleReqRepository;
 
 	@Autowired
 	private PtsService ptsService;
@@ -224,10 +229,25 @@ public class TransmissionService {
 		 * step3. send file to PTS
 		 * step4. send to complete notification mail.
 		 */
-
 		params.put("userName",username);
 		log.info("case::QCTEST");
 		log.info("params={}", params);
+
+		SingleReq singleReq = new SingleReq();
+		singleReq.setUsername(String.valueOf(params.get("userName")));
+		singleReq.setMemberId(String.valueOf(params.get("memberId")));
+		singleReq.setExtractTarget(String.valueOf(params.get("extractTarget")));
+		singleReq.setExtractCond(String.valueOf(params.get("extractCond")));
+		singleReq.setPeriodType(String.valueOf(params.get("periodType")));
+		singleReq.setPeriodFrom(String.valueOf(params.get("periodFrom")));
+		singleReq.setPeriodTo(String.valueOf(params.get("periodTo")));
+		singleReq.setStatus(ProgressStatus.PROCESSING);
+
+		int curSn = singleReqRepository.insertSingleRequestProgress(singleReq);
+		log.info("current insert SN={}",curSn);
+
+		List<SingleReq> singleReqList = singleReqRepository.selectSingleRequestProgress(singleReq);
+		log.info("select singleReq list={}", singleReqList);
 
 		List<AutoMap> rawList = querycacheRepository.selectQueryCache(params);
 		log.info("rawList size={}", rawList.size());
