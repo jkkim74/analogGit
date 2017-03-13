@@ -4,16 +4,25 @@
 
 	<select id="selectQueryCache" parameterType="map" resultType="AutoMap">
         SELECT
-        A.rcv_dt AS rcv_dt,     --접수일자
-        A.appr_dttm AS appr_dttm,       --승인일시
-        A.rep_appr_no AS rep_appr_no,   --대표승인번호
-        A.appr_no AS appr_no,   --승인번호
-        A.sale_dttm AS sale_dttm,       --매출일시
-        A.mbr_id AS mbr_id,     --회원ID
-        A.card_dtl_grp_cd AS card_dtl_grp_cd,   --카드코드
-        G.dtl_cd_nm AS dtl_cd_nm,       --카드코드명
-        A.card_no AS card_no,   --카드번호
-        A.stlmt_alcmpn_cd AS stlmt_alcmpn_cd,   --정산제휴사코드
+        A.rcv_dt AS rcv_dt,                     -- 접수일자
+        A.appr_dttm AS appr_dttm,               -- 승인일시
+        A.rep_appr_no AS rep_appr_no,           -- 대표승인번호
+        A.appr_no AS appr_no,                   -- 승인번호
+        A.sale_dttm AS sale_dttm,               -- 매출일시
+        A.mbr_id AS mbr_id,                     -- 회원ID
+        A.card_dtl_grp_cd AS card_dtl_grp_cd,   -- 카드코드
+        G.dtl_cd_nm AS dtl_cd_nm,               -- 카드코드명
+        <choose>
+          <when test="MaskingVal == 'TMP'">
+            A.card_no AS card_no,               -- 카드번호
+          </when>
+          <otherwise>
+            case when A.card_no is null then A.card_no
+                 else concat(substring(A.card_no,1,LENGTH(A.card_no)-8) , '****', substring(A.card_no,LENGTH(A.card_no)-3,4) )
+            end AS card_no
+          </otherwise>
+		</choose>
+		A.stlmt_alcmpn_cd AS stlmt_alcmpn_cd,   --정산제휴사코드
         B.alcmpn_nm AS alcmpn_nm,       --정산제휴사명
         A.stlmt_mcnt_cd AS stlmt_mcnt_cd,       --정산가맹점코드
         C.mcnt_nm AS mcnt_nm,   --정산가맹점명
