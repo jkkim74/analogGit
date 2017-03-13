@@ -225,6 +225,7 @@ public class TransmissionService {
 		 * step4. send to complete notification mail.
 		 */
 
+		params.put("userName",username);
 		log.info("case::QCTEST");
 		log.info("params={}", params);
 
@@ -232,7 +233,7 @@ public class TransmissionService {
 		log.info("rawList size={}", rawList.size());
 
 		log.info("memberId={}",String.valueOf(params.get("memberId")));
-		String mbrKorNm = oracleRepository.selectMbrKorNm(String.valueOf(params.get("memberId")));
+		String mbrKorNm = oracleRepository.selectMbrKorNmQc(params);
 		log.info("mbrKorNm={}", mbrKorNm);
 
 		AutoMap hMap = new AutoMap();

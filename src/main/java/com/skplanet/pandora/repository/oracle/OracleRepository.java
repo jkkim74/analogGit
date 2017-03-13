@@ -21,6 +21,8 @@ public interface OracleRepository {
 
 	String selectMbrKorNm(String mbrId);
 
+	String selectMbrKorNmQc(Map<String, Object> params);
+
 	List<AutoMap> selectMemberInfo(Map<String, Object> params);
 
 	List<AutoMap> selectJoinInfo(Map<String, Object> params);

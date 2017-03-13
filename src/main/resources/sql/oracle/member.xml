@@ -89,4 +89,27 @@
 		)
 	</select>
 
+	<select id="selectMbrKorNmQc" parameterType="map" resultType="string">
+		<choose>
+			<when test="ptsMasking == 'true'">
+				SELECT DECODE(MBR_KOR_NM,NULL,MBR_KOR_NM,SUBSTR(MBR_KOR_NM,1,LENGTH(MBR_KOR_NM)-2)||'*'||SUBSTR(MBR_KOR_NM,LENGTH(MBR_KOR_NM),1)) AS MBR_KOR_NM
+			</when>
+			<otherwise>
+				SELECT MBR_KOR_NM
+			</otherwise>
+		</choose>
+		FROM MART_MBR_ID_MST WHERE MBR_ID = #{memberId}
+	</select>
+
+	<select id="selectMbrKorNmQc" parameterType="map" resultType="string" databaseId="hsql">
+		<choose>
+			<when test="ptsMasking == 'true'">
+				SELECT DECODE(MBR_KOR_NM,NULL,MBR_KOR_NM,SUBSTR(MBR_KOR_NM,1,LENGTH(MBR_KOR_NM)-2)||'*'||SUBSTR(MBR_KOR_NM,LENGTH(MBR_KOR_NM),1)) AS MBR_KOR_NM
+			</when>
+			<otherwise>
+				SELECT MBR_KOR_NM
+			</otherwise>
+		</choose>
+		FROM MART_MBR_ID_MST WHERE MBR_ID = #{memberId}
+	</select>
 </mapper>
