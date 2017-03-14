@@ -247,7 +247,7 @@ public class TransmissionService {
 			log.info("singleReqParam1={}",singleReqParam);
 
 			String mbrKorNm = oracleRepository.selectMbrKorNmQc(singleReqParam);
-			singleReqParam.setMemberKorNM(mbrKorNm);
+			singleReqParam.setMemberKorNm(((mbrKorNm==null)||(mbrKorNm.length()==0))?"결과없음":mbrKorNm);
 			log.info("singleReqParam2={}",singleReqParam);
 
 			curSn = singleReqRepository.insertSingleRequestProgress(singleReqParam);

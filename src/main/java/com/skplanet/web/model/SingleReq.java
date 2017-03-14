@@ -29,6 +29,6 @@ public class SingleReq implements Serializable {
     private String ptsMasking;
     private String ptsPrefix;
     private String menuId;
-    private String memberKorNM;
+    private String memberKorNm;
 
 }
