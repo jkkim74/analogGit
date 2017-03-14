@@ -45,13 +45,13 @@
 		</selectKey>
 	</insert>
 
-	<update id="updateSingleRequestProgress" parameterType="SingleReq">
+	<update id="updateSingleRequestProgress" parameterType="map">
 		UPDATE SINGLE_REQUEST_PROGRESS SET
 			STATUS = #{status},
 			REQ_FINISH_TIME = now()
 		WHERE SN = #{sn}
 	</update>
-	<update id="updateSingleRequestProgress" parameterType="SingleReq" databaseId="hsql">
+	<update id="updateSingleRequestProgress" parameterType="map" databaseId="hsql">
 		UPDATE SINGLE_REQUEST_PROGRESS SET
 			STATUS = #{status},
 			REQ_FINISH_TIME = now()

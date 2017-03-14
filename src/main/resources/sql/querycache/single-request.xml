@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.pandora.repository.querycache.QueryCacheRepository">
 
-	<select id="selectQueryCache" parameterType="map" resultType="AutoMap">
+	<select id="selectTrSingleRequest" parameterType="map" resultType="AutoMap">
         SELECT
         A.rcv_dt AS rcv_dt,                     -- 접수일자
         A.appr_dttm AS appr_dttm,               -- 승인일시
@@ -13,13 +13,13 @@
         A.card_dtl_grp_cd AS card_dtl_grp_cd,   -- 카드코드
         G.dtl_cd_nm AS dtl_cd_nm,               -- 카드코드명
         <choose>
-          <when test="MaskingVal == 'TMP'">
-            A.card_no AS card_no,               -- 카드번호
-          </when>
-          <otherwise>
+          <when test="ptsMasking == 'ture'">
             case when A.card_no is null then A.card_no
                  else concat(substring(A.card_no,1,LENGTH(A.card_no)-8) , '****', substring(A.card_no,LENGTH(A.card_no)-3,4) )
             end AS card_no
+          </when>
+          <otherwise>
+            A.card_no AS card_no,               -- 카드번호
           </otherwise>
 		</choose>
 		A.stlmt_alcmpn_cd AS stlmt_alcmpn_cd,   -- 정산제휴사코드
@@ -51,7 +51,7 @@
         A.cncl_slip_tp_cd AS cncl_slip_tp_cd, -- 취소전표유형코드
         M.dtl_cd_nm AS cncl_slip_tp_nm  -- 취소전표유형명
         <if test="extractTarget!= null and extractTarget == 'tr_mbrKorNm'">
-                ,#{memberKorNm} AS memberKorNm -- 한글이름
+          ,#{memberKorNm} AS memberKorNm -- 한글이름
         </if>
         FROM   (SELECT A.rcv_dt
         , Concat(A.appr_dt, ' ', A.appr_tm) AS appr_dttm
@@ -186,7 +186,7 @@
 
     </select>
 
-	<select id="selectQueryCache" parameterType="map" resultType="AutoMap" databaseId="hsql">
+	<select id="selectTrSingleRequest" parameterType="map" resultType="AutoMap" databaseId="hsql">
 SELECT
 rcv_dt,
 appr_dttm,

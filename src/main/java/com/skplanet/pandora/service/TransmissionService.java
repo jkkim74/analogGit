@@ -217,15 +217,11 @@ public class TransmissionService {
 	}
 
 	@Async
-	public void sendForSingleRequst(String username, String ptsUsername, String ptsPrefix, Map<String, Object> params){
+	public void sendForSingleRequst(String username, String emailAddr, String ptsUsername, String ptsPrefix, Map<String, Object> params){
 
 		/**
 		 * step1. load data
-		 * 			a. TR : from hive(queryCache)
-		 * 			b. member name : from oracle(jdbc)
 		 * step2. make list
-		 * 			a. TR
-		 * 			b. TR + member name
 		 * step3. send file to PTS
 		 * step4. send to complete notification mail.
 		 */
@@ -256,15 +252,12 @@ public class TransmissionService {
 
 			curSn = singleReqRepository.insertSingleRequestProgress(singleReqParam);
 			log.info("current insert SN={}", curSn);
-			singleReqParam.setSn(curSn);
-			log.info("singleReqParam3={}",singleReqParam);
 
-			List<SingleReq> singleReqList = singleReqRepository.selectSingleRequestProgress(singleReqParam);
-			log.info("select singleReq list={}", singleReqList);
+//			List<SingleReq> singleReqList = singleReqRepository.selectSingleRequestProgress(singleReqParam);
+//			log.info("select singleReq list={}", singleReqList);
 
-			List<AutoMap> rawList = querycacheRepository.selectQueryCache(params);
+			List<AutoMap> rawList = querycacheRepository.selectTrSingleRequest(params);
 			log.info("rawList size={}", rawList.size());
-
 
 			AutoMap hMap = new AutoMap();
 			String header[] = {"접수일자", "승인일시", "대표승인번호", "승인번호", "매출일시", "회원ID"
@@ -277,9 +270,9 @@ public class TransmissionService {
 			for (int i = 0; i < header.length; i++) {
 				hMap.put(Integer.toString(i), header[i]);
 			}
-			//헤더추가
+			//add header '고객성명' if extractTarget is tr_mbrKorNm
 			if(singleReqParam.getExtractTarget().equals("tr_mbrKorNm")){
-				hMap.put(Integer.toString(header.length), "고객이름");
+				hMap.put(Integer.toString(header.length), "고객성명");
 			}
 
 			List<AutoMap> resultList = new ArrayList();
@@ -299,12 +292,15 @@ public class TransmissionService {
 
 			ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
 
-			singleReqParam.setStatus(ProgressStatus.FINISHED);
-			singleReqRepository.updateSingleRequestProgress(singleReqParam);
+			singleReqRepository.updateSingleRequestProgress(ProgressStatus.FINISHED, curSn);
+
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("filename", filename);
+			mailService.sendAsTo("pan0105.vm", map, "거래실적 및 유실적 고객 단건 추출완료 안내", emailAddr);
 
 		} catch (Exception e) {
+			singleReqRepository.updateSingleRequestProgress(ProgressStatus.FAILED, curSn);
 			throw new BizException("Failed to call sendForSingleRequest", e);
-			//todo need to check FAIL process
 		}
 
 	}

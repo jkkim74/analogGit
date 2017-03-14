@@ -21,6 +21,6 @@ public interface QueryCacheRepository {
 
 	List<AutoMap> selectAppPushHistory(@Param("mbrId") String mbrId);
 
-	List<AutoMap> selectQueryCache(Map<String, Object> params);
+	List<AutoMap> selectTrSingleRequest(Map<String, Object> params);
 
 }

@@ -253,7 +253,7 @@ public class ApiController {
 		log.info("params={}", params);
 
 //		String mbrId = oracleRepository.selectMbrId(params);
-		List<AutoMap> list = querycacheRepository.selectQueryCache(params);
+		List<AutoMap> list = querycacheRepository.selectTrSingleRequest(params);
 		log.info("list={}", list);
 
 //		String mbrId = String.valueOf(params.get("memberId"));
@@ -475,9 +475,9 @@ public class ApiController {
 				 */
 				int currentReqCall = singleReqRepository.selectSingleReqProcessingCnt(username);
 				log.info("Current Request Call={}", currentReqCall);
-				if( currentReqCall < Constant.MAX_SINGLE_REQUEST_CALL){
-					transmissionService.sendForSingleRequst(username,ptsUsername,ptsPrefix,params);
-				}else{
+				if( currentReqCall < Constant.MAX_SINGLE_REQUEST_CALL) {
+					transmissionService.sendForSingleRequst(username, Helper.currentUser().getEmailAddr(), ptsUsername, ptsPrefix, params);
+				} else {
 					return ApiResponse.builder().message("현재 5건이 요청중에 있습니다..").build();
 				}
 
@@ -491,7 +491,7 @@ public class ApiController {
 		if(!menuId.equals("QCTEST")){
 			return ApiResponse.builder().message("PTS 전송 성공").build();
 		}else{
-			return ApiResponse.builder().message("PTS전송되었습니다. (mail service is not yet.").build();
+			return ApiResponse.builder().message("PTS전송되었습니다. 메일로 안내됩니다.").build();
 		}
 	}
 
