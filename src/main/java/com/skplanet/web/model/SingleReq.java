@@ -17,7 +17,7 @@ public class SingleReq implements Serializable {
     private long sn;
     private String username;
     private String memberId;
-    private String extractTarget;
+    private String extractTarget;   //tr, tr_mbrKorNm, mbrId
     private String extractCond;
     private String periodType;
     private String periodFrom;
@@ -25,4 +25,10 @@ public class SingleReq implements Serializable {
     private ProgressStatus status;  //PROCESSING, FINISHED, FAILED
     private Date reqStartTime;
     private Date reqFinishTime;
+
+    private String ptsMasking;
+    private String ptsPrefix;
+    private String menuId;
+    private String memberKorNM;
+
 }

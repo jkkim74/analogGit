@@ -50,6 +50,9 @@
         A.oriappr_no AS oriappr_no,   -- 원승인번호
         A.cncl_slip_tp_cd AS cncl_slip_tp_cd, -- 취소전표유형코드
         M.dtl_cd_nm AS cncl_slip_tp_nm  -- 취소전표유형명
+        <if test="extractTarget!= null and extractTarget == 'tr_mbrKorNm'">
+                ,#{memberKorNm} AS memberKorNm -- 한글이름
+        </if>
         FROM   (SELECT A.rcv_dt
         , Concat(A.appr_dt, ' ', A.appr_tm) AS appr_dttm
         , A.rep_appr_no
@@ -222,6 +225,9 @@ oriappr_dt,
 oriappr_no,
 cnsl_slip_tp_cd,
 cnsl_slip_tp_nm
+<if test="extractTarget!= null and extractTarget == 'tr_mbrKorNm'">
+,#{memberKorNm} AS memberKorNm -- 한글이름
+</if>
 from MOCK_QC_TEST
 where mbr_id = #{memberId}
 	</select>

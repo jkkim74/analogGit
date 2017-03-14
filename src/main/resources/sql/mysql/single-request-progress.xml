@@ -2,12 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.web.repository.mysql.SingleReqRepository">
 
-
-	<select id="selectSingleReqProcessingCnt" parameterType="SingleReq" resultType="int">
+	<select id="selectSingleReqProcessingCnt" parameterType="map" resultType="int">
 		SELECT count(*) processingCount
 		  FROM SINGLE_REQUEST_PROGRESS
 		 WHERE username = #{username}
-		   AND stauts = 'PROCESSING'
+		   AND STATUS = 'PROCESSING'
+	</select>
+	<select id="selectSingleReqProcessingCnt" parameterType="map" resultType="int" databaseId="hsql">
+		SELECT count(*) processingCount
+		  FROM SINGLE_REQUEST_PROGRESS
+		 WHERE username = #{username}
+		   AND STATUS = 'PROCESSING'
 	</select>
 
 	<select id="selectSingleRequestProgress" parameterType="SingleReq" resultType="SingleReq">
@@ -40,6 +45,17 @@
 		</selectKey>
 	</insert>
 
-	<update id="updateSingleRequestProgress"></update>
+	<update id="updateSingleRequestProgress" parameterType="SingleReq">
+		UPDATE SINGLE_REQUEST_PROGRESS SET
+			STATUS = #{status},
+			REQ_FINISH_TIME = now()
+		WHERE SN = #{sn}
+	</update>
+	<update id="updateSingleRequestProgress" parameterType="SingleReq" databaseId="hsql">
+		UPDATE SINGLE_REQUEST_PROGRESS SET
+			STATUS = #{status},
+			REQ_FINISH_TIME = now()
+		WHERE SN = #{sn}
+	</update>
 
 </mapper>

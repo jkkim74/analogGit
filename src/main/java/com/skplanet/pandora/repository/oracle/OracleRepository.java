@@ -3,6 +3,7 @@ package com.skplanet.pandora.repository.oracle;
 import java.util.List;
 import java.util.Map;
 
+import com.skplanet.web.model.SingleReq;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +22,7 @@ public interface OracleRepository {
 
 	String selectMbrKorNm(String mbrId);
 
-	String selectMbrKorNmQc(Map<String, Object> params);
+	String selectMbrKorNmQc(SingleReq singleReq);
 
 	List<AutoMap> selectMemberInfo(Map<String, Object> params);
 

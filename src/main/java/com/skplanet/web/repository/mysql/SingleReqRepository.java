@@ -1,6 +1,7 @@
 package com.skplanet.web.repository.mysql;
 
 import com.skplanet.web.model.SingleReq;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public interface SingleReqRepository {
 
     int insertSingleRequestProgress(SingleReq singleReq);
 
-    int selectSingleReqProcessingCnt(SingleReq singleReq);
+    int selectSingleReqProcessingCnt(@Param("username")String username);
 
+    void updateSingleRequestProgress(SingleReq singleReq);
 }

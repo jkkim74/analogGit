@@ -1,23 +1,5 @@
 package com.skplanet.pandora.controller;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.batch.core.JobParameters;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
@@ -27,6 +9,7 @@ import com.skplanet.web.model.ApiResponse;
 import com.skplanet.web.model.AutoMap;
 import com.skplanet.web.model.MenuProgress;
 import com.skplanet.web.model.ProgressStatus;
+import com.skplanet.web.repository.mysql.SingleReqRepository;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.security.UserInfo;
 import com.skplanet.web.service.ExcelService;
@@ -35,8 +18,19 @@ import com.skplanet.web.service.PtsService;
 import com.skplanet.web.service.UploadService;
 import com.skplanet.web.util.Constant;
 import com.skplanet.web.util.Helper;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api")
@@ -48,6 +42,9 @@ public class ApiController {
 
 	@Autowired
 	private QueryCacheRepository querycacheRepository;
+
+	@Autowired
+	private SingleReqRepository singleReqRepository;
 
 	@Autowired
 	private UploadTempRepository uploadTempRepository;
@@ -259,10 +256,9 @@ public class ApiController {
 		List<AutoMap> list = querycacheRepository.selectQueryCache(params);
 		log.info("list={}", list);
 
-		String username = Helper.currentUser().getUsername();
-		String mbrId = String.valueOf(params.get("memberId"));
-		String mbrKorNm = oracleRepository.selectMbrKorNmQc(params);
-		log.info("username={}, mbrId={}, mbrKorNm={}", username, mbrId, mbrKorNm);
+//		String mbrId = String.valueOf(params.get("memberId"));
+//		String mbrKorNm = oracleRepository.selectMbrKorNmQc(params);
+//		log.info("username={}, mbrId={}, mbrKorNm={}", username, mbrId, mbrKorNm);
 //		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
 //				(String) params.get("menuId"), 1);
 
@@ -477,8 +473,13 @@ public class ApiController {
 				 * step3. if under 5, call sendForSingleRequest
 				 * step4. if over 5, send message 'Your request count is over limit..!!!, just wait....'
 				 */
-
-				transmissionService.sendForSingleRequst(username,ptsUsername,ptsPrefix,params);
+				int currentReqCall = singleReqRepository.selectSingleReqProcessingCnt(username);
+				log.info("Current Request Call={}", currentReqCall);
+				if( currentReqCall < Constant.MAX_SINGLE_REQUEST_CALL){
+					transmissionService.sendForSingleRequst(username,ptsUsername,ptsPrefix,params);
+				}else{
+					return ApiResponse.builder().message("현재 5건이 요청중에 있습니다..").build();
+				}
 
 				break;
 			}
