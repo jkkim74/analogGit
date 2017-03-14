@@ -298,7 +298,8 @@ public class TransmissionService {
 			singleReqRepository.updateSingleRequestProgress(ProgressStatus.FINISHED, curSn);
 
 			HashMap<String, Object> map = new HashMap<>();
-			map.put("filename", filename);
+			String tmpFilename = filename.toString();
+			map.put("filename", tmpFilename.substring(tmpFilename.lastIndexOf('_') + 1));
 			mailService.sendAsTo("pan0105.vm", map, "거래실적 및 유실적 고객 단건 추출완료 안내", emailAddr);
 
 		} catch (Exception e) {
