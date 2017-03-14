@@ -13,7 +13,7 @@
         A.card_dtl_grp_cd AS card_dtl_grp_cd,   -- 카드코드
         G.dtl_cd_nm AS dtl_cd_nm,               -- 카드코드명
         <choose>
-          <when test="ptsMasking == 'ture'">
+          <when test="ptsMasking == 'true'">
             case when A.card_no is null then A.card_no
                  else concat(substring(A.card_no,1,LENGTH(A.card_no)-8) , '****', substring(A.card_no,LENGTH(A.card_no)-3,4) )
             end AS card_no

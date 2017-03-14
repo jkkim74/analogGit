@@ -252,6 +252,9 @@ public class TransmissionService {
 
 			curSn = singleReqRepository.insertSingleRequestProgress(singleReqParam);
 			log.info("current insert SN={}", curSn);
+			log.info("current insert SN(singleReqParam.getSn())={}", singleReqParam.getSn());
+			curSn = singleReqParam.getSn();
+			log.info("current SN={}", curSn);
 
 //			List<SingleReq> singleReqList = singleReqRepository.selectSingleRequestProgress(singleReqParam);
 //			log.info("select singleReq list={}", singleReqList);
@@ -265,14 +268,14 @@ public class TransmissionService {
 							, "정산가맹점명", "발생제휴사코드", "발생제휴사명", "발생가맹점코드", "발생가맹점명", "포인트종류코드"
 							, "포인트종류명", "전표코드", "전표명", "매출금액", "포인트", "제휴사연회비"
 							, "수수료", "지불수단코드", "지불수단명", "기관코드", "기관명", "유종코드"
-							, "유종명", "쿠폰코드", "쿠폰명"};
+							, "유종명", "쿠폰코드", "쿠폰명", "원승인일자", "원승인번호", "취소전표유형코드", "취소전표유형명"};
 
 			for (int i = 0; i < header.length; i++) {
 				hMap.put(Integer.toString(i), header[i]);
 			}
 			//add header '고객성명' if extractTarget is tr_mbrKorNm
 			if(singleReqParam.getExtractTarget().equals("tr_mbrKorNm")){
-				hMap.put(Integer.toString(header.length), "고객성명");
+				hMap.put(Integer.toString(header.length), "회원한글명");
 			}
 
 			List<AutoMap> resultList = new ArrayList();
