@@ -1,23 +1,5 @@
 package com.skplanet.pandora.controller;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.batch.core.JobParameters;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.skplanet.pandora.model.TransmissionType;
 import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
@@ -27,6 +9,7 @@ import com.skplanet.web.model.ApiResponse;
 import com.skplanet.web.model.AutoMap;
 import com.skplanet.web.model.MenuProgress;
 import com.skplanet.web.model.ProgressStatus;
+import com.skplanet.web.repository.mysql.SingleReqRepository;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.security.UserInfo;
 import com.skplanet.web.service.ExcelService;
@@ -35,8 +18,19 @@ import com.skplanet.web.service.PtsService;
 import com.skplanet.web.service.UploadService;
 import com.skplanet.web.util.Constant;
 import com.skplanet.web.util.Helper;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api")
@@ -48,6 +42,9 @@ public class ApiController {
 
 	@Autowired
 	private QueryCacheRepository querycacheRepository;
+
+	@Autowired
+	private SingleReqRepository singleReqRepository;
 
 	@Autowired
 	private UploadTempRepository uploadTempRepository;
@@ -259,10 +256,9 @@ public class ApiController {
 		List<AutoMap> list = querycacheRepository.selectQueryCache(params);
 		log.info("list={}", list);
 
-		String username = Helper.currentUser().getUsername();
-		String mbrId = String.valueOf(params.get("memberId"));
-		String mbrKorNm = oracleRepository.selectMbrKorNm(mbrId);
-		log.info("username={}, mbrId={}, mbrKorNm={}", username, mbrId, mbrKorNm);
+//		String mbrId = String.valueOf(params.get("memberId"));
+//		String mbrKorNm = oracleRepository.selectMbrKorNmQc(params);
+//		log.info("username={}, mbrId={}, mbrKorNm={}", username, mbrId, mbrKorNm);
 //		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
 //				(String) params.get("menuId"), 1);
 
@@ -469,53 +465,6 @@ public class ApiController {
 				break;
 			}
 			case "QCTEST": {
-//				/**
-//				 * todo queryCache logic........
-//				 * step0. check call count under 5times?
-//				 * step1. load data
-//				 * 			a. TR : from hive(queryCache)
-//				 * 			b. member name : from oracle(jdbc)
-//				 * step2. make list
-//				 * 			a. TR
-//				 * 			b. TR + member name
-//				 * step3. send file to PTS
-//				 *
-//				 */
-//
-//				log.info("case::QCTEST");
-//				log.info("params={}", params);
-//
-//				List<AutoMap> rawList = querycacheRepository.selectQueryCache(params);
-//				log.info("rawList size={}", rawList.size());
-//
-//				log.info("memberId={}",String.valueOf(params.get("memberId")));
-//				String mbrKorNm = oracleRepository.selectMbrKorNm(String.valueOf(params.get("memberId")));
-//				log.info("mbrKorNm={}", mbrKorNm);
-//
-//				AutoMap hMap = new AutoMap();
-//				String header[] = {"접수일자","승인일시","대표승인번호","승인번호","매출일시","회원ID","카드코드","카드코드명","카드번호","정산제휴사코드","정산제휴사명","정산가맹점코드","정산가맹점명","발생제휴사코드","발생제휴사명","발생가맹점코드","발생가맹점명","포인트종류코드","포인트종류명","전표코드","전표명","매출금액","포인트","제휴사연회비","수수료","지불수단코드","지불수단명","기관코드","기관명","유종코드","유종명","쿠폰코드","쿠폰명"};
-//
-//				for(int i=0; i<header.length; i++){
-//					hMap.put(Integer.toString(i), header[i]);
-//				}
-//
-//				List<AutoMap> resultList = new ArrayList();
-//				resultList.add(hMap);
-//				resultList.addAll(rawList);
-//
-//				StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
-//						.append(Helper.nowDateTimeString()).append('_');
-//				if (!StringUtils.isEmpty(ptsPrefix)) {
-//					filename.append(ptsPrefix).append('-');
-//				}
-//
-//				filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".xls");
-//
-//				Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
-//				excelService.create(filePath, "거래실적 단건조회", resultList);
-//
-//				ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
-//
 
 				/**
 				 * todo check request count under 5 or not???
@@ -524,8 +473,13 @@ public class ApiController {
 				 * step3. if under 5, call sendForSingleRequest
 				 * step4. if over 5, send message 'Your request count is over limit..!!!, just wait....'
 				 */
-
-				transmissionService.sendForSingleRequst(username,ptsUsername,ptsPrefix,params);
+				int currentReqCall = singleReqRepository.selectSingleReqProcessingCnt(username);
+				log.info("Current Request Call={}", currentReqCall);
+				if( currentReqCall < Constant.MAX_SINGLE_REQUEST_CALL){
+					transmissionService.sendForSingleRequst(username,ptsUsername,ptsPrefix,params);
+				}else{
+					return ApiResponse.builder().message("현재 5건이 요청중에 있습니다..").build();
+				}
 
 				break;
 			}

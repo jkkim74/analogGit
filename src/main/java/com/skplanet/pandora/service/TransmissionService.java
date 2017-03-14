@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
+import com.skplanet.web.model.SingleReq;
+import com.skplanet.web.repository.mysql.SingleReqRepository;
 import com.skplanet.web.service.*;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ public class TransmissionService {
 
 	@Autowired
 	private QueryCacheRepository querycacheRepository;
+
+	@Autowired
+	private SingleReqRepository singleReqRepository;
 
 	@Autowired
 	private PtsService ptsService;
@@ -228,36 +233,79 @@ public class TransmissionService {
 		log.info("case::QCTEST");
 		log.info("params={}", params);
 
-		List<AutoMap> rawList = querycacheRepository.selectQueryCache(params);
-		log.info("rawList size={}", rawList.size());
+		int curSn = -1;
 
-		log.info("memberId={}",String.valueOf(params.get("memberId")));
-		String mbrKorNm = oracleRepository.selectMbrKorNm(String.valueOf(params.get("memberId")));
-		log.info("mbrKorNm={}", mbrKorNm);
+		try {
+			SingleReq singleReqParam = new SingleReq();
+			singleReqParam.setUsername(username);
+			singleReqParam.setMemberId(String.valueOf(params.get("memberId")));
+			singleReqParam.setExtractTarget(String.valueOf(params.get("extractTarget")));
+			singleReqParam.setExtractCond(String.valueOf(params.get("extractCond")));
+			singleReqParam.setPeriodType(String.valueOf(params.get("periodType")));
+			singleReqParam.setPeriodFrom(String.valueOf(params.get("periodFrom")));
+			singleReqParam.setPeriodTo(String.valueOf(params.get("periodTo")));
+			singleReqParam.setStatus(ProgressStatus.PROCESSING);
+			singleReqParam.setPtsMasking(String.valueOf(params.get("ptsMasking")));
+			singleReqParam.setPtsPrefix(String.valueOf(params.get("ptsPrefix")));
+			singleReqParam.setMenuId(String.valueOf(params.get("menuId")));
+			log.info("singleReqParam1={}",singleReqParam);
 
-		AutoMap hMap = new AutoMap();
-		String header[] = {"접수일자","승인일시","대표승인번호","승인번호","매출일시","회원ID","카드코드","카드코드명","카드번호","정산제휴사코드","정산제휴사명","정산가맹점코드","정산가맹점명","발생제휴사코드","발생제휴사명","발생가맹점코드","발생가맹점명","포인트종류코드","포인트종류명","전표코드","전표명","매출금액","포인트","제휴사연회비","수수료","지불수단코드","지불수단명","기관코드","기관명","유종코드","유종명","쿠폰코드","쿠폰명"};
+			String mbrKorNm = oracleRepository.selectMbrKorNmQc(singleReqParam);
+			singleReqParam.setMemberKorNM(mbrKorNm);
+			log.info("singleReqParam2={}",singleReqParam);
 
-		for(int i=0; i<header.length; i++){
-			hMap.put(Integer.toString(i), header[i]);
+			curSn = singleReqRepository.insertSingleRequestProgress(singleReqParam);
+			log.info("current insert SN={}", curSn);
+			singleReqParam.setSn(curSn);
+			log.info("singleReqParam3={}",singleReqParam);
+
+			List<SingleReq> singleReqList = singleReqRepository.selectSingleRequestProgress(singleReqParam);
+			log.info("select singleReq list={}", singleReqList);
+
+			List<AutoMap> rawList = querycacheRepository.selectQueryCache(params);
+			log.info("rawList size={}", rawList.size());
+
+
+			AutoMap hMap = new AutoMap();
+			String header[] = {"접수일자", "승인일시", "대표승인번호", "승인번호", "매출일시", "회원ID"
+							, "카드코드", "카드코드명", "카드번호", "정산제휴사코드", "정산제휴사명", "정산가맹점코드"
+							, "정산가맹점명", "발생제휴사코드", "발생제휴사명", "발생가맹점코드", "발생가맹점명", "포인트종류코드"
+							, "포인트종류명", "전표코드", "전표명", "매출금액", "포인트", "제휴사연회비"
+							, "수수료", "지불수단코드", "지불수단명", "기관코드", "기관명", "유종코드"
+							, "유종명", "쿠폰코드", "쿠폰명"};
+
+			for (int i = 0; i < header.length; i++) {
+				hMap.put(Integer.toString(i), header[i]);
+			}
+			//헤더추가
+			if(singleReqParam.getExtractTarget().equals("tr_mbrKorNm")){
+				hMap.put(Integer.toString(header.length), "고객이름");
+			}
+
+			List<AutoMap> resultList = new ArrayList();
+			resultList.add(hMap);
+			resultList.addAll(rawList);
+
+			StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
+					.append(Helper.nowDateTimeString()).append('_');
+			if (!StringUtils.isEmpty(ptsPrefix)) {
+				filename.append(ptsPrefix).append('-');
+			}
+
+			filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".xls");
+
+			Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
+			excelService.create(filePath, "거래실적 단건조회", resultList);
+
+			ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
+
+			singleReqParam.setStatus(ProgressStatus.FINISHED);
+			singleReqRepository.updateSingleRequestProgress(singleReqParam);
+
+		} catch (Exception e) {
+			throw new BizException("Failed to call sendForSingleRequest", e);
+			//todo need to check FAIL process
 		}
-
-		List<AutoMap> resultList = new ArrayList();
-		resultList.add(hMap);
-		resultList.addAll(rawList);
-
-		StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
-				.append(Helper.nowDateTimeString()).append('_');
-		if (!StringUtils.isEmpty(ptsPrefix)) {
-			filename.append(ptsPrefix).append('-');
-		}
-
-		filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".xls");
-
-		Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
-		excelService.create(filePath, "거래실적 단건조회", resultList);
-
-		ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
 
 	}
 

@@ -59,8 +59,9 @@ CREATE TABLE MOCK_QC_TEST (
 	,DTL_CD_NM6 varchar(100)	--유종명
 	,cpn_prd_cd varchar(100)	--쿠폰코드
 	,prd_nm varchar(100)	--쿠폰명
-	,cnsl_slip_tp_cd  varchar(100)	--취소전표유형코드
   ,oriappr_dt  varchar(100)	--원승인일자
   ,oriappr_no  varchar(100)	--원승인번호
+	,cnsl_slip_tp_cd  varchar(100)	--취소전표유형코드
+	,cnsl_slip_tp_nm  varchar(100)	--취소전표유형명
 );
 
