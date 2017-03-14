@@ -16,7 +16,7 @@
           <when test="ptsMasking == 'true'">
             case when A.card_no is null then A.card_no
                  else concat(substring(A.card_no,1,LENGTH(A.card_no)-8) , '****', substring(A.card_no,LENGTH(A.card_no)-3,4) )
-            end AS card_no
+            end AS card_no,
           </when>
           <otherwise>
             A.card_no AS card_no,               -- 카드번호
