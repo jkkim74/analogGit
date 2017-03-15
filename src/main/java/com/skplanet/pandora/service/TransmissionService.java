@@ -226,7 +226,7 @@ public class TransmissionService {
 		 * step4. send to complete notification mail.
 		 */
 
-		log.info("case::QCTEST");
+		log.info("case::sendForSingleRequest");
 		log.info("params={}", params);
 
 		int curSn = -1;
@@ -251,15 +251,13 @@ public class TransmissionService {
 			log.info("singleReqParam2={}",singleReqParam);
 
 			curSn = singleReqRepository.insertSingleRequestProgress(singleReqParam);
-			log.info("current insert SN={}", curSn);
-			log.info("current insert SN(singleReqParam.getSn())={}", singleReqParam.getSn());
 			curSn = singleReqParam.getSn();
 			log.info("current SN={}", curSn);
 
 //			List<SingleReq> singleReqList = singleReqRepository.selectSingleRequestProgress(singleReqParam);
 //			log.info("select singleReq list={}", singleReqList);
 
-			List<AutoMap> rawList = querycacheRepository.selectTrSingleRequest(params);
+			List<AutoMap> rawList = querycacheRepository.selectTrSingleRequest(singleReqParam);
 			log.info("rawList size={}", rawList.size());
 
 			AutoMap hMap = new AutoMap();

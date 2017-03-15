@@ -249,12 +249,13 @@ public class ApiController {
 	@GetMapping("/queryCacheTest")
 	public List<AutoMap> getQueryCacheTest(@RequestParam Map<String, Object> params) {
 
-		log.info("call::getQuerycache...");
-		log.info("params={}", params);
+		log.info("call::testing.......");
+//		log.info("call::getQuerycache...");
+//		log.info("params={}", params);
 
-//		String mbrId = oracleRepository.selectMbrId(params);
-		List<AutoMap> list = querycacheRepository.selectTrSingleRequest(params);
-		log.info("list={}", list);
+		String mbrId = oracleRepository.selectMbrId(params);
+//		List<AutoMap> list = querycacheRepository.selectTrSingleRequest(params);
+//		log.info("list={}", list);
 
 //		String mbrId = String.valueOf(params.get("memberId"));
 //		String mbrKorNm = oracleRepository.selectMbrKorNmQc(params);
@@ -262,7 +263,7 @@ public class ApiController {
 //		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
 //				(String) params.get("menuId"), 1);
 
-		return list;
+		return null;
 	}
 
 	@PostMapping("/sendPts")
