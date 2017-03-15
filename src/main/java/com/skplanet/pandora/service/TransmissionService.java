@@ -258,7 +258,7 @@ public class TransmissionService {
 //			log.info("select singleReq list={}", singleReqList);
 
 			List<AutoMap> rawList = querycacheRepository.selectTrSingleRequest(singleReqParam);
-			log.info("rawList size={}", rawList.size());
+			log.info("QC receive list size={}", rawList.size());
 
 			AutoMap hMap = new AutoMap();
 			String header[] = {"접수일자", "승인일시", "대표승인번호", "승인번호", "매출일시", "회원ID"

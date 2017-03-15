@@ -37,8 +37,8 @@ angular.module('app').controller('QCTESTCtrl', ['$scope', '$q', '$http', '$timeo
         };
 
         $scope.qcObjectSample2= function() {
-            $scope.qcObject.memberId = 111854997;
-            $scope.qcObject.extractTarget = 'tr_mbrKorNm';
+            $scope.qcObject.memberId = 101700393;
+            $scope.qcObject.extractTarget = 'tr';
             $scope.qcObject.extractCond = 't';
             $scope.qcObject.periodType = 'sale_dt';
             $scope.qcObject.periodFrom = '20170301';

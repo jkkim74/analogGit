@@ -468,7 +468,6 @@ public class ApiController {
 			case "QCTEST": {
 
 				/**
-				 * todo check request count under 5 or not???
 				 * step1. load request count.
 				 * step2. under 5 or not?
 				 * step3. if under 5, call sendForSingleRequest
@@ -479,7 +478,7 @@ public class ApiController {
 				if( currentReqCall < Constant.MAX_SINGLE_REQUEST_CALL) {
 					transmissionService.sendForSingleRequst(username, Helper.currentUser().getEmailAddr(), ptsUsername, ptsPrefix, params);
 				} else {
-					return ApiResponse.builder().message("현재 5건이 요청중에 있습니다..").build();
+					return ApiResponse.builder().message("최대 5건 까지 동시 요청 가능합니다.").build();
 				}
 
 				break;

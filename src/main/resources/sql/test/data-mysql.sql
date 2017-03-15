@@ -16,6 +16,7 @@ insert into authorities(username, authority, masking_yn) values('user4', 'ROLE_A
 insert into authorities(username, authority, masking_yn) values('user5', 'ROLE_USER', 0);
 
 insert into menu_access(username, menu_id) values('user', 'QCTEST');
+insert into menu_access(username, menu_id) values('user1', 'QCTEST');
 insert into menu_access(username, menu_id) values('user', 'PAN0002');
 insert into menu_access(username, menu_id) values('user', 'PAN0003');
 insert into menu_access(username, menu_id) values('user', 'PAN0101');
