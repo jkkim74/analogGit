@@ -51,6 +51,7 @@ angular.module('app').controller('PAN0003Ctrl', ['$scope', '$q', '$http', '$time
             $scope.checkMenuId.PAN0105 = entity.menuList.indexOf('PAN0105') !== -1;
             $scope.checkMenuId.PAN0106 = entity.menuList.indexOf('PAN0106') !== -1;
             $scope.checkMenuId.PAN0107 = entity.menuList.indexOf('PAN0107') !== -1;
+            $scope.checkMenuId.QCTEST= entity.menuList.indexOf('QCTEST') !== -1;
         };
 
         $scope.saveAccess = function () {

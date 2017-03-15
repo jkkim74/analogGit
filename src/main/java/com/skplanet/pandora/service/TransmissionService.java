@@ -1,7 +1,12 @@
 package com.skplanet.pandora.service;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CodingErrorAction;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -10,6 +15,7 @@ import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.web.model.SingleReq;
 import com.skplanet.web.repository.mysql.SingleReqRepository;
 import com.skplanet.web.service.*;
+import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -216,6 +222,21 @@ public class TransmissionService {
 		}
 	}
 
+	public void createCsvForSingleReq(Path filePath, Charset charset, List<AutoMap> resultList) {
+		CharsetEncoder encoder = charset.newEncoder().onUnmappableCharacter(CodingErrorAction.IGNORE);
+		try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(filePath), encoder));
+			 CSVPrinter printer = CSVFormat.RFC4180.withDelimiter(',').withQuote(null).print(writer)) {
+			if (resultList != null && !resultList.isEmpty()) {
+				for (AutoMap i : resultList) {
+					printer.printRecord(i.values());
+				}
+			}
+		} catch (IOException e) {
+			throw new BizException("single request CSV 파일생성실패");
+		}
+//		return filePath;
+	}
+
 	@Async
 	public void sendForSingleRequst(String username, String emailAddr, String ptsUsername, String ptsPrefix, Map<String, Object> params){
 
@@ -226,7 +247,7 @@ public class TransmissionService {
 		 * step4. send to complete notification mail.
 		 */
 
-		log.info("case::QCTEST");
+		log.info("case::sendForSingleRequst");
 		log.info("params={}", params);
 
 		int curSn = -1;
@@ -288,10 +309,13 @@ public class TransmissionService {
 				filename.append(ptsPrefix).append('-');
 			}
 
-			filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".xls");
+//			filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".xls");
+//			Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
+//			excelService.create(filePath, "거래실적 단건조회", resultList);
 
+			filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".txt");
 			Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
-			excelService.create(filePath, "거래실적 단건조회", resultList);
+			createCsvForSingleReq(filePath, Charset.forName(encodingForPts), resultList);
 
 			ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
 
