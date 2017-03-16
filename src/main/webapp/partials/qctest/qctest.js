@@ -29,19 +29,19 @@ angular.module('app').controller('QCTESTCtrl', ['$scope', '$q', '$http', '$timeo
 
         $scope.qcObjectSample1 = function() {
             $scope.qcObject.memberId = 101700393;
-            $scope.qcObject.extractTarget = 'tr';
+            $scope.qcObject.extractTarget = 'tr_mbrKorNm';
             $scope.qcObject.extractCond = 't';
             $scope.qcObject.periodType = 'sale_dt';
-            $scope.qcObject.periodFrom = '20160101';
+            $scope.qcObject.periodFrom = '20170101';
             $scope.qcObject.periodTo= '20170303';
         };
 
         $scope.qcObjectSample2= function() {
-            $scope.qcObject.memberId = 111854997;
+            $scope.qcObject.memberId = 101700393;
             $scope.qcObject.extractTarget = 'tr';
             $scope.qcObject.extractCond = 't';
             $scope.qcObject.periodType = 'sale_dt';
-            $scope.qcObject.periodFrom = '20120301';
+            $scope.qcObject.periodFrom = '20170301';
             $scope.qcObject.periodTo= '20170306';
         };
 

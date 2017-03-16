@@ -249,12 +249,13 @@ public class ApiController {
 	@GetMapping("/queryCacheTest")
 	public List<AutoMap> getQueryCacheTest(@RequestParam Map<String, Object> params) {
 
-		log.info("call::getQuerycache...");
-		log.info("params={}", params);
+		log.info("call::testing.......");
+//		log.info("call::getQuerycache...");
+//		log.info("params={}", params);
 
-//		String mbrId = oracleRepository.selectMbrId(params);
-		List<AutoMap> list = querycacheRepository.selectTrSingleRequest(params);
-		log.info("list={}", list);
+		String mbrId = oracleRepository.selectMbrId(params);
+//		List<AutoMap> list = querycacheRepository.selectTrSingleRequest(params);
+//		log.info("list={}", list);
 
 //		String mbrId = String.valueOf(params.get("memberId"));
 //		String mbrKorNm = oracleRepository.selectMbrKorNmQc(params);
@@ -262,7 +263,7 @@ public class ApiController {
 //		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
 //				(String) params.get("menuId"), 1);
 
-		return list;
+		return null;
 	}
 
 	@PostMapping("/sendPts")
@@ -467,7 +468,6 @@ public class ApiController {
 			case "QCTEST": {
 
 				/**
-				 * todo check request count under 5 or not???
 				 * step1. load request count.
 				 * step2. under 5 or not?
 				 * step3. if under 5, call sendForSingleRequest
@@ -476,9 +476,9 @@ public class ApiController {
 				int currentReqCall = singleReqRepository.selectSingleReqProcessingCnt(username);
 				log.info("Current Request Call={}", currentReqCall);
 				if( currentReqCall < Constant.MAX_SINGLE_REQUEST_CALL) {
-					transmissionService.sendForSingleRequst(username, Helper.currentUser().getEmailAddr(), ptsUsername, ptsPrefix, params);
+					transmissionService.sendForSingleRequest(username, Helper.currentUser().getEmailAddr(), ptsUsername, ptsPrefix, params);
 				} else {
-					return ApiResponse.builder().message("현재 5건이 요청중에 있습니다..").build();
+					return ApiResponse.builder().message("최대 5건 까지 동시 요청 가능합니다.").build();
 				}
 
 				break;

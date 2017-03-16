@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skplanet.pandora.repository.querycache.QueryCacheRepository">
 
-	<select id="selectTrSingleRequest" parameterType="map" resultType="AutoMap">
+	<select id="selectTrSingleRequest" parameterType="SingleReq" resultType="AutoMap">
         SELECT
         A.rcv_dt AS rcv_dt,                     -- 접수일자
         A.appr_dttm AS appr_dttm,               -- 승인일시
@@ -186,7 +186,7 @@
 
     </select>
 
-	<select id="selectTrSingleRequest" parameterType="map" resultType="AutoMap" databaseId="hsql">
+	<select id="selectTrSingleRequest" parameterType="SingleReq" resultType="AutoMap" databaseId="hsql">
 SELECT
 rcv_dt,
 appr_dttm,

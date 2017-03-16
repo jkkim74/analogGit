@@ -238,7 +238,7 @@ public class TransmissionService {
 	}
 
 	@Async
-	public void sendForSingleRequst(String username, String emailAddr, String ptsUsername, String ptsPrefix, Map<String, Object> params){
+	public void sendForSingleRequest(String username, String emailAddr, String ptsUsername, String ptsPrefix, Map<String, Object> params){
 
 		/**
 		 * step1. load data
@@ -247,7 +247,7 @@ public class TransmissionService {
 		 * step4. send to complete notification mail.
 		 */
 
-		log.info("case::sendForSingleRequst");
+		log.info("case::sendForSingleRequest");
 		log.info("params={}", params);
 
 		int curSn = -1;
@@ -268,20 +268,18 @@ public class TransmissionService {
 			log.info("singleReqParam1={}",singleReqParam);
 
 			String mbrKorNm = oracleRepository.selectMbrKorNmQc(singleReqParam);
-			singleReqParam.setMemberKorNM(mbrKorNm);
+			singleReqParam.setMemberKorNm(((mbrKorNm==null)||(mbrKorNm.length()==0))?"결과없음":mbrKorNm);
 			log.info("singleReqParam2={}",singleReqParam);
 
 			curSn = singleReqRepository.insertSingleRequestProgress(singleReqParam);
-			log.info("current insert SN={}", curSn);
-			log.info("current insert SN(singleReqParam.getSn())={}", singleReqParam.getSn());
 			curSn = singleReqParam.getSn();
 			log.info("current SN={}", curSn);
 
 //			List<SingleReq> singleReqList = singleReqRepository.selectSingleRequestProgress(singleReqParam);
 //			log.info("select singleReq list={}", singleReqList);
 
-			List<AutoMap> rawList = querycacheRepository.selectTrSingleRequest(params);
-			log.info("rawList size={}", rawList.size());
+			List<AutoMap> rawList = querycacheRepository.selectTrSingleRequest(singleReqParam);
+			log.info("QC receive list size={}", rawList.size());
 
 			AutoMap hMap = new AutoMap();
 			String header[] = {"접수일자", "승인일시", "대표승인번호", "승인번호", "매출일시", "회원ID"
@@ -322,7 +320,8 @@ public class TransmissionService {
 			singleReqRepository.updateSingleRequestProgress(ProgressStatus.FINISHED, curSn);
 
 			HashMap<String, Object> map = new HashMap<>();
-			map.put("filename", filename);
+			String tmpFilename = filename.toString();
+			map.put("filename", tmpFilename.substring(tmpFilename.lastIndexOf('_') + 1));
 			mailService.sendAsTo("pan0105.vm", map, "거래실적 및 유실적 고객 단건 추출완료 안내", emailAddr);
 
 		} catch (Exception e) {
