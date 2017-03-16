@@ -234,7 +234,6 @@ public class TransmissionService {
 		} catch (IOException e) {
 			throw new BizException("single request CSV 파일생성실패");
 		}
-//		return filePath;
 	}
 
 	@Async
@@ -306,10 +305,6 @@ public class TransmissionService {
 			if (!StringUtils.isEmpty(ptsPrefix)) {
 				filename.append(ptsPrefix).append('-');
 			}
-
-//			filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".xls");
-//			Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
-//			excelService.create(filePath, "거래실적 단건조회", resultList);
 
 			filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".txt");
 			Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());

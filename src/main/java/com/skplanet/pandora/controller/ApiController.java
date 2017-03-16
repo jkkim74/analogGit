@@ -249,11 +249,11 @@ public class ApiController {
 	@GetMapping("/queryCacheTest")
 	public List<AutoMap> getQueryCacheTest(@RequestParam Map<String, Object> params) {
 
-		log.info("call::testing.......");
+//		log.info("call::testing.......");
 //		log.info("call::getQuerycache...");
 //		log.info("params={}", params);
 
-		String mbrId = oracleRepository.selectMbrId(params);
+//		String mbrId = oracleRepository.selectMbrId(params);
 //		List<AutoMap> list = querycacheRepository.selectTrSingleRequest(params);
 //		log.info("list={}", list);
 
@@ -277,7 +277,7 @@ public class ApiController {
 		String username = Helper.currentUser().getUsername();
 		String ptsUsername = Helper.currentUser().getPtsUsername();
 
-		if(!menuId.equals("QCTEST")){
+		if(!menuId.equals("PAN0105")){
 			log.info("insert parms mbrId");
 			params.put("mbrId", mbrId);
 		}
@@ -465,8 +465,7 @@ public class ApiController {
 
 				break;
 			}
-			case "QCTEST": {
-
+			case "PAN0105":{
 				/**
 				 * step1. load request count.
 				 * step2. under 5 or not?
@@ -488,7 +487,7 @@ public class ApiController {
 				transmissionService.sendToPts(ptsUsername, ptsMasking, ptsPrefix, progress);
 				break;
 		}
-		if(!menuId.equals("QCTEST")){
+		if(!menuId.equals("PAN0105")){
 			return ApiResponse.builder().message("PTS 전송 성공").build();
 		}else{
 			return ApiResponse.builder().message("PTS전송되었습니다. 메일로 안내됩니다.").build();

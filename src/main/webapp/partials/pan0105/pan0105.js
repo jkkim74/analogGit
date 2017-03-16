@@ -159,21 +159,48 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
 
             modalInstance.result.then(function () {
 
-                $scope.sendPtsPromise = apiSvc.extractMemberInfo({
-                    inputDataType: $scope.selectedOption.value,
-                    extractionCond: $scope.selectedOption4.value,
-                    periodType: $scope.selectedOption3.value,
-                    periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
-                    periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd'),
-                    ptsMasking: ptsMasking,
-                    ptsPrefix: ptsPrefix,
-                    singleReq: $scope.mbrId ? $scope.mbrId : 'N'
-                });
+                var singleReqMbrId = $scope.mbrId ? $scope.mbrId : 'N';
+                //console.log('PAN0105::SINGLE REQ - ' + singleReqMbrId);
+                //console.log('ptsMasking:' + ptsMasking);
+                //console.log('ptsPrefix:' + ptsPrefix);
+                //console.log('memberId:' + singleReqMbrId);
+                //console.log('extractTarget:' + $scope.selectedOption2.value);
+                //console.log('extractCond:' + $scope.selectedOption4.value);
+                //console.log('periodType:' + $scope.selectedOption3.value);
+                //console.log('periodFrom:' + $filter('date')($scope.periodFrom, 'yyyyMMdd'));
+                //console.log('periodTo:' + $filter('date')($scope.periodTo, 'yyyyMMdd'));
+
+                if (singleReqMbrId != 'N') {
+                    //single request...
+                    $scope.sendPtsPromise = apiSvc.sendPts({
+                        ptsMasking: ptsMasking,
+                        ptsPrefix: ptsPrefix,
+                        memberId: singleReqMbrId,
+                        extractTarget: $scope.selectedOption2.value,
+                        extractCond: $scope.selectedOption4.value,
+                        periodType: $scope.selectedOption3.value,
+                        periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
+                        periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd')
+                    });
+                } else {
+                    //multi request...
+                    $scope.sendPtsPromise = apiSvc.extractMemberInfo({
+                        inputDataType: $scope.selectedOption.value,
+                        extractionCond: $scope.selectedOption4.value,
+                        periodType: $scope.selectedOption3.value,
+                        periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
+                        periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd'),
+                        ptsMasking: ptsMasking,
+                        ptsPrefix: ptsPrefix,
+                        singleReq: $scope.mbrId ? $scope.mbrId : 'N'
+                    });
+                }
 
                 $scope.sendPtsPromise.then(function () {
                     $scope.clear();
                     // $scope.sendPtsPromise = apiSvc.sendPts({ ptsMasking: ptsMasking });
                 });
+
             }, function () {
                 $scope.clear();
             });
