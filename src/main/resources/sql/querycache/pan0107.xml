@@ -3,7 +3,7 @@
 <mapper namespace="com.skplanet.pandora.repository.querycache.QueryCacheRepository">
 
 	<select id="selectAgreementInfo" parameterType="map" resultType="AutoMap">
-		SELECT A.MBR_ID 
+		SELECT A.MBR_ID AS MBR_ID
 		    , IF(A.OCB_MKTNG_AGRMT_YN='1','Y',IF(A.OCB_MKTNG_AGRMT_YN='2','N',IF(A.OCB_MKTNG_AGRMT_YN='X','미상','미입력'))) AS OCB_MKTNG_AGRMT_YN
 			--, A.MKTNG_FNL_AGRMT_SRC_ORG_CD AS MKTNG_FNL_AGRMT_SRC_ORG_CD
 			--, B.DTL_CD_NM AS MKTNG_FNL_AGRMT_SRC_ORG_NM
