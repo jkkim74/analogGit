@@ -26,6 +26,7 @@ insert into menu_access(username, menu_id) values('user', 'PAN0104');
 insert into menu_access(username, menu_id) values('user', 'PAN0105');
 insert into menu_access(username, menu_id) values('user', 'PAN0106');
 insert into menu_access(username, menu_id) values('user', 'PAN0107');
+insert into menu_access(username, menu_id) values('user', 'PAN0108');
 insert into menu_access(username, menu_id) values('user1', 'PAN0101');
 insert into menu_access(username, menu_id) values('user1', 'PAN0102');
 insert into menu_access(username, menu_id) values('user2', 'PAN0002');

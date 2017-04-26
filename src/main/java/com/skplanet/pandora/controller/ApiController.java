@@ -266,6 +266,31 @@ public class ApiController {
 		return null;
 	}
 
+
+	@GetMapping("/memberLedger")
+	public List<AutoMap> getMemberLedger(@RequestParam Map<String, Object> params) {
+		params.put("ptsMasking", "true");
+		return oracleRepository.selectMemberLedger(params);
+	}
+	@GetMapping("/marketingLedger")
+	public List<AutoMap> getMarketingLedger(@RequestParam Map<String, Object> params) {
+		params.put("ptsMasking", "true");
+		return oracleRepository.selectMarketingLedger(params);
+	}
+	@GetMapping("/marketingHistory")
+	public List<AutoMap> getMarketingHistory(@RequestParam Map<String, Object> params) {
+		params.put("ptsMasking", "true");
+		return oracleRepository.selectMarketingHistory(params);
+	}
+
+	private AutoMap makeHeader(String[] headerTexts){
+        AutoMap tmpHeader = new AutoMap();
+        for (int i = 0; i < headerTexts.length; i++) {
+            tmpHeader.put(Integer.toString(i), headerTexts[i]);
+        }
+        return tmpHeader;
+    }
+
 	@PostMapping("/sendPts")
 	public ApiResponse sendPts(@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix,
 					   @RequestParam String menuId, @RequestParam Map<String, Object> params) {
@@ -283,6 +308,51 @@ public class ApiController {
 		}
 
 		switch (menuId) {
+
+			case "PAN0108": {
+				log.info("call::PAN0108 PTS...");
+				log.info("PAN0108 PTS call...params={}", params);
+
+                if (Boolean.valueOf(String.valueOf(params.get("onHive")))) {
+                    //todo hive call logic
+                } else {
+                    //oracle call logic
+                    List<AutoMap> resultList = new ArrayList<>();
+
+                    String headers[][] = {
+                            {"MBR_ID","OCBCOM 로그인 ID","이메일 주소","중복여부","최종원장 변경일자"},
+                            {"MBR_ID","OCBCOM 로그인 ID","이메일 주소","중복여부","최종원장 변경일자"},
+                            {"MBR_ID","OCBCOM 로그인 ID","이메일 주소","최소일자","최종일자"}
+                    };
+                    List<AutoMap> list1 = oracleRepository.selectMemberLedger(params);
+                    List<AutoMap> list2 = oracleRepository.selectMarketingLedger(params);
+                    List<AutoMap> list3 = oracleRepository.selectMarketingHistory(params);
+                    log.info("memberLedger={}, marketingLedger={}, marketingHistory={}"
+                            , String.valueOf(list1), String.valueOf(list2), String.valueOf(list3));
+
+                    resultList.add(makeHeader(headers[0]));
+                    resultList.addAll(list1);
+                    resultList.add(makeHeader(headers[1]));
+                    resultList.addAll(list2);
+                    resultList.add(makeHeader(headers[2]));
+                    resultList.addAll(list3);
+
+                    log.info("PTS DATA...={}", resultList);
+
+                    StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
+                            .append(Helper.nowDateTimeString()).append('_');
+                    if (!StringUtils.isEmpty(ptsPrefix)) {
+                        filename.append(ptsPrefix).append('-');
+                    }
+                    filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".xls");
+
+                    Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
+                    excelService.create(filePath, "이메일조회", resultList);
+                    ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
+                }
+                break;
+
+			}
 
 			case "PAN0102": {
 

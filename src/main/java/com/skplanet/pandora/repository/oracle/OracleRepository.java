@@ -76,4 +76,7 @@ public interface OracleRepository {
 	
 	void updateSmsSendStatus(Map<String, Object> params);
 
+	List<AutoMap> selectMemberLedger(Map<String, Object> params);
+	List<AutoMap> selectMarketingLedger(Map<String, Object> params);
+    List<AutoMap> selectMarketingHistory(Map<String, Object> params);
 }

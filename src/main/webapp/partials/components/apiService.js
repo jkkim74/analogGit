@@ -102,6 +102,11 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
         this.getUploaded = new ApiGet('files');
         this.getQueryCacheTest = new ApiGet('queryCacheTest');
 
+
+        this.getMemberLedger= new ApiGet('memberLedger');
+        this.getMarketingLedger= new ApiGet('marketingLedger');
+        this.getMarketingHistory= new ApiGet('marketingHistory');
+
         this.upload = function (params) {
             var deferred = $q.defer();
 

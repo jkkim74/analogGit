@@ -1,0 +1,104 @@
+<div class="section-content">
+    <form name="emailSearchForm" novalidate>
+        <div class="row">
+            <div class="col-md-12 form-inline">
+                <div class="input-group">
+                    <span class="input-group-addon">이메일제목 연계검색</span>
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" ng-class="{'btn-info': searchCond.onHive}"
+                                ng-model="searchCond.onHive" uib-btn-radio="true">Yes
+                        </button>
+                        <button class="btn btn-default" ng-class="{'btn-info': !searchCond.onHive}"
+                                ng-model="searchCond.onHive" uib-btn-radio="false">No
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" ng-click="searchEmail()"
+                        ng-show="!searchCond.onHive"><i class="fa fa-search"></i> 조회
+                </button>
+            </div>
+        </div>
+        <br/>
+
+        <div class="row">
+            <div class="col-md-9">
+                <div class="input-group">
+                    <label class="input-group-addon">이메일주소</label>
+                    <input type="text" class="form-control col-8" ng-model="searchCond.emailAddr" ng-required="true"
+                           placeholder="ex) 전체일치:pandora@sk.com  /  ID일치:pandora">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" ng-init="searchCond.sameType = selectEqualOptions[0].value"
+                        ng-options="option.value as option.label for option in selectEqualOptions"
+                        ng-model="searchCond.sameType"></select>
+            </div>
+        </div>
+
+        <div class="row" ng-show="searchCond.onHive">
+            <div class="col-md-12 form-inline">
+                <div class="input-group">
+                    <label class="input-group-addon">조 회 기 간</label>
+                    <input type="date" class="form-control"
+                           ng-model="searchCond.startDate" uib-datepicker-popup is-open="popup.opened">
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="popup.opened=true">
+                        <i class="fa fa-calendar"></i></button>
+                </span>
+                </div>
+                <div class="input-group">
+                    <input type="date" class="form-control"
+                           ng-model="searchCond.endDate" uib-datepicker-popup is-open="popup2.opened">
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="popup2.opened=true">
+                        <i class="fa fa-calendar"></i></button>
+                </span>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="input-group">
+                    <label class="input-group-addon">이메일제목</label>
+                    <input type="text" class="form-control" ng-model="searchCond.emailTitle">
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <hr>
+
+    <div ng-show="searchCond.onHive">
+        <h4>이메일제목 연계검색 선택시에는 <span class="bg-warning"> PTS전송</span>만 가능합니다. 선택하신 조건을 확인하세요.</h4>
+        <ul>
+            <li>이메일 주소 : <span class="bg-danger">{{searchCond.emailAddr}}</span></li>
+            <li>일치여부 : <span class="bg-danger" ng-show="searchCond.sameType!='id'">전체일치</span><span class="bg-danger" ng-show="searchCond.sameType=='id'">ID일치</span></li>
+            <li>조회기간 : <span class="bg-danger">{{searchCond.startDate | date:'yyyy-MM-dd'}} ~ {{searchCond.endDate| date:'yyyy-MM-dd'}}</span></li>
+            <li>이메일 제목 : <span class="bg-danger">{{searchCond.emailTitle}}</span></li>
+        </ul>
+    </div>
+    <div ng-show="!searchCond.onHive">
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>회원원장</strong></div>
+            <div cg-busy="table1Promise">
+                <div ui-grid="gridOptionsTable1" ui-grid-resize-columns></div>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>마케팅원장</strong></div>
+            <div cg-busy="table2Promise">
+                <div ui-grid="gridOptionsTable2" ui-grid-resize-columns></div>
+            </div>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>마케팅원장 변경이력</strong></div>
+            <div cg-busy="table3Promise">
+                <div ui-grid="gridOptionsTable3" ui-grid-resize-columns></div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <div ng-include="'partials/common/pts-form-tpl.html'"></div>
+</div>

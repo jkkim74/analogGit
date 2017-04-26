@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.pandora.repository.oracle.OracleRepository">
+
+	<select id="selectMemberLedger" parameterType="map" resultType="AutoMap">
+        SELECT
+        	MBR_ID                    --  회원ID
+    		,UNITED_ID	              --  UNITED_ID
+		<choose>
+			<when test="ptsMasking == 'true'">
+				,DECODE(EMAIL_ADDR,NULL,EMAIL_ADDR,SUBSTR(regexp_substr(EMAIL_ADDR, '[^@]+', 1, 1),1,LENGTH(regexp_substr(EMAIL_ADDR, '[^@]+', 1, 1))-2)||'**@'||regexp_substr(EMAIL_ADDR, '[^@]+', 1, 2)) AS EMAIL_ADDR -- 이메일주소
+			</when>
+			<otherwise>
+				,EMAIL_ADDR
+			</otherwise>
+		</choose>
+    		,EMAIL_ADDR_DUP_YN        --  이메일주소중복여부
+			,TO_CHAR(TO_DATE(MART_UPD_DTTM, 'YYYYMMDD'), 'YYYY-MM-DD') AS MART_UPD_DTTM           --  마트변경일시
+		FROM MART_INDIV_MBR_MST
+		<choose>
+			<when test="sameType == 'all'">
+			WHERE EMAIL_ADDR = #{emailAddr}
+			</when>
+			<when test="sameType == 'id'">
+				<bind name="emailAddr" value="emailAddr + '@%'"/>
+			WHERE EMAIL_ADDR LIKE #{emailAddr}
+			</when>
+		</choose>
+    </select>
+	<select id="selectMemberLedger" parameterType="map" resultType="AutoMap" databaseId="hsql">
+		SELECT
+		MBR_ID                    --  회원ID
+		,UNITED_ID	              --  UNITED_ID
+		<choose>
+			<when test="ptsMasking == 'true'">
+				,'haha**@nate.com' AS EMAIL_ADDR
+			</when>
+			<otherwise>
+				,EMAIL_ADDR
+			</otherwise>
+		</choose>
+		,EMAIL_ADDR_DUP_YN        --  이메일주소중복여부
+		,TO_CHAR(TO_DATE(MART_UPD_DTTM, 'YYYYMMDD'), 'YYYY-MM-DD') AS MART_UPD_DTTM           --  마트변경일시
+		FROM MART_INDIV_MBR_MST
+		<choose>
+			<when test="sameType == 'all'">
+				WHERE EMAIL_ADDR = #{emailAddr}
+			</when>
+			<when test="sameType == 'id'">
+				<bind name="emailAddr" value="emailAddr + '@%'"/>
+				WHERE EMAIL_ADDR LIKE #{emailAddr}
+			</when>
+		</choose>
+	</select>
+
+	<select id="selectMarketingLedger" parameterType="map" resultType="AutoMap">
+		SELECT
+			MBR_ID                   --  회원ID
+			,UNITED_ID	             --  UNITED_ID
+		<choose>
+			<when test="ptsMasking == 'true'">
+				,DECODE(EMAIL_ADDR,NULL,EMAIL_ADDR,SUBSTR(regexp_substr(EMAIL_ADDR, '[^@]+', 1, 1),1,LENGTH(regexp_substr(EMAIL_ADDR, '[^@]+', 1, 1))-2)||'**@'||regexp_substr(EMAIL_ADDR, '[^@]+', 1, 2)) AS EMAIL_ADDR -- 이메일주소
+			</when>
+			<otherwise>
+				,EMAIL_ADDR
+			</otherwise>
+		</choose>
+		,EMAIL_ADDR_DUP_YN       --  이메일주소중복여부
+			,TO_CHAR(TO_DATE(MART_UPD_DTTM, 'YYYYMMDD'), 'YYYY-MM-DD') AS MART_UPD_DTTM           --  마트변경일시
+		FROM MART_MKTNG_MBR_MST
+		<choose>
+			<when test="sameType == 'all'">
+				WHERE EMAIL_ADDR = #{emailAddr}
+			</when>
+			<when test="sameType == 'id'">
+				<bind name="emailAddr" value="emailAddr + '@%'"/>
+				WHERE EMAIL_ADDR LIKE #{emailAddr}
+			</when>
+		</choose>
+	</select>
+	<select id="selectMarketingLedger" parameterType="map" resultType="AutoMap" databaseId="hsql">
+		SELECT
+			'100019956' AS MBR_ID               --  회원ID
+			,'823362' AS UNITED_ID	            --  UNITED_ID
+		<choose>
+			<when test="ptsMasking == 'true'">
+				,'sugapr**@nate.com' AS EMAIL_ADDR  --  이메일 주소
+			</when>
+			<otherwise>
+				,'sugapro@nate.com' AS EMAIL_ADDR
+			</otherwise>
+		</choose>
+			,'2' AS EMAIL_ADDR_DUP_YN       	--  이메일주소중복여부
+			,'2015-10-22' AS MART_UPD_DTTM      --  마트변경일시
+		FROM dual
+	</select>
+
+	<select id="selectMarketingHistory" parameterType="map" resultType="AutoMap">
+		SELECT
+		    A.MBR_ID AS MBR_ID                         --  회원ID
+		    ,C.UNITED_ID AS UNITED_ID	               --  UNITED_ID
+		<choose>
+			<when test="ptsMasking == 'true'">
+				,DECODE(B.EMAIL_ADDR,NULL,B.EMAIL_ADDR,SUBSTR(regexp_substr(B.EMAIL_ADDR, '[^@]+', 1, 1),1,LENGTH(regexp_substr(B.EMAIL_ADDR, '[^@]+', 1, 1))-2)||'**@'||regexp_substr(B.EMAIL_ADDR, '[^@]+', 1, 2)) AS EMAIL_ADDR -- 이메일주소
+			</when>
+			<otherwise>
+				,B.EMAIL_ADDR AS EMAIL_ADDR
+			</otherwise>
+		</choose>
+		    ,TO_CHAR(TO_DATE(MIN(A.CUST_REG_DT), 'YYYYMMDD'), 'YYYY-MM-DD') AS MIN_CUST_REG_DT     --  최초일자
+			,TO_CHAR(TO_DATE(MAX(A.CUST_REG_DT), 'YYYYMMDD'), 'YYYY-MM-DD') AS MAX_CUST_REG_DT     --  최종일자
+		FROM
+		    INTGUSER.DW_MKTNG_AGRMT_MGMT_HST A
+		    JOIN
+		    INTGUSER.DW_MKTNG_AGRMT_HST B
+		    ON (A.CUST_REG_DT = B.CUST_REG_DT AND A.REG_NO = B.REG_NO AND A.REP_REG_NO = B.REP_REG_NO)
+		    LEFT OUTER JOIN
+		    INTGUSER.MART_INDIV_MBR_MST C
+		    ON A.MBR_ID = C.MBR_ID
+		<choose>
+			<when test="sameType == 'all'">
+				WHERE B.EMAIL_ADDR = #{emailAddr}
+			</when>
+			<when test="sameType == 'id'">
+				<bind name="emailAddr" value="emailAddr + '@%'"/>
+				WHERE B.EMAIL_ADDR LIKE #{emailAddr}
+			</when>
+		</choose>
+		GROUP BY
+		    A.MBR_ID                                   --  회원ID
+		    ,C.UNITED_ID	                           --  UNITED_ID
+		    ,B.EMAIL_ADDR                              --  이메일 주소
+	</select>
+	<select id="selectMarketingHistory" parameterType="map" resultType="AutoMap" databaseId="hsql">
+		SELECT
+			'100019956' AS MBR_ID               --  회원ID
+			,'823362' AS UNITED_ID	            --  UNITED_ID
+		<choose>
+			<when test="ptsMasking == 'true'">
+				,'sugapr**@nate.com' AS EMAIL_ADDR  --  이메일 주소
+			</when>
+			<otherwise>
+				,'sugapro@nate.com' AS EMAIL_ADDR
+			</otherwise>
+		</choose>
+			,'2016-01-21' AS MIN_CUST_REG_DT    --  이메일주소중복여부
+			,'2016-01-21' AS MAX_CUST_REG_DT	--  마트변경일시
+		FROM dual
+	</select>
+
+</mapper>
