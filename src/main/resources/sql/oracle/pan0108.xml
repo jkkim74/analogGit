@@ -15,7 +15,8 @@
 			</otherwise>
 		</choose>
     		,EMAIL_ADDR_DUP_YN        --  이메일주소중복여부
-			,TO_CHAR(TO_DATE(MART_UPD_DTTM, 'YYYYMMDD'), 'YYYY-MM-DD') AS MART_UPD_DTTM           --  마트변경일시
+-- 			,TO_CHAR(TO_DATE(MART_UPD_DTTM, 'YYYYMMDD'), 'YYYY-MM-DD') AS MART_UPD_DTTM           --  마트변경일시
+			,MART_UPD_DTTM --  마트변경일시
 		FROM MART_INDIV_MBR_MST
 		<choose>
 			<when test="sameType == 'all'">
@@ -65,8 +66,9 @@
 				,EMAIL_ADDR
 			</otherwise>
 		</choose>
-		,EMAIL_ADDR_DUP_YN       --  이메일주소중복여부
-			,TO_CHAR(TO_DATE(MART_UPD_DTTM, 'YYYYMMDD'), 'YYYY-MM-DD') AS MART_UPD_DTTM           --  마트변경일시
+			,EMAIL_ADDR_DUP_YN       --  이메일주소중복여부
+-- 			,TO_CHAR(TO_DATE(MART_UPD_DTTM, 'YYYYMMDD'), 'YYYY-MM-DD') AS MART_UPD_DTTM           --  마트변경일시
+			,MART_UPD_DTTM --  마트변경일시
 		FROM MART_MKTNG_MBR_MST
 		<choose>
 			<when test="sameType == 'all'">
