@@ -291,6 +291,12 @@ public class ApiController {
         return tmpHeader;
     }
 
+    private AutoMap emptyLine(){
+		AutoMap dummyMap = new AutoMap();
+		dummyMap.put("dummy", "");
+		return dummyMap;
+	}
+
 	@PostMapping("/sendPts")
 	public ApiResponse sendPts(@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix,
 					   @RequestParam String menuId, @RequestParam Map<String, Object> params) {
@@ -332,8 +338,10 @@ public class ApiController {
 
                     resultList.add(makeHeader(headers[0]));
                     resultList.addAll(list1);
+                    resultList.add(emptyLine());
                     resultList.add(makeHeader(headers[1]));
                     resultList.addAll(list2);
+					resultList.add(emptyLine());
                     resultList.add(makeHeader(headers[2]));
                     resultList.addAll(list3);
 
