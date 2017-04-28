@@ -260,8 +260,6 @@ public class ApiController {
 //		String mbrId = String.valueOf(params.get("memberId"));
 //		String mbrKorNm = oracleRepository.selectMbrKorNmQc(params);
 //		log.info("username={}, mbrId={}, mbrKorNm={}", username, mbrId, mbrKorNm);
-//		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
-//				(String) params.get("menuId"), 1);
 
 		return null;
 	}
@@ -315,6 +313,10 @@ public class ApiController {
 
                 if (Boolean.valueOf(String.valueOf(params.get("onHive")))) {
                     //todo hive call logic
+
+
+					transmissionService.sendForSearchEmail(username, Helper.currentUser().getEmailAddr(), ptsUsername, ptsPrefix, params);
+					return ApiResponse.builder().message("PTS전송되었습니다. 메일로 안내됩니다.").build();
                 } else {
                     //oracle call logic
                     List<AutoMap> resultList = new ArrayList<>();

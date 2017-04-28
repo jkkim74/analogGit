@@ -222,7 +222,7 @@ public class TransmissionService {
 		}
 	}
 
-	public void createCsvForSingleReq(Path filePath, Charset charset, List<AutoMap> resultList) {
+	private void createCsvForSingleReq(Path filePath, Charset charset, List<AutoMap> resultList) {
 		CharsetEncoder encoder = charset.newEncoder().onUnmappableCharacter(CodingErrorAction.IGNORE);
 		try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(filePath), encoder));
 			 CSVPrinter printer = CSVFormat.RFC4180.withDelimiter(',').withQuote(null).print(writer)) {
@@ -233,6 +233,60 @@ public class TransmissionService {
 			}
 		} catch (IOException e) {
 			throw new BizException("single request CSV 파일생성실패");
+		}
+	}
+
+	@Async
+	public void sendForSearchEmail(String username, String emailAddr, String ptsUsername, String ptsPrefix, Map<String, Object> params){
+		/**
+		 * step1. load members list
+		 * step2. extract mbr_id from the members list
+		 * step3. run query on use querycache
+		 * step4. send file to pts
+		 * step5. send to complete notification mail.... :)
+		 */
+
+		log.info("case::sendForSearchEmail");
+		log.info("params={}", params);
+
+		List<AutoMap> rawMemberLists = oracleRepository.selectMemberLedger(params);
+		log.info("rawMemberLists={}", rawMemberLists);
+
+		if (rawMemberLists.size() > 0) {
+			params.put("idLists",rawMemberLists);
+
+			List<AutoMap> rawList = querycacheRepository.selectSearchEmail(params);
+			log.info("QC receive list size={}", rawList.size());
+
+			AutoMap hMap = new AutoMap();
+			String headers[] = {"MBR_ID", "OCBCOM 로그인 ID", "이메일 도메인", "이메일 제목", "발송일자"};
+			for(int i=0; i<headers.length; i++){
+				hMap.put(Integer.toString(i), headers[i]);
+			}
+
+			List<AutoMap> resultList = new ArrayList<>();
+			resultList.add(hMap);
+			resultList.addAll(rawList);
+
+			StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
+					.append(Helper.nowDateTimeString()).append('_');
+			if (!StringUtils.isEmpty(ptsPrefix)) {
+				filename.append(ptsPrefix).append('-');
+			}
+
+			filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".txt");
+			Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
+			createCsvForSingleReq(filePath, Charset.forName(encodingForPts), resultList);
+
+			ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
+
+			HashMap<String, Object> map = new HashMap<>();
+			String tmpFilename = filename.toString();
+			map.put("filename", tmpFilename.substring(tmpFilename.lastIndexOf('_') + 1));
+			mailService.sendAsTo("pan0108.vm", map, "이메일 조회 추출완료 안내", emailAddr);
+
+		} else {
+		    log.info("have no data....");
 		}
 	}
 

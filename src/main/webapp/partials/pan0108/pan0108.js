@@ -80,14 +80,6 @@ angular.module('app').controller('PAN0108Ctrl', ['$scope', '$q', '$http', '$time
             }
 
             var params = makeSearchEmailParams();
-                // {
-                //     onHive: $scope.searchCond.onHive,
-                //     emailAddr: ($scope.searchCond.sameType != 'id') ? $scope.searchCond.emailAddr : ($scope.searchCond.emailAddr).split('@')[0],
-                //     sameType: $scope.searchCond.sameType,
-                //     startDate: $filter('date')($scope.searchCond.startDate, 'yyyyMMdd'),
-                //     endDate: $filter('date')($scope.searchCond.endDate, 'yyyyMMdd'),
-                //     emailTitle: $scope.searchCond.emailTitle
-                // };
 
             console.log('Search email params:',params);
 
@@ -117,6 +109,12 @@ angular.module('app').controller('PAN0108Ctrl', ['$scope', '$q', '$http', '$time
 
             var params = makeSearchEmailParams();
             console.log(params);
+
+            if ($scope.emailSearchForm.$invalid) {
+                toastr.warning('조회 조건을 확인하세요!!');
+                return;
+            }
+
             $scope.sendPtsPromise = apiSvc.sendPts({
                 ptsMasking: ptsMasking,
                 ptsPrefix: ptsPrefix,
@@ -130,9 +128,7 @@ angular.module('app').controller('PAN0108Ctrl', ['$scope', '$q', '$http', '$time
         };
 
         $scope.isPtsDisabled = function () {
-            //return !$scope.ptsUsername
-            //    || (!$scope.gridOptionsAgreementInfo.data.length && !$scope.gridOptionsJoinInfoOcbapp.data.length && !$scope.gridOptionsJoinInfoOcbcom.data.length
-            //    && !$scope.gridOptionsEmailSendHistory.data.length && !$scope.gridOptionsAppPushHistory.data.length);
+            // return $scope.emailSearchForm.$invalid;
             return false;
         };
 

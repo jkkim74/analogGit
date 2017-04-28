@@ -34,7 +34,7 @@
 		,UNITED_ID	              --  UNITED_ID
 		<choose>
 			<when test="ptsMasking == 'true'">
-				,'haha**@nate.com' AS EMAIL_ADDR
+				,'**'||EMAIL_ADDR AS EMAIL_ADDR
 			</when>
 			<otherwise>
 				,EMAIL_ADDR
