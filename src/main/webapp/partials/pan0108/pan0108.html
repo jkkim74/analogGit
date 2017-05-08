@@ -13,8 +13,8 @@
                         </button>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary" ng-click="searchEmail()"
-                        ng-show="!searchCond.onHive"><i class="fa fa-search"></i> 조회
+                <button type="submit" class="btn btn-primary" ng-click="searchEmail()" ng-show="!searchCond.onHive">
+                    <i class="fa fa-search"></i> 조회
                 </button>
             </div>
         </div>
@@ -40,6 +40,7 @@
                 <div class="input-group">
                     <label class="input-group-addon">조 회 기 간</label>
                     <input type="date" class="form-control"
+                           ng-required="searchCond.onHive"
                            ng-model="searchCond.startDate" uib-datepicker-popup is-open="popup.opened">
                     <span class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-click="popup.opened=true">
@@ -48,6 +49,7 @@
                 </div>
                 <div class="input-group">
                     <input type="date" class="form-control"
+                           ng-required="searchCond.onHive"
                            ng-model="searchCond.endDate" uib-datepicker-popup is-open="popup2.opened">
                     <span class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-click="popup2.opened=true">
@@ -59,7 +61,7 @@
             <div class="col-md-12">
                 <div class="input-group">
                     <label class="input-group-addon">이메일제목</label>
-                    <input type="text" class="form-control" ng-model="searchCond.emailTitle">
+                    <input type="text" class="form-control" ng-model="searchCond.emailTitle" ng-required="searchCond.onHive">
                 </div>
             </div>
         </div>

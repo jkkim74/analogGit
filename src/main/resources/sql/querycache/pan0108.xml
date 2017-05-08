@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.pandora.repository.querycache.QueryCacheRepository">
+
+	<select id="selectSearchEmail" parameterType="map" resultType="AutoMap">
+		select 	b.src_idntf2_id as mbr_id,  			-- 회원id
+				c.united_id as united_id,   			-- united_id
+				a.email_titl as email_title,			-- 이메일제목
+				b.rcvr_email_domn_nm as email_domain,   -- 이메일도메인
+				b.snd_dt as send_date                   -- 발송일자
+		from    ocb.dw_email_snd_ctnt a
+				inner join
+					ocb.dw_email_snd_rslt_ctnt  b
+				on a.sys_src_cd = b.sys_src_cd and a.msg_id = b.msg_id and a.sub_msg_id = b.sub_msg_id and a.msg_grp_id = b.msg_grp_id
+				inner join
+					ocb.mart_mbr_mst c
+				on b.src_idntf2_id = c.mbr_id
+		where	regexp_replace(a.email_titl, '\\s*', '') like concat('%', regexp_replace(#{emailTitle}, '\\s*', ''), '%')
+			and b.snd_dt between #{startDate} and #{endDate}
+			and c.mbr_id in
+			<foreach collection="idLists" item="item" open="(" close=")" separator=",">
+				#{item.mbrId}
+			</foreach>
+			and a.SYS_SRC_CD != ''
+	</select>
+
+	<select id="selectSearchEmail" parameterType="map" resultType="AutoMap" databaseId="hsql">
+		SELECT *
+		FROM MART_INDIV_MBR_MST
+        where mbr_id in
+			<foreach collection="idLists" item="item" open="(" close=")" separator=",">
+				#{item.mbrId}
+			</foreach>
+	</select>
+
+</mapper>

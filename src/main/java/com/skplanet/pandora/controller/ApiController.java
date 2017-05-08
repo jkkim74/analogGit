@@ -260,8 +260,6 @@ public class ApiController {
 //		String mbrId = String.valueOf(params.get("memberId"));
 //		String mbrKorNm = oracleRepository.selectMbrKorNmQc(params);
 //		log.info("username={}, mbrId={}, mbrKorNm={}", username, mbrId, mbrKorNm);
-//		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), mbrId, mbrKorNm,
-//				(String) params.get("menuId"), 1);
 
 		return null;
 	}
@@ -270,17 +268,23 @@ public class ApiController {
 	@GetMapping("/memberLedger")
 	public List<AutoMap> getMemberLedger(@RequestParam Map<String, Object> params) {
 		params.put("ptsMasking", "true");
-		return oracleRepository.selectMemberLedger(params);
+		List<AutoMap> result = oracleRepository.selectMemberLedger(params);
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), Helper.currentUser().getUsername(), Helper.currentClientIp(), null, null, (String) params.get("menuId"), result.size());
+		return result;
 	}
 	@GetMapping("/marketingLedger")
 	public List<AutoMap> getMarketingLedger(@RequestParam Map<String, Object> params) {
 		params.put("ptsMasking", "true");
-		return oracleRepository.selectMarketingLedger(params);
+		List<AutoMap> result = oracleRepository.selectMarketingLedger(params);
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), Helper.currentUser().getUsername(), Helper.currentClientIp(), null, null, (String) params.get("menuId"), result.size());
+		return result;
 	}
 	@GetMapping("/marketingHistory")
 	public List<AutoMap> getMarketingHistory(@RequestParam Map<String, Object> params) {
 		params.put("ptsMasking", "true");
-		return oracleRepository.selectMarketingHistory(params);
+		List<AutoMap> result = oracleRepository.selectMarketingHistory(params);
+		idmsLogService.memberSearch(Helper.nowDateTimeString(), Helper.currentUser().getUsername(), Helper.currentClientIp(), null, null, (String) params.get("menuId"), result.size());
+		return result;
 	}
 
 	private AutoMap makeHeader(String[] headerTexts){
@@ -320,7 +324,9 @@ public class ApiController {
 				log.info("PAN0108 PTS call...params={}", params);
 
                 if (Boolean.valueOf(String.valueOf(params.get("onHive")))) {
-                    //todo hive call logic
+                    //hive call logic
+					transmissionService.sendForSearchEmail(username, Helper.currentUser().getEmailAddr(), ptsUsername, ptsPrefix, params);
+					return ApiResponse.builder().message("PTS전송되었습니다. 메일로 안내됩니다.").build();
                 } else {
                     //oracle call logic
                     List<AutoMap> resultList = new ArrayList<>();
@@ -357,6 +363,9 @@ public class ApiController {
                     Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
                     excelService.create(filePath, "이메일조회", resultList);
                     ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
+
+					idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(),
+							null, null, (String) params.get("menuId"), list1.size()+list2.size()+list3.size());
                 }
                 break;
 
