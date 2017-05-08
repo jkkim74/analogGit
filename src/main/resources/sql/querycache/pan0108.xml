@@ -5,8 +5,8 @@
 	<select id="selectSearchEmail" parameterType="map" resultType="AutoMap">
 		select 	b.src_idntf2_id as mbr_id,  			-- 회원id
 				c.united_id as united_id,   			-- united_id
-				a.email_titl as email_title,			-- 이메일제목
 				b.rcvr_email_domn_nm as email_domain,   -- 이메일도메인
+				a.email_titl as email_title,			-- 이메일제목
 				b.snd_dt as send_date                   -- 발송일자
 		from    ocb.dw_email_snd_ctnt a
 				inner join
