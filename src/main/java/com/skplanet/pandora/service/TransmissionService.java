@@ -69,6 +69,8 @@ public class TransmissionService {
 	@Autowired
 	private ExcelService excelService;
 
+	@Autowired
+	private IdmsLogService idmsLogService;
 
 	@Value("${ftp.extraction.host}")
 	private String extractionHost;
@@ -284,6 +286,10 @@ public class TransmissionService {
 			String tmpFilename = filename.toString();
 			map.put("filename", tmpFilename.substring(tmpFilename.lastIndexOf('_') + 1));
 			mailService.sendAsTo("pan0108.vm", map, "이메일 조회 추출완료 안내", emailAddr);
+
+			//idmslog
+			idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(),
+					null, null, String.valueOf(params.get("menuId")), rawList.size());
 
 		} else {
 		    log.info("have no data....");

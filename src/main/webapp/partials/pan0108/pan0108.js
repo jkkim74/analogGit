@@ -63,7 +63,7 @@ angular.module('app').controller('PAN0108Ctrl', ['$scope', '$q', '$http', '$time
         function makeSearchEmailParams() {
             return {
                 onHive: $scope.searchCond.onHive,
-                emailAddr: ($scope.searchCond.sameType != 'id') ? $scope.searchCond.emailAddr : ($scope.searchCond.emailAddr).split('@')[0],
+                emailAddr: ($scope.searchCond.sameType !== 'id') ? $scope.searchCond.emailAddr : ($scope.searchCond.emailAddr).split('@')[0],
                 sameType: $scope.searchCond.sameType,
                 startDate: $filter('date')($scope.searchCond.startDate, 'yyyyMMdd'),
                 endDate: $filter('date')($scope.searchCond.endDate, 'yyyyMMdd'),
@@ -83,9 +83,9 @@ angular.module('app').controller('PAN0108Ctrl', ['$scope', '$q', '$http', '$time
 
             console.log('Search email params:',params);
 
-            $scope.gridOptionsTable1.data = null;
-            $scope.gridOptionsTable2.data = null;
-            $scope.gridOptionsTable3.data = null;
+            $scope.gridOptionsTable1.data = [];
+            $scope.gridOptionsTable2.data = [];
+            $scope.gridOptionsTable3.data = [];
 
             $scope.table1Promise = apiSvc.getMemberLedger(params);
             $scope.table2Promise = apiSvc.getMarketingLedger(params);
@@ -93,17 +93,27 @@ angular.module('app').controller('PAN0108Ctrl', ['$scope', '$q', '$http', '$time
 
             $scope.table1Promise.then(function (data) {
                 $scope.gridOptionsTable1.data = data;
-                // console.log(data);
             });
             $scope.table2Promise.then(function (data) {
                 $scope.gridOptionsTable2.data = data;
-                // console.log(data);
             });
             $scope.table3Promise.then(function (data) {
                 $scope.gridOptionsTable3.data = data;
-                // console.log(data);
             });
         };
+
+        function refreshSearchCond() {
+            $scope.searchCond.onHive = false; //연계검색
+            $scope.searchCond.emailAddr = null; //이메일주소
+            $scope.searchCond.sameType = 'all'; //이메일주소 일치여부
+            $scope.searchCond.startDate = null; //조회기간 시작
+            $scope.searchCond.endDate = null; //조회기간 종료
+            $scope.searchCond.emailTitle = null; //이메일 제목
+
+            $scope.gridOptionsTable1.data = [];
+            $scope.gridOptionsTable2.data = [];
+            $scope.gridOptionsTable3.data = [];
+        }
 
         $scope.sendPts = function (ptsMasking, ptsPrefix) {
 
@@ -125,11 +135,12 @@ angular.module('app').controller('PAN0108Ctrl', ['$scope', '$q', '$http', '$time
                 endDate: params.endDate,
                 emailTitle: params.emailTitle
             });
+
+            refreshSearchCond();
         };
 
         $scope.isPtsDisabled = function () {
-            // return $scope.emailSearchForm.$invalid;
-            return false;
+            return $scope.emailSearchForm.$invalid;
         };
 
         authSvc.getUserInfo().then(function (userInfo) {
