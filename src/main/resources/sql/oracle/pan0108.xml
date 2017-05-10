@@ -14,9 +14,8 @@
 				,EMAIL_ADDR
 			</otherwise>
 		</choose>
-    		,EMAIL_ADDR_DUP_YN        --  이메일주소중복여부
--- 			,TO_CHAR(TO_DATE(MART_UPD_DTTM, 'YYYYMMDD'), 'YYYY-MM-DD') AS MART_UPD_DTTM           --  마트변경일시
-			,MART_UPD_DTTM --  마트변경일시
+    		,DECODE(EMAIL_ADDR_DUP_YN,'1','Y','2','N',EMAIL_ADDR_DUP_YN) AS EMAIL_ADDR_DUP_YN        --  이메일주소중복여부
+			,TO_CHAR(MART_UPD_DTTM,'YYYY-MM-DD') AS MART_UPD_DTTM  --  마트변경일시
 		FROM MART_INDIV_MBR_MST
 		<choose>
 			<when test="sameType == 'all'">
@@ -40,7 +39,7 @@
 				,EMAIL_ADDR
 			</otherwise>
 		</choose>
-		,EMAIL_ADDR_DUP_YN        --  이메일주소중복여부
+		,DECODE(EMAIL_ADDR_DUP_YN,'1','Y','2','N',EMAIL_ADDR_DUP_YN) AS EMAIL_ADDR_DUP_YN        --  이메일주소중복여부
 		,TO_CHAR(TO_DATE(MART_UPD_DTTM, 'YYYYMMDD'), 'YYYY-MM-DD') AS MART_UPD_DTTM           --  마트변경일시
 		FROM MART_INDIV_MBR_MST
 		<choose>
@@ -66,9 +65,8 @@
 				,EMAIL_ADDR
 			</otherwise>
 		</choose>
-			,EMAIL_ADDR_DUP_YN       --  이메일주소중복여부
--- 			,TO_CHAR(TO_DATE(MART_UPD_DTTM, 'YYYYMMDD'), 'YYYY-MM-DD') AS MART_UPD_DTTM           --  마트변경일시
-			,MART_UPD_DTTM --  마트변경일시
+			,DECODE(EMAIL_ADDR_DUP_YN,'1','Y','2','N',EMAIL_ADDR_DUP_YN) AS EMAIL_ADDR_DUP_YN        --  이메일주소중복여부
+			,TO_CHAR(MART_UPD_DTTM, 'YYYY-MM-DD') AS MART_UPD_DTTM --  마트변경일시
 		FROM MART_MKTNG_MBR_MST
 		<choose>
 			<when test="sameType == 'all'">
@@ -92,7 +90,7 @@
 				,'sugapro@nate.com' AS EMAIL_ADDR
 			</otherwise>
 		</choose>
-			,'2' AS EMAIL_ADDR_DUP_YN       	--  이메일주소중복여부
+			,'N' AS EMAIL_ADDR_DUP_YN       	--  이메일주소중복여부
 			,'2015-10-22' AS MART_UPD_DTTM      --  마트변경일시
 		FROM dual
 	</select>
