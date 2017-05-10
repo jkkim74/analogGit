@@ -288,11 +288,15 @@ public class TransmissionService {
 			mailService.sendAsTo("pan0108.vm", map, "이메일 조회 추출완료 안내", emailAddr);
 
 			//idmslog
-			idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(),
+			idmsLogService.memberSearch(Helper.nowDateTimeString(), username, String.valueOf(params.get("currentClientIp")),
 					null, null, String.valueOf(params.get("menuId")), rawList.size());
 
 		} else {
-		    log.info("have no data....");
+		    log.info("Send error message to mail that is Have no matched mbrId.");
+
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("errMessage", "해당 조건에 맞는 MBR_ID가 회원원장에 존재하지 않습니다.");
+			mailService.sendAsTo("pan0108err.vm", map, "이메일 조회 추출요청 결과 안내", emailAddr);
 		}
 	}
 
@@ -356,7 +360,7 @@ public class TransmissionService {
 				hMap.put(Integer.toString(header.length), "회원한글명");
 			}
 
-			List<AutoMap> resultList = new ArrayList();
+			List<AutoMap> resultList = new ArrayList<>();
 			resultList.add(hMap);
 			resultList.addAll(rawList);
 

@@ -325,6 +325,7 @@ public class ApiController {
 
                 if (Boolean.valueOf(String.valueOf(params.get("onHive")))) {
                     //hive call logic
+					params.put("currentClientIp", Helper.currentClientIp());
 					transmissionService.sendForSearchEmail(username, Helper.currentUser().getEmailAddr(), ptsUsername, ptsPrefix, params);
 					return ApiResponse.builder().message("PTS전송되었습니다. 메일로 안내됩니다.").build();
                 } else {
@@ -433,7 +434,7 @@ public class ApiController {
 					hMap6.put(Integer.toString(i), header6[i]);
 				}
 
-				List<AutoMap> list = new ArrayList();
+				List<AutoMap> list = new ArrayList<>();
 
 				list.add(hMap1);
 				list.addAll(list1);
@@ -520,7 +521,7 @@ public class ApiController {
 					hMap5.put(Integer.toString(i), header5[i]);
 				}
 
-				List<AutoMap> list = new ArrayList();
+				List<AutoMap> list = new ArrayList<>();
 
 				list.add(hMap1);
 				list.addAll(list1);
