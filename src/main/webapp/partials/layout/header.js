@@ -7,7 +7,7 @@ angular.module('app').controller('HeaderCtrl', ['$scope', 'authSvc', function ($
 
     $scope.isAllowedMenu = function (menuId) {
         return authSvc.isAllowedMenu(menuId);
-    }
+    };
 
     $scope.logout = function () {
         authSvc.logout();
