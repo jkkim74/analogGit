@@ -38,7 +38,11 @@ a {
 }
 
 .section-home {
-    padding-top: 10vh;
+    padding-top: 5vh;
+}
+
+.section-home ul {
+    margin-left: -15px;
 }
 
 .drop-box {

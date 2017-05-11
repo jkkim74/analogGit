@@ -2,7 +2,7 @@
 
 angular.module('app').controller('HeaderCtrl', ['$scope', 'authSvc', function ($scope, authSvc) {
 
-    $scope.isNavCollapsed = true
+    $scope.isNavCollapsed = true;
     $scope.isAuthenticated = authSvc.isAuthenticated();
 
     $scope.isAllowedMenu = function (menuId) {
