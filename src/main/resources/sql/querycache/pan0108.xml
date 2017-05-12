@@ -25,7 +25,14 @@
 	</select>
 
 	<select id="selectSearchEmail" parameterType="map" resultType="AutoMap" databaseId="hsql">
-		SELECT *
+		SELECT MBR_ID
+			,UNITED_ID
+			,EMAIL_ADDR
+			,EMAIL_ADDR_DUP_YN
+			,MART_UPD_DTTM
+			,#{emailTitle} as emailTitle2
+			,#{startDate} as startDate2
+			,#{endDate} as endDate2
 		FROM MART_INDIV_MBR_MST
         where mbr_id in
 			<foreach collection="idLists" item="item" open="(" close=")" separator=",">

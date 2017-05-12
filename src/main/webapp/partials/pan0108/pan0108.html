@@ -71,12 +71,15 @@
     <hr>
 
     <div ng-show="searchCond.onHive">
-        <h4>이메일제목 연계검색 선택시에는 <span class="bg-warning"> PTS전송</span>만 가능합니다. 선택하신 조건을 확인하세요.</h4>
-        <ul>
-            <li>이메일 주소 : <span class="bg-danger">{{searchCond.emailAddr}}</span></li>
-            <li>일치여부 : <span class="bg-danger" ng-show="searchCond.sameType!='id'">전체일치</span><span class="bg-danger" ng-show="searchCond.sameType=='id'">ID일치</span></li>
-            <li>조회기간 : <span class="bg-danger">{{searchCond.startDate | date:'yyyy-MM-dd'}} ~ {{searchCond.endDate| date:'yyyy-MM-dd'}}</span></li>
-            <li>이메일 제목 : <span class="bg-danger">{{searchCond.emailTitle}}</span></li>
+        <h4>이메일제목 연계검색 선택시에는 <span class="bg-warning"> PTS전송</span>만 가능합니다. PTS전송 조건을 확인하세요.
+            (<i class="fa fa-check-circle-o"></i>:필수, <i class="fa fa-question-circle-o"></i>:선택) </h4>
+        <ul class="fa-ul">
+            <li><i class="fa-li fa fa-check-circle-o"></i> 이메일 주소 : <span class="bg-info">{{searchCond.emailAddr}}</span></li>
+            <li><i class="fa-li fa fa-check-circle-o"></i> 일치여부 : <span class="bg-info" ng-show="searchCond.sameType!='id'">전체일치</span><span class="bg-info" ng-show="searchCond.sameType=='id'">ID일치</span></li>
+            <li><i class="fa-li fa fa-check-circle-o"></i> 조회기간 : <span class="bg-info">{{searchCond.startDate | date:'yyyy-MM-dd'}} ~ {{searchCond.endDate| date:'yyyy-MM-dd'}}</span></li>
+            <li><i class="fa-li fa fa-question-circle-o"></i> 이메일 제목 : <span class="bg-info">{{searchCond.emailTitle}}</span>
+                            <span class="bg-danger" ng-hide="searchCond.emailTitle">이메일 제목 미입력 상태입니다. 해당기간 내 모든 이메일을 검색합니다.</span>
+            </li>
         </ul>
     </div>
     <div ng-show="!searchCond.onHive">

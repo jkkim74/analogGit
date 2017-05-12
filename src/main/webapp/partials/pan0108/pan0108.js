@@ -67,7 +67,7 @@ angular.module('app').controller('PAN0108Ctrl', ['$scope', '$q', '$http', '$time
                 sameType: $scope.searchCond.sameType,
                 startDate: $filter('date')($scope.searchCond.startDate, 'yyyyMMdd'),
                 endDate: $filter('date')($scope.searchCond.endDate, 'yyyyMMdd'),
-                emailTitle: $scope.searchCond.emailTitle
+                emailTitle: $scope.searchCond.emailTitle ? $scope.searchCond.emailTitle : ''
             };
         }
 
@@ -81,7 +81,7 @@ angular.module('app').controller('PAN0108Ctrl', ['$scope', '$q', '$http', '$time
 
             var params = makeSearchEmailParams();
 
-            console.log('Search email params:',params);
+            // console.log('Search email params:',params);
 
             $scope.gridOptionsTable1.data = [];
             $scope.gridOptionsTable2.data = [];
@@ -117,13 +117,13 @@ angular.module('app').controller('PAN0108Ctrl', ['$scope', '$q', '$http', '$time
 
         $scope.sendPts = function (ptsMasking, ptsPrefix) {
 
-            var params = makeSearchEmailParams();
-            console.log(params);
-
             if ($scope.emailSearchForm.$invalid) {
                 toastr.warning('조회 조건을 확인하세요!!');
                 return;
             }
+
+            var params = makeSearchEmailParams();
+            // console.log('pts send parameter',params);
 
             $scope.sendPtsPromise = apiSvc.sendPts({
                 ptsMasking: ptsMasking,
