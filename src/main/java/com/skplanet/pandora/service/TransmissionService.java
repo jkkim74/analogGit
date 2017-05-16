@@ -200,24 +200,36 @@ public class TransmissionService {
 
 			log.info("remotePath={}", remotePath);
 
-			ftpService.send(localPath, remotePath, extractionHost, extractionPort, extractionUsername,
-					extractionPassword);
+			ftpService.send(localPath, remotePath, extractionHost, extractionPort, extractionUsername, extractionPassword);
 
 			int extractionTarget = "MBR_ID".equals(menuProgress.getParam()) ? 2 : 1;
 
 			sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget, extractionCond, singleReq);
+			log.info("Finish sshService.execute....");
 
-			String sentFilename = sendToPts(ptsUsername, ptsMasking, ptsPrefix, menuProgress);
+			List<AutoMap> rawList = oracleRepository.selectMembers(menuProgress, 0, 10000, ptsMasking);
+			log.info("sendForExtraction list size={}", rawList.size());
 
-			// uploadService.markStatus(ProgressStatus.FINISHED,
-			// menuProgress.getMenuId(), username, null, null);
+			if(rawList.size() > 0) {
+				String sentFilename = sendToPts(ptsUsername, ptsMasking, ptsPrefix, menuProgress);
+
+				HashMap<String, Object> map = new HashMap<>();
+				map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
+				mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
+			} else {
+				HashMap<String, Object> map = new HashMap<>();
+				map.put("errMessage", "해당 조건에 맞는 조회 결과가 존재하지 않습니다.");
+				mailService.sendAsTo("panErrMsg.vm", map, "거래 실적 및 유실적 고객 추출요청 결과 안내", emailAddr);
+			}
+
+			// uploadService.markStatus(ProgressStatus.FINISHED, menuProgress.getMenuId(), username, null, null);
 			// 임시로 하드코딩
 			uploadService.markStatus(ProgressStatus.FINISHED, "PAN0005", username, null, null);
 
-			HashMap<String, Object> map = new HashMap<>();
-			map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
-			mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
 		} catch (Exception e) {
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("errMessage", "거래 실적 및 유실적 고객 추출에 실패 했습니다. 관리자에게 문의하세요.");
+			mailService.sendAsTo("panErrMsg.vm", map, "거래 실적 및 유실적 고객 추출요청 결과 안내", emailAddr);
 
 			uploadService.markStatus(ProgressStatus.FAILED, "PAN0005", username, null, null);
 			throw new BizException("Failed to Write File", e);
@@ -260,34 +272,40 @@ public class TransmissionService {
 			List<AutoMap> rawList = querycacheRepository.selectSearchEmail(params);
 			log.info("QC receive list size={}", rawList.size());
 
-			AutoMap hMap = new AutoMap();
-			String headers[] = {"MBR_ID", "OCBCOM 로그인 ID", "이메일 도메인", "이메일 제목", "발송일자"};
-			for(int i=0; i<headers.length; i++){
-				hMap.put(Integer.toString(i), headers[i]);
+			if (rawList.size() > 0) {
+				AutoMap hMap = new AutoMap();
+				String headers[] = {"MBR_ID", "OCBCOM 로그인 ID", "이메일 도메인", "이메일 제목", "발송일자"};
+				for (int i = 0; i < headers.length; i++) {
+					hMap.put(Integer.toString(i), headers[i]);
+				}
+
+				List<AutoMap> resultList = new ArrayList<>();
+				resultList.add(hMap);
+				resultList.addAll(rawList);
+
+				StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
+						.append(Helper.nowDateTimeString()).append('_');
+				if (!StringUtils.isEmpty(ptsPrefix)) {
+					filename.append(ptsPrefix).append('-');
+				}
+
+				filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".txt");
+				Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
+				createCsvForSingleReq(filePath, Charset.forName(encodingForPts), resultList);
+
+				ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
+
+				HashMap<String, Object> map = new HashMap<>();
+				String tmpFilename = filename.toString();
+				map.put("filename", tmpFilename.substring(tmpFilename.lastIndexOf('_') + 1));
+				mailService.sendAsTo("pan0108.vm", map, "이메일 조회 추출완료 안내", emailAddr);
+			}else {
+				HashMap<String, Object> map = new HashMap<>();
+				map.put("errMessage", "해당 조건에 맞는 조회 결과가 존재하지 않습니다.");
+				mailService.sendAsTo("panErrMsg.vm", map, "이메일 조회 추출요청 결과 안내", emailAddr);
 			}
 
-			List<AutoMap> resultList = new ArrayList<>();
-			resultList.add(hMap);
-			resultList.addAll(rawList);
-
-			StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
-					.append(Helper.nowDateTimeString()).append('_');
-			if (!StringUtils.isEmpty(ptsPrefix)) {
-				filename.append(ptsPrefix).append('-');
-			}
-
-			filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".txt");
-			Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
-			createCsvForSingleReq(filePath, Charset.forName(encodingForPts), resultList);
-
-			ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
-
-			HashMap<String, Object> map = new HashMap<>();
-			String tmpFilename = filename.toString();
-			map.put("filename", tmpFilename.substring(tmpFilename.lastIndexOf('_') + 1));
-			mailService.sendAsTo("pan0108.vm", map, "이메일 조회 추출완료 안내", emailAddr);
-
-			//idmslog
+			//idms log
 			idmsLogService.memberSearch(Helper.nowDateTimeString(), username, String.valueOf(params.get("currentClientIp")),
 					null, null, String.valueOf(params.get("menuId")), rawList.size());
 
@@ -295,8 +313,12 @@ public class TransmissionService {
 		    log.info("Send error message to mail that is Have no matched mbrId.");
 
 			HashMap<String, Object> map = new HashMap<>();
-			map.put("errMessage", "해당 조건에 맞는 MBR_ID가 회원원장에 존재하지 않습니다.");
-			mailService.sendAsTo("pan0108err.vm", map, "이메일 조회 추출요청 결과 안내", emailAddr);
+			map.put("errMessage", "해당 조건에 맞는 MBR_ID가 회원원장에 존재하지 않습니다.\n조회조건을 확인하세요.");
+			mailService.sendAsTo("panErrMsg.vm", map, "이메일 조회 추출요청 결과 안내", emailAddr);
+
+			//idms log (mbrCnt is must 0. cause no matched data.)
+			idmsLogService.memberSearch(Helper.nowDateTimeString(), username, String.valueOf(params.get("currentClientIp")),
+					null, null, String.valueOf(params.get("menuId")), 0);
 		}
 	}
 
@@ -344,44 +366,50 @@ public class TransmissionService {
 			List<AutoMap> rawList = querycacheRepository.selectTrSingleRequest(singleReqParam);
 			log.info("QC receive list size={}", rawList.size());
 
-			AutoMap hMap = new AutoMap();
-			String header[] = {"접수일자", "승인일시", "대표승인번호", "승인번호", "매출일시", "회원ID"
-							, "카드코드", "카드코드명", "카드번호", "정산제휴사코드", "정산제휴사명", "정산가맹점코드"
-							, "정산가맹점명", "발생제휴사코드", "발생제휴사명", "발생가맹점코드", "발생가맹점명", "포인트종류코드"
-							, "포인트종류명", "전표코드", "전표명", "매출금액", "포인트", "제휴사연회비"
-							, "수수료", "지불수단코드", "지불수단명", "기관코드", "기관명", "유종코드"
-							, "유종명", "쿠폰코드", "쿠폰명", "원승인일자", "원승인번호", "취소전표유형코드", "취소전표유형명"};
+			if (rawList.size() > 0) {
+				AutoMap hMap = new AutoMap();
+				String header[] = {"접수일자", "승인일시", "대표승인번호", "승인번호", "매출일시", "회원ID"
+						, "카드코드", "카드코드명", "카드번호", "정산제휴사코드", "정산제휴사명", "정산가맹점코드"
+						, "정산가맹점명", "발생제휴사코드", "발생제휴사명", "발생가맹점코드", "발생가맹점명", "포인트종류코드"
+						, "포인트종류명", "전표코드", "전표명", "매출금액", "포인트", "제휴사연회비"
+						, "수수료", "지불수단코드", "지불수단명", "기관코드", "기관명", "유종코드"
+						, "유종명", "쿠폰코드", "쿠폰명", "원승인일자", "원승인번호", "취소전표유형코드", "취소전표유형명"};
 
-			for (int i = 0; i < header.length; i++) {
-				hMap.put(Integer.toString(i), header[i]);
+				for (int i = 0; i < header.length; i++) {
+					hMap.put(Integer.toString(i), header[i]);
+				}
+				//add header '고객성명' if extractTarget is tr_mbrKorNm
+				if (singleReqParam.getExtractTarget().equals("tr_mbrKorNm")) {
+					hMap.put(Integer.toString(header.length), "회원한글명");
+				}
+
+				List<AutoMap> resultList = new ArrayList<>();
+				resultList.add(hMap);
+				resultList.addAll(rawList);
+
+				StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
+						.append(Helper.nowDateTimeString()).append('_');
+				if (!StringUtils.isEmpty(ptsPrefix)) {
+					filename.append(ptsPrefix).append('-');
+				}
+
+				filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".txt");
+				Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
+				createCsvForSingleReq(filePath, Charset.forName(encodingForPts), resultList);
+
+				ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
+
+				HashMap<String, Object> map = new HashMap<>();
+				String tmpFilename = filename.toString();
+				map.put("filename", tmpFilename.substring(tmpFilename.lastIndexOf('_') + 1));
+				mailService.sendAsTo("pan0105.vm", map, "거래실적 및 유실적 고객 단건 추출완료 안내", emailAddr);
+			}else{
+				HashMap<String, Object> map = new HashMap<>();
+				map.put("errMessage", "해당 조건에 맞는 조회 결과가 존재하지 않습니다.\n조회조건을 확인하세요.");
+				mailService.sendAsTo("panErrMsg.vm", map, "거래실적 및 유실적 고객 단건 추출요청 결과 안내", emailAddr);
 			}
-			//add header '고객성명' if extractTarget is tr_mbrKorNm
-			if(singleReqParam.getExtractTarget().equals("tr_mbrKorNm")){
-				hMap.put(Integer.toString(header.length), "회원한글명");
-			}
-
-			List<AutoMap> resultList = new ArrayList<>();
-			resultList.add(hMap);
-			resultList.addAll(rawList);
-
-			StringBuilder filename = new StringBuilder("P140802BKhub_").append(ptsUsername).append('_')
-					.append(Helper.nowDateTimeString()).append('_');
-			if (!StringUtils.isEmpty(ptsPrefix)) {
-				filename.append(ptsPrefix).append('-');
-			}
-
-			filename.append(username).append('-').append(Helper.nowDateTimeString()).append(".txt");
-			Path filePath = Paths.get(Constant.APP_FILE_DIR, filename.toString());
-			createCsvForSingleReq(filePath, Charset.forName(encodingForPts), resultList);
-
-			ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
 
 			singleReqRepository.updateSingleRequestProgress(ProgressStatus.FINISHED, curSn);
-
-			HashMap<String, Object> map = new HashMap<>();
-			String tmpFilename = filename.toString();
-			map.put("filename", tmpFilename.substring(tmpFilename.lastIndexOf('_') + 1));
-			mailService.sendAsTo("pan0105.vm", map, "거래실적 및 유실적 고객 단건 추출완료 안내", emailAddr);
 
 		} catch (Exception e) {
 			singleReqRepository.updateSingleRequestProgress(ProgressStatus.FAILED, curSn);
@@ -437,9 +465,7 @@ public class TransmissionService {
 
 		log.info("remotePath={}", remotePath);
 
-		// TODO 주석풀기
-		ftpService.send(filePath, remotePath, extinctionHost, extinctionPort,
-		extinctionUsername, extinctionPassword);
+		ftpService.send(filePath, remotePath, extinctionHost, extinctionPort, extinctionUsername, extinctionPassword);
 	}
 
 	public void sendToSms(final Map<String, Object> params) {

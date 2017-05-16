@@ -565,7 +565,7 @@ public class ApiController {
 				if( currentReqCall < Constant.MAX_SINGLE_REQUEST_CALL) {
 					transmissionService.sendForSingleRequest(username, Helper.currentUser().getEmailAddr(), ptsUsername, ptsPrefix, params);
 				} else {
-					return ApiResponse.builder().message("최대 5건 까지 동시 요청 가능합니다.").build();
+					return ApiResponse.builder().message("최대 "+ Constant.MAX_SINGLE_REQUEST_CALL + "건 까지 동시 요청 가능합니다.").build();
 				}
 
 				break;
