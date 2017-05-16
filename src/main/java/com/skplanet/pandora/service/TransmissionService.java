@@ -270,9 +270,10 @@ public class TransmissionService {
 			params.put("idLists",rawMemberLists);
 
 			List<AutoMap> rawList = querycacheRepository.selectSearchEmail(params);
-			log.info("QC receive list size={}", rawList.size());
+			log.info("sendForSearchEmail() QC receive list size={}", rawList.size());
 
 			if (rawList.size() > 0) {
+				log.info("sendForSearchEmail() - have some data, run to pts logic");
 				AutoMap hMap = new AutoMap();
 				String headers[] = {"MBR_ID", "OCBCOM 로그인 ID", "이메일 도메인", "이메일 제목", "발송일자"};
 				for (int i = 0; i < headers.length; i++) {
@@ -300,6 +301,7 @@ public class TransmissionService {
 				map.put("filename", tmpFilename.substring(tmpFilename.lastIndexOf('_') + 1));
 				mailService.sendAsTo("pan0108.vm", map, "이메일 조회 추출완료 안내", emailAddr);
 			}else {
+				log.info("sendForSearchEmail() - have No data, just send mail");
 				HashMap<String, Object> map = new HashMap<>();
 				map.put("errMessage", "해당 조건에 맞는 조회 결과가 존재하지 않습니다.");
 				mailService.sendAsTo("panErrMsg.vm", map, "이메일 조회 추출요청 결과 안내", emailAddr);
@@ -364,9 +366,10 @@ public class TransmissionService {
 //			log.info("select singleReq list={}", singleReqList);
 
 			List<AutoMap> rawList = querycacheRepository.selectTrSingleRequest(singleReqParam);
-			log.info("QC receive list size={}", rawList.size());
+			log.info("sendForSingleRequest() QC receive list size={}", rawList.size());
 
 			if (rawList.size() > 0) {
+				log.info("sendForSingleRequest() - have some data, run to pts logic");
 				AutoMap hMap = new AutoMap();
 				String header[] = {"접수일자", "승인일시", "대표승인번호", "승인번호", "매출일시", "회원ID"
 						, "카드코드", "카드코드명", "카드번호", "정산제휴사코드", "정산제휴사명", "정산가맹점코드"
@@ -404,6 +407,7 @@ public class TransmissionService {
 				map.put("filename", tmpFilename.substring(tmpFilename.lastIndexOf('_') + 1));
 				mailService.sendAsTo("pan0105.vm", map, "거래실적 및 유실적 고객 단건 추출완료 안내", emailAddr);
 			}else{
+				log.info("sendForSingleRequest() - have No data, just send mail");
 				HashMap<String, Object> map = new HashMap<>();
 				map.put("errMessage", "해당 조건에 맞는 조회 결과가 존재하지 않습니다.\n조회조건을 확인하세요.");
 				mailService.sendAsTo("panErrMsg.vm", map, "거래실적 및 유실적 고객 단건 추출요청 결과 안내", emailAddr);
