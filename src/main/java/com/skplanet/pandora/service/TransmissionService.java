@@ -212,14 +212,14 @@ public class TransmissionService {
 
 			if(rawList.size() > 0) {
 				String sentFilename = sendToPts(ptsUsername, ptsMasking, ptsPrefix, menuProgress);
-
 				HashMap<String, Object> map = new HashMap<>();
+				map.put("menuname","거래 실적 및 유실적 고객 추출");
 				map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
-				mailService.sendAsTo("pan0105.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
+				mailService.sendAsTo("panSuccessMsg.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
 			} else {
 				HashMap<String, Object> map = new HashMap<>();
 				map.put("errMessage", "해당 조건에 맞는 조회 결과가 존재하지 않습니다.");
-				mailService.sendAsTo("panErrMsg.vm", map, "거래 실적 및 유실적 고객 추출요청 결과 안내", emailAddr);
+				mailService.sendAsTo("panErrorMsg.vm", map, "거래 실적 및 유실적 고객 추출요청 결과 안내", emailAddr);
 			}
 
 			// uploadService.markStatus(ProgressStatus.FINISHED, menuProgress.getMenuId(), username, null, null);
@@ -229,7 +229,7 @@ public class TransmissionService {
 		} catch (Exception e) {
 			HashMap<String, Object> map = new HashMap<>();
 			map.put("errMessage", "거래 실적 및 유실적 고객 추출에 실패 했습니다. 관리자에게 문의하세요.");
-			mailService.sendAsTo("panErrMsg.vm", map, "거래 실적 및 유실적 고객 추출요청 결과 안내", emailAddr);
+			mailService.sendAsTo("panErrorMsg.vm", map, "거래 실적 및 유실적 고객 추출요청 결과 안내", emailAddr);
 
 			uploadService.markStatus(ProgressStatus.FAILED, "PAN0005", username, null, null);
 			throw new BizException("Failed to Write File", e);
@@ -296,15 +296,16 @@ public class TransmissionService {
 
 				ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
 
-				HashMap<String, Object> map = new HashMap<>();
 				String tmpFilename = filename.toString();
+				HashMap<String, Object> map = new HashMap<>();
+				map.put("menuname","이메일 조회");
 				map.put("filename", tmpFilename.substring(tmpFilename.lastIndexOf('_') + 1));
-				mailService.sendAsTo("pan0108.vm", map, "이메일 조회 추출완료 안내", emailAddr);
+				mailService.sendAsTo("panSuccessMsg.vm", map, "이메일 조회 추출완료 안내", emailAddr);
 			}else {
 				log.info("sendForSearchEmail() - have No data, just send mail");
 				HashMap<String, Object> map = new HashMap<>();
 				map.put("errMessage", "해당 조건에 맞는 조회 결과가 존재하지 않습니다.");
-				mailService.sendAsTo("panErrMsg.vm", map, "이메일 조회 추출요청 결과 안내", emailAddr);
+				mailService.sendAsTo("panErrorMsg.vm", map, "이메일 조회 추출요청 결과 안내", emailAddr);
 			}
 
 			//idms log
@@ -316,7 +317,7 @@ public class TransmissionService {
 
 			HashMap<String, Object> map = new HashMap<>();
 			map.put("errMessage", "해당 조건에 맞는 MBR_ID가 회원원장에 존재하지 않습니다.\n조회조건을 확인하세요.");
-			mailService.sendAsTo("panErrMsg.vm", map, "이메일 조회 추출요청 결과 안내", emailAddr);
+			mailService.sendAsTo("panErrorMsg.vm", map, "이메일 조회 추출요청 결과 안내", emailAddr);
 
 			//idms log (mbrCnt is must 0. cause no matched data.)
 			idmsLogService.memberSearch(Helper.nowDateTimeString(), username, String.valueOf(params.get("currentClientIp")),
@@ -402,15 +403,16 @@ public class TransmissionService {
 
 				ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
 
-				HashMap<String, Object> map = new HashMap<>();
 				String tmpFilename = filename.toString();
+				HashMap<String, Object> map = new HashMap<>();
+				map.put("menuname","거래 실적 및 유실적 고객 추출");
 				map.put("filename", tmpFilename.substring(tmpFilename.lastIndexOf('_') + 1));
-				mailService.sendAsTo("pan0105.vm", map, "거래실적 및 유실적 고객 단건 추출완료 안내", emailAddr);
+				mailService.sendAsTo("panSuccessMsg.vm", map, "거래실적 및 유실적 고객 단건 추출완료 안내", emailAddr);
 			}else{
 				log.info("sendForSingleRequest() - have No data, just send mail");
 				HashMap<String, Object> map = new HashMap<>();
-				map.put("errMessage", "해당 조건에 맞는 조회 결과가 존재하지 않습니다.\n조회조건을 확인하세요.");
-				mailService.sendAsTo("panErrMsg.vm", map, "거래실적 및 유실적 고객 단건 추출요청 결과 안내", emailAddr);
+				map.put("errMessage", "해당 조건에 맞는 조회 결과가 존재하지 않습니다.");
+				mailService.sendAsTo("panErrorMsg.vm", map, "거래실적 및 유실적 고객 단건 추출요청 결과 안내", emailAddr);
 			}
 
 			singleReqRepository.updateSingleRequestProgress(ProgressStatus.FINISHED, curSn);
