@@ -211,12 +211,14 @@ public class TransmissionService {
 			log.info("sendForExtraction list size={}", rawList.size());
 
 			if(rawList.size() > 0) {
+				log.info("sendForExtraction() - have some data, run to pts logic");
 				String sentFilename = sendToPts(ptsUsername, ptsMasking, ptsPrefix, menuProgress);
 				HashMap<String, Object> map = new HashMap<>();
 				map.put("menuname","거래 실적 및 유실적 고객 추출");
 				map.put("filename", sentFilename.substring(sentFilename.lastIndexOf('_') + 1));
 				mailService.sendAsTo("panSuccessMsg.vm", map, "거래 실적 및 유실적 고객 추출 완료 안내", emailAddr);
 			} else {
+				log.info("sendForExtraction() - have No data, just send mail");
 				HashMap<String, Object> map = new HashMap<>();
 				map.put("errMessage", "해당 조건에 맞는 조회 결과가 존재하지 않습니다.");
 				mailService.sendAsTo("panErrorMsg.vm", map, "거래 실적 및 유실적 고객 추출요청 결과 안내", emailAddr);
