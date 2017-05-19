@@ -193,6 +193,8 @@ public class TransmissionService {
 	public void sendForExtraction(String username, String inputDataType, String periodType, String periodFrom,
 			String periodTo, String ptsUsername, boolean ptsMasking, String ptsPrefix, String emailAddr,
 			MenuProgress menuProgress, String extractionCond, String singleReq) {
+	    int errExtractionTarget = 0;
+	    String errFilename = "";
 		try {
 			String filename = menuProgress.getFilename();
 			Path localPath = Paths.get(Constant.APP_FILE_DIR, filename);
@@ -209,6 +211,9 @@ public class TransmissionService {
 
 			List<AutoMap> rawList = oracleRepository.selectMembers(menuProgress, 0, 10000, ptsMasking);
 			log.info("sendForExtraction list size={}", rawList.size());
+
+			errExtractionTarget = extractionTarget;
+			errFilename = filename;
 
 			if(rawList.size() > 0) {
 				log.info("sendForExtraction() - have some data, run to pts logic");
@@ -231,7 +236,24 @@ public class TransmissionService {
 		} catch (Exception e) {
 			HashMap<String, Object> map = new HashMap<>();
 			map.put("errMessage", "거래 실적 및 유실적 고객 추출에 실패 했습니다. 관리자에게 문의하세요.");
+			map.put("errMenu","PAN0005");
+			map.put("errUsername", username);
+			map.put("errInputDataType", inputDataType);
+			map.put("errPeriodType", periodType);
+			map.put("errPeriodFrom", periodFrom);
+			map.put("errPeriodTo", periodTo);
+			map.put("errPtsUsername", ptsUsername);
+			map.put("errPtsMasking", ptsMasking);
+			map.put("errPtsPrefix", ptsPrefix);
+			map.put("errEmailAddr", emailAddr);
+			map.put("errExtractionCond", extractionCond);
+			map.put("errSingleReq", singleReq);
+			map.put("errFilename", errFilename);
+			map.put("errExtractionTarget", errExtractionTarget);
+			map.put("errLog", e.toString());
+
 			mailService.sendAsTo("panErrorMsg.vm", map, "거래 실적 및 유실적 고객 추출요청 결과 안내", emailAddr);
+			mailService.sendAsTo("panAdminMsg.vm", map, "거래 실적 및 유실적 고객 추출 장애발생 안내", "woosok.cho@sk.com");
 
 			uploadService.markStatus(ProgressStatus.FAILED, "PAN0005", username, null, null);
 			throw new BizException("Failed to Write File", e);
