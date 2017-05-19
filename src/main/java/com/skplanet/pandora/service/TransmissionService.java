@@ -199,21 +199,20 @@ public class TransmissionService {
 			String filename = menuProgress.getFilename();
 			Path localPath = Paths.get(Constant.APP_FILE_DIR, filename);
 			String remotePath = "web/" + filename;
+			int extractionTarget = "MBR_ID".equals(menuProgress.getParam()) ? 2 : 1;
+
+			errExtractionTarget = extractionTarget;
+			errFilename = filename;
 
 			log.info("remotePath={}", remotePath);
 
 			ftpService.send(localPath, remotePath, extractionHost, extractionPort, extractionUsername, extractionPassword);
-
-			int extractionTarget = "MBR_ID".equals(menuProgress.getParam()) ? 2 : 1;
 
 			sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget, extractionCond, singleReq);
 			log.info("Finish sshService.execute....");
 
 			List<AutoMap> rawList = oracleRepository.selectMembers(menuProgress, 0, 10000, ptsMasking);
 			log.info("sendForExtraction list size={}", rawList.size());
-
-			errExtractionTarget = extractionTarget;
-			errFilename = filename;
 
 			if(rawList.size() > 0) {
 				log.info("sendForExtraction() - have some data, run to pts logic");
