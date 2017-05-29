@@ -94,6 +94,7 @@ angular.module('app').controller('PAN0104Ctrl', ['$scope', '$q', '$http', '$time
                 baseYm: $scope.selectedOption.value
             };
 
+            apiSvc.pandoraLog(params);
             $scope.summaryPromise = apiSvc.getExtinctionSummary(params);
             $scope.summaryPromise.then(function (data) {
                 $scope.gridOptionsSummary.data = data;
@@ -112,6 +113,7 @@ angular.module('app').controller('PAN0104Ctrl', ['$scope', '$q', '$http', '$time
                 limit: limit || $scope.gridOptionsTargets.paginationPageSize
             };
 
+            apiSvc.pandoraLog(params);
             $scope.targetsPromise = apiSvc.getExtinctionTargets(params);
             $scope.targetsPromise.then(function (data) {
                 $scope.gridOptionsTargets.data = data.value;

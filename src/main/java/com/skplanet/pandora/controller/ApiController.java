@@ -5,10 +5,8 @@ import com.skplanet.pandora.repository.oracle.OracleRepository;
 import com.skplanet.pandora.repository.querycache.QueryCacheRepository;
 import com.skplanet.pandora.service.TransmissionService;
 import com.skplanet.web.exception.BizException;
-import com.skplanet.web.model.ApiResponse;
-import com.skplanet.web.model.AutoMap;
-import com.skplanet.web.model.MenuProgress;
-import com.skplanet.web.model.ProgressStatus;
+import com.skplanet.web.model.*;
+import com.skplanet.web.repository.mysql.PandoraLogRepository;
 import com.skplanet.web.repository.mysql.SingleReqRepository;
 import com.skplanet.web.repository.oracle.UploadTempRepository;
 import com.skplanet.web.security.UserInfo;
@@ -62,7 +60,10 @@ public class ApiController {
 	private ExcelService excelService;	
 	
 	@Autowired
-	private PtsService ptsService;	
+	private PtsService ptsService;
+
+	@Autowired
+	private PandoraLogRepository pandoraLogRepository;
 
 	@PostMapping("files")
 	public ApiResponse handleUpload(@RequestParam("file") MultipartFile file, @RequestParam String menuId,
@@ -179,31 +180,26 @@ public class ApiController {
 
 	@GetMapping("/lastestUsageInfo")
 	public List<AutoMap> getLastestUsageInfo(@RequestParam Map<String, Object> params) {
-
 		return oracleRepository.selectLastestUsageInfo(params);
 	}
 
 	@GetMapping("/marketingMemberInfo")
 	public List<AutoMap> getMarketingMemberInfo(@RequestParam Map<String, Object> params) {
-
 		return oracleRepository.selectMarketingMemberInfo(params);
 	}
 
 	@GetMapping("/marketingMemberInfoHistory")
 	public List<AutoMap> getMarketingMemberInfoHistory(@RequestParam Map<String, Object> params) {
-
 		return oracleRepository.selectMarketingMemberInfoHistory(params);
 	}
 
 	@GetMapping("/thirdPartyProvideHistory")
 	public List<AutoMap> getThirdPartyProvideHistory(@RequestParam Map<String, Object> params) {
-
 		return oracleRepository.selectThirdPartyProvideHistory(params);
 	}
 
 	@GetMapping("/cardList")
 	public List<AutoMap> getCardList(@RequestParam Map<String, Object> params) {
-
 		return oracleRepository.selectCardList(params);
 	}
 
@@ -301,9 +297,41 @@ public class ApiController {
 		return dummyMap;
 	}
 
+	@GetMapping("/pandoraLog")
+	public List<PandoraLog> getPandoraLog(){
+		log.info("Call getPandoraLog.");
+		List<PandoraLog> pandoraLogs = pandoraLogRepository.selectPandoraMenuActions();
+		log.info("pandoraLogs size={}",pandoraLogs.size());
+		return pandoraLogs;
+	}
+
+	@PostMapping("/pandoraLog")
+	public void pandoraLog(@RequestParam Map<String,Object> params, @RequestParam(defaultValue = "search") String actionId){
+		log.info("Call pandoraLog. params={}", params);
+
+		String ptsMask = String.valueOf(params.get("ptsMasking"));
+		String ptsPrefix = String.valueOf(params.get("ptsPrefix"));
+
+		PandoraLog pandoraLog = new PandoraLog();
+		pandoraLog.setUserId(Helper.currentUser().getUsername());
+		pandoraLog.setMenuId(String.valueOf(params.get("menuId")));
+		pandoraLog.setActionId(actionId);
+		pandoraLog.setSearchCond(params.toString());
+		pandoraLog.setPtsMask(((ptsMask==null)||(ptsMask.length()==0))?"":ptsMask);
+		pandoraLog.setPtsPrefix(((ptsPrefix==null)||(ptsPrefix.length()==0))?"":ptsPrefix);
+
+        pandoraLogRepository.insertPandoraMenuAction(pandoraLog);
+	}
+
 	@PostMapping("/sendPts")
 	public ApiResponse sendPts(@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix,
 					   @RequestParam String menuId, @RequestParam Map<String, Object> params) {
+
+		/**
+		 * pandora menu action log
+		 *  - pan0101 pan0102 pan0103 pan0105(singleRequest) pan0106 pan0107 pan0108
+		 **/
+		pandoraLog(params,"pts");
 
 		log.info("call::sendPts...");
 		log.info("ptsMasking={}, ptsPrefix={}, menuId={}, params={}", ptsMasking, ptsPrefix, menuId, params);
@@ -369,7 +397,6 @@ public class ApiController {
 							null, null, (String) params.get("menuId"), list1.size()+list2.size()+list3.size());
                 }
                 break;
-
 			}
 
 			case "PAN0102": {
@@ -468,6 +495,7 @@ public class ApiController {
 				ptsService.send(filePath.toFile().getAbsolutePath(), ptsUsername);
 				break;
 			}
+
 			case "PAN0107": {
 
 				List<AutoMap> list1 = querycacheRepository.selectAgreementInfo(mbrId);
@@ -553,6 +581,7 @@ public class ApiController {
 
 				break;
 			}
+
 			case "PAN0105":{
 				/**
 				 * step1. load request count.
@@ -586,7 +615,16 @@ public class ApiController {
 	public ApiResponse extractMemberInfo(@RequestParam String menuId, @RequestParam String inputDataType,
 			@RequestParam String extractionCond, @RequestParam String periodType, @RequestParam String periodFrom, @RequestParam String periodTo,
 			@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix,
-			@RequestParam(defaultValue = "N") String singleReq) {
+			@RequestParam(defaultValue = "N") String singleReq, @RequestParam Map<String, Object> params) {
+
+		/**
+		 * pandora menu action log
+		 *  - pan0105
+		 */
+		pandoraLog(params,"pts");
+
+		log.info("pan0105 multi request - extractMemberinfo()");
+		log.info("ptsMasking={}, ptsPrefix={}, menuId={}, params={}", ptsMasking, ptsPrefix, menuId, params);
 
 		UserInfo user = Helper.currentUser();
 		String username = user.getUsername();
@@ -617,7 +655,6 @@ public class ApiController {
 
 	@GetMapping("/extinctionTargets")
 	public ApiResponse getExtinctionTargets(@RequestParam Map<String, Object> params) {
-
 		List<AutoMap> list = oracleRepository.selectExtinctionTargetsMas(params);
 		int count = oracleRepository.countExtinctionTargets(params);
 		return ApiResponse.builder().value(list).totalItems(count).build();
@@ -625,6 +662,12 @@ public class ApiController {
 
 	@PostMapping("/noticeExtinction")
 	public ApiResponse noticeExtinction(@RequestParam Map<String, Object> params) {
+		/**
+		 * pandora menu action log
+		 *  - pan0104
+		 */
+		pandoraLog(params,"channel");
+
 		TransmissionType transmissionType = TransmissionType
 				.valueOf(params.get("transmissionType").toString().toUpperCase());
 

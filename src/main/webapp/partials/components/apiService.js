@@ -78,35 +78,44 @@ angular.module('app').service('apiSvc', ['$log', '$q', '$http', '$httpParamSeria
         this.saveAccess = new ApiPost('users/access');
         this.saveMasking = new ApiPost('users/masking');
 
-        // PANDORA
-        this.getMembers = new ApiGet('members');
+        //pan0102
         this.getMemberInfo = new ApiGet('memberInfo');
-        this.getAgreementInfo = new ApiGet('agreementInfo');
-        this.getJoinInfoOcbapp = new ApiGet('joinInfoOcbapp');
-        this.getJoinInfoOcbcom = new ApiGet('joinInfoOcbcom');
         this.getLastestUsageInfo = new ApiGet('lastestUsageInfo');
         this.getMarketingMemberInfo = new ApiGet('marketingMemberInfo');
         this.getMarketingMemberInfoHistory = new ApiGet('marketingMemberInfoHistory');
         this.getThirdPartyProvideHistory = new ApiGet('thirdPartyProvideHistory');
         this.getCardList = new ApiGet('cardList');
-        this.getTransactionHistory = new ApiGet('transactionHistory');
-        this.getEmailSendHistory = new ApiGet('emailSendHistory');
-        this.getAppPushHistory = new ApiGet('appPushHistory');
         this.getClphnNoDup = new ApiGet('clphnNoDup');
         this.getEmailAddrDup = new ApiGet('emailAddrDup');
-        this.sendPts = new ApiPost('sendPts');
-        this.extractMemberInfo = new ApiPost('extractMemberInfo');
+
+        //pan0104
         this.getExtinctionSummary = new ApiGet('extinctionSummary');
         this.getExtinctionTargets = new ApiGet('extinctionTargets');
         this.noticeExtinction = new ApiPost('noticeExtinction');
-        this.getUploaded = new ApiGet('files');
-        this.getQueryCacheTest = new ApiGet('queryCacheTest');
 
+        //pan0105
+        this.extractMemberInfo = new ApiPost('extractMemberInfo');
 
+        //pan0107
+        this.getAgreementInfo = new ApiGet('agreementInfo');
+        this.getJoinInfoOcbapp = new ApiGet('joinInfoOcbapp');
+        this.getJoinInfoOcbcom = new ApiGet('joinInfoOcbcom');
+        this.getEmailSendHistory = new ApiGet('emailSendHistory');
+        this.getAppPushHistory = new ApiGet('appPushHistory');
+        this.getTransactionHistory = new ApiGet('transactionHistory');
+
+        //pan0108
         this.getMemberLedger= new ApiGet('memberLedger');
         this.getMarketingLedger= new ApiGet('marketingLedger');
         this.getMarketingHistory= new ApiGet('marketingHistory');
 
+        // PANDORA all page
+        this.getMembers = new ApiGet('members');
+        this.sendPts = new ApiPost('sendPts');
+        this.getPandoraLog= new ApiGet('pandoraLog');
+        this.pandoraLog = new ApiPost('pandoraLog');
+        this.getUploaded = new ApiGet('files');
+        this.getQueryCacheTest = new ApiGet('queryCacheTest');
         this.upload = function (params) {
             var deferred = $q.defer();
 

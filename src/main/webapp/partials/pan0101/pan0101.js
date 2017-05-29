@@ -66,8 +66,9 @@ angular.module('app').controller('PAN0101Ctrl', ['$scope', '$q', '$http', '$time
             var params = {
                 offset: offset || 0,
                 limit: limit || $scope.gridOptionsMembers.paginationPageSize
-            }
+            };
 
+            apiSvc.pandoraLog(params);
             $scope.membersPromise = apiSvc.getMembers(params);
             $scope.membersPromise.then(function (data) {
                 $scope.gridOptionsMembers.data = data.value;

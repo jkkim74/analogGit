@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skplanet.web.repository.mysql.PandoraLogRepository">
+
+	<select id="selectPandoraMenuActions" resultType="PandoraLog">
+		select A.SN as SN
+			  ,A.USER_ID AS USER_ID
+			  ,B.NAME AS MENU_NAME
+			  ,A.MENU_ID AS MENU_ID
+			  ,C.NAME AS ACTION_NAME
+			  ,A.ACTION_ID AS ACTION_ID
+			  ,A.SEARCH_COND AS SEARCH_COND
+			  ,A.PTS_MASK AS PTS_MASK
+			  ,A.PTS_PREFIX AS PTS_PREFIX
+			  ,DATE_FORMAT(A.ACTION_TIME, '%Y-%m-%d %H:%i:%s') AS ACTION_TIME
+		 from  PANDORA_MENU_ACTION_LOG A
+			  ,(select * from pandora_codes where code = 'menu') B
+			  ,(select * from pandora_codes where code = 'action') C
+		where  A.MENU_ID = B.ID
+		  and  A.action_ID = C.ID
+	 order by  A.ACTION_TIME DESC
+	</select>
+	<select id="selectPandoraMenuActions" resultType="PandoraLog" databaseId="hsql">
+		select A.SN as SN
+			  ,A.USER_ID AS USER_ID
+			  ,B.NAME AS MENU_NAME
+			  ,A.MENU_ID AS MENU_ID
+			  ,C.NAME AS ACTION_NAME
+			  ,A.ACTION_ID AS ACTION_ID
+			  ,A.SEARCH_COND AS SEARCH_COND
+			  ,A.PTS_MASK AS PTS_MASK
+			  ,A.PTS_PREFIX AS PTS_PREFIX
+			  ,A.ACTION_TIME AS ACTION_TIME
+		 from  PANDORA_MENU_ACTION_LOG A
+			  ,(select * from pandora_codes where code = 'menu') B
+			  ,(select * from pandora_codes where code = 'action') C
+		where  A.MENU_ID = B.ID
+		  and  A.action_ID = C.ID
+	 order by  A.ACTION_TIME DESC
+	</select>
+
+	<insert id="insertPandoraMenuAction" parameterType="PandoraLog">
+		insert into PANDORA_MENU_ACTION_LOG(USER_ID, MENU_ID, ACTION_ID, SEARCH_COND, PTS_MASK, PTS_PREFIX)
+		values (#{userId},#{menuId},#{actionId},#{searchCond},#{ptsMask},#{ptsPrefix});
+	</insert>
+	<insert id="insertPandoraMenuAction" parameterType="PandoraLog" databaseId="hsql">
+ 		insert into PANDORA_MENU_ACTION_LOG(USER_ID, MENU_ID, ACTION_ID, SEARCH_COND, PTS_MASK, PTS_PREFIX)
+		values (#{userId},#{menuId},#{actionId},#{searchCond},#{ptsMask},#{ptsPrefix});
+	</insert>
+
+</mapper>

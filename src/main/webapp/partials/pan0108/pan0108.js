@@ -81,6 +81,8 @@ angular.module('app').controller('PAN0108Ctrl', ['$scope', '$q', '$http', '$time
 
             var params = makeSearchEmailParams();
 
+            apiSvc.pandoraLog(params);
+
             // console.log('Search email params:',params);
 
             $scope.gridOptionsTable1.data = [];

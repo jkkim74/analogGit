@@ -140,6 +140,7 @@ angular.module('app').controller('PAN0107Ctrl', ['$scope', '$q', '$http', '$time
                 searchType: $scope.selectedOption.value,
                 searchKeyword: $scope.searchKeyword
             };
+            apiSvc.pandoraLog(params);
 
             $scope.agreementInfoPromise = apiSvc.getAgreementInfo(params);
             $scope.agreementInfoPromise.then(function (data) {

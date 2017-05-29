@@ -167,6 +167,7 @@ angular.module('app').controller('PAN0102Ctrl', ['$scope', '$q', '$http', '$time
                 searchKeyword: $scope.searchKeyword
             };
 
+            apiSvc.pandoraLog(params);
             $scope.memberInfoPromise = apiSvc.getMemberInfo(params);
             $scope.memberInfoPromise.then(function (data) {
                 $scope.gridOptionsBasicInfo.data = data;

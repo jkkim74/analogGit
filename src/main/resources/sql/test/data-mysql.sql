@@ -52,20 +52,29 @@ insert into SINGLE_REQUEST_PROGRESS (SN,USERNAME,MEMBER_ID,EXTRACT_TARGET,EXTRAC
 insert into SINGLE_REQUEST_PROGRESS (SN,USERNAME,MEMBER_ID,EXTRACT_TARGET,EXTRACT_COND,PERIOD_TYPE,PERIOD_FROM,PERIOD_TO,STATUS) values('999998', 'user', '101700393', 'tr','t','sale_dt','20100101','20170314','PROCESSING');
 insert into SINGLE_REQUEST_PROGRESS (SN,USERNAME,MEMBER_ID,EXTRACT_TARGET,EXTRACT_COND,PERIOD_TYPE,PERIOD_FROM,PERIOD_TO,STATUS) values('999999', 'user', '101700393', 'tr','t','sale_dt','20100101','20170314','PROCESSING');
 
+insert into PANDORA_CODES(CODE, ID, NAME) values ('menu', 'PAN0002', '사용자등록관리');
+insert into PANDORA_CODES(CODE, ID, NAME) values ('menu', 'PAN0003', '화면권한관리');
+insert into PANDORA_CODES(CODE, ID, NAME) values ('menu', 'PAN0101', '멤버ID일괄전환');
+insert into PANDORA_CODES(CODE, ID, NAME) values ('menu', 'PAN0102', '고객정보기본조회');
+insert into PANDORA_CODES(CODE, ID, NAME) values ('menu', 'PAN0103', '배치적립파일검증');
+insert into PANDORA_CODES(CODE, ID, NAME) values ('menu', 'PAN0104', '시효만료포인트사전고지');
+insert into PANDORA_CODES(CODE, ID, NAME) values ('menu', 'PAN0105', '거래실적및유실적고객추출');
+insert into PANDORA_CODES(CODE, ID, NAME) values ('menu', 'PAN0106', '회원프로파일분석');
+insert into PANDORA_CODES(CODE, ID, NAME) values ('menu', 'PAN0107', '고객정보상세조회');
+insert into PANDORA_CODES(CODE, ID, NAME) values ('menu', 'PAN0108', '이메일조회');
+insert into PANDORA_CODES(CODE, ID, NAME) values ('action', 'pts', 'PTS전송');
+insert into PANDORA_CODES(CODE, ID, NAME) values ('action', 'search', '검색조회');
+insert into PANDORA_CODES(CODE, ID, NAME) values ('action', 'channel', '채널별전송');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- insert into PANDORA_MENU_ACTION_LOG(USER_ID, MENU_ID, ACTION_ID) values ('1003899', 'PAN0105','pts');
+-- insert into PANDORA_MENU_ACTION_LOG(USER_ID, MENU_ID, ACTION_ID) values ('1003899', 'PAN0101','pts');
+-- insert into PANDORA_MENU_ACTION_LOG(USER_ID, MENU_ID, ACTION_ID) values ('1003899', 'PAN0102','pts');
+-- insert into PANDORA_MENU_ACTION_LOG(USER_ID, MENU_ID, ACTION_ID) values ('1003899', 'PAN0103','pts');
+-- insert into PANDORA_MENU_ACTION_LOG(USER_ID, MENU_ID, ACTION_ID) values ('1003899', 'PAN0104','search');
+-- insert into PANDORA_MENU_ACTION_LOG(USER_ID, MENU_ID, ACTION_ID) values ('1003899', 'PAN0105','search');
+-- insert into PANDORA_MENU_ACTION_LOG(USER_ID, MENU_ID, ACTION_ID) values ('1003899', 'PAN0105','search');
+-- insert into PANDORA_MENU_ACTION_LOG(USER_ID, MENU_ID, ACTION_ID) values ('1003899', 'PAN0108','pts');
+-- insert into PANDORA_MENU_ACTION_LOG(USER_ID, MENU_ID, ACTION_ID) values ('1003899', 'PAN0108','search');
+-- insert into PANDORA_MENU_ACTION_LOG(USER_ID, MENU_ID, ACTION_ID) values ('1003899', 'PAN0107','search');
 
 
