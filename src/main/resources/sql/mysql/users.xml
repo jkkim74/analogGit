@@ -28,6 +28,7 @@
 					SELECT A.*, IFNULL(GROUP_CONCAT(B.MENU_ID), '') AS MENU_LIST
 					FROM USERS A
 					LEFT OUTER JOIN MENU_ACCESS B ON A.USERNAME = B.USERNAME
+                    WHERE A.PTS_USERNAME IS NOT NULL AND A.PTS_USERNAME &lt;&gt; ''
 					GROUP BY A.USERNAME
 					<if test="username != null and username != ''">
 						HAVING A.USERNAME = #{username}
