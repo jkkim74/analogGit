@@ -107,7 +107,10 @@ public class UserService implements UserDetailsService {
 		List<UserInfo> users = new ArrayList<>(usernames.size());
 
 		for (UserInfo u : usernames) {
-			users.add(getUserFromLdap(u.getUsername()));
+			UserInfo user = getUserFromLdap(u.getUsername());
+			if(user.getPtsUsername() != null && user.getPtsUsername() != "") {
+				users.add(getUserFromLdap(u.getUsername()));
+			}
 		}
 
 		return users;
