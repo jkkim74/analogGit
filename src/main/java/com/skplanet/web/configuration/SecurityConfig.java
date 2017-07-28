@@ -2,6 +2,8 @@ package com.skplanet.web.configuration;
 
 import javax.sql.DataSource;
 
+import com.skplanet.web.security.CustomAuthenticationProvider;
+import com.skplanet.web.security.CustomUserDetailsContextMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +24,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
-import com.skplanet.web.security.CustomAuthenticationProvider;
-import com.skplanet.web.security.CustomUserDetailsContextMapper;
+
 
 @Configuration
 public class SecurityConfig {
@@ -52,20 +53,20 @@ public class SecurityConfig {
 		@Value("${ldap.userSearchFilter}")
 		private String ldapUserSearchFilter;
 
-		@Autowired
+       	@Autowired
 		public void configureGlobal(AuthenticationManagerBuilder auth, UserDetailsService userDetailsService,
-				CustomUserDetailsContextMapper userDetailsContextMapper,
-				CustomAuthenticationProvider authenticationProvider) throws Exception {
+                   CustomUserDetailsContextMapper userDetailsContextMapper,
+            CustomAuthenticationProvider authenticationProvider) throws Exception {
 
-			auth.authenticationProvider(authenticationProvider);
+            auth.authenticationProvider(authenticationProvider);
 
-			auth.ldapAuthentication().userSearchFilter(ldapUserSearchFilter).userSearchBase(ldapBaseDn)
-					.ldapAuthoritiesPopulator(new NullLdapAuthoritiesPopulator())
-					.userDetailsContextMapper(userDetailsContextMapper).contextSource(ldapContextSource());
+            auth.ldapAuthentication().userSearchFilter(ldapUserSearchFilter).userSearchBase(ldapBaseDn)
+                    .ldapAuthoritiesPopulator(new NullLdapAuthoritiesPopulator())
+                    .userDetailsContextMapper(userDetailsContextMapper).contextSource(ldapContextSource());
 
 		}
 
-		@Bean
+        @Bean
 		public LdapContextSource ldapContextSource() {
 			LdapContextSource contextSource = new LdapContextSource();
 			contextSource.setUrl(ldapUrl);
@@ -97,5 +98,6 @@ public class SecurityConfig {
 		}
 
 	}
+
 
 }

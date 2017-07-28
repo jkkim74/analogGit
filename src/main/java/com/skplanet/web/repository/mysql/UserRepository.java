@@ -25,4 +25,14 @@ public interface UserRepository {
 
 	void updateMasking(@Param("username") String username, @Param("maskingYn") String maskingYn);
 
+	Integer selectPassCount(@Param("username") String username);
+
+	void updatePassCount(@Param("username") String username);
+
+	void insertPassCount(@Param("username") String username);
+
+    void deletePassCount(@Param("username") String username);
+
+	void updateUserEnabled(@Param("username") String username);
+
 }

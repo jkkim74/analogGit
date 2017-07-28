@@ -113,4 +113,56 @@
 		WHERE USERNAME = #{username}
 	</update>
 
+	<select id="selectPassCount" parameterType="String" resultType="Integer" databaseId="hsql">
+		SELECT FAIL_CNT
+		FROM PASS_CHECK
+		WHERE USERNAME = #{username}
+	</select>
+
+	<insert id="insertPassCount" parameterType="String" databaseId="hsql">
+		INSERT INTO PASS_CHECK (USERNAME, FAIL_CNT)
+		VALUES
+		( #{username} , 1 )
+	</insert>
+
+	<update id="updatePassCount" parameterType="String" databaseId="hsql">
+		UPDATE PASS_CHECK SET FAIL_CNT = FAIL_CNT + 1
+		WHERE USERNAME = #{username}
+	</update>
+
+    <delete id="deletePassCount" parameterType="String" databaseId="hsql">
+        DELETE FROM PASS_CHECK WHERE USERNAME = #{username}
+    </delete>
+
+	<update id="updateUserEnabled" parameterType="String" databaseId="hsql">
+		UPDATE USERS SET ENABLED = 0
+		WHERE USERNAME = #{username}
+	</update>
+
+	<select id="selectPassCount" parameterType="String" resultType="Integer">
+		SELECT FAIL_CNT
+		FROM PASS_CHECK
+		WHERE USERNAME = #{username}
+	</select>
+
+	<insert id="insertPassCount" parameterType="String">
+		INSERT INTO PASS_CHECK (USERNAME, FAIL_CNT)
+		VALUES
+		( #{username} , 1 )
+	</insert>
+
+	<update id="updatePassCount" parameterType="String">
+		UPDATE PASS_CHECK SET FAIL_CNT = FAIL_CNT + 1
+		WHERE USERNAME = #{username}
+	</update>
+
+	<delete id="deletePassCount" parameterType="String">
+		DELETE FROM PASS_CHECK WHERE USERNAME = #{username}
+	</delete>
+
+	<update id="updateUserEnabled" parameterType="String">
+		UPDATE USERS SET ENABLED = 0
+		WHERE USERNAME = #{username}
+	</update>
+
 </mapper>

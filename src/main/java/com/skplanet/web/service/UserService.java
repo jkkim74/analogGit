@@ -142,4 +142,24 @@ public class UserService implements UserDetailsService {
 	    userRepository.updateMasking(username, maskingYn);
 	}
 
+	public Integer selectPassCount(String username){
+		Integer count = userRepository.selectPassCount(username);
+		return count;
+	}
+
+	public void updatePassCount(String username){
+		userRepository.updatePassCount(username);
+	}
+
+	public void insertPassCount(String username){
+		userRepository.insertPassCount(username);
+	}
+
+    public void deletePassCount(String username){
+        userRepository.deletePassCount(username);
+    }
+
+	public void updateUserEnabled(String username){
+		userRepository.deletePassCount(username);
+	}
 }
