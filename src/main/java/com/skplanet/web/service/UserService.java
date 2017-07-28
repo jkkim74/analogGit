@@ -160,6 +160,6 @@ public class UserService implements UserDetailsService {
     }
 
 	public void updateUserEnabled(String username){
-		userRepository.deletePassCount(username);
+		userRepository.updateUserEnabled(username);
 	}
 }
