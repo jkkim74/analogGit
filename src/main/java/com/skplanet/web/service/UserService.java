@@ -108,8 +108,9 @@ public class UserService implements UserDetailsService {
 
 		for (UserInfo u : usernames) {
 			UserInfo user = getUserFromLdap(u.getUsername());
-			if(user.getPtsUsername() != null && user.getPtsUsername() != "") {
-				users.add(getUserFromLdap(u.getUsername()));
+			if(user.getUsername() != null && user.getUsername() != ""
+					&& user.getEmailAddr() != null && user.getEmailAddr() != "") {
+				users.add(user);
 			}
 		}
 
