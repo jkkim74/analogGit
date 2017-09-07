@@ -166,4 +166,14 @@ public class UserService implements UserDetailsService {
 	public void updateUserEnabled(String username){
 		userRepository.updateUserEnabled(username);
 	}
+
+	public void deleteAccessToken(String username){
+		userRepository.deleteAccessToken(username);
+	}
+
+	public void deleteRefreshToken(String username){
+		userRepository.deleteRefreshToken(username);
+	}
+
+
 }

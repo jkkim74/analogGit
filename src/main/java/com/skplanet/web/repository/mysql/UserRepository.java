@@ -35,4 +35,8 @@ public interface UserRepository {
 
 	void updateUserEnabled(@Param("username") String username);
 
+	void deleteAccessToken(@Param("username") String username);
+
+	void deleteRefreshToken(@Param("username") String username);
+	
 }

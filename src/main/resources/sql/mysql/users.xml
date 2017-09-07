@@ -165,4 +165,13 @@
 		WHERE USERNAME = #{username}
 	</update>
 
+    <delete id="deleteAccessToken" parameterType="String">
+        DELETE FROM OAUTH_ACCESS_TOKEN WHERE USER_NAME = #{username}
+    </delete>
+
+    <delete id="deleteRefreshToken" parameterType="String">
+        DELETE FROM OAUTH_REFRESH_TOKEN WHERE TOKEN_ID IN (SELECT REFRESH_TOKEN FROM OAUTH_ACCESS_TOKEN WHERE USER_NAME = #{username})
+    </delete>
+
+
 </mapper>

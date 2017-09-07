@@ -65,7 +65,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		try {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
 			if (userDetails != null && !userDetails.isEnabled()) {
-				throw new DisabledException("사용 정지된 사용자입니다.");
+                Throwable ex = new Throwable();
+				throw new DisabledException("사용 정지된 사용자입니다.", ex);
 			}
 
 			// IDMS에 아이디 등록이 되여 있는지 체크
@@ -94,6 +95,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
             }else{
 				userService.deletePassCount(authentication.getPrincipal().toString());
+
+				// 기존 token값을 삭제해서 기존에 로그인되여 있는 부분을 강제 로그아웃 시킴
+				userService.deleteRefreshToken(authentication.getName());
+				userService.deleteAccessToken(authentication.getName());
 			}
 
             // local test only aa
@@ -129,7 +134,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			log.info("IDMS RESULT_CD={}, RESULT_MSG={}", resultCd, resultMsg);
 
 			if (!"E0".equals(resultCd) && !"E99".equals(resultCd)) {
-				throw new InternalAuthenticationServiceException(resultMsg);
+				Throwable ex = new Throwable();
+				throw new InternalAuthenticationServiceException(resultMsg,ex);
 			}
 		} catch (IOException | ResourceAccessException e) {
 			log.info(e.toString());
