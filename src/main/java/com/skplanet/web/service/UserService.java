@@ -144,7 +144,7 @@ public class UserService implements UserDetailsService {
 
     public void insertUserAuthInfo(String userId, String targetUserId , String actionId, boolean isAdmin, String ip) {
         if (isAdmin) {
-            userRepository.insertUserAuthInfo(userId, targetUserId,actionId,  "Y", ip);
+            userRepository.insertUserAuthInfo(userId, targetUserId, actionId,  "Y", ip);
         } else {
             userRepository.insertUserAuthInfo(userId, targetUserId, actionId, "N", ip);
         }

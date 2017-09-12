@@ -102,7 +102,7 @@ public class UserController {
 		if(maskingYn.equals("false")){
 			isAdmin = false;
 		}
-		userService.insertUserAuthInfo(adminUser.getUsername().toString(),username,"admin", isAdmin, Helper.currentClientIp());
+		userService.insertUserAuthInfo(adminUser.getUsername().toString(),username,"masking", isAdmin, Helper.currentClientIp());
 		userService.updateMasking(username, maskingYn);
 		return ApiResponse.builder().message("마스킹 권한 수정 완료").build();
 	}
