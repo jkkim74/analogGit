@@ -173,7 +173,7 @@
         DELETE FROM OAUTH_REFRESH_TOKEN WHERE TOKEN_ID IN (SELECT REFRESH_TOKEN FROM OAUTH_ACCESS_TOKEN WHERE USER_NAME = #{username})
     </delete>
 
-    <insert id="insertUserAuthHis" parameterType="map" databaseId="hsql">
+    <insert id="insertUserAuthInfo" parameterType="map" databaseId="hsql">
         INSERT INTO USER_AUTHORITY_HISTORY (USER_ID,TARGET_USER_ID,AUTH_ID,ON_YN,IP)
         VALUES (#{userId},#{targetUserId},#{actionId},#{isAdmin},#{ip})
     </insert>

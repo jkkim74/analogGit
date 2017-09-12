@@ -39,7 +39,6 @@ public interface UserRepository {
 
 	void deleteRefreshToken(@Param("username") String username);
 
-	void insertUserAuthHis(@Param("userId") String userId,@Param("targetUserId") String targetUserId,
-						   @Param("actionId") String actionId,@Param("isAdmin") String isAdmin,@Param("ip") String ip);
+	void insertUserAuthInfo(@Param("userId") String userId,@Param("targetUserId") String targetUserId, @Param("actionId") String actionId,@Param("isAdmin") String isAdmin,@Param("ip") String ip);
 	
 }
