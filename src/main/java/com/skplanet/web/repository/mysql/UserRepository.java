@@ -38,5 +38,8 @@ public interface UserRepository {
 	void deleteAccessToken(@Param("username") String username);
 
 	void deleteRefreshToken(@Param("username") String username);
+
+	void insertUserAuthHis(@Param("userId") String userId,@Param("targetUserId") String targetUserId,
+						   @Param("actionId") String actionId,@Param("isAdmin") String isAdmin,@Param("ip") String ip);
 	
 }

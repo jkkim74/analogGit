@@ -65,7 +65,13 @@ public class UserController {
 	@RolesAllowed("ROLE_ADMIN")
 	@Transactional("mysqlTxManager")
 	public ApiResponse updateUser(@RequestParam Map<String, Object> params) {
+		UserInfo adminUser = Helper.currentUser();
 		UserInfo user = userService.updateUser(params);
+		boolean isAdmin = true;
+		if(params.get("enabled").equals(false)){
+			isAdmin = false;
+		}
+		userService.insertUserAuthInfo(adminUser.getUsername().toString(),params.get("username").toString(),"info", isAdmin, Helper.currentClientIp());
 		return ApiResponse.builder().message("사용자 정보 수정 완료").value(user).build();
 	}
 
@@ -81,6 +87,8 @@ public class UserController {
 	@RolesAllowed("ROLE_ADMIN")
 	@Transactional("mysqlTxManager")
 	public ApiResponse saveAdmin(@RequestParam String username, @RequestParam boolean isAdmin) {
+		UserInfo adminUser = Helper.currentUser();
+		userService.insertUserAuthInfo(adminUser.getUsername().toString(),username,"admin", isAdmin, Helper.currentClientIp());
 		userService.updateAdmin(username, isAdmin);
 		return ApiResponse.builder().message("관리자 정보 수정 완료").build();
 	}
@@ -89,6 +97,12 @@ public class UserController {
 	@RolesAllowed("ROLE_ADMIN")
 	@Transactional("mysqlTxManager")
     public ApiResponse updateMasking(@RequestParam String username, @RequestParam String maskingYn){
+		UserInfo adminUser = Helper.currentUser();
+		boolean isAdmin = true;
+		if(maskingYn.equals("false")){
+			isAdmin = false;
+		}
+		userService.insertUserAuthInfo(adminUser.getUsername().toString(),username,"admin", isAdmin, Helper.currentClientIp());
 		userService.updateMasking(username, maskingYn);
 		return ApiResponse.builder().message("마스킹 권한 수정 완료").build();
 	}
