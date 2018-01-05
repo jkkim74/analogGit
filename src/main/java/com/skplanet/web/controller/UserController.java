@@ -68,7 +68,7 @@ public class UserController {
 		UserInfo adminUser = Helper.currentUser();
 		UserInfo user = userService.updateUser(params);
 		boolean isAdmin = true;
-		if(params.get("enabled").equals(false)){
+		if(params.get("enabled") != null && params.get("enabled").equals(false)){
 			isAdmin = false;
 		}
 		userService.insertUserAuthInfo(adminUser.getUsername().toString(),params.get("username").toString(),"info", isAdmin, Helper.currentClientIp());
