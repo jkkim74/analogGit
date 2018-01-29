@@ -198,7 +198,7 @@ public class IdmsLogService {
 			protected void printRecord(CSVPrinter printer, UserInfo t) throws IOException {
 				printer.printRecord(t.getUsername(), t.getFullname(), null,
 						(t.isEnabled() ? USER_STATUS_ENABLED : USER_STATUS_DIASABLED), USER_ID_TYPE_ADMIN,
-						(t.getCreateDttm() != null ? t.getCreateDttm() : "20120101000000"), (t.getBeginDttm() != null ? t.getBeginDttm().substring(0, 8) : "20120101000000"),
+						(t.getCreateDttm() != null ? t.getCreateDttm() : "20120101000000"), (t.getBeginDttm() != null ? t.getBeginDttm().substring(0, 8) : "20120101"),
 						(t.getEndDttm() != null ? t.getEndDttm().substring(0, 8) : "99991231"));
 			}
 		}.create(userInfoPath);
