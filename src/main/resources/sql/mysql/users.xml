@@ -8,6 +8,7 @@
 		<result property="ptsUsername" column="PTS_USERNAME" javaType="string" />
 		<result property="beginDttm" column="BEGIN_DTTM" javaType="string" />
 		<result property="endDttm" column="END_DTTM" javaType="string" />
+		<result property="createDttm" column="CREATE_DTTM" javaType="string" />
 		<result property="menuList" column="MENU_LIST" javaType="string" />
 		<result property="maskingYn" column="MASKING_YN" javaType="_boolean" />
 		<collection property="authorities" ofType="org.springframework.security.core.authority.SimpleGrantedAuthority">
