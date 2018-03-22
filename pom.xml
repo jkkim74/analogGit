@@ -181,6 +181,14 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/PtsApiClient_1.5.jar</systemPath>
 		</dependency>
+
+		<dependency>
+			<groupId>com.skplanet</groupId>
+			<artifactId>VexApiClient</artifactId>
+			<version>1.5</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/VexApiClient8.jar</systemPath>
+		</dependency>
 		
 		<!-- SKP Crypto -->
 		<dependency>
