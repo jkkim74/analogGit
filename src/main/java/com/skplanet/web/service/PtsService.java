@@ -99,9 +99,9 @@ public class PtsService {
         String[] command = { filename };
 
         //로그 기록 위치 (DEFAULT: System.getProperty(user.dir) + EXAPI.log)
-        System.setProperty("vex_log", "config/EXAPI.log") ;
+        System.setProperty("vex_log", "/app/docroot/tomcat/svr_KHUBc-ocbpisapp1/ROOT/WEB-INF/classes/config/EXAPI.log") ;
         //설정파일 위치 (DEFAULT: System.getProperty(user.dir) + VEXAPI.propertis)
-        System.setProperty("vex_cnf", "config/VEXAPI.propertis") ;
+        System.setProperty("vex_cnf", "/app/docroot/tomcat/svr_KHUBc-ocbpisapp1/ROOT/WEB-INF/classes/config/VEXAPI.propertis") ;
 
         VexApiClient.main(command);
 
