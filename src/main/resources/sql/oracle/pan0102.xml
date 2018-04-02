@@ -5,7 +5,10 @@
 	<select id="selectMbrId" parameterType="map" resultType="string">
 		<choose>
 			<when test="searchType == 'cardNo' and searchKeyword != null and searchKeyword != ''">
-				SELECT MBR_ID FROM MART_CARD_MST WHERE CARD_NO = #{searchKeyword}
+				SELECT MST.MBR_ID 
+				FROM MART_CARD_MST MST 
+				LEFT OUTER JOIN CARD_NO_ACS_MDIA_SRNO_MPNG_MST MPNG ON MST.ACS_MDIA_SRNO = MPNG.ACS_MDIA_SRNO
+				WHERE MPNG.CARD_NO = #{searchKeyword}
 			</when>
 			<when test="searchType == 'ocbcomLgnId' and searchKeyword != null and searchKeyword != ''">
 				SELECT MBR_ID FROM MART_OCBCOM_MBR_MST WHERE LGN_ID = #{searchKeyword}
@@ -23,7 +26,12 @@
 					AND A.MBR_ID = #{searchKeyword}
 				</when>
 				<when test="searchType == 'cardNo' and searchKeyword != null and searchKeyword != ''">
-					AND A.MBR_ID = ( SELECT MBR_ID FROM MART_CARD_MST WHERE CARD_NO = #{searchKeyword} )
+					AND A.MBR_ID = ( 	
+												SELECT MST.MBR_ID 
+												FROM MART_CARD_MST MST
+												LEFT OUTER JOIN CARD_NO_ACS_MDIA_SRNO_MPNG_MST MPNG ON MST.ACS_MDIA_SRNO = MPNG.ACS_MDIA_SRNO
+												WHERE MPNG.CARD_NO = #{searchKeyword} 
+											)
 				</when>
 				<when test="searchType == 'ocbcomLgnId' and searchKeyword != null and searchKeyword != ''">
 					AND A.MBR_ID = ( SELECT MBR_ID FROM MART_OCBCOM_MBR_MST WHERE LGN_ID = #{searchKeyword} )
@@ -394,24 +402,27 @@
 		SELECT CARD_DTL_GRP_CD /* 카드코드 */
 			, CARD_DTL_GRP_CD || ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_DTL_GRP_CD' AND DTL_CD = A.CARD_DTL_GRP_CD) AS CARD_DTL_GRP
 			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_STS_CD' AND DTL_CD = A.CARD_STS_CD) AS CARD_STS_CD /* 카드상태 */
-			, DECODE(A.CARD_NO,NULL,A.CARD_NO,SUBSTR(A.CARD_NO,1,LENGTH(A.CARD_NO)-8)||'****'||SUBSTR(A.CARD_NO,LENGTH(A.CARD_NO)-3,4)) AS CARD_NO /* 카드번호 */
+			, DECODE(B.CARD_NO,NULL,B.CARD_NO,SUBSTR(B.CARD_NO,1,LENGTH(B.CARD_NO)-8)||'****'||SUBSTR(B.CARD_NO,LENGTH(B.CARD_NO)-3,4)) AS CARD_NO /* 카드번호 */
 			, TO_CHAR(TO_DATE(ISS_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS ISS_DT /* 카드발급일자 */
 			, TO_CHAR(TO_DATE(CARD_RREG_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS CARD_RREG_DT /* 카드등록일자 */
 		FROM MART_CARD_MST A
-
+		LEFT OUTER JOIN CARD_NO_ACS_MDIA_SRNO_MPNG_MST B ON A.ACS_MDIA_SRNO = B.ACS_MDIA_SRNO
+		
 		<include refid="whereMbrId" />
 
 		ORDER BY CARD_RREG_DT
 	</select>
+	
 	<select id="selectCardList" parameterType="map" resultType="AutoMap" databaseId="hsql">
 		SELECT CARD_DTL_GRP_CD /* 카드코드 */
 			, CARD_DTL_GRP_CD || ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_DTL_GRP_CD' AND DTL_CD = A.CARD_DTL_GRP_CD) AS CARD_DTL_GRP
 			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_STS_CD' AND DTL_CD = A.CARD_STS_CD) AS CARD_STS_CD /* 카드상태 */
-			, DECODE(A.CARD_NO,NULL,A.CARD_NO,SUBSTR(A.CARD_NO,1,LENGTH(A.CARD_NO)-8)||'****'||SUBSTR(A.CARD_NO,LENGTH(A.CARD_NO)-3,4)) AS CARD_NO /* 카드번호 */
+			, DECODE(B.CARD_NO,NULL,B.CARD_NO,SUBSTR(B.CARD_NO,1,LENGTH(B.CARD_NO)-8)||'****'||SUBSTR(B.CARD_NO,LENGTH(B.CARD_NO)-3,4)) AS CARD_NO /* 카드번호 */
 			, TO_CHAR(TO_DATE(ISS_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS ISS_DT /* 카드발급일자 */
 			, TO_CHAR(TO_DATE(CARD_RREG_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS CARD_RREG_DT /* 카드등록일자 */
 		FROM MART_CARD_MST A
-
+		LEFT OUTER JOIN CARD_NO_ACS_MDIA_SRNO_MPNG_MST B ON A.ACS_MDIA_SRNO = B.ACS_MDIA_SRNO
+		
 		<include refid="whereMbrId" />
 
 		ORDER BY CARD_RREG_DT
@@ -583,10 +594,11 @@
 	<select id="selectTotMbrInfo6" parameterType="map" resultType="AutoMap">	
 		SELECT CARD_DTL_GRP_CD || ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_DTL_GRP_CD' AND DTL_CD = A.CARD_DTL_GRP_CD) AS CARD_DTL_GRP
 			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_STS_CD' AND DTL_CD = A.CARD_STS_CD) AS CARD_STS_CD /* 카드상태 */
-			, DECODE(A.CARD_NO,NULL,A.CARD_NO,SUBSTR(A.CARD_NO,1,LENGTH(A.CARD_NO)-8)||'****'||SUBSTR(A.CARD_NO,LENGTH(A.CARD_NO)-3,4)) AS CARD_NO /* 카드번호 */
+			, DECODE(B.CARD_NO,NULL,B.CARD_NO,SUBSTR(B.CARD_NO,1,LENGTH(B.CARD_NO)-8)||'****'||SUBSTR(B.CARD_NO,LENGTH(B.CARD_NO)-3,4)) AS CARD_NO /* 카드번호 */
 			, TO_CHAR(TO_DATE(ISS_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS ISS_DT /* 카드발급일자 */
 			, TO_CHAR(TO_DATE(CARD_RREG_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS CARD_RREG_DT /* 카드등록일자 */
 		FROM MART_CARD_MST A
+		LEFT OUTER JOIN CARD_NO_ACS_MDIA_SRNO_MPNG_MST B ON A.ACS_MDIA_SRNO = B.ACS_MDIA_SRNO
 		WHERE A.MBR_ID = #{mbrId}
 	</select>
 	
@@ -730,10 +742,11 @@
 	<select id="selectTotMbrInfoNoMas6" parameterType="map" resultType="AutoMap">			
 		SELECT CARD_DTL_GRP_CD || ' / ' || (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_DTL_GRP_CD' AND DTL_CD = A.CARD_DTL_GRP_CD) AS CARD_DTL_GRP
 			, (SELECT DTL_CD_NM FROM DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_STS_CD' AND DTL_CD = A.CARD_STS_CD) AS CARD_STS_CD /* 카드상태 */
-			, A.CARD_NO AS CARD_NO /* 카드번호 */
+			, B.CARD_NO AS CARD_NO /* 카드번호 */
 			, TO_CHAR(TO_DATE(ISS_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS ISS_DT /* 카드발급일자 */
 			, TO_CHAR(TO_DATE(CARD_RREG_DT, 'YYYYMMDD'), 'YYYY-MM-DD') AS CARD_RREG_DT /* 카드등록일자 */
 		FROM MART_CARD_MST A
+		LEFT OUTER JOIN CARD_NO_ACS_MDIA_SRNO_MPNG_MST B ON A.ACS_MDIA_SRNO = B.ACS_MDIA_SRNO
 		WHERE A.MBR_ID = #{mbrId}	
 	</select>		
 
