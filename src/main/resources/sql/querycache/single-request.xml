@@ -3,227 +3,238 @@
 <mapper namespace="com.skplanet.pandora.repository.querycache.QueryCacheRepository">
 
 	<select id="selectTrSingleRequest" parameterType="SingleReq" resultType="AutoMap">
-        SELECT A.RCV_DT AS RCV_DT                    			-- 접수일자
-	        , A.APPR_DTTM AS APPR_DTTM               			-- 승인일시
-	        , A.REP_APPR_NO AS REP_APPR_NO          			-- 대표승인번호
-	        , A.APPR_NO AS APPR_NO                   				-- 승인번호
-	        , A.SALE_DTTM AS SALE_DTTM               			-- 매출일시
-	        , A.MBR_ID AS MBR_ID                     					-- 회원ID
-	        , A.CARD_DTL_GRP_CD AS CARD_DTL_GRP_CD		-- 카드코드
-	        ,  G.DTL_CD_NM AS DTL_CD_NM               			-- 카드코드명
-	        <choose>
-	        	<when test="ptsMasking == 'true'">
-		            , CASE WHEN N.CARD_NO IS NULL THEN N.CARD_NO
-		                 ELSE CONCAT(SUBSTRING(N.CARD_NO,1,LENGTH(N.CARD_NO)-8) , '****', SUBSTRING(N.CARD_NO,LENGTH(N.CARD_NO)-3,4) )
-		              END AS CARD_NO
-	          	</when>
-	          	<otherwise>
-	            	, N.CARD_NO AS CARD_NO               			-- 카드번호
-	          	</otherwise>
-			</choose>
-			, A.STLMT_ALCMPN_CD AS STLMT_ALCMPN_CD   	-- 정산제휴사코드
-	        , B.ALCMPN_NM AS ALCMPN_NM       					-- 정산제휴사명
-	        , A.STLMT_MCNT_CD AS STLMT_MCNT_CD       	-- 정산가맹점코드
-	        , C.MCNT_NM AS MCNT_NM   								-- 정산가맹점명
-	        , A.ALCMPN_CD AS ALCMPN_CD       					-- 발생제휴사코드
-	        , D.ALCMPN_NM AS ALCMPN_NM2      					-- 발생제휴사명
-	        , A.MCNT_CD AS MCNT_CD   								-- 발생가맹점코드
-	        , E.MCNT_NM AS MCNT_NM2  							-- 발생가맹점명
-	        , A.PNT_KND_CD AS PNT_KND_CD     					-- 포인트종류코드
-	        , H.DTL_CD_NM AS DTL_CD_NM2      					-- 포인트종류명
-	        , A.SLIP_CD AS SLIP_CD   									-- 전표코드
-	        , I.DTL_CD_NM AS DTL_CD_NM3      					-- 전표명
-	        , A.SALE_AMT AS SALE_AMT 								-- 매출금액
-	        , A.PNT AS PNT   												-- 포인트
-	        , A.CS_MBR_CMMSN AS CS_MBR_CMMSN 				-- 제휴사연회비
-	        , A.CMMSN AS CMMSN       								-- 수수료
-	        , A.PMNT_WAY_CD AS PMNT_WAY_CD   				-- 지불수단코드
-	        , J.DTL_CD_NM AS DTL_CD_NM4      					-- 지불수단명
-	        , A.ORG_CD AS ORG_CD     								-- 기관코드
-	        , K.DTL_CD_NM AS DTL_CD_NM5      					-- 기관명
-	        , A.OIL_PRDCT_SGRP_CD AS OIL_PRDCT_SGRP_CD -- 유종코드
-	        , L.DTL_CD_NM AS DTL_CD_NM6      					-- 유종명
-	        , A.CPN_PRD_CD AS CPN_PRD_CD     					-- 쿠폰코드
-	        , F.PRD_NM AS PRD_NM      								-- 쿠폰명
-	        , A.ORIAPPR_DT AS ORIAPPR_DT  						-- 원승인일자
-	        , A.ORIAPPR_NO AS ORIAPPR_NO   						-- 원승인번호
-	        , A.CNCL_SLIP_TP_CD AS CNCL_SLIP_TP_CD 		-- 취소전표유형코드
-	        , M.DTL_CD_NM AS CNCL_SLIP_TP_NM  				-- 취소전표유형명
-        	<if test="extractTarget!= null and extractTarget == 'tr_mbrKorNm'">
-          		, #{memberKorNm} AS MEMBERKORNM 			-- 한글이름
-        	</if>
+        SELECT
+        A.rcv_dt AS rcv_dt,                     -- 접수일자
+        A.appr_dttm AS appr_dttm,               -- 승인일시
+        A.rep_appr_no AS rep_appr_no,           -- 대표승인번호
+        A.appr_no AS appr_no,                   -- 승인번호
+        A.sale_dttm AS sale_dttm,               -- 매출일시
+        A.mbr_id AS mbr_id,                     -- 회원ID
+        A.card_dtl_grp_cd AS card_dtl_grp_cd,   -- 카드코드
+        G.dtl_cd_nm AS dtl_cd_nm,               -- 카드코드명
+        <choose>
+          <when test="ptsMasking == 'true'">
+            case when N.card_no is null then N.card_no
+                 else concat(substring(funcs.Secuaesdecrypt(N.card_no),1,LENGTH(funcs.Secuaesdecrypt(N.card_no))-8) , '****', substring(funcs.Secuaesdecrypt(N.card_no),LENGTH(funcs.Secuaesdecrypt(N.card_no))-3,4) )
+            end AS card_no,
+          </when>
+          <otherwise>
+            funcs.Secuaesdecrypt(N.card_no) AS card_no,               -- 카드번호
+          </otherwise>
+        </choose>
+        A.stlmt_alcmpn_cd AS stlmt_alcmpn_cd,   -- 정산제휴사코드
+        B.alcmpn_nm AS alcmpn_nm,       -- 정산제휴사명
+        A.stlmt_mcnt_cd AS stlmt_mcnt_cd,       -- 정산가맹점코드
+        C.mcnt_nm AS mcnt_nm,   -- 정산가맹점명
+        A.alcmpn_cd AS alcmpn_cd,       -- 발생제휴사코드
+        D.alcmpn_nm AS alcmpn_nm2,      -- 발생제휴사명
+        A.mcnt_cd AS mcnt_cd,   -- 발생가맹점코드
+        E.mcnt_nm AS mcnt_nm2,  -- 발생가맹점명
+        A.pnt_knd_cd AS pnt_knd_cd,     -- 포인트종류코드
+        H.dtl_cd_nm AS dtl_cd_nm2,      -- 포인트종류명
+        A.slip_cd AS slip_cd,   -- 전표코드
+        I.dtl_cd_nm AS dtl_cd_nm3,      -- 전표명
+        A.sale_amt AS sale_amt, -- 매출금액
+        A.pnt AS pnt,   -- 포인트
+        A.cs_mbr_cmmsn AS cs_mbr_cmmsn, -- 제휴사연회비
+        A.cmmsn AS cmmsn,       -- 수수료
+        A.pmnt_way_cd AS pmnt_way_cd,   -- 지불수단코드
+        J.dtl_cd_nm AS dtl_cd_nm4,      -- 지불수단명
+        A.org_cd AS org_cd,     -- 기관코드
+        K.dtl_cd_nm AS dtl_cd_nm5,      -- 기관명
+        A.oil_prdct_sgrp_cd AS oil_prdct_sgrp_cd,       -- 유종코드
+        L.dtl_cd_nm AS dtl_cd_nm6,      -- 유종명
+        A.cpn_prd_cd AS cpn_prd_cd,     -- 쿠폰코드
+        F.prd_nm AS prd_nm,      -- 쿠폰명
+        A.oriappr_dt AS oriappr_dt,  -- 원승인일자
+        A.oriappr_no AS oriappr_no,   -- 원승인번호
+        A.cncl_slip_tp_cd AS cncl_slip_tp_cd, -- 취소전표유형코드
+        M.dtl_cd_nm AS cncl_slip_tp_nm  -- 취소전표유형명
+        <if test="extractTarget!= null and extractTarget == 'tr_mbrKorNm'">
+          ,#{memberKorNm} AS memberKorNm -- 한글이름
+        </if>
+        FROM   (SELECT A.rcv_dt
+        , Concat(A.appr_dt, ' ', A.appr_tm) AS appr_dttm
+        , A.rep_appr_no
+        , A.appr_no
+        , Concat(A.sale_dt, ' ', A.sale_tm) AS sale_dttm
+        , A.mbr_id
+        , A.card_dtl_grp_cd
+        , A.stlmt_alcmpn_cd
+        , A.stlmt_mcnt_cd
+        , A.alcmpn_cd
+        , A.mcnt_cd
+        , A.pnt_knd_cd
+        , A.slip_cd
+        , A.sale_amt
+        , A.occ_pnt + avl_pnt               AS pnt
+        , A.cs_mbr_cmmsn
+        , A.cmmsn
+        , A.pmnt_way_cd
+        , A.org_cd
+        , A.oil_prdct_sgrp_cd
+        , A.cpn_prd_cd
+        , A.oriappr_dt
+        , A.oriappr_no
+        , A.cncl_slip_tp_cd
+        , A.acs_mdia_srno
         FROM   (
-	        SELECT A.RCV_DT
-		        , CONCAT(A.APPR_DT, ' ', A.APPR_TM) AS APPR_DTTM
-		        , A.REP_APPR_NO
-		        , A.APPR_NO
-		        , CONCAT(A.SALE_DT, ' ', A.SALE_TM) AS SALE_DTTM
-		        , A.MBR_ID
-		        , A.CARD_DTL_GRP_CD
-		        , A.CARD_NO
-		        , A.STLMT_ALCMPN_CD
-		        , A.STLMT_MCNT_CD
-		        , A.ALCMPN_CD
-		        , A.MCNT_CD
-		        , A.PNT_KND_CD
-		        , A.SLIP_CD
-		        , A.SALE_AMT
-		        , A.OCC_PNT + AVL_PNT AS PNT
-		        , A.CS_MBR_CMMSN
-		        , A.CMMSN
-		        , A.PMNT_WAY_CD
-		        , A.ORG_CD
-		        , A.OIL_PRDCT_SGRP_CD
-		        , A.CPN_PRD_CD
-		        , A.ORIAPPR_DT
-		        , A.ORIAPPR_NO
-		        , A.CNCL_SLIP_TP_CD
-		        , A.ACS_MDIA_SRNO
-	        FROM   (
-	        		SELECT RCV_DT,RCV_SEQ,APPR_DT,APPR_TM,REP_APPR_NO,APPR_NO,SALE_DT,SALE_TM,MBR_ID,CARD_DTL_GRP_CD,
-				        FUNCS.SECUAESDECRYPT(CARD_NO) CARD_NO,ALCMPN_CD,STLMT_ALCMPN_CD,MCNT_CD,STLMT_MCNT_CD,PNT_KND_CD,
-				        SLIP_CD,SALE_AMT,OCC_PNT,AVL_PNT,CS_MBR_CMMSN,CMMSN,PMNT_WAY_CD,ORG_CD,OIL_PRDCT_SGRP_CD,SALE_QTY,CPN_PRD_CD,
-				        CASE
-				        	WHEN #{extractCond} = 't' THEN '1'
-				        	WHEN #{extractCond} = 'g' AND ( LENGTH(STLMT_MCNT_CD) &lt;&gt; ( '5' ) OR STLMT_MCNT_CD IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1'
-				        	WHEN #{extractCond} = 'f'
-				        		AND ( LENGTH(STLMT_MCNT_CD) = ( '5' )
-				        		AND STLMT_MCNT_CD NOT IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1' ELSE '2'
-				        END AS TR_IND,
-				        ORIAPPR_DT,
-				        ORIAPPR_NO,
-				        CNCL_SLIP_TP_CD,
-				        ACS_MDIA_SRNO
-			        FROM   OCB.DW_SALE_CTNT
-			        WHERE  INTG_SLIP_FG_CD IN ('g') 
-			        	AND SUBSTRING(SLIP_CD, 1, 1) NOT IN ( 'I' )
-			        	AND SLIP_CD NOT IN ( 'A1', 'A2' )
-			        	<choose>
-			          		<when test="periodType == 'sale_dt'">
-			            		AND SALE_DT BETWEEN #{periodFrom} AND #{periodTo}
-			          		</when>
-			          		<otherwise>
-			            		AND RCV_DT BETWEEN #{periodFrom} AND #{periodTo}
-			          		</otherwise>
-						</choose>
-	        	UNION ALL
-			        SELECT RCV_DT,RCV_SEQ,APPR_DT,APPR_TM,REP_APPR_NO,APPR_NO,SALE_DT,SALE_TM,MBR_ID,CARD_DTL_GRP_CD,
-				        FUNCS.SECUAESDECRYPT(CARD_NO) CARD_NO,ALCMPN_CD,STLMT_ALCMPN_CD,MCNT_CD,STLMT_MCNT_CD,PNT_KND_CD,
-				        SLIP_CD,SALE_AMT,OCC_PNT,AVL_PNT,CS_MBR_CMMSN,CMMSN,PMNT_WAY_CD,ORG_CD,OIL_PRDCT_SGRP_CD,SALE_QTY,CPN_PRD_CD,
-				        CASE
-				        	WHEN #{extractCond} = 't' THEN '1'
-				        	WHEN #{extractCond} = 'g'
-				        		AND ( LENGTH(STLMT_MCNT_CD) &lt;&gt; ( '5' ) OR STLMT_MCNT_CD IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1'
-				        	WHEN #{extractCond} = 'f'
-				        		AND ( LENGTH(STLMT_MCNT_CD) = ( '5' ) AND STLMT_MCNT_CD NOT IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1' ELSE '2'
-				        END AS TR_IND,
-				        ORIAPPR_DT,
-				        ORIAPPR_NO,
-				        CNCL_SLIP_TP_CD,
-				        ACS_MDIA_SRNO
-			        FROM   OCB.DW_MTH07_PREV_SALE_CTNT
-			        WHERE  SUBSTRING(SLIP_CD, 1, 1) NOT IN ( 'I' )
-			        	AND SLIP_CD NOT IN ( 'A1', 'A2' )
-			        	AND RCV_YM BETWEEN SUBSTRING(#{periodFrom}, 1, 6) AND SUBSTRING(#{periodTo}, 1, 6)
-			        	<choose>
-			          		<when test="periodType == 'sale_dt'">
-			            		AND SALE_DT BETWEEN #{periodFrom} AND #{periodTo}
-			          		</when>
-			          		<otherwise>
-			            		AND RCV_DT BETWEEN #{periodFrom} AND #{periodTo}
-			          		</otherwise>
-						</choose>
-	        	UNION ALL
-			        SELECT RCV_DT,RCV_SEQ,APPR_DT,APPR_TM,REP_APPR_NO,APPR_NO,SALE_DT,SALE_TM,MBR_ID,CARD_DTL_GRP_CD,
-				        FUNCS.SECUAESDECRYPT(CARD_NO) CARD_NO,ALCMPN_CD,STLMT_ALCMPN_CD,MCNT_CD,STLMT_MCNT_CD,PNT_KND_CD,
-				        SLIP_CD,SALE_AMT,OCC_PNT,AVL_PNT,CS_MBR_CMMSN,CMMSN,PMNT_WAY_CD,ORG_CD,OIL_PRDCT_SGRP_CD,SALE_QTY,CPN_PRD_CD,
-				        CASE
-				        	WHEN #{extractCond} = 't' THEN '1'
-				        	WHEN #{extractCond} = 'g'
-				        		AND ( LENGTH(STLMT_MCNT_CD) &lt;&gt; ( '5' ) OR STLMT_MCNT_CD IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1'
-				        	WHEN #{extractCond} = 'f'
-				        		AND ( LENGTH(STLMT_MCNT_CD) = ( '5' ) AND STLMT_MCNT_CD NOT IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1' ELSE '2'
-				        END AS TR_IND,
-				        ORIAPPR_DT,
-				        ORIAPPR_NO,
-				        CNCL_SLIP_TP_CD,
-				        ACS_MDIA_SRNO
-			        FROM   OCB.DW_MTH37_PREV_SALE_CTNT
-			        WHERE  SUBSTRING(SLIP_CD, 1, 1) NOT IN ( 'I' )
-			        	AND SLIP_CD NOT IN ( 'A1', 'A2' )
-			        	AND RCV_YM BETWEEN Substring(#{periodFrom}, 1, 6) AND SUBSTRING(#{periodTo}, 1, 6)
-				        <choose>
-				       		<when test="periodType == 'sale_dt'">
-				            	AND SALE_DT BETWEEN #{periodFrom} AND #{periodTo}
-				          	</when>
-				          	<otherwise>
-				            	AND RCV_DT BETWEEN #{periodFrom} AND #{periodTo}
-				          	</otherwise>
-						</choose>
-	        ) A
-        	WHERE  A.TR_IND = '1'
-        	AND A.MBR_ID = #{memberId}
-        	LIMIT  50000
+                    SELECT rcv_dt,rcv_seq,appr_dt,appr_tm,rep_appr_no,appr_no,sale_dt,sale_tm,mbr_id,card_dtl_grp_cd,
+                    alcmpn_cd,stlmt_alcmpn_cd,mcnt_cd,stlmt_mcnt_cd,pnt_knd_cd,
+                    slip_cd,sale_amt,occ_pnt,avl_pnt,cs_mbr_cmmsn,cmmsn,pmnt_way_cd,org_cd,oil_prdct_sgrp_cd,sale_qty,cpn_prd_cd,
+                    CASE
+                    WHEN #{extractCond} = 't' THEN '1'
+                    WHEN #{extractCond} = 'g' AND ( Length(stlmt_mcnt_cd) &lt;&gt; ( '5' ) OR stlmt_mcnt_cd IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1'
+                    WHEN #{extractCond} = 'f'
+                    AND ( Length(stlmt_mcnt_cd) = ( '5' )
+                    AND stlmt_mcnt_cd NOT IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1' ELSE '2'
+                    end                           AS tr_ind,
+                    oriappr_dt,
+                    oriappr_no,
+                    cncl_slip_tp_cd,
+                    acs_mdia_srno
+                    FROM   ocb.dw_sale_ctnt
+                    WHERE  intg_slip_fg_cd in ('g') 
+                    and Substring(slip_cd, 1, 1) NOT IN ( 'I' )
+                    AND slip_cd NOT IN ( 'A1', 'A2' )
+                    <choose>
+                      <when test="periodType == 'sale_dt'">
+                        AND sale_dt BETWEEN #{periodFrom} AND #{periodTo}
+                      </when>
+                      <otherwise>
+                        AND rcv_dt BETWEEN #{periodFrom} AND #{periodTo}
+                      </otherwise>
+                    </choose>
+        UNION ALL
+                    SELECT rcv_dt,rcv_seq,appr_dt,appr_tm,rep_appr_no,appr_no,sale_dt,sale_tm,mbr_id,card_dtl_grp_cd,
+                    alcmpn_cd,stlmt_alcmpn_cd,mcnt_cd,stlmt_mcnt_cd,pnt_knd_cd,
+                    slip_cd,sale_amt,occ_pnt,avl_pnt,cs_mbr_cmmsn,cmmsn,pmnt_way_cd,org_cd,oil_prdct_sgrp_cd,sale_qty,cpn_prd_cd,
+                    CASE
+                    WHEN #{extractCond} = 't' THEN '1'
+                    WHEN #{extractCond} = 'g'
+                    AND ( Length(stlmt_mcnt_cd) &lt;&gt; ( '5' ) OR stlmt_mcnt_cd IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1'
+                    WHEN #{extractCond} = 'f'
+                    AND ( Length(stlmt_mcnt_cd) = ( '5' ) AND stlmt_mcnt_cd NOT IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1' ELSE '2'
+                    end                           AS tr_ind,
+                    oriappr_dt,
+                    oriappr_no,
+                    cncl_slip_tp_cd,
+                    acs_mdia_srno
+                    FROM   ocb.dw_mth07_prev_sale_ctnt
+                    WHERE  Substring(slip_cd, 1, 1) NOT IN ( 'I' )
+                    AND slip_cd NOT IN ( 'A1', 'A2' )
+                    AND rcv_ym BETWEEN Substring(#{periodFrom}, 1, 6) AND Substring(#{periodTo}, 1, 6)
+                    <choose>
+                      <when test="periodType == 'sale_dt'">
+                        AND sale_dt BETWEEN #{periodFrom} AND #{periodTo}
+                      </when>
+                      <otherwise>
+                        AND rcv_dt BETWEEN #{periodFrom} AND #{periodTo}
+                      </otherwise>
+                    </choose>
+        UNION ALL
+                    SELECT rcv_dt,rcv_seq,appr_dt,appr_tm,rep_appr_no,appr_no,sale_dt,sale_tm,mbr_id,card_dtl_grp_cd,
+                    alcmpn_cd,stlmt_alcmpn_cd,mcnt_cd,stlmt_mcnt_cd,pnt_knd_cd,
+                    slip_cd,sale_amt,occ_pnt,avl_pnt,cs_mbr_cmmsn,cmmsn,pmnt_way_cd,org_cd,oil_prdct_sgrp_cd,sale_qty,cpn_prd_cd,
+                    CASE
+                    WHEN #{extractCond} = 't' THEN '1'
+                    WHEN #{extractCond} = 'g'
+                    AND ( Length(stlmt_mcnt_cd) &lt;&gt; ( '5' ) OR stlmt_mcnt_cd IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1'
+                    WHEN #{extractCond} = 'f'
+                    AND ( Length(stlmt_mcnt_cd) = ( '5' ) AND stlmt_mcnt_cd NOT IN ( 'HOMEP', 'PINIX', 'BOHUM' ) ) THEN '1' ELSE '2'
+                    end                           AS tr_ind,
+                    oriappr_dt,
+                    oriappr_no,
+                    cncl_slip_tp_cd,
+                    acs_mdia_srno
+                    FROM   ocb.dw_mth37_prev_sale_ctnt
+                    WHERE  Substring(slip_cd, 1, 1) NOT IN ( 'I' )
+                    AND slip_cd NOT IN ( 'A1', 'A2' )
+                    AND rcv_ym BETWEEN Substring(#{periodFrom}, 1, 6) AND Substring(#{periodTo}, 1, 6)
+                    <choose>
+                      <when test="periodType == 'sale_dt'">
+                        AND sale_dt BETWEEN #{periodFrom} AND #{periodTo}
+                      </when>
+                      <otherwise>
+                        AND rcv_dt BETWEEN #{periodFrom} AND #{periodTo}
+                      </otherwise>
+                    </choose>
         ) A
-        LEFT OUTER JOIN OCB.DW_ALCMPN_MST B ON A.STLMT_ALCMPN_CD = B.ALCMPN_CD
-        LEFT OUTER JOIN OCB.DW_MCNT_MST C ON A.STLMT_MCNT_CD = C.MCNT_CD
-        LEFT OUTER JOIN OCB.DW_ALCMPN_MST D ON A.ALCMPN_CD = D.ALCMPN_CD
-        LEFT OUTER JOIN OCB.DW_MCNT_MST E ON A.MCNT_CD = E.MCNT_CD
-        LEFT OUTER JOIN OCB.DW_CPN_PRD_MST F ON A.CPN_PRD_CD = F.CPN_PRD_CD
-        LEFT OUTER JOIN (SELECT DTL_CD, DTL_CD_NM FROM OCB.DW_OCB_INTG_CD WHERE DOMN_ID = 'CARD_DTL_GRP_CD') G ON A.CARD_DTL_GRP_CD = G.DTL_CD
-        LEFT OUTER JOIN (SELECT DTL_CD, DTL_CD_NM FROM OCB.DW_OCB_INTG_CD WHERE DOMN_ID = 'PNT_KND_CD') H ON A.PNT_KND_CD = H.DTL_CD
-        LEFT OUTER JOIN (SELECT DTL_CD, DTL_CD_NM FROM OCB.DW_OCB_INTG_CD WHERE DOMN_ID = 'SLIP_CD') I ON A.SLIP_CD = I.DTL_CD
-        LEFT OUTER JOIN (SELECT DTL_CD, DTL_CD_NM FROM OCB.DW_OCB_INTG_CD WHERE DOMN_ID = 'PMNT_WAY_CD') J ON A.PMNT_WAY_CD = J.DTL_CD
-        LEFT OUTER JOIN (SELECT DTL_CD, DTL_CD_NM FROM OCB.DW_OCB_INTG_CD WHERE DOMN_ID = 'ORG_CD') K ON A.ORG_CD = K.DTL_CD
-        LEFT OUTER JOIN (SELECT DTL_CD, DTL_CD_NM FROM OCB.DW_OCB_INTG_CD WHERE DOMN_ID = 'CAR_OIL_PRDCT_SGRP_CD') L ON A.OIL_PRDCT_SGRP_CD = L.DTL_CD
-        LEFT OUTER JOIN (SELECT DTL_CD, DTL_CD_NM FROM OCB.DW_OCB_INTG_CD WHERE DOMN_ID = 'CNCL_SLIP_TP_CD') M ON A.CNCL_SLIP_TP_CD = M.DTL_CD
-        LEFT OUTER JOIN USER_BI_OCB.WK_CARD_NO_ACS_MDIA_SRNO_MPNG_MST N ON A.ACS_MDIA_SRNO = N.ACS_MDIA_SRNO
+        WHERE  A.tr_ind = '1'
+        AND A.mbr_id = #{memberId}
+        LIMIT  50000) A
+        LEFT OUTER JOIN ocb.dw_alcmpn_mst B
+        ON A.stlmt_alcmpn_cd = B.alcmpn_cd
+        LEFT OUTER JOIN ocb.dw_mcnt_mst C
+        ON A.stlmt_mcnt_cd = C.mcnt_cd
+        LEFT OUTER JOIN ocb.dw_alcmpn_mst D
+        ON A.alcmpn_cd = D.alcmpn_cd
+        LEFT OUTER JOIN ocb.dw_mcnt_mst E
+        ON A.mcnt_cd = E.mcnt_cd
+        left outer join ocb.dw_cpn_prd_mst f
+        on a.cpn_prd_cd = f.cpn_prd_cd
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'CARD_DTL_GRP_CD') g
+        on a.card_dtl_grp_cd = g.dtl_cd
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'PNT_KND_CD') h
+        on a.pnt_knd_cd = h.dtl_cd
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'SLIP_CD') i
+        on a.slip_cd = i.dtl_cd
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'PMNT_WAY_CD') j
+        on a.pmnt_way_cd = j.dtl_cd
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'ORG_CD') k
+        on a.org_cd = k.dtl_cd
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'CAR_OIL_PRDCT_SGRP_CD') l
+        on a.oil_prdct_sgrp_cd = l.dtl_cd
+        left outer join (select dtl_cd, dtl_cd_nm from ocb.dw_ocb_intg_cd where domn_id = 'CNCL_SLIP_TP_CD') m
+        on a.cncl_slip_tp_cd = m.dtl_cd
+        left outer join user_bi_ocb.wk_card_no_acs_mdia_srno_mpng_mst n 
+        on a.acs_mdia_srno = n.acs_mdia_srno
     </select>
 
 	<select id="selectTrSingleRequest" parameterType="SingleReq" resultType="AutoMap" databaseId="hsql">
-		SELECT
-			RCV_DT
-			, APPR_DTTM
-			, REP_APPR_NO
-			, APPR_NO
-			, SALE_DTTM
-			, MBR_ID
-			, CARD_DTL_GRP_CD
-			, DTL_CD_NM
-			, CARD_NO
-			, STLMT_ALCMPN_CD
-			, ALCMPN_NM
-			, STLMT_MCNT_CD
-			, MCNT_NM
-			, ALCMPN_CD
-			, ALCMPN_NM2
-			, MCNT_CD
-			, MCNT_NM2
-			, PNT_KND_CD
-			, DTL_CD_NM2
-			, SLIP_CD
-			, DTL_CD_NM3
-			, SALE_AMT
-			, PNT
-			, CS_MBR_CMMSN
-			, CMMSN
-			, PMNT_WAY_CD
-			, DTL_CD_NM4
-			, ORG_CD
-			, DTL_CD_NM5
-			, OIL_PRDCT_SGRP_CD
-			, DTL_CD_NM6
-			, CPN_PRD_CD
-			, PRD_NM
-			, ORIAPPR_DT
-			, ORIAPPR_NO
-			, CNSL_SLIP_TP_CD
-			, CNSL_SLIP_TP_NM
-			<if test="extractTarget!= null and extractTarget == 'tr_mbrKorNm'">
-			,#{memberKorNm} AS MEMBERKORNM -- 한글이름
-			</if>
-		FROM MOCK_QC_TEST
-		WHERE MBR_ID = #{memberId}
+SELECT
+rcv_dt,
+appr_dttm,
+rep_appr_no,
+appr_no,
+sale_dttm,
+mbr_id,
+card_dtl_grp_cd,
+dtl_cd_nm,
+card_no,
+stlmt_alcmpn_cd,
+alcmpn_nm,
+stlmt_mcnt_cd,
+mcnt_nm,
+alcmpn_cd,
+alcmpn_nm2,
+mcnt_cd,
+mcnt_nm2,
+pnt_knd_cd,
+dtl_cd_nm2,
+slip_cd,
+dtl_cd_nm3,
+sale_amt,
+pnt,
+cs_mbr_cmmsn,
+cmmsn,
+pmnt_way_cd,
+dtl_cd_nm4,
+org_cd,
+dtl_cd_nm5,
+oil_prdct_sgrp_cd,
+dtl_cd_nm6,
+cpn_prd_cd,
+prd_nm,
+oriappr_dt,
+oriappr_no,
+cnsl_slip_tp_cd,
+cnsl_slip_tp_nm
+<if test="extractTarget!= null and extractTarget == 'tr_mbrKorNm'">
+,#{memberKorNm} AS memberKorNm -- 한글이름
+</if>
+from MOCK_QC_TEST
+where mbr_id = #{memberId}
 	</select>
 
 </mapper>
