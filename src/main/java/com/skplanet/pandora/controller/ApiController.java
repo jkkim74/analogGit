@@ -613,7 +613,7 @@ public class ApiController {
 
 	@PostMapping("/extractMemberInfo")
 	public ApiResponse extractMemberInfo(@RequestParam String menuId, @RequestParam String inputDataType,
-			@RequestParam String extractionCond, @RequestParam String periodType, @RequestParam String periodFrom, @RequestParam String periodTo,
+			@RequestParam String extractionCond, @RequestParam String extractionBase, @RequestParam String periodType, @RequestParam String periodFrom, @RequestParam String periodTo,
 			@RequestParam boolean ptsMasking, @RequestParam(defaultValue = "") String ptsPrefix,
 			@RequestParam(defaultValue = "N") String singleReq, @RequestParam Map<String, Object> params) {
 
@@ -632,6 +632,7 @@ public class ApiController {
 		String emailAddr = user.getEmailAddr();
 
 		System.out.println(extractionCond);
+		System.out.println(extractionBase);
 		
 		// 임시로 하드코딩 수정 menuId 새로 생성
 		MenuProgress progress = uploadService.getFinishedMenuProgressTmp(menuId, username);
@@ -640,7 +641,7 @@ public class ApiController {
 		uploadService.markStatus(ProgressStatus.PROCESSING, "PAN0005", username, null, null);
 
 		transmissionService.sendForExtraction(username, inputDataType, periodType, periodFrom, periodTo, ptsUsername,
-				ptsMasking, ptsPrefix, emailAddr, progress, extractionCond, singleReq);
+				ptsMasking, ptsPrefix, emailAddr, progress, extractionCond, singleReq, extractionBase);
 
 		idmsLogService.memberSearch(Helper.nowDateTimeString(), username, Helper.currentClientIp(), null, null, menuId,
 				250); // 다른 화면에서 보통 고객조회 첫페이지로 250건 조회하므로 일관성맞춤.

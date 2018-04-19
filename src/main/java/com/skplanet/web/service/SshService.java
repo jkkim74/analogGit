@@ -33,7 +33,7 @@ public class SshService {
 	private boolean enabled;
 
 	public void execute(String username, String inputDataType, String periodType, String periodFrom, String periodTo,
-			String filename, int extractionTarget, String extractionCond, String singleReq) {
+			String filename, int extractionTarget, String extractionCond, String singleReq, String extractionBase) {
 
 		StringBuilder builder = new StringBuilder("sh /app/home/bi_ocb/WEB/web_2_5.sh ");
 		String command = builder.append(username)
@@ -45,6 +45,7 @@ public class SshService {
 				.append(' ').append(filename)
 				.append(' ').append(extractionCond)
 				.append(' ').append(singleReq)
+				.append(' ').append(extractionBase)
 				.toString();
 
 		log.info("execute ssh command: {}", command);

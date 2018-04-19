@@ -25,12 +25,18 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
             { label: '일반', value: 'g' },
             { label: '주유', value: 'f' }
         ];        
+        
+        $scope.selectOptions5 = [
+            { label: 'TR', value: 'tr' },
+            { label: '카드마스터', value: 'card' }
+        ];                
 
         $scope.clear = function () {
             $scope.selectedOption = $scope.selectOptions[0];
             $scope.selectedOption2 = $scope.selectOptions2[0];
             $scope.selectedOption3 = $scope.selectOptions3[0];
             $scope.selectedOption4 = $scope.selectOptions4[0];
+            $scope.selectedOption5 = $scope.selectOptions5[0];
             $scope.uploaded = false;
             $scope.disableUpload = false;
             $scope.mbrId = null;
@@ -149,6 +155,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
                             inputDataType: $scope.selectedOption.label,
                             extractionTarget: $scope.selectedOption2.label,
                             extractionCond: $scope.selectedOption4.label,
+                            extractionBase: $scope.selectedOption5.label,
                             periodType: $scope.selectedOption3.label,
                             periodFrom: $filter('date')($scope.periodFrom, 'yyyy.MM.dd'),
                             periodTo: $filter('date')($scope.periodTo, 'yyyy.MM.dd')
@@ -166,6 +173,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
                 //console.log('memberId:' + singleReqMbrId);
                 //console.log('extractTarget:' + $scope.selectedOption2.value);
                 //console.log('extractCond:' + $scope.selectedOption4.value);
+                //console.log('extractBase:' + $scope.selectedOption5.value);
                 //console.log('periodType:' + $scope.selectedOption3.value);
                 //console.log('periodFrom:' + $filter('date')($scope.periodFrom, 'yyyyMMdd'));
                 //console.log('periodTo:' + $filter('date')($scope.periodTo, 'yyyyMMdd'));
@@ -178,6 +186,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
                         memberId: singleReqMbrId,
                         extractTarget: $scope.selectedOption2.value,
                         extractCond: $scope.selectedOption4.value,
+                        extractBase: $scope.selectedOption5.value,
                         periodType: $scope.selectedOption3.value,
                         periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
                         periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd')
@@ -187,6 +196,7 @@ angular.module('app').controller('PAN0105Ctrl', ['$scope', '$q', '$http', '$time
                     $scope.sendPtsPromise = apiSvc.extractMemberInfo({
                         inputDataType: $scope.selectedOption.value,
                         extractionCond: $scope.selectedOption4.value,
+                        extractionBase: $scope.selectedOption5.value,
                         periodType: $scope.selectedOption3.value,
                         periodFrom: $filter('date')($scope.periodFrom, 'yyyyMMdd'),
                         periodTo: $filter('date')($scope.periodTo, 'yyyyMMdd'),
