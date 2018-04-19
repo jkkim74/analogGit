@@ -192,7 +192,7 @@ public class TransmissionService {
 	@Async
 	public void sendForExtraction(String username, String inputDataType, String periodType, String periodFrom,
 			String periodTo, String ptsUsername, boolean ptsMasking, String ptsPrefix, String emailAddr,
-			MenuProgress menuProgress, String extractionCond, String singleReq) {
+			MenuProgress menuProgress, String extractionCond, String singleReq, String extractionBase) {
 	    int errExtractionTarget = 0;
 	    String errFilename = "";
 		try {
@@ -208,7 +208,7 @@ public class TransmissionService {
 
 			ftpService.send(localPath, remotePath, extractionHost, extractionPort, extractionUsername, extractionPassword);
 
-			sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget, extractionCond, singleReq);
+			sshService.execute(username, inputDataType, periodType, periodFrom, periodTo, filename, extractionTarget, extractionCond, singleReq, extractionBase);
 			log.info("Finish sshService.execute....");
 
 			List<AutoMap> rawList = oracleRepository.selectMembers(menuProgress, 0, 10000, ptsMasking);
@@ -246,6 +246,7 @@ public class TransmissionService {
 			map.put("errPtsPrefix", ptsPrefix);
 			map.put("errEmailAddr", emailAddr);
 			map.put("errExtractionCond", extractionCond);
+			map.put("errExtractionBase", extractionBase);
 			map.put("errSingleReq", singleReq);
 			map.put("errFilename", errFilename);
 			map.put("errExtractionTarget", errExtractionTarget);
@@ -369,6 +370,7 @@ public class TransmissionService {
 			singleReqParam.setMemberId(String.valueOf(params.get("memberId")));
 			singleReqParam.setExtractTarget(String.valueOf(params.get("extractTarget")));
 			singleReqParam.setExtractCond(String.valueOf(params.get("extractCond")));
+			singleReqParam.setExtractBase(String.valueOf(params.get("extractBase")));
 			singleReqParam.setPeriodType(String.valueOf(params.get("periodType")));
 			singleReqParam.setPeriodFrom(String.valueOf(params.get("periodFrom")));
 			singleReqParam.setPeriodTo(String.valueOf(params.get("periodTo")));

@@ -20,6 +20,7 @@ public class SingleReq implements Serializable {
     private String extractTarget;   //tr, tr_mbrKorNm, mbrId
     private String extractCond;
     private String periodType;
+    private String extractBase;
     private String periodFrom;
     private String periodTo;
     private ProgressStatus status;  //PROCESSING, FINISHED, FAILED

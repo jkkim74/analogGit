@@ -15,6 +15,7 @@
         - ptsPrefix : ${errPtsPrefix} <br/>
         - emailAddr : ${errEmailAddr} <br/>
         - extractionCond : ${errExtractionCond} <br/>
+        - extractionBase : ${errExtractionBase} <br/>
         - singleReq : ${errSingleReq} <br/>
         - if002 upload filename : ${errFilename} <br/>
         - extractionTarget : ${errExtractionTarget} <br/>
