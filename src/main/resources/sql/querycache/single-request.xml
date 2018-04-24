@@ -124,7 +124,7 @@
                             , A.acs_mdia_srno
                         FROM   ocb.dw_sale_ctnt A
                         <if test="extractBase != null and extractBase == 'card'">
-                        	LEFT OUTER JOIN MART_CARD_MST B ON A.ACS_MDIA_SRNO = B.ACS_MDIA_SRNO
+                        	LEFT OUTER JOIN ocb.MART_CARD_MST B ON A.ACS_MDIA_SRNO = B.ACS_MDIA_SRNO
                         </if>                      
                         WHERE  A.intg_slip_fg_cd in ('g') 
                         AND Substring(A.slip_cd, 1, 1) NOT IN ( 'I' )
@@ -183,7 +183,7 @@
                             , A.acs_mdia_srno
                         FROM   ocb.dw_mth07_prev_sale_ctnt A
                         <if test="extractBase != null and extractBase == 'card'">
-                        	LEFT OUTER JOIN MART_CARD_MST B ON A.ACS_MDIA_SRNO = B.ACS_MDIA_SRNO
+                        	LEFT OUTER JOIN ocb.MART_CARD_MST B ON A.ACS_MDIA_SRNO = B.ACS_MDIA_SRNO
                         </if>  
                         WHERE  Substring(A.slip_cd, 1, 1) NOT IN ( 'I' )
                         AND A.slip_cd NOT IN ( 'A1', 'A2' )
@@ -242,7 +242,7 @@
                             , A.acs_mdia_srno
                         FROM   ocb.dw_mth37_prev_sale_ctnt A
                         <if test="extractBase != null and extractBase == 'card'">
-                        	LEFT OUTER JOIN MART_CARD_MST B ON A.ACS_MDIA_SRNO = B.ACS_MDIA_SRNO
+                        	LEFT OUTER JOIN ocb.MART_CARD_MST B ON A.ACS_MDIA_SRNO = B.ACS_MDIA_SRNO
                         </if>  
                         WHERE  Substring(A.slip_cd, 1, 1) NOT IN ( 'I' )
                         AND A.slip_cd NOT IN ( 'A1', 'A2' )
