@@ -3,7 +3,6 @@
 <mapper namespace="com.skplanet.pandora.repository.querycache.QueryCacheRepository">
 
 	<select id="selectTrSingleRequest" parameterType="SingleReq" resultType="AutoMap">
-		/* single-request.selectTrSingleRequest */
         SELECT
             A.rcv_dt AS rcv_dt,                     -- 접수일자
             A.appr_dttm AS appr_dttm,               -- 승인일시
@@ -290,7 +289,6 @@
     </select>
 
 	<select id="selectTrSingleRequest" parameterType="SingleReq" resultType="AutoMap" databaseId="hsql">
-		/* single-request.selectTrSingleRequest(hsql) */
 		SELECT
 			rcv_dt,
 			appr_dttm,
