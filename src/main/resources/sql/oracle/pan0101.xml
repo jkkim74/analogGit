@@ -30,7 +30,7 @@
 				FROM MART_MBR_ID_MST A
 				JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
 				LEFT OUTER JOIN CARD_NO_ACS_MDIA_SRNO_MPNG_MST C ON A.ACS_MDIA_SRNO = C.ACS_MDIA_SRNO
-				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
+				WHERE C.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</when>
 			<when test="menuProgress.param == 'SYW_MBR_ID'">
 				/* 시럽 스마트월렛 회원ID */
@@ -104,7 +104,7 @@
 				FROM MART_MBR_ID_MST A
 				JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
 				LEFT OUTER JOIN CARD_NO_ACS_MDIA_SRNO_MPNG_MST C ON A.ACS_MDIA_SRNO = C.ACS_MDIA_SRNO
-				WHERE B.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
+				WHERE C.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</when>
 			<when test="menuProgress.param == 'SYW_MBR_ID'">
 				/* 시럽 스마트월렛 회원ID */
