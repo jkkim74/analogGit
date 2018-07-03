@@ -19,18 +19,17 @@
 				WHERE B.LGN_ID IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
 			</when>
 			<when test="menuProgress.param == 'CARD_NO'">
-				/* 카드번호 */
-				SELECT A.MBR_ID
-				    , DECODE(A.OCBCOM_LGN_ID,NULL,A.OCBCOM_LGN_ID,SUBSTR(A.OCBCOM_LGN_ID,1,LENGTH(A.OCBCOM_LGN_ID)-2)||'**') AS OCBCOM_LGN_ID
-					, A.CI_NO
-					, DECODE(A.MBR_KOR_NM,NULL,A.MBR_KOR_NM,SUBSTR(A.MBR_KOR_NM,1,LENGTH(A.MBR_KOR_NM)-2)||'*'||SUBSTR(A.MBR_KOR_NM,LENGTH(A.MBR_KOR_NM),1)) AS MBR_KOR_NM
-					, DECODE(C.CARD_NO,NULL,C.CARD_NO,SUBSTR(C.CARD_NO,1,LENGTH(C.CARD_NO)-8)||'****'||SUBSTR(C.CARD_NO,LENGTH(C.CARD_NO)-3,4)) AS CARD_NO
-					, A.SYW_MBR_ID
-					, A.EVS_MBR_ID
-				FROM MART_MBR_ID_MST A
-				JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
-				LEFT OUTER JOIN CARD_NO_ACS_MDIA_SRNO_MPNG_MST C ON A.ACS_MDIA_SRNO = C.ACS_MDIA_SRNO
-				WHERE C.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
+				/* 카드번호 */				
+				SELECT MBR.MBR_ID         
+				, DECODE(MBR.OCBCOM_LGN_ID,NULL,MBR.OCBCOM_LGN_ID,SUBSTR(MBR.OCBCOM_LGN_ID,1,LENGTH(MBR.OCBCOM_LGN_ID)-2)||'**') AS OCBCOM_LGN_ID      
+				, MBR.CI_NO      
+				, DECODE(MBR.MBR_KOR_NM,NULL,MBR.MBR_KOR_NM,SUBSTR(MBR.MBR_KOR_NM,1,LENGTH(MBR.MBR_KOR_NM)-2)||'*'||SUBSTR(MBR.MBR_KOR_NM,LENGTH(MBR.MBR_KOR_NM),1)) AS MBR_KOR_NM      
+				, DECODE(MPNG.CARD_NO,NULL,MPNG.CARD_NO,SUBSTR(MPNG.CARD_NO,1,LENGTH(MPNG.CARD_NO)-8)||'****'||SUBSTR(MPNG.CARD_NO,LENGTH(MPNG.CARD_NO)-3,4)) AS CARD_NO      
+				, MBR.SYW_MBR_ID      
+				, MBR.EVS_MBR_ID
+				FROM TMP_${menuProgress.menuId}_${menuProgress.username} TMP
+				    JOIN CARD_NO_ACS_MDIA_SRNO_MPNG_MST MPNG ON TMP.COLUMN1 = MPNG.CARD_NO
+				    JOIN MART_MBR_ID_MST MBR ON MPNG.ACS_MDIA_SRNO = MBR.ACS_MDIA_SRNO 			
 			</when>
 			<when test="menuProgress.param == 'SYW_MBR_ID'">
 				/* 시럽 스마트월렛 회원ID */
@@ -94,17 +93,16 @@
 			</when>
 			<when test="menuProgress.param == 'CARD_NO'">
 				/* 카드번호 */
-				SELECT A.MBR_ID
-				    , A.OCBCOM_LGN_ID AS OCBCOM_LGN_ID
-					, A.CI_NO
-					, A.MBR_KOR_NM AS MBR_KOR_NM
-					, C.CARD_NO AS CARD_NO
-					, A.SYW_MBR_ID
-					, A.EVS_MBR_ID
-				FROM MART_MBR_ID_MST A
-				JOIN MART_CARD_MST B ON A.MBR_ID = B.MBR_ID
-				LEFT OUTER JOIN CARD_NO_ACS_MDIA_SRNO_MPNG_MST C ON A.ACS_MDIA_SRNO = C.ACS_MDIA_SRNO
-				WHERE C.${menuProgress.param} IN (SELECT COLUMN1 FROM TMP_${menuProgress.menuId}_${menuProgress.username})
+				SELECT MBR.MBR_ID
+				    , MBR.OCBCOM_LGN_ID AS OCBCOM_LGN_ID
+					, MBR.CI_NO
+					, MBR.MBR_KOR_NM AS MBR_KOR_NM
+					, MPNG.CARD_NO AS CARD_NO
+					, MBR.SYW_MBR_ID
+					, MBR.EVS_MBR_ID
+				FROM TMP_${menuProgress.menuId}_${menuProgress.username} TMP
+				    JOIN CARD_NO_ACS_MDIA_SRNO_MPNG_MST MPNG ON TMP.COLUMN1 = MPNG.CARD_NO
+				    JOIN MART_MBR_ID_MST MBR ON MPNG.ACS_MDIA_SRNO = MBR.ACS_MDIA_SRNO 						
 			</when>
 			<when test="menuProgress.param == 'SYW_MBR_ID'">
 				/* 시럽 스마트월렛 회원ID */
