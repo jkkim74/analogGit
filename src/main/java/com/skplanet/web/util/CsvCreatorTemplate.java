@@ -16,9 +16,12 @@ import org.apache.commons.csv.CSVPrinter;
 
 import com.skplanet.web.exception.BizException;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 대량 데이터를 끊어서 파일에 쓰기 위한 용도
  */
+@Slf4j
 public abstract class CsvCreatorTemplate<T> {
 
 	private int offset;
@@ -46,7 +49,18 @@ public abstract class CsvCreatorTemplate<T> {
 
 	public final Path create(Path filePath, char delimiter, Charset charset) {
 		// UTF-8 -> CP949 변환등 문자셋에 존재하지 않는 문자는 무시하도록 설정.
-		CharsetEncoder encoder = charset.newEncoder().onUnmappableCharacter(CodingErrorAction.IGNORE);
+		
+		log.debug("########## CsvCreatorTemplate.filePath={}", filePath);
+		log.debug("########## CsvCreatorTemplate.delimiter={}", delimiter);
+		log.debug("########## CsvCreatorTemplate.charset={}", charset);
+		
+		CharsetEncoder encoder = charset.newEncoder();
+		
+		if(filePath.toString().indexOf("PAND_CUS_") <= 0) {
+			encoder = encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+		}
+		
+		log.debug("########## CsvCreatorTemplate.encoder={}", encoder);
 
 		try (BufferedWriter writer = new BufferedWriter(
 				new OutputStreamWriter(Files.newOutputStream(filePath), encoder));
