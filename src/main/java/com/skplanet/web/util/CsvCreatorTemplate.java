@@ -54,13 +54,12 @@ public abstract class CsvCreatorTemplate<T> {
 		log.debug("########## CsvCreatorTemplate.delimiter={}", delimiter);
 		log.debug("########## CsvCreatorTemplate.charset={}", charset);
 		
-		CharsetEncoder encoder = charset.newEncoder();
+		CharsetEncoder encoder = charset.newEncoder().onUnmappableCharacter(CodingErrorAction.IGNORE);
 		
-		if(filePath.toString().indexOf("PAND_CUS_") <= 0) {
-			encoder = encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+		if(filePath.toString().indexOf("PAND_CUS_") > 0) {
+			encoder = Charset.forName("UTF-8").newEncoder();
+			log.debug("########## CsvCreatorTemplate.PAND_CUS.encoder={}", encoder);
 		}
-		
-		log.debug("########## CsvCreatorTemplate.encoder={}", encoder);
 
 		try (BufferedWriter writer = new BufferedWriter(
 				new OutputStreamWriter(Files.newOutputStream(filePath), encoder));
