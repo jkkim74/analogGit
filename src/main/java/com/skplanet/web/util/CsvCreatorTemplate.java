@@ -1,9 +1,7 @@
 package com.skplanet.web.util;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
@@ -12,14 +10,12 @@ import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
 import com.skplanet.web.exception.BizException;
-import com.skplanet.web.model.AutoMap;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,25 +50,13 @@ public abstract class CsvCreatorTemplate<T> {
 
 	public final Path create(Path filePath, char delimiter, Charset charset) {
 		// UTF-8 -> CP949 변환등 문자셋에 존재하지 않는 문자는 무시하도록 설정.
-		
-		CharsetEncoder encoder = charset.newEncoder().onUnmappableCharacter(CodingErrorAction.IGNORE);	
+		CharsetEncoder encoder = charset.newEncoder().onUnmappableCharacter(CodingErrorAction.IGNORE);
 
-		try {
-			
-			//BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(filePath), encoder));
-			//BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath.toString()),"UTF-8"));
-			
-			BufferedWriter writer = null;
-			
-			if(filePath.toString().indexOf("PAND_CUS_") > 0) {
-				writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath.toString()),"UTF-8"));
-				log.debug("########## CsvCreatorTemplate.PAND_CUS.filePath={}", filePath.toString());		
-			} else {
-				writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(filePath), encoder));
-			}			
-			
-			CSVPrinter printer = CSVFormat.RFC4180.withDelimiter(delimiter).withQuote(null).print(writer);	
-			
+		try (BufferedWriter writer = new BufferedWriter(
+				new OutputStreamWriter(Files.newOutputStream(filePath), encoder));
+				CSVPrinter printer = CSVFormat.RFC4180.withDelimiter(delimiter).withQuote(null).print(writer)) {
+
+
 			List<T> list = nextList(offset, limit);
 
 			if (list != null && !list.isEmpty()) {
