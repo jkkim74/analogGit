@@ -122,7 +122,7 @@ public abstract class CsvCreatorTemplate<T> {
 				}
 			}
 			
-			Files.write(filePath, Files.readAllLines(filePath, charset), charset, StandardOpenOption.APPEND);
+			Files.write(filePath, Files.readAllLines(filePath, charset), charset, StandardOpenOption.WRITE);
 
 		} catch (IOException e) {
 			throw new BizException("CSV 파일 생성 실패", e);
