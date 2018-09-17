@@ -182,7 +182,7 @@ public class IdmsLogService {
 			protected void printRecord(CSVPrinter printer, Map<String, Object> t) throws IOException {
 				printer.printRecord(t.values());
 			}
-		}.create(memberSearchLogPath);
+		}.create(memberSearchLogPath, "CUS");
 
 		return memberSearchLogPath;
 	}
